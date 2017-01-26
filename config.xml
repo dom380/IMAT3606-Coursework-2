@@ -1,0 +1,12 @@
+<game>
+	<width>1080</width>
+	<height>720</height>
+	<fontLocation>./resources/fonts/</fontLocation>
+	<levelLocation>./resources/levels/</levelLocation>
+	<modelLocation>./resources/models/</modelLocation>
+	<textureLocation>./resources/textures/</textureLocation>
+	<shaderLocation>./shaders/</shaderLocation>
+	<initScreen>MainMenu</initScreen>
+	<renderer>OPEN_GL</renderer>
+	<input>GLFW</input>
+</game>

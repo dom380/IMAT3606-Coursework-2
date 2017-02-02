@@ -4,6 +4,7 @@
 *.userosscache
 *.sln.docstates
 */temp*
+*temp*
 *Debug*
 
 # User-specific files (MonoDevelop/Xamarin Studio)
@@ -116,3 +117,4 @@ IMAT3606-Coursework/include/GL/glm/CMakeLists.txt
 kitchen.blend
 *.iobj
 *.ipdb
+*.db

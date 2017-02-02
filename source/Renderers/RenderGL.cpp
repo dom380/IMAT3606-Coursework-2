@@ -70,7 +70,8 @@ void RenderGL::buildTextShader(unsigned int &vertArrayObj, unsigned int &vertBuf
 #endif
 	glm::mat4 projection = glm::ortho(0.0f, (float)width, 0.0f, (float)height);
 	textShader->setUniform("projection", projection);
-	textShader->setUniform("textColour", glm::vec3(1.0, 1.0, 1.0));
+	check = OpenGLSupport().GetError();
+	textShader->setUniform("textColour", glm::vec4(1.0, 1.0, 1.0, 1.0));
 	textShader->setUniform("tex", 0);
 	glFlush();
 }
@@ -85,7 +86,7 @@ void RenderGL::renderText(string& text, Font& font, shared_ptr<Transform>& trans
 #endif
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	textShader->bindShader();
-	textShader->setUniform("textColour", colour);
+	textShader->setUniform("textColour", glm::vec4(colour,1.0));
 #ifndef NDEBUG
 	check = OpenGLSupport().GetError();
 #endif

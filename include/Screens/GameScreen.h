@@ -3,12 +3,13 @@
 #define GAMESCREEN_H
 #include <Screens\Screen.h>
 #include <memory>
+using std::shared_ptr;
 #include <Camera\Camera.h>
 #include <Camera\PerspectiveCamera.h>
 #include <Input.h>
-using std::shared_ptr;
 #include <vector>
 using std::vector;
+#include <ComponentStore.h>
 #include <Robot.h>
 #include <GUI\TextBox.h>
 #include <GameObject.h>
@@ -19,8 +20,13 @@ using std::vector;
 #ifndef NDEBUG
 #include <utils\Timer.h>
 #endif
+
+class GameObject;
+class ComponentStore;
+class LogicComponent; //Forward declare a number of classes.
+
 /*
-	The gameplay implementaion of the Screen Class. 
+	The gameplay implementaion of the Screen Class.
 	Implements EventListener.
 */
 class GameScreen : public Screen, public EventListener
@@ -49,6 +55,12 @@ public:
 		int height, The new height.
 	*/
 	void resize(int width, int height);
+
+	/*
+		Returns this screens component store.
+	*/
+	shared_ptr<ComponentStore> getComponentStore();
+
 	/*
 		Clean up resources.
 	*/
@@ -84,6 +96,7 @@ public:
 	*/
 	void  handle(KeyEvent event);
 private:
+	shared_ptr<ComponentStore> componentStore;
 	vector<shared_ptr<GameObject>> gameObjects;
 	vector<shared_ptr<TextBox>> textBoxes;
 	shared_ptr<Input> input;

@@ -186,7 +186,7 @@ private:
 		gameScreen->setID(screenElement->Attribute("name"));
 		tinyxml2::XMLElement* gameObjElement = screenElement->FirstChildElement("gameObjects")->FirstChildElement();
 		while (gameObjElement != NULL) {
-			loadGameObject(renderer, gameScreen, gameObjElement);
+			loadGameObject(renderer, gameScreen, gameObjElement, gameScreen->getComponentStore());
 			gameObjElement = gameObjElement->NextSiblingElement();
 		}
 		tinyxml2::XMLElement* lightElement = screenElement->FirstChildElement("lights")->FirstChildElement();
@@ -212,11 +212,11 @@ private:
 		return true;
 	}
 
-	static void loadGameObject(shared_ptr<Graphics>& renderer, shared_ptr<GameScreen> gameSceen, tinyxml2::XMLElement* gameObjElement)
+	static void loadGameObject(shared_ptr<Graphics>& renderer, shared_ptr<GameScreen> gameSceen, tinyxml2::XMLElement* gameObjElement, shared_ptr<ComponentStore> componentStore)
 	{
 		if (gameObjElement->FirstChildElement("components") == NULL)
 			return;
-		shared_ptr<GameObject> gameObject = std::make_shared<GameObject>();
+		shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(componentStore);
 		tinyxml2::XMLElement* componentElement = gameObjElement->FirstChildElement("components")->FirstChildElement();
 		while (componentElement != NULL)
 		{
@@ -238,13 +238,16 @@ private:
 					//todo
 					break;
 				case ComponentType::LOGIC:
-					gameObject->AddComponent(std::make_shared<LogicComponent>(gameObject, gameSceen));
+				{
+					shared_ptr<LogicComponent> logicComp = std::make_shared<LogicComponent>(gameObject, gameSceen);
+					gameObject->AddComponent(logicComp, ComponentType::LOGIC);
+				}
 					break;
 				case ComponentType::TRANSFORM:
 					{
-						auto transform = std::make_shared<Transform>();
+						shared_ptr<Transform> transform = std::make_shared<Transform>();
 						loadTransform(transform, componentElement);
-						gameObject->AddComponent(transform);
+						gameObject->AddComponent(transform, ComponentType::TRANSFORM);
 					}
 				break;
 				default:
@@ -252,9 +255,9 @@ private:
 			}
 			if (gameObject->HasComponent(ComponentType::TRANSFORM) && gameObject->HasComponent(ComponentType::MODEL)) //Ensure the model is using the same transform as the object
 			{
-				shared_ptr<ModelComponent> model = std::dynamic_pointer_cast<ModelComponent, Component>(gameObject->GetComponent(ComponentType::MODEL));
-				shared_ptr<Transform> transform = std::dynamic_pointer_cast<Transform, Component>(gameObject->GetComponent(ComponentType::TRANSFORM));
-				model->transform = transform;
+				//auto transform = componentStore->getComponent<Transform>(gameObject->GetComponent(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
+				auto model = componentStore->getComponent<ModelComponent>(gameObject->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
+				model->transformHandle = gameObject->GetComponentHandle(ComponentType::TRANSFORM);//transform;
 			}
 			componentElement = componentElement->NextSiblingElement();
 		}
@@ -276,48 +279,67 @@ private:
 		modelElement->Attribute("id") != NULL ? id = modelElement->Attribute("id") : id = "";
 		mesh->init(modelPath, texturePath, id);
 		//loadTransform(mesh->transform, modelElement);
-		gameObject->AddComponent(mesh);
+		gameObject->AddComponent(mesh, ComponentType::MODEL);
 	}
 
 	/*
 		Utility method to load Transform objects
 	*/
-	static void loadTransform(shared_ptr<Transform> &transform, tinyxml2::XMLElement* element) 
+	static void loadTransform(Transform &transform, tinyxml2::XMLElement* element) 
 	{
 		glm::vec3 pos;
 		glm::vec3 scale = glm::vec3(1.0,1.0,1.0);
 		glm::quat quat; quat.y = 1.0f; quat.w = 0.0f;
+		readTransformData(pos, scale, quat, element);
+		transform.orientation = quat;
+		transform.position = pos;
+		transform.scale = scale;
+	}
+
+	/*
+	Utility method to load Transform objects
+	*/
+	static void loadTransform(std::shared_ptr<Transform> &transform, tinyxml2::XMLElement* element)
+	{
+		glm::vec3 pos;
+		glm::vec3 scale = glm::vec3(1.0, 1.0, 1.0);
+		glm::quat quat; quat.y = 1.0f; quat.w = 0.0f;
+		readTransformData(pos, scale, quat, element);
+		transform->orientation = quat;
+		transform->position = pos;
+		transform->scale = scale;
+	}
+
+	static void readTransformData(glm::vec3 &pos, glm::vec3 &scale, glm::quat &quat, tinyxml2::XMLElement* element)
+	{
 		tinyxml2::XMLElement* posElement = element->FirstChildElement("position");
 		if (posElement != NULL) {
 			pos = glm::vec3
 				(
-					posElement->FirstChildElement("x")!=NULL ? posElement->FirstChildElement("x")->FloatText():0.0f, 
-					posElement->FirstChildElement("y")!=NULL ? posElement->FirstChildElement("y")->FloatText():0.0f, 
-					posElement->FirstChildElement("z")!=NULL ? posElement->FirstChildElement("z")->FloatText() : 0.0f
-				);
+					posElement->FirstChildElement("x") != NULL ? posElement->FirstChildElement("x")->FloatText() : 0.0f,
+					posElement->FirstChildElement("y") != NULL ? posElement->FirstChildElement("y")->FloatText() : 0.0f,
+					posElement->FirstChildElement("z") != NULL ? posElement->FirstChildElement("z")->FloatText() : 0.0f
+					);
 		}
 		tinyxml2::XMLElement* scaleElement = element->FirstChildElement("scale");
 		if (scaleElement != NULL) {
 			scale = glm::vec3
 				(
-					scaleElement->FirstChildElement("x")!=NULL ? scaleElement->FirstChildElement("x")->FloatText(1.0f) : 1.0f, 
-					scaleElement->FirstChildElement("y") != NULL ? scaleElement->FirstChildElement("y")->FloatText(1.0f) : 1.0f, 
+					scaleElement->FirstChildElement("x") != NULL ? scaleElement->FirstChildElement("x")->FloatText(1.0f) : 1.0f,
+					scaleElement->FirstChildElement("y") != NULL ? scaleElement->FirstChildElement("y")->FloatText(1.0f) : 1.0f,
 					scaleElement->FirstChildElement("z") != NULL ? scaleElement->FirstChildElement("z")->FloatText(1.0f) : 1.0f
-				);
+					);
 		}
 		tinyxml2::XMLElement* quatElement = element->FirstChildElement("orientation");
 		if (quatElement != NULL) {
 			quat = glm::quat
 				(
 					quatElement->FirstChildElement("w") != NULL ? quatElement->FirstChildElement("w")->FloatText() : 0.0f,
-					quatElement->FirstChildElement("x")!=NULL ? quatElement->FirstChildElement("x")->FloatText() : 0.0f, 
-					quatElement->FirstChildElement("y")!=NULL ? quatElement->FirstChildElement("y")->FloatText(1.0f) : 1.0f, //default to be orientated around y axis
-					quatElement->FirstChildElement("z")!=NULL ? quatElement->FirstChildElement("z")->FloatText() : 0.0f
-				);
+					quatElement->FirstChildElement("x") != NULL ? quatElement->FirstChildElement("x")->FloatText() : 0.0f,
+					quatElement->FirstChildElement("y") != NULL ? quatElement->FirstChildElement("y")->FloatText(1.0f) : 1.0f, //default to be orientated around y axis
+					quatElement->FirstChildElement("z") != NULL ? quatElement->FirstChildElement("z")->FloatText() : 0.0f
+					);
 		}
-		transform->orientation = quat;
-		transform->position = pos;
-		transform->scale = scale;
 	}
 
 	/*

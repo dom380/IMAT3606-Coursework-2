@@ -4,6 +4,7 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 	robot(std::make_shared<Robot>(AssetManager::getInstance()->getShader(std::pair<string, string>("colour.vert", "colour.frag"))))
 {
 	this->renderer = renderer;
+	componentStore = std::make_shared<ComponentStore>();
 	camera->move(58.0, 41.0f, 68.0f);
 	camera->lookAt(glm::vec3(-1.0,-0.6,-1.0));
 	cameras.push_back(camera);
@@ -33,9 +34,15 @@ void GameScreen::update(double dt)
 #endif
 	robot->Prepare(dt);
 	Message* robotLocMsg = new LocationMessage(robot->getPosition());
-	for (shared_ptr<GameObject> gameObj : gameObjects) {
-		gameObj->updateComponents(dt);
-		gameObj->notifyAll(robotLocMsg);
+	std::vector<std::pair<int, LogicComponent>>* logicComponents = componentStore->getAllComponents<LogicComponent>(ComponentType::LOGIC);
+	std::vector<std::pair<int, LogicComponent>>::iterator it;
+	for (it = logicComponents->begin(); it != logicComponents->end(); ++it)
+	{
+		if (it->first != -1)
+		{
+			it->second.update(dt);
+			it->second.RecieveMessage(robotLocMsg);
+		}
 	}
 	delete robotLocMsg;
 }
@@ -45,8 +52,12 @@ void GameScreen::render()
 	shared_ptr<Camera> camera = cameras.at(activeCamera);
 	robot->DrawRobot(camera->getView(), camera->getProjection());
 	Message* renderMsg = new RenderMessage(camera, lightingBufferId, lightingBlockId);
-	for (shared_ptr<GameObject> gameObj : gameObjects) {
-		gameObj->notifyAll(renderMsg);
+	std::vector<std::pair<int,ModelComponent>>* models = componentStore->getAllComponents<ModelComponent>(ComponentType::MODEL);
+	std::vector<std::pair<int, ModelComponent>>::iterator it;
+	for (it = models->begin(); it != models->end(); ++it)
+	{
+		if(it->first != -1)
+			it->second.RecieveMessage(renderMsg);
 	}
 	delete renderMsg;
 	for (shared_ptr<TextBox> textBox : textBoxes)
@@ -65,6 +76,11 @@ void GameScreen::resize(int width, int height)
 {
 }
 
+shared_ptr<ComponentStore> GameScreen::getComponentStore()
+{
+	return componentStore;
+}
+
 void GameScreen::dispose()
 {
 	for (shared_ptr<Camera> camera : cameras) {
@@ -76,6 +92,7 @@ void GameScreen::dispose()
 	lights.clear();
 	robot.reset();
 	cameras.clear();
+	componentStore.reset();
 }
 
 void GameScreen::addLight(Light light)

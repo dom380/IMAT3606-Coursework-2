@@ -270,8 +270,9 @@ void RenderGL::renderModel(ModelComponent& model, shared_ptr<Shader>& shaderProg
 	glBindVertexArray(model.getVertArray());
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, model.getTexture()->object());
-	glm::quat orientation = model.transform->orientation;
-	glm::mat4 mMat = modelMat * glm::translate(model.transform->position) * glm::rotate(orientation.w, glm::vec3(orientation.x, orientation.y, orientation.z)) * glm::scale(model.transform->scale);
+	Transform* transform = model.getTransform();
+	glm::quat orientation = transform->orientation;
+	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::rotate(orientation.w, glm::vec3(orientation.x, orientation.y, orientation.z)) * glm::scale(transform->scale);
 	shaderProgram->setUniform("tex", 0);
 	shaderProgram->setUniform("mView", camera->getView());
 	shaderProgram->setUniform("mProjection", camera->getProjection());
@@ -311,8 +312,9 @@ void RenderGL::renderModel(ModelComponent & model, shared_ptr<Shader>& shaderPro
 		shaderProgram = AssetManager::getInstance()->getShader(std::pair<std::string, std::string>("phong_no_texture.vert", "phong_no_texture.frag"));
 		shaderProgram->bindShader();
 	}
-	glm::quat orientation = model.transform->orientation;
-	glm::mat4 mMat = modelMat * glm::translate(model.transform->position) * glm::rotate(glm::radians(orientation.w), glm::vec3(orientation.x, orientation.y, orientation.z)) * glm::scale(model.transform->scale);
+	Transform* transform = model.getTransform();
+	glm::quat orientation = transform->orientation;
+	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::rotate(glm::radians(orientation.w), glm::vec3(orientation.x, orientation.y, orientation.z)) * glm::scale(transform->scale);
 	shaderProgram->setUniform("mView", camera->getView());
 	shaderProgram->setUniform("mProjection", camera->getProjection());
 	shaderProgram->setUniform("mModel", mMat);

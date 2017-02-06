@@ -1,42 +1,45 @@
 #include "..\include\GameObject.h"
 
-shared_ptr<Component> GameObject::GetComponent(ComponentType type)
+GameObject::GameObject(std::shared_ptr<ComponentStore> componentStore)
 {
-	for (shared_ptr<Component> comp : components) {
-		if (comp->isType(type))
-		{
-			return comp;
-		}
-	}
-	return nullptr;
+	this->componentStore = componentStore;
 }
 
-void GameObject::AddComponent(shared_ptr<Component> comp)
+
+Handle GameObject::GetComponentHandle(ComponentType type)
 {
-	components.push_back(comp);
+	return componentHandles[type];
 }
+
+void GameObject::AddComponent(std::shared_ptr<Component> comp, ComponentType type)
+{
+	auto storePtr = componentStore.lock();
+	if (storePtr != nullptr)
+	{
+		switch (type)
+		{
+		case MODEL:
+			componentHandles[type] = storePtr->storeComponent(std::dynamic_pointer_cast<ModelComponent>(comp));
+			break;
+		case ANIMATION:
+			break;
+		case RIGID_BODY:
+			break;
+		case LOGIC:
+			componentHandles[type] = storePtr->storeComponent(std::dynamic_pointer_cast<LogicComponent>(comp));
+			break;
+		case TRANSFORM:
+			componentHandles[type] = storePtr->storeComponent(std::dynamic_pointer_cast<Transform>(comp));
+			break;
+		default:
+			break;
+		}
+	}
+}
+
 
 bool GameObject::HasComponent(ComponentType type)
 {
-	for (shared_ptr<Component> comp : components) {
-		if (comp->isType(type))
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-void GameObject::updateComponents(double dt)
-{
-	for (shared_ptr<Component> comp : components) {
-		comp->update(dt);
-	}
-}
-
-void GameObject::notifyAll(Message* msg)
-{
-	for (shared_ptr<Component> comp : components) {
-		comp->RecieveMessage(msg);
-	}
+	Handle handle = componentHandles[type];
+	return !handle.isNull(); //If handle is not null, it has the component
 }

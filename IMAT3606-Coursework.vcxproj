@@ -146,7 +146,9 @@
   <ItemGroup>
     <ClCompile Include="source\AssetManager.cpp" />
     <ClCompile Include="source\Camera\PerspectiveCamera.cpp" />
+    <ClCompile Include="source\ComponentStore.cpp" />
     <ClCompile Include="source\Components\Component.cpp" />
+    <ClCompile Include="source\Components\LogicComponent.cpp" />
     <ClCompile Include="source\Engine.cpp" />
     <ClCompile Include="source\GameObject.cpp" />
     <ClCompile Include="source\Graphics\Bitmap.cpp" />
@@ -164,6 +166,7 @@
     <ClCompile Include="source\Screens\GameScreen.cpp" />
     <ClCompile Include="source\Screens\MenuScreen.cpp" />
     <ClCompile Include="source\utils\EnumParser.cpp" />
+    <ClCompile Include="source\utils\Handle.cpp" />
     <ClCompile Include="source\utils\ObjReader.cpp" />
     <ClCompile Include="source\utils\Timer.cpp" />
     <ClCompile Include="source\utils\tinyxml2.cpp" />
@@ -173,6 +176,7 @@
     <ClInclude Include="include\Camera\Camera.h" />
     <ClInclude Include="include\Camera\OrthographicCamera.h" />
     <ClInclude Include="include\Camera\PerspectiveCamera.h" />
+    <ClInclude Include="include\ComponentStore.h" />
     <ClInclude Include="include\Components\Component.h" />
     <ClInclude Include="include\Components\ComponentType.h" />
     <ClInclude Include="include\Components\LocationMessage.h" />
@@ -214,6 +218,8 @@
     <ClInclude Include="include\utils\EnumParser.h" />
     <ClInclude Include="include\utils\FbxReader.h" />
     <ClInclude Include="include\utils\GLSupport.h" />
+    <ClInclude Include="include\utils\Handle.h" />
+    <ClInclude Include="include\utils\HandleManager.h" />
     <ClInclude Include="include\utils\LevelLoader.h" />
     <ClInclude Include="include\utils\ModelFileReader.h" />
     <ClInclude Include="include\utils\ObjReader.h" />

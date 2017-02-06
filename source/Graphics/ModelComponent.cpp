@@ -100,6 +100,16 @@ Material ModelComponent::getMaterial()
 	return material;
 }
 
+Transform * ModelComponent::getTransform()
+{
+	auto spOwner = owner.lock();
+	if (spOwner != nullptr) 
+	{
+		return spOwner->getComponent<Transform>(ComponentType::TRANSFORM);
+	}
+	return nullptr;
+}
+
 string ModelComponent::getId()
 {
 	return id;

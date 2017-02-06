@@ -18,6 +18,8 @@ using std::vector;
 #include "Components\RenderMessage.h"
 #include "GameObject.h"
 
+class GameObject;
+
 /*
 	Component representing a GameObject's model and texture.
 */
@@ -65,9 +67,13 @@ public:
 	*/
 	Material getMaterial();
 	/*
-		Returns a pointer to the models Transform object.
+		Returns a Handle to the GameObject's Transform this model belongs to.
 	*/
-	shared_ptr<Transform> transform;
+	Handle transformHandle;
+	/*
+		Returns a pointer to the GameObject's Transform this model belongs to.
+	*/
+	Transform* getTransform();
 	string getId();
 	/*
 		Toggles the drawing flag to enable and disable rendering of this model.

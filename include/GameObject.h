@@ -1,48 +1,66 @@
 #pragma once
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
-#include "Components\Component.h"
 #include <vector>
 using std::vector;
-#include <memory> 
-using std::shared_ptr;
-
+#include <memory>
+#include "utils\Handle.h"
+#include "ComponentStore.h"
+class ComponentStore;
 /*
 	Generic GameObject class.
 */
+
 class GameObject
 {
 public:
-	//Default constructor.
-	GameObject() {};
+	//Constructor.
+	GameObject(std::shared_ptr<ComponentStore> componentStore);
+
 	/*
-		Returns the object's component of specified type.
-		If Object doesn't have a component of that type nullptr is returned.
+		Returns the handle to the component of specified type.
+		If Object doesn't have the specified component type an empty handle is return;
 	*/
-	shared_ptr<Component> GetComponent(ComponentType type);
+	Handle GetComponentHandle (ComponentType type);
+
+	/*
+		Returns a pointer to the component of the specified type.
+		If the object doesn't have the component a nullptr is returned.
+		Note the use of the template. The should be the concrete type of the requested component. 
+		This is to avoid the caller having to perform a dynamic cast on the returned pointer.
+	*/
+	template <typename T>
+	T* getComponent(ComponentType type)
+	{
+		if (!HasComponent(type))
+		{
+			return nullptr;
+		}
+		auto spStore = componentStore.lock();
+		if (spStore != nullptr) 
+		{
+			return spStore->getComponent<T>(componentHandles[type], type);
+		} 
+		else
+		{
+			return nullptr;
+		}
+	};
+
 	/*
 		Adds the specified component to the GameObject.
-		shared_ptr<Component> comp, The component to add.
+		T comp, The component to add.
 	*/
-	void AddComponent(shared_ptr<Component> comp);
+	void AddComponent(std::shared_ptr<Component> comp, ComponentType type);
 	/*
 		Checks if GameObject has component of this type.
 		ComponentType type, The type to check for.
 		Returns true if Object has a component of this type.
 	*/
 	bool HasComponent(ComponentType type);
-	/*
-		Calls the update method on all components
-		double dt, time step.
-	*/
-	void updateComponents(double dt);
-	/*
-		Passes the message to all components.
-		Message* msg, Pointer to the message to pass.
-	*/
-	void notifyAll(Message* msg);
 private:
-	vector<shared_ptr<Component>> components;
+	Handle componentHandles[ComponentType::COMPONENT_TYPE_COUNT];
+	std::weak_ptr<ComponentStore> componentStore;
 };
 
 #endif // !GAMEOBJECT_H

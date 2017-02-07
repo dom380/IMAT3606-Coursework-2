@@ -1,5 +1,9 @@
 #include "Graphics\WindowGLFW.h"
 
+#ifndef NDEBUG
+#include <Editor\imgui\imgui.h>
+#endif
+
 WindowGLFW::WindowGLFW(int width, int height, shared_ptr<InputGLFW> input) : Window(width,height)
 {
 	this->input = input;
@@ -52,6 +56,16 @@ bool WindowGLFW::inititalise()
 	glfwWindowHint(GLFW_RESIZABLE, false);
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 	offscreen_context = glfwCreateWindow(640, 480, "", NULL, window);
+
+#ifndef NDEBUG
+	ImGuiGLFWHandler = std::make_shared<ImguiGLFWHandler>();
+	if (!ImGuiGLFWHandler->init(window, false))
+	{
+		return false;
+	}
+#endif
+	
+
 	return true;
 }
 
@@ -63,6 +77,13 @@ bool WindowGLFW::shouldExit()
 void WindowGLFW::display()
 {
 	glfwSwapBuffers(window);
+}
+
+void WindowGLFW::update()
+{
+#ifndef NDEBUG
+	ImGuiGLFWHandler->newFrame();
+#endif
 }
 
 void WindowGLFW::pollEvents()
@@ -77,6 +98,9 @@ void WindowGLFW::switchBackgroundContext()
 
 void WindowGLFW::close()
 {
+#ifndef NDEBUG
+	ImGuiGLFWHandler->shutdown();
+#endif
 	// Close window and terminate GLFW
 	glfwTerminate();
 }

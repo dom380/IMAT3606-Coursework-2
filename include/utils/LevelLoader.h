@@ -64,6 +64,74 @@ public:
 			return false;
 		}
 	}
+	static void loadGameObject(shared_ptr<Graphics>& renderer, shared_ptr<GameScreen> gameSceen, tinyxml2::XMLElement* gameObjElement, shared_ptr<ComponentStore> componentStore)
+	{
+		if (gameObjElement->FirstChildElement("components") == NULL)
+			return;
+		shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(componentStore);
+		tinyxml2::XMLElement* componentElement = gameObjElement->FirstChildElement("components")->FirstChildElement();
+		while (componentElement != NULL)
+		{
+			if (componentElement->Attribute("type") == NULL)
+			{
+				std::cerr << "Unknown component type, skipping" << std::endl;
+				continue;
+			}
+			ComponentType type = componentEnumParser.parse(string(componentElement->Attribute("type")));
+			switch (type)
+			{
+			case ComponentType::MODEL:
+				loadModel(renderer, gameObject, componentElement);
+				break;
+			case ComponentType::ANIMATION:
+				//todo
+				break;
+			case ComponentType::RIGID_BODY:
+				//todo
+				break;
+			case ComponentType::LOGIC:
+			{
+				shared_ptr<LogicComponent> logicComp = std::make_shared<LogicComponent>(gameObject, gameSceen);
+				gameObject->AddComponent(logicComp, ComponentType::LOGIC);
+			}
+			break;
+			case ComponentType::TRANSFORM:
+			{
+				shared_ptr<Transform> transform = std::make_shared<Transform>();
+				loadTransform(transform, componentElement);
+				gameObject->AddComponent(transform, ComponentType::TRANSFORM);
+			}
+			break;
+			default:
+				break;
+			}
+			if (gameObject->HasComponent(ComponentType::TRANSFORM) && gameObject->HasComponent(ComponentType::MODEL)) //Ensure the model is using the same transform as the object
+			{
+				//auto transform = componentStore->getComponent<Transform>(gameObject->GetComponent(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
+				auto model = componentStore->getComponent<ModelComponent>(gameObject->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
+				model->transformHandle = gameObject->GetComponentHandle(ComponentType::TRANSFORM);//transform;
+			}
+			componentElement = componentElement->NextSiblingElement();
+		}
+		gameSceen->addGameObject(gameObject);
+
+	}
+	static void loadGameObject(shared_ptr<Graphics>& renderer, shared_ptr<GameScreen> gameScreen, string objFileName, shared_ptr<Transform> transform)
+	{
+
+		shared_ptr<ComponentStore> componentStore = gameScreen->getComponentStore();
+		shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(componentStore);
+		loadModel(renderer, gameObject, objFileName);
+		gameObject->AddComponent(transform, ComponentType::TRANSFORM);
+		
+		if (gameObject->HasComponent(ComponentType::TRANSFORM) && gameObject->HasComponent(ComponentType::MODEL)) //Ensure the model is using the same transform as the object
+		{
+			//auto transform = componentStore->getComponent<Transform>(gameObject->GetComponent(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
+			auto model = componentStore->getComponent<ModelComponent>(gameObject->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
+			model->transformHandle = gameObject->GetComponentHandle(ComponentType::TRANSFORM);//transform;
+		}
+		gameScreen->addGameObject(gameObject);
+	}
 private:
 	/*
 		Utility method to load MenuScreens
@@ -212,69 +280,35 @@ private:
 		return true;
 	}
 
-	static void loadGameObject(shared_ptr<Graphics>& renderer, shared_ptr<GameScreen> gameSceen, tinyxml2::XMLElement* gameObjElement, shared_ptr<ComponentStore> componentStore)
+	
+
+	/*
+		Utility method to load a Model from obj name
+
+		Currently only supports Wavefront .obj format.
+	*/
+	static void loadModel(shared_ptr<Graphics>& renderer, shared_ptr<GameObject> gameObject, string objName)
 	{
-		if (gameObjElement->FirstChildElement("components") == NULL)
-			return;
-		shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(componentStore);
-		tinyxml2::XMLElement* componentElement = gameObjElement->FirstChildElement("components")->FirstChildElement();
-		while (componentElement != NULL)
-		{
-			if (componentElement->Attribute("type") == NULL)
-			{
-				std::cerr << "Unknown component type, skipping" << std::endl;
-				continue;
-			}
-			ComponentType type = componentEnumParser.parse(string(componentElement->Attribute("type")));
-			switch (type)
-			{
-				case ComponentType::MODEL:
-					loadModel(renderer, gameObject, componentElement);
-					break;
-				case ComponentType::ANIMATION:
-					//todo
-					break;
-				case ComponentType::RIGID_BODY:
-					//todo
-					break;
-				case ComponentType::LOGIC:
-				{
-					shared_ptr<LogicComponent> logicComp = std::make_shared<LogicComponent>(gameObject, gameSceen);
-					gameObject->AddComponent(logicComp, ComponentType::LOGIC);
-				}
-					break;
-				case ComponentType::TRANSFORM:
-					{
-						shared_ptr<Transform> transform = std::make_shared<Transform>();
-						loadTransform(transform, componentElement);
-						gameObject->AddComponent(transform, ComponentType::TRANSFORM);
-					}
-				break;
-				default:
-					break;
-			}
-			if (gameObject->HasComponent(ComponentType::TRANSFORM) && gameObject->HasComponent(ComponentType::MODEL)) //Ensure the model is using the same transform as the object
-			{
-				//auto transform = componentStore->getComponent<Transform>(gameObject->GetComponent(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
-				auto model = componentStore->getComponent<ModelComponent>(gameObject->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
-				model->transformHandle = gameObject->GetComponentHandle(ComponentType::TRANSFORM);//transform;
-			}
-			componentElement = componentElement->NextSiblingElement();
-		}
-		gameSceen->addGameObject(gameObject);
-			
+		shared_ptr<ModelComponent> mesh = std::make_shared<ModelComponent>(renderer, gameObject);
+		const char* modelPath = objName.c_str();
+		//const char* texturePath = modelElement->FirstChildElement("texture")!=NULL ? modelElement->FirstChildElement("texture")->GetText():NULL;
+		string id = "";
+		//modelElement->Attribute("id") != NULL ? id = modelElement->Attribute("id") : id = "";
+		mesh->init(modelPath, NULL, id);
+		//loadTransform(mesh->transform, modelElement);
+		gameObject->AddComponent(mesh, ComponentType::MODEL);
 	}
 
 	/*
-		Utility method to load a Model.
+	Utility method to load a Model.
 
-		Currently only supports Wavefront .obj format.
+	Currently only supports Wavefront .obj format.
 	*/
 	static void loadModel(shared_ptr<Graphics>& renderer, shared_ptr<GameObject> gameObject, tinyxml2::XMLElement* modelElement)
 	{
 		shared_ptr<ModelComponent> mesh = std::make_shared<ModelComponent>(renderer, gameObject);
 		const char* modelPath = modelElement->FirstChildElement("file")->GetText();
-		const char* texturePath = modelElement->FirstChildElement("texture")!=NULL ? modelElement->FirstChildElement("texture")->GetText():NULL;
+		const char* texturePath = modelElement->FirstChildElement("texture") != NULL ? modelElement->FirstChildElement("texture")->GetText() : NULL;
 		string id;
 		modelElement->Attribute("id") != NULL ? id = modelElement->Attribute("id") : id = "";
 		mesh->init(modelPath, texturePath, id);
@@ -294,6 +328,19 @@ private:
 		transform.orientation = quat;
 		transform.position = pos;
 		transform.scale = scale;
+	}
+
+	/*
+	Utility method to load Transform objects
+	*/
+	static void loadTransform(std::shared_ptr<Transform> &transform)
+	{
+		glm::vec3 pos;
+		glm::vec3 scale = glm::vec3(1.0, 1.0, 1.0);
+		glm::quat quat; quat.y = 1.0f; quat.w = 0.0f;
+		transform->orientation = quat;
+		transform->position = pos;
+		transform->scale = scale;
 	}
 
 	/*
@@ -393,7 +440,6 @@ private:
 	static EnumParser<ComponentType> componentEnumParser;
 
 };
-EnumParser<OnClickFunctions::FunctionType> LevelLoader::funcEnumParser;
-EnumParser<ComponentType> LevelLoader::componentEnumParser;
+
 #endif // !LEVELLOADER_H
 

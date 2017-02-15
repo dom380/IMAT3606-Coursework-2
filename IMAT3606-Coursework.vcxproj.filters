@@ -64,6 +64,18 @@
     <Filter Include="Header Files\utils\FileParsers">
       <UniqueIdentifier>{8fbc931b-1195-416a-83e3-0c7c55763909}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Editor">
+      <UniqueIdentifier>{68144b44-e64a-4788-94e9-2c66feee7072}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Editor\imgui">
+      <UniqueIdentifier>{4835715a-1036-4d15-9a14-058b2261449a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Editor">
+      <UniqueIdentifier>{f4fe79bc-5d78-449c-892f-88bf7646517c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Editor\imgui">
+      <UniqueIdentifier>{521470e1-e946-4403-a9e4-4dd8ea4d5203}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -143,6 +155,24 @@
     </ClCompile>
     <ClCompile Include="source\Components\LogicComponent.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Editor\imgui\imgui.cpp">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Editor\imgui\imgui_demo.cpp">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Editor\imgui\imgui_draw.cpp">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Editor\imgui\ImguiGLFWHandler.cpp">
+      <Filter>Header Files\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Editor\DebugMenu.cpp">
+      <Filter>Source Files\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="source\utils\LevelLoader.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -307,6 +337,30 @@
     </ClInclude>
     <ClInclude Include="include\ComponentStore.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\imgui\imconfig.h">
+      <Filter>Header Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\imgui\imgui.h">
+      <Filter>Header Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\imgui\imgui_internal.h">
+      <Filter>Header Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\imgui\ImguiGLFWHandler.h">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\imgui\stb_rect_pack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\imgui\stb_textedit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\imgui\stb_truetype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\DebugMenu.h">
+      <Filter>Header Files\Editor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

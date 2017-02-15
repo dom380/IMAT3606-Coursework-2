@@ -10,7 +10,10 @@
 
 #ifndef NDEBUG
 #include <Editor\imgui\imgui.h>
+#include <Editor\DebugMenu.h>
 #endif
+
+
 
 Engine::Engine()
 {
@@ -44,9 +47,14 @@ void Engine::init()
 		std::cerr << "Failed to create window. Exiting..." << std::endl;
 		exit();
 	}
+
 	renderer = buildRenderer(graphicsContext);
 	renderer->init();
 	loadFirstLevel();
+
+#ifndef NDEBUG
+	DebugMenu::getInstance()->init();
+#endif
 }
 
 void Engine::mainLoop()
@@ -64,6 +72,9 @@ void Engine::mainLoop()
 
 		window->pollEvents();
 		window->update();
+#ifndef NDEBUG
+		DebugMenu::getInstance()->update();
+#endif
 		while (frameTime > 0.0) //While there is still time to update the simulation
 		{
 			double deltaTime = std::min(frameTime, dt);
@@ -73,34 +84,12 @@ void Engine::mainLoop()
 			t += deltaTime;
 			//todo pass t and delta time to physics sim here
 		}
-#ifndef NDEBUG
-		//IMGUI DEMO
-		//This would be an example of how to use IMGUI.
-		//Ideally use this where you want to debug something at runtime
-		//TODO
-		//Jack will create a debug menu class for grouped stuff to hide in.
-		//Then in specific classes where debuggables are present, Jack will help incorporate that. 
-		{
-			ImGui::SetNextWindowSize(ImVec2(200, 100), ImGuiSetCond_FirstUseEver);
-			ImGui::Begin("Another Window", &show_another_window);
-			ImGui::Text("Hello");
-			ImGui::End();
 
-			if (ImGui::BeginMainMenuBar())
-			{
-				if (ImGui::BeginMenu("Test"))
-				{
-					ImGui::EndMenu();
-				}
-				ImGui::EndMainMenuBar();
-			}
-		}
-#endif
 		renderer->prepare();
 		activeScreen.second->render();
 
 #ifndef NDEBUG
-		ImGui::Render();
+		DebugMenu::getInstance()->render();
 #endif
 		window->display();
 		
@@ -201,6 +190,11 @@ void Engine::loadFirstLevel()
 		std::exit(1);
 	}
 	this->switchScreen(initialScreenId);
+}
+
+shared_ptr<Graphics> Engine::getRenderer()
+{
+	return renderer;
 }
 
 int Engine::getWindowWidth()

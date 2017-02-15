@@ -1,4 +1,5 @@
 #include "Editor/DebugMenu.h"
+#include "utils/Utils.h"
 #include "utils/levelloader.h"
 
 bool DebugMenu::initialised = false;
@@ -87,18 +88,53 @@ void DebugMenu::debugGameObjectsMenu()
 		{
 			if (ImGui::TreeNode(goName))
 			{
-				/*for (int i = ComponentType::MODEL; i < ComponentType::COMPONENT_TYPE_COUNT; i++)
+				for (int i = ComponentType::MODEL; i < ComponentType::COMPONENT_TYPE_COUNT; i++)
 				{
-					ComponentType tempCType = static_cast<ComponentType>(i);
-					if (gameScreen->getComponentStore()->getComponent<ModelComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(tempCType), tempCType))
+					ComponentType cType = static_cast<ComponentType>(i);
+					
+					if (gameScreen->getGameObjects()[x]->HasComponent(cType))
 					{
-
+						char compName[14];
+						snprintf(compName, sizeof(compName), "COMP_%d_%d", i, x);
+						if (ImGui::TreeNode(compName))
+						{
+							switch (cType)
+							{
+							case MODEL:
+								
+								break;
+							case ANIMATION:
+								
+								break;
+							case RIGID_BODY:
+								
+								break;
+							case LOGIC:
+								
+								break;
+							case TRANSFORM:
+								ImGui::DragFloat3("Position", &model->getTransform()->position[0], 0.25f);
+								ImGui::DragFloat3("Orientation", &model->getTransform()->orientation[0], 0.25f);
+								ImGui::DragFloat3("Scale", &model->getTransform()->scale[0], 0.25f);
+								break;
+							}
+							ImGui::TreePop();
+						}
+						
 					}
 				}
-				if (ImGui::TreeNode(goName))
+
+				if (ImGui::Button("DeleteObj"))
 				{
-					ImGui::TreePop();
-				}*/
+					if (x != gameScreen->getGameObjects().size() - 1)
+					{
+						gameScreen->getGameObjects()[x] = std::move(gameScreen->getGameObjects().back());
+					}
+					//std::for_each(gameScreen->getGameObjects().begin(), gameScreen->getGameObjects().end(), DeleteVector<GameObject>());
+					gameScreen->getGameObjects().back().reset();
+					gameScreen->getGameObjects().pop_back();
+				}
+				
 				ImGui::TreePop();
 			}
 

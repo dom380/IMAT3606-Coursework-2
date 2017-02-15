@@ -39,7 +39,6 @@ void DebugMenu::updateMainMenu()
 			if (ImGui::Button("Objects"))
 			{
 				showGameObjects = true;
-				ImGui::EndMenu();
 			}
 			ImGui::EndMenu();
 		}
@@ -63,15 +62,49 @@ void DebugMenu::updateLogic()
 	}
 	if (showGameObjects)
 	{
-
-
+		debugGameObjectsMenu();
 	}
 }
 
 void DebugMenu::debugGameObjectsMenu()
 {
 	ImGui::Begin("GameObjects", &showGameObjects);
-	//for (int x = 0;  x < Engine::g_pEngine->getActiveScreen()->)
+	shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
+	for (int x = 0; x < gameScreen->getGameObjects().size(); x++)
+	{
+		static bool showMore = false;
+		char goName[50];
+		auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
+		if (model)
+		{
+			snprintf(goName, sizeof(goName), "GO_%s_%d", model->getId().c_str(), x);
+		}
+		else {
+			snprintf(goName, sizeof(goName), "GO_%s_%d", "ID_ERROR", x);
+		}
+		
+
+		{
+			if (ImGui::TreeNode(goName))
+			{
+				/*for (int i = ComponentType::MODEL; i < ComponentType::COMPONENT_TYPE_COUNT; i++)
+				{
+					ComponentType tempCType = static_cast<ComponentType>(i);
+					if (gameScreen->getComponentStore()->getComponent<ModelComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(tempCType), tempCType))
+					{
+
+					}
+				}
+				if (ImGui::TreeNode(goName))
+				{
+					ImGui::TreePop();
+				}*/
+				ImGui::TreePop();
+			}
+
+		}
+
+	}
 	ImGui::End();
 }
 

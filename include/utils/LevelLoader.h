@@ -292,7 +292,7 @@ private:
 		shared_ptr<ModelComponent> mesh = std::make_shared<ModelComponent>(renderer, gameObject);
 		const char* modelPath = objName.c_str();
 		//const char* texturePath = modelElement->FirstChildElement("texture")!=NULL ? modelElement->FirstChildElement("texture")->GetText():NULL;
-		string id = "";
+		string id = modelPath;
 		//modelElement->Attribute("id") != NULL ? id = modelElement->Attribute("id") : id = "";
 		mesh->init(modelPath, NULL, id);
 		//loadTransform(mesh->transform, modelElement);
@@ -310,7 +310,7 @@ private:
 		const char* modelPath = modelElement->FirstChildElement("file")->GetText();
 		const char* texturePath = modelElement->FirstChildElement("texture") != NULL ? modelElement->FirstChildElement("texture")->GetText() : NULL;
 		string id;
-		modelElement->Attribute("id") != NULL ? id = modelElement->Attribute("id") : id = "";
+		modelElement->Attribute("id") != NULL ? id = modelElement->Attribute("id") : id = modelPath;
 		mesh->init(modelPath, texturePath, id);
 		//loadTransform(mesh->transform, modelElement);
 		gameObject->AddComponent(mesh, ComponentType::MODEL);

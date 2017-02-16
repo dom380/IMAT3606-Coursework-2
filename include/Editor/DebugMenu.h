@@ -1,10 +1,11 @@
 #ifndef DEBUGMENU_H
 #define DEBUGMENU_H
+#define NOMINMAX
 
-
-
+#include <algorithm>
 #include <memory>
-#include "Editor/imgui/imgui.h"
+#include <Editor/imgui/imgui.h>
+#include <Graphics\ModelComponent.h>
 
 using std::shared_ptr;
 /*
@@ -15,11 +16,13 @@ Uses imgui to organise a menu bar full of options for debug.
 
 */
 
-
-class ModelComponent;
 class DebugMenu
 {
 private:
+	DebugMenu() {};
+	DebugMenu(DebugMenu const&) {};
+	void operator=(DebugMenu const&) {};
+
 	static bool initialised;
 	static shared_ptr<DebugMenu> instance;
 	/*
@@ -57,9 +60,6 @@ private:
 	void gameObjectsMenuTransform(int i, ModelComponent* model);
 
 public:
-	DebugMenu() {};
-	DebugMenu(DebugMenu const&) {};
-	void operator=(DebugMenu const&) {};
 	static shared_ptr<DebugMenu> getInstance();
 
 	void init();

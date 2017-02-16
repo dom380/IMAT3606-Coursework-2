@@ -165,14 +165,14 @@
     <ClCompile Include="source\Editor\imgui\imgui_draw.cpp">
       <Filter>Source Files\Editor\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="source\Editor\imgui\ImguiGLFWHandler.cpp">
-      <Filter>Header Files\Editor\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="source\Editor\DebugMenu.cpp">
       <Filter>Source Files\Editor</Filter>
     </ClCompile>
     <ClCompile Include="source\utils\LevelLoader.cpp">
       <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Editor\imgui\ImguiGLFWHandler.cpp">
+      <Filter>Source Files\Editor\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -347,9 +347,6 @@
     <ClInclude Include="include\Editor\imgui\imgui_internal.h">
       <Filter>Header Files\Editor\imgui</Filter>
     </ClInclude>
-    <ClInclude Include="include\Editor\imgui\ImguiGLFWHandler.h">
-      <Filter>Source Files\Editor\imgui</Filter>
-    </ClInclude>
     <ClInclude Include="include\Editor\imgui\stb_rect_pack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -361,6 +358,9 @@
     </ClInclude>
     <ClInclude Include="include\Editor\DebugMenu.h">
       <Filter>Header Files\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\imgui\ImguiGLFWHandler.h">
+      <Filter>Header Files\Editor\imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

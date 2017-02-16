@@ -3,7 +3,7 @@
 
 /*
 	An IMGUI handler for GLFW based GL program.
-	TODO: Base handler for IMGUI.
+	TODO: Base handler for IMGUI for multiple gl programs.
 */
 
 struct GLFWwindow;

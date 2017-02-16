@@ -1,12 +1,10 @@
 #include "Editor/DebugMenu.h"
-#include "utils/Utils.h"
 #include "utils/levelloader.h"
 
 bool DebugMenu::initialised = false;
 shared_ptr<DebugMenu> DebugMenu::instance;
-float DebugMenu::createPosition[3] { 0.0f, 0.0f, 0.0f };
-float DebugMenu::createOrientation[3]{ 0.0f, 1.0f, 0.0f };
-float DebugMenu::createScale[3]{ 1.0f, 1.0f, 1.0f };
+
+
 
 shared_ptr<DebugMenu> DebugMenu::getInstance()
 {
@@ -27,8 +25,7 @@ void DebugMenu::init()
 void DebugMenu::update()
 {
 	updateMainMenu();
-	updateLogic();
-	
+	updateLogic();	
 }
 
 void DebugMenu::updateMainMenu()
@@ -71,75 +68,68 @@ void DebugMenu::debugGameObjectsMenu()
 {
 	ImGui::Begin("GameObjects", &showGameObjects);
 	shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
+	
+	/*
+		Every game object from the vector is listed.
+	*/
 	for (int x = 0; x < gameScreen->getGameObjects().size(); x++)
 	{
+		//Push and PopID, useful for similarly named objects.
+		ImGui::PushID(x);
 		static bool showMore = false;
 		char goName[50];
-		auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
+		auto model =  gameScreen->getComponentStore()->getComponent<ModelComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
 		if (model)
 		{
-			snprintf(goName, sizeof(goName), "GO_%s_%d", model->getId().c_str(), x);
+			snprintf(goName, sizeof(goName), "GO_%s", model->getId().c_str());
 		}
 		else {
 			snprintf(goName, sizeof(goName), "GO_%s_%d", "ID_ERROR", x);
 		}
-		
-
+		//Tree node creates a tree from the game object name
+		if (ImGui::TreeNode(goName))
 		{
-			if (ImGui::TreeNode(goName))
+			/*
+				Inside the gameobject is a list of the components
+			*/
+			for (int i = ComponentType::MODEL; i < ComponentType::COMPONENT_TYPE_COUNT; i++)
 			{
-				for (int i = ComponentType::MODEL; i < ComponentType::COMPONENT_TYPE_COUNT; i++)
-				{
-					ComponentType cType = static_cast<ComponentType>(i);
+				ComponentType cType = static_cast<ComponentType>(i);
 					
-					if (gameScreen->getGameObjects()[x]->HasComponent(cType))
-					{
-						char compName[14];
-						snprintf(compName, sizeof(compName), "COMP_%d_%d", i, x);
-						if (ImGui::TreeNode(compName))
-						{
-							switch (cType)
-							{
-							case MODEL:
-								
-								break;
-							case ANIMATION:
-								
-								break;
-							case RIGID_BODY:
-								
-								break;
-							case LOGIC:
-								
-								break;
-							case TRANSFORM:
-								ImGui::DragFloat3("Position", &model->getTransform()->position[0], 0.25f);
-								ImGui::DragFloat3("Orientation", &model->getTransform()->orientation[0], 0.25f);
-								ImGui::DragFloat3("Scale", &model->getTransform()->scale[0], 0.25f);
-								break;
-							}
-							ImGui::TreePop();
-						}
-						
-					}
-				}
-
-				if (ImGui::Button("DeleteObj"))
+				if (gameScreen->getGameObjects()[x]->HasComponent(cType))
 				{
-					if (x != gameScreen->getGameObjects().size() - 1)
+					ImGui::PushID(i);
+					char compName[14];
+					snprintf(compName, sizeof(compName), "COMP_%d", i);
+					//Each component has editable stuff
+					if (ImGui::TreeNode(compName))
 					{
-						gameScreen->getGameObjects()[x] = std::move(gameScreen->getGameObjects().back());
+						switch (cType)
+						{
+						case MODEL:
+							gameObjectsMenuModel(i, model);
+							break;
+						case ANIMATION:
+							gameObjectsMenuAnimation();
+							break;
+						case RIGID_BODY:
+							gameObjectsMenuRigidBody();
+							break;
+						case LOGIC:
+							gameObjectsMenuLogic();
+							break;
+						case TRANSFORM:
+							gameObjectsMenuTransform(i, model);
+							break;
+						}
+						ImGui::TreePop();
 					}
-					//std::for_each(gameScreen->getGameObjects().begin(), gameScreen->getGameObjects().end(), DeleteVector<GameObject>());
-					gameScreen->getGameObjects().back().reset();
-					gameScreen->getGameObjects().pop_back();
+					ImGui::PopID();
 				}
-				
-				ImGui::TreePop();
 			}
-
+			ImGui::TreePop();
 		}
-
+		ImGui::PopID();
 	}
 	ImGui::End();
 }
@@ -147,13 +137,17 @@ void DebugMenu::debugGameObjectsMenu()
 void DebugMenu::createCubeMenu()
 {
 	ImGui::Begin("CreateCube", &showCube);
-	//static float position[3] = { 0.0f, 0.0f, 0.0f };
+
+	static float createPosition[3] = { 0.0f, 0.0f, 0.0f };
+	static float createScale[3] = { 1.0f, 1.0f, 1.0f };
+	static float createOrientation[3] = { 0.0f, 1.0f, 0.0f };
 	ImGui::DragFloat3("Position", createPosition, 0.5f);
 	ImGui::DragFloat3("Scale", createScale, 0.5f);
 	ImGui::DragFloat3("Orientation", createOrientation, 0.5f);
+
 	if (ImGui::Button("Create"))
 	{
-		tinyxml2::XMLDocument doc;
+		/*tinyxml2::XMLDocument doc;
 		string filePath = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::LEVEL) + "level1" + ".xml";
 		tinyxml2::XMLError check = doc.LoadFile(filePath.c_str());
 		if (check != tinyxml2::XML_SUCCESS) {
@@ -161,7 +155,7 @@ void DebugMenu::createCubeMenu()
 
 		}
 		tinyxml2::XMLElement* screenElement = doc.FirstChildElement("screen");
-		tinyxml2::XMLElement* gameObjElement = screenElement->FirstChildElement("gameObjects")->FirstChildElement();
+		tinyxml2::XMLElement* gameObjElement = screenElement->FirstChildElement("gameObjects")->FirstChildElement();*/
 		//Load cube, overide
 		shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
 		shared_ptr<Transform> transform = std::make_shared<Transform>();
@@ -179,4 +173,33 @@ void DebugMenu::render()
 	ImGui::Render();
 }
 
+void DebugMenu::gameObjectsMenuModel(int i, ModelComponent* model)
+{
+	ImGui::PushID(i);
+	if (ImGui::Button("Toggle"))
+	{
+		model->toggleDrawing();
+	}
+	ImGui::PopID();
+}
 
+void DebugMenu::gameObjectsMenuAnimation()
+{
+}
+
+void DebugMenu::gameObjectsMenuRigidBody()
+{
+}
+
+void DebugMenu::gameObjectsMenuLogic()
+{
+}
+
+void DebugMenu::gameObjectsMenuTransform(int i, ModelComponent* model)
+{
+	ImGui::PushID(i);
+	ImGui::DragFloat3("Position", &model->getTransform()->position[0], 0.25f);
+	ImGui::DragFloat3("Orientation", &model->getTransform()->orientation[0], 0.25f);
+	ImGui::DragFloat3("Scale", &model->getTransform()->scale[0], 0.25f);
+	ImGui::PopID();
+}

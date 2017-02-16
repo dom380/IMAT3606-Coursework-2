@@ -5,6 +5,14 @@
 #include "LocationMessage.h"
 #include <memory>
 #include <Screens\GameScreen.h>
+extern "C" 
+{
+	#include <lua\lua.h>
+	#include <lua\lauxlib.h>
+	#include <lua\lualib.h>
+}
+#include <LuaBridge\LuaBridge.h>
+
 /*
 	Component resposible for handeling game logic of objects.
 	TODO : Use some form of scripting instead of hard coded logic here

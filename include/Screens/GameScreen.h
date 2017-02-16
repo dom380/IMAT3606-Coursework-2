@@ -78,6 +78,13 @@ public:
 	*/
 	void addGameObject(shared_ptr<GameObject> gameObj);
 	/*
+		Gets the vector of gameobjects.
+	*/
+	vector<shared_ptr<GameObject>> getGameObjects()
+	{
+		return gameObjects;
+	}
+	/*
 		Calls to the graphics system to update the lighting buffer.
 		This method must be called after any change to the lighting.
 	*/

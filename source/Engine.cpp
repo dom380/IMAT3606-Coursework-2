@@ -8,6 +8,12 @@
 #include <Screens\LoadingScreen.h>
 #include <InputGLFW.h>
 
+#ifndef NDEBUG
+#include <Editor\imgui\imgui.h>
+#include <Editor\DebugMenu.h>
+#endif
+
+
 
 Engine::Engine()
 {
@@ -34,15 +40,21 @@ void Engine::init()
 	loadConfig();
 	inputHandler = buildInput(inputImplementation);
 	window = buildWindow(graphicsContext);
+
 	bool success = window->inititalise();
 	if (!success)
 	{
 		std::cerr << "Failed to create window. Exiting..." << std::endl;
 		exit();
 	}
+
 	renderer = buildRenderer(graphicsContext);
 	renderer->init();
 	loadFirstLevel();
+
+#ifndef NDEBUG
+	DebugMenu::getInstance()->init();
+#endif
 }
 
 void Engine::mainLoop()
@@ -51,12 +63,18 @@ void Engine::mainLoop()
 	double dt = 1 / 60.0;
 	timer.start();
 	auto currentTime = timer.getElapsedTime();
+	bool show_another_window = true;
 	//variable timestep
 	while (!window->shouldExit()) {
 		double newTime = timer.getElapsedTime();
 		double frameTime = newTime - currentTime; 
 		currentTime = newTime; //set current time
 
+		window->pollEvents();
+		window->update();
+#ifndef NDEBUG
+		DebugMenu::getInstance()->update();
+#endif
 		while (frameTime > 0.0) //While there is still time to update the simulation
 		{
 			double deltaTime = std::min(frameTime, dt);
@@ -66,10 +84,15 @@ void Engine::mainLoop()
 			t += deltaTime;
 			//todo pass t and delta time to physics sim here
 		}
+
 		renderer->prepare();
 		activeScreen.second->render();
+
+#ifndef NDEBUG
+		DebugMenu::getInstance()->render();
+#endif
 		window->display();
-		window->pollEvents();
+		
 	}
 }
 
@@ -167,6 +190,11 @@ void Engine::loadFirstLevel()
 		std::exit(1);
 	}
 	this->switchScreen(initialScreenId);
+}
+
+shared_ptr<Graphics> Engine::getRenderer()
+{
+	return renderer;
 }
 
 int Engine::getWindowWidth()

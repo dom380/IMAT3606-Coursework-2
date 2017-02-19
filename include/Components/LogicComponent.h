@@ -15,22 +15,37 @@ extern "C"
 
 /*
 	Component resposible for handeling game logic of objects.
-	TODO : Use some form of scripting instead of hard coded logic here
+	Class contains a number of Lua bindings to minimise exposure of 
+	internal details to scripts.
 */
 class GameScreen;
 class LogicComponent : public Component
 {
 public:
-	LogicComponent(std::weak_ptr<GameObject> owner, std::weak_ptr<GameScreen> screen);
-
+	LogicComponent(std::weak_ptr<GameObject> owner, std::weak_ptr<GameScreen> screen, const char* scriptFile);
+	LogicComponent(std::weak_ptr<GameObject> owner, std::weak_ptr<GameScreen> screen, std::string scriptFile);
+	~LogicComponent();
 	virtual void update(double dt);
 
 	virtual void RecieveMessage(Message* msg);
 private:
+	lua_State* luaState = luaL_newstate();
+	luabridge::LuaRef updateFunc = luabridge::LuaRef(luaState);
+	luabridge::LuaRef recieveMsgFunc = luabridge::LuaRef(luaState);
 	std::weak_ptr<GameObject> owner;
 	std::weak_ptr<GameScreen> screen;
 	double angle = 0;
 	double rotationSpeed = 50.0;
+	const char* script;
+	//private member functions
+	void registerLuaBindings();
+	//private lua bindings
+	void applyTransform(glm::vec3 position, float scale, float orientation);
+	void toggleRender();
+	void updateScore(int incValue);
+	bool isRendering();
+	glm::vec3 getPosition();
+
 };
 
 #endif // !LogicComponent_H

@@ -83,9 +83,10 @@ public:
 	*/
 	void updateLighting();
 	/*
-		Increments the score and updates the score text.
+		Increments the score and updates the score text by the specified amount.
+		int amountToAdd, The number of points to add to the current score.
 	*/
-	void updateScore();
+	void updateScore(int amountToAdd);
 
 	/*
 		Empty implementation of Mouse Event handeling

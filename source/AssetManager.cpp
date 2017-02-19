@@ -76,6 +76,18 @@ shared_ptr<ModelData> AssetManager::getModelData(const char * fileName, shared_p
 	return data;
 }
 
+string AssetManager::getScript(const char * fileName)
+{
+	auto it = scripts.find(fileName);
+	if (it != scripts.end())
+	{
+		return it->second;
+	}
+	string fullPath = buildFilePath(ResourceType::SCRIPT, fileName);
+	scripts.emplace(fileName, fullPath);
+	return fullPath;
+}
+
 void AssetManager::setAssetFolder(string path, AssetManager::ResourceType resourceType)
 {
 	switch (resourceType)
@@ -94,6 +106,9 @@ void AssetManager::setAssetFolder(string path, AssetManager::ResourceType resour
 		break;
 	case ResourceType::SHADER:
 		shaderFolder = path;
+		break;
+	case ResourceType::SCRIPT:
+		scriptFolder = path;
 		break;
 	}
 }
@@ -116,6 +131,9 @@ string AssetManager::getRootFolder(ResourceType resourceType)
 		break;
 	case ResourceType::SHADER:
 		return shaderFolder;
+		break;
+	case ResourceType::SCRIPT:
+		return scriptFolder;
 		break;
 	}
 }
@@ -147,6 +165,8 @@ string AssetManager::buildFilePath(ResourceType resourceType, const char * path)
 	case ResourceType::SHADER:
 		return string(shaderFolder + path);
 		break;
+	case ResourceType::SCRIPT:
+		return string(scriptFolder + path);
 	}
 }
 

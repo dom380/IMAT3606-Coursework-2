@@ -239,7 +239,9 @@ private:
 					break;
 				case ComponentType::LOGIC:
 				{
-					shared_ptr<LogicComponent> logicComp = std::make_shared<LogicComponent>(gameObject, gameSceen);
+					auto scriptElement = componentElement->FirstChildElement("script");
+					const char* scriptName = scriptElement != NULL ?  scriptElement->GetText() : "default.lua";
+					shared_ptr<LogicComponent> logicComp = std::make_shared<LogicComponent>(gameObject, gameSceen, AssetManager::getInstance()->getScript(scriptName));
 					gameObject->AddComponent(logicComp, ComponentType::LOGIC);
 				}
 					break;

@@ -31,6 +31,11 @@ private:
 	bool showCube;
 	bool showGameObjects;
 
+	//
+	vector<std::string> objList;
+	vector<bool> objCreateActive;
+	vector<ModelComponent*> objModelList;
+
 	/*
 		MainMenu bar update.
 	*/
@@ -48,6 +53,7 @@ private:
 		Create menus
 	*/
 	void createCubeMenu();
+	void createObjectWindow(std::string objName, int iterator);
 
 	/*
 		debugGameObjectsMenu Component Functions

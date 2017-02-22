@@ -116,12 +116,12 @@ public:
 		gameSceen->addGameObject(gameObject);
 
 	}
-	static void loadGameObject(shared_ptr<Graphics>& renderer, shared_ptr<GameScreen> gameScreen, string objFileName, shared_ptr<Transform> transform)
+	static void loadGameObject(shared_ptr<Graphics>& renderer, shared_ptr<GameScreen> gameScreen, std::pair<string,string>objectInfo, shared_ptr<Transform> transform)
 	{
 
 		shared_ptr<ComponentStore> componentStore = gameScreen->getComponentStore();
 		shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(componentStore);
-		loadModel(renderer, gameObject, objFileName);
+		loadModel(renderer, gameObject, objectInfo.first, objectInfo.second);
 		gameObject->AddComponent(transform, ComponentType::TRANSFORM);
 		
 		if (gameObject->HasComponent(ComponentType::TRANSFORM) && gameObject->HasComponent(ComponentType::MODEL)) //Ensure the model is using the same transform as the object
@@ -287,14 +287,14 @@ private:
 
 		Currently only supports Wavefront .obj format.
 	*/
-	static void loadModel(shared_ptr<Graphics>& renderer, shared_ptr<GameObject> gameObject, string objName)
+	static void loadModel(shared_ptr<Graphics>& renderer, shared_ptr<GameObject> gameObject, string objName, string textureName="")
 	{
 		shared_ptr<ModelComponent> mesh = std::make_shared<ModelComponent>(renderer, gameObject);
 		const char* modelPath = objName.c_str();
-		//const char* texturePath = modelElement->FirstChildElement("texture")!=NULL ? modelElement->FirstChildElement("texture")->GetText():NULL;
-		string id = modelPath;
+		const char* texturePath = textureName.empty() ? NULL : textureName.c_str();
+		string id = objName;
 		//modelElement->Attribute("id") != NULL ? id = modelElement->Attribute("id") : id = "";
-		mesh->init(modelPath, NULL, id);
+		mesh->init(modelPath, texturePath, id);
 		//loadTransform(mesh->transform, modelElement);
 		gameObject->AddComponent(mesh, ComponentType::MODEL);
 	}

@@ -61,10 +61,12 @@ public:
 		if (!loading)
 		{
 			backgroundThread.join();
-			if (succeded) {
+			if (succeded) 
+			{
 				gameEngine->replaceScreen(levelId);
 			} 
-			else {
+			else 
+			{
 				gameEngine->replaceScreen(gameEngine->getInitialScreenId());
 			}
 		}

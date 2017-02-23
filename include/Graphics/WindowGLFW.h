@@ -5,6 +5,10 @@
 #include "GL/glfw3.h"
 #include <InputGLFW.h>
 
+#ifndef NDEBUG
+#include <Editor\imgui\ImguiGLFWHandler.h>
+#endif
+
 /*
 	GLFW implementation of the Window class.
 	Should be used with the OpenGL Renderer implementation.
@@ -34,6 +38,11 @@ public:
 	*/
 	void display();
 	/*
+		Start of frame operations.
+		In debug, this alerts imgui to a new frame.
+	*/
+	void update();
+	/*
 		Signa;s GLFW to poll events.
 	*/
 	void pollEvents();
@@ -50,6 +59,9 @@ private:
 	GLFWwindow* window;
 	GLFWwindow* offscreen_context;
 	shared_ptr<InputGLFW> input;
+#ifndef NDEBUG
+	shared_ptr<ImguiGLFWHandler> ImGuiGLFWHandler;
+#endif
 };
 
 #endif // !WINDOWGLFW_H

@@ -31,6 +31,10 @@ public:
 	*/
 	virtual void display() = 0;
 	/*
+		Generic update for a window to be called at start of frame.
+	*/
+	virtual void update() = 0;
+	/*
 		Poll system events.
 		Called at the end of each loop by the Engine.
 	*/
@@ -45,6 +49,7 @@ public:
 		Allows for loading of graphical data on a background thread.
 	*/
 	virtual void switchBackgroundContext() = 0;
+
 	/*
 		Called on program exit.
 		Implementations should clear up any resources and destroy graphics contexts here.

@@ -149,6 +149,11 @@
     <ClCompile Include="source\ComponentStore.cpp" />
     <ClCompile Include="source\Components\Component.cpp" />
     <ClCompile Include="source\Components\LogicComponent.cpp" />
+    <ClCompile Include="source\Editor\DebugMenu.cpp" />
+    <ClCompile Include="source\Editor\imgui\imgui.cpp" />
+    <ClCompile Include="source\Editor\imgui\ImguiGLFWHandler.cpp" />
+    <ClCompile Include="source\Editor\imgui\imgui_demo.cpp" />
+    <ClCompile Include="source\Editor\imgui\imgui_draw.cpp" />
     <ClCompile Include="source\Engine.cpp" />
     <ClCompile Include="source\GameObject.cpp" />
     <ClCompile Include="source\Graphics\Bitmap.cpp" />
@@ -167,6 +172,7 @@
     <ClCompile Include="source\Screens\MenuScreen.cpp" />
     <ClCompile Include="source\utils\EnumParser.cpp" />
     <ClCompile Include="source\utils\Handle.cpp" />
+    <ClCompile Include="source\utils\LevelLoader.cpp" />
     <ClCompile Include="source\utils\ObjReader.cpp" />
     <ClCompile Include="source\utils\Timer.cpp" />
     <ClCompile Include="source\utils\tinyxml2.cpp" />
@@ -184,6 +190,14 @@
     <ClInclude Include="include\Components\Message.h" />
     <ClInclude Include="include\Components\MessageType.h" />
     <ClInclude Include="include\Components\RenderMessage.h" />
+    <ClInclude Include="include\Editor\DebugMenu.h" />
+    <ClInclude Include="include\Editor\imgui\imconfig.h" />
+    <ClInclude Include="include\Editor\imgui\imgui.h" />
+    <ClInclude Include="include\Editor\imgui\ImguiGLFWHandler.h" />
+    <ClInclude Include="include\Editor\imgui\imgui_internal.h" />
+    <ClInclude Include="include\Editor\imgui\stb_rect_pack.h" />
+    <ClInclude Include="include\Editor\imgui\stb_textedit.h" />
+    <ClInclude Include="include\Editor\imgui\stb_truetype.h" />
     <ClInclude Include="include\Engine.h" />
     <ClInclude Include="include\GameObject.h" />
     <ClInclude Include="include\Graphics\Bitmap.h" />

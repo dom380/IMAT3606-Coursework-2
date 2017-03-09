@@ -21,6 +21,8 @@ static int          g_ShaderHandle = 0, g_VertHandle = 0, g_FragHandle = 0;
 static int          g_AttribLocationTex = 0, g_AttribLocationProjMtx = 0;
 static int          g_AttribLocationPosition = 0, g_AttribLocationUV = 0, g_AttribLocationColor = 0;
 static unsigned int g_VboHandle = 0, g_VaoHandle = 0, g_ElementsHandle = 0;
+shared_ptr<ImguiGLFWHandler> ImguiGLFWHandler::instance;
+bool ImguiGLFWHandler::initialised = false;
 
 void renderDrawLists(ImDrawData * draw_data)
 {
@@ -128,7 +130,17 @@ void ImguiGLFWHandler::SetClipboardText(void * user_data, const char * text)
 	glfwSetClipboardString((GLFWwindow*)user_data, text);
 }
 
-bool ImguiGLFWHandler::init(GLFWwindow * window, bool install_callbacks)
+shared_ptr<ImguiGLFWHandler> ImguiGLFWHandler::getInstance()
+{
+	if (initialised) {
+		return instance;
+	}
+	instance = shared_ptr<ImguiGLFWHandler>(new ImguiGLFWHandler());
+	initialised = true;
+	return instance;
+}
+
+bool ImguiGLFWHandler::init(GLFWwindow * window)
 {
 	g_Window = window;
 
@@ -160,14 +172,6 @@ bool ImguiGLFWHandler::init(GLFWwindow * window, bool install_callbacks)
 #ifdef _WIN32
 	io.ImeWindowHandle = glfwGetWin32Window(g_Window);
 #endif
-
-	if (install_callbacks)
-	{
-		/*glfwSetMouseButtonCallback(window, ImGui_ImplGlfwGL3_MouseButtonCallback);
-		glfwSetScrollCallback(window, ImGui_ImplGlfwGL3_ScrollCallback);
-		glfwSetKeyCallback(window, ImGui_ImplGlfwGL3_KeyCallback);
-		glfwSetCharCallback(window, ImGui_ImplGlfwGL3_CharCallback);*/
-	}
 
 	return true;
 }
@@ -357,4 +361,37 @@ bool ImguiGLFWHandler::createFontsTexture()
 	glBindTexture(GL_TEXTURE_2D, last_texture);
 
 	return true;
+}
+
+void ImguiGLFWHandler::ImGui_ImplGlfwGL3_MouseButtonCallback(GLFWwindow*, int button, int action, int /*mods*/)
+{
+	if (action == GLFW_PRESS && button >= 0 && button < 3)
+		g_MousePressed[button] = true;
+}
+
+void ImguiGLFWHandler::ImGui_ImplGlfwGL3_ScrollCallback(GLFWwindow*, double /*xoffset*/, double yoffset)
+{
+	g_MouseWheel += (float)yoffset; // Use fractional mouse wheel, 1.0 unit 5 lines.
+}
+
+void ImguiGLFWHandler::ImGui_ImplGlfwGL3_KeyCallback(GLFWwindow*, int key, int, int action, int mods)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	if (action == GLFW_PRESS)
+		io.KeysDown[key] = true;
+	if (action == GLFW_RELEASE)
+		io.KeysDown[key] = false;
+
+	(void)mods; // Modifiers are not reliable across systems
+	io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
+	io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
+	io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
+	io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
+}
+
+void ImguiGLFWHandler::ImGui_ImplGlfwGL3_CharCallback(GLFWwindow*, unsigned int c)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	if (c > 0 && c < 0x10000)
+		io.AddInputCharacter((unsigned short)c);
 }

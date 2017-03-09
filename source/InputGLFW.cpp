@@ -1,5 +1,10 @@
 #include "..\include\InputGLFW.h"
 
+#ifndef NDEBUG
+#include <Editor\imgui\ImguiGLFWHandler.h>
+#include <Editor\imgui\imgui.h>
+#endif
+
 InputGLFW::InputGLFW()
 {
 }
@@ -14,6 +19,9 @@ void InputGLFW::mouseMovementCallback(GLFWwindow * window, double xpos, double y
 
 void InputGLFW::mouseButtonCallback(GLFWwindow * window, int button, int action, int mods)
 {
+#ifndef NDEBUG
+	ImguiGLFWHandler::getInstance()->ImGui_ImplGlfwGL3_MouseButtonCallback(window, button, action, mods);
+#endif
 	double cursorPosX, cursorPosY;
 	glfwGetCursorPos(window, &cursorPosX, &cursorPosY);
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
@@ -27,6 +35,9 @@ void InputGLFW::mouseButtonCallback(GLFWwindow * window, int button, int action,
 
 void InputGLFW::keyboardCallback(GLFWwindow * window, int key, int scancode, int action, int mods)
 {
+#ifndef NDEBUG
+	ImguiGLFWHandler::getInstance()->ImGui_ImplGlfwGL3_KeyCallback(window, key, scancode, action, mods);
+#endif
 	KeyEventType type;
 	switch (action)
 	{
@@ -47,4 +58,11 @@ void InputGLFW::keyboardCallback(GLFWwindow * window, int key, int scancode, int
 	for (shared_ptr<EventListener> listener : keySubs) {
 		listener->handle(e);
 	}
+}
+
+void InputGLFW::charCallback(GLFWwindow * window, unsigned int c)
+{
+#ifndef NDEBUG
+	ImguiGLFWHandler::getInstance()->ImGui_ImplGlfwGL3_CharCallback(window, c);
+#endif
 }

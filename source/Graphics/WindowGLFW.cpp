@@ -43,7 +43,13 @@ bool WindowGLFW::inititalise()
 	{
 		static_cast<InputGLFW*>(glfwGetWindowUserPointer(window))->mouseButtonCallback(window, button, action, mods);
 	};
+
+	auto charCallback = [](GLFWwindow * window, unsigned int c)
+	{
+		static_cast<InputGLFW*>(glfwGetWindowUserPointer(window))->charCallback(window, c);
+	};
 	glfwSetKeyCallback(window, keyCallback);
+	glfwSetCharCallback(window, charCallback);
 	glfwSetMouseButtonCallback(window, mouseCickCallback);
 	glfwSetCursorPosCallback(window, mouseMoveCallback);
 
@@ -58,8 +64,8 @@ bool WindowGLFW::inititalise()
 	offscreen_context = glfwCreateWindow(640, 480, "", NULL, window);
 
 #ifndef NDEBUG
-	ImGuiGLFWHandler = std::make_shared<ImguiGLFWHandler>();
-	if (!ImGuiGLFWHandler->init(window, false))
+	ImGuiGLFWHandler = ImguiGLFWHandler::getInstance();
+	if (!ImGuiGLFWHandler->init(window))
 	{
 		return false;
 	}

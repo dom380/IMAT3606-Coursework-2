@@ -30,6 +30,7 @@ public:
 	*/
 	void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
+	void charCallback(GLFWwindow* window, unsigned int c);
 };
 
 #endif // !INPUTGLFW_H

@@ -1,7 +1,9 @@
 #pragma once
 #ifndef INPUTGLFW_H
 #define INPUTGLFW_H
+
 #include "Input.h"
+#include <Engine.h>
 #include <gl\glfw3.h>
 
 /*

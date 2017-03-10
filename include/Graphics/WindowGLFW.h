@@ -2,7 +2,6 @@
 #ifndef WINDOWGLFW_H
 #define WINDOWGLFW_H
 #include "Window.h"
-#include "GL/glfw3.h"
 #include <InputGLFW.h>
 
 #ifndef NDEBUG
@@ -55,6 +54,13 @@ public:
 		Destroys the main and background OpenGL Contexts.
 	*/
 	void close();
+
+	/*
+	Get GLFW window
+	*/
+	GLFWwindow* getWindow();
+
+	shared_ptr<ImguiGLFWHandler> getImGuiHandler();
 private:
 	GLFWwindow* window;
 	GLFWwindow* offscreen_context;

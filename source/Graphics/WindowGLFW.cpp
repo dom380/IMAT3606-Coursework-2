@@ -64,8 +64,8 @@ bool WindowGLFW::inititalise()
 	offscreen_context = glfwCreateWindow(640, 480, "", NULL, window);
 
 #ifndef NDEBUG
-	ImGuiGLFWHandler = ImguiGLFWHandler::getInstance();
-	if (!ImGuiGLFWHandler->init(window))
+	ImGuiGLFWHandler = std::make_shared<ImguiGLFWHandler>();
+	if (!ImGuiGLFWHandler->init(this))
 	{
 		return false;
 	}
@@ -109,4 +109,14 @@ void WindowGLFW::close()
 #endif
 	// Close window and terminate GLFW
 	glfwTerminate();
+}
+
+GLFWwindow * WindowGLFW::getWindow()
+{
+	return window;
+}
+
+shared_ptr<ImguiGLFWHandler> WindowGLFW::getImGuiHandler()
+{
+	return ImGuiGLFWHandler;
 }

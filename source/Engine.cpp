@@ -69,12 +69,14 @@ void Engine::mainLoop()
 		double newTime = timer.getElapsedTime();
 		double frameTime = newTime - currentTime; 
 		currentTime = newTime; //set current time
-
-		window->pollEvents();
 		window->update();
+		window->pollEvents();
 #ifndef NDEBUG
 		DebugMenu::getInstance()->update();
 #endif
+	
+		
+
 		while (frameTime > 0.0) //While there is still time to update the simulation
 		{
 			double deltaTime = std::min(frameTime, dt);
@@ -210,6 +212,11 @@ int Engine::getWindowHeight()
 string Engine::getInitialScreenId()
 {
 	return initialScreenId;
+}
+
+shared_ptr<Window> Engine::GetWindow()
+{
+	return window;
 }
 
 shared_ptr<Graphics> Engine::buildRenderer(GraphicsContext renderType)

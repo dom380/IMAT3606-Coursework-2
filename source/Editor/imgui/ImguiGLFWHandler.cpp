@@ -1,6 +1,7 @@
 #include "utils\GLSupport.h"
 #include "Editor/imgui/imgui.h"
 #include "Editor/imgui/ImguiGLFWHandler.h"
+#include "Graphics\WindowGLFW.h"
 
 #include "GL/glfw3.h"
 #ifdef _WIN32
@@ -21,8 +22,6 @@ static int          g_ShaderHandle = 0, g_VertHandle = 0, g_FragHandle = 0;
 static int          g_AttribLocationTex = 0, g_AttribLocationProjMtx = 0;
 static int          g_AttribLocationPosition = 0, g_AttribLocationUV = 0, g_AttribLocationColor = 0;
 static unsigned int g_VboHandle = 0, g_VaoHandle = 0, g_ElementsHandle = 0;
-shared_ptr<ImguiGLFWHandler> ImguiGLFWHandler::instance;
-bool ImguiGLFWHandler::initialised = false;
 
 void renderDrawLists(ImDrawData * draw_data)
 {
@@ -130,19 +129,11 @@ void ImguiGLFWHandler::SetClipboardText(void * user_data, const char * text)
 	glfwSetClipboardString((GLFWwindow*)user_data, text);
 }
 
-shared_ptr<ImguiGLFWHandler> ImguiGLFWHandler::getInstance()
-{
-	if (initialised) {
-		return instance;
-	}
-	instance = shared_ptr<ImguiGLFWHandler>(new ImguiGLFWHandler());
-	initialised = true;
-	return instance;
-}
 
-bool ImguiGLFWHandler::init(GLFWwindow * window)
+bool ImguiGLFWHandler::init(Window * window)
 {
-	g_Window = window;
+	WindowGLFW* gW = (WindowGLFW*)window;
+	g_Window = gW->getWindow();
 
 	ImGuiIO& io = ImGui::GetIO();
 	io.KeyMap[ImGuiKey_Tab] = GLFW_KEY_TAB;                         // Keyboard mapping. ImGui will use those indices to peek into the io.KeyDown[] array.
@@ -363,18 +354,18 @@ bool ImguiGLFWHandler::createFontsTexture()
 	return true;
 }
 
-void ImguiGLFWHandler::ImGui_ImplGlfwGL3_MouseButtonCallback(GLFWwindow*, int button, int action, int /*mods*/)
+void ImguiGLFWHandler::imGuiMouseButtonCallback(shared_ptr<Window>, int button, int action, int /*mods*/)
 {
 	if (action == GLFW_PRESS && button >= 0 && button < 3)
 		g_MousePressed[button] = true;
 }
 
-void ImguiGLFWHandler::ImGui_ImplGlfwGL3_ScrollCallback(GLFWwindow*, double /*xoffset*/, double yoffset)
+void ImguiGLFWHandler::imGuiScrollCallback(shared_ptr<Window>, double /*xoffset*/, double yoffset)
 {
 	g_MouseWheel += (float)yoffset; // Use fractional mouse wheel, 1.0 unit 5 lines.
 }
 
-void ImguiGLFWHandler::ImGui_ImplGlfwGL3_KeyCallback(GLFWwindow*, int key, int, int action, int mods)
+void ImguiGLFWHandler::imGuiKeyCallback(shared_ptr<Window>, int key, int, int action, int mods)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	if (action == GLFW_PRESS)
@@ -389,7 +380,7 @@ void ImguiGLFWHandler::ImGui_ImplGlfwGL3_KeyCallback(GLFWwindow*, int key, int, 
 	io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
 }
 
-void ImguiGLFWHandler::ImGui_ImplGlfwGL3_CharCallback(GLFWwindow*, unsigned int c)
+void ImguiGLFWHandler::imGuiCharCallback(shared_ptr<Window>, unsigned int c)
 {
 	ImGuiIO& io = ImGui::GetIO();
 	if (c > 0 && c < 0x10000)

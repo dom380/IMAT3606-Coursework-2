@@ -1,8 +1,8 @@
 #pragma once
 #ifndef RENDERGL_H
 #define RENDERGL_H
-#include "Graphics.h"
 #include <gl\glew.h>
+#include "Graphics.h"
 #include "GL\glm\glm\gtc\matrix_transform.hpp"
 #include "GL\glm\glm\gtx\transform.hpp"
 #include <string>

@@ -152,6 +152,7 @@
     <ClCompile Include="source\Editor\DebugMenu.cpp" />
     <ClCompile Include="source\Editor\imgui\imgui.cpp" />
     <ClCompile Include="source\Editor\imgui\ImguiGLFWHandler.cpp" />
+    <ClCompile Include="source\Editor\imgui\ImguiHandler.cpp" />
     <ClCompile Include="source\Editor\imgui\imgui_demo.cpp" />
     <ClCompile Include="source\Editor\imgui\imgui_draw.cpp" />
     <ClCompile Include="source\Engine.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="include\Editor\imgui\imconfig.h" />
     <ClInclude Include="include\Editor\imgui\imgui.h" />
     <ClInclude Include="include\Editor\imgui\ImguiGLFWHandler.h" />
+    <ClInclude Include="include\Editor\imgui\ImguiHandler.h" />
     <ClInclude Include="include\Editor\imgui\imgui_internal.h" />
     <ClInclude Include="include\Editor\imgui\stb_rect_pack.h" />
     <ClInclude Include="include\Editor\imgui\stb_textedit.h" />

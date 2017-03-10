@@ -97,6 +97,8 @@ public:
 	*/
 	string getInitialScreenId();
 
+	shared_ptr<Window> GetWindow();
+
 	shared_ptr<Graphics> Engine::getRenderer();
 
 	static shared_ptr<Engine> g_pEngine;

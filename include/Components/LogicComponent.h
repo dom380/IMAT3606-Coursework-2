@@ -12,6 +12,7 @@ extern "C"
 	#include <lua\lualib.h>
 }
 #include <LuaBridge\LuaBridge.h>
+#include <Scripting\LuaStateHolder.h>
 
 /*
 	Component resposible for handeling game logic of objects.
@@ -19,8 +20,10 @@ extern "C"
 	internal details to scripts.
 */
 class GameScreen;
+
 class LogicComponent : public Component
 {
+	friend class ScriptEngine;
 public:
 	LogicComponent(std::weak_ptr<GameObject> owner, std::weak_ptr<GameScreen> screen, const char* scriptFile);
 	LogicComponent(std::weak_ptr<GameObject> owner, std::weak_ptr<GameScreen> screen, std::string scriptFile);
@@ -29,13 +32,11 @@ public:
 
 	virtual void RecieveMessage(Message* msg);
 private:
-	lua_State* luaState = luaL_newstate();
-	luabridge::LuaRef updateFunc = luabridge::LuaRef(luaState);
-	luabridge::LuaRef recieveMsgFunc = luabridge::LuaRef(luaState);
+	lua_State* luaState = LuaStateHolder::getLuaState();
+	luabridge::LuaRef updateFunc;
+	luabridge::LuaRef recieveMsgFunc;
 	std::weak_ptr<GameObject> owner;
 	std::weak_ptr<GameScreen> screen;
-	double angle = 0;
-	double rotationSpeed = 50.0;
 	const char* script;
 	//private member functions
 	void registerLuaBindings();

@@ -76,6 +76,12 @@
     <Filter Include="Source Files\Editor\imgui">
       <UniqueIdentifier>{521470e1-e946-4403-a9e4-4dd8ea4d5203}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Scripting">
+      <UniqueIdentifier>{ab4ee1ad-bb6e-4f43-962c-4b59b0c880c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scripting">
+      <UniqueIdentifier>{cba1652d-db09-49fb-8bdf-0d34ab0d4d3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -173,6 +179,12 @@
     </ClCompile>
     <ClCompile Include="source\Editor\imgui\ImguiGLFWHandler.cpp">
       <Filter>Source Files\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scripting\ScriptEngine.cpp">
+      <Filter>Source Files\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scripting\LuaStateHolder.cpp">
+      <Filter>Source Files\Scripting</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -361,6 +373,12 @@
     </ClInclude>
     <ClInclude Include="include\Editor\imgui\ImguiGLFWHandler.h">
       <Filter>Header Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripting\ScriptEngine.h">
+      <Filter>Header Files\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripting\LuaStateHolder.h">
+      <Filter>Header Files\Scripting</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

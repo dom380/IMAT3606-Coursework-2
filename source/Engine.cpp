@@ -7,6 +7,7 @@
 #include <utils\LevelLoader.h>
 #include <Screens\LoadingScreen.h>
 #include <InputGLFW.h>
+#include <Scripting\ScriptEngine.h>
 
 #ifndef NDEBUG
 #include <Editor\imgui\imgui.h>
@@ -103,6 +104,7 @@ void Engine::exit()
 	if(renderer != nullptr)
 		renderer->exit();
 	AssetManager::getInstance()->exit();
+	ScriptEngine::getInstance()->close();
 	if(window != nullptr)
 		window->close();
 	closed = true;

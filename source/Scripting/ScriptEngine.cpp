@@ -1,5 +1,6 @@
 #include <Scripting\ScriptEngine.h>
 #include <Components\LogicComponent.h>
+#include <Engine.h>
 
 bool ScriptEngine::initialised = false;
 shared_ptr<ScriptEngine> ScriptEngine::instance;
@@ -77,9 +78,9 @@ luabridge::LuaRef ScriptEngine::getFunction(string scriptName, string functionNa
 
 void ScriptEngine::close()
 {
-	LuaStateHolder::destroyState();
 	loadedScripts.clear();
 	luaFunctions.clear();
+	LuaStateHolder::destroyState();
 }
 
 ScriptEngine::ScriptEngine()
@@ -115,6 +116,11 @@ ScriptEngine::ScriptEngine()
 			.endClass()
 			.deriveClass<LocationMessage, Message>("LocationMessage")
 				.addData("location", &LocationMessage::location)
+			.endClass()
+			.beginClass<Engine>("engineObj")
+				.addFunction("switchScreen", &Engine::switchScreen)
+				.addFunction("replaceScreen", &Engine::replaceScreen)
+				.addFunction("exit", &Engine::exit)
 			.endClass()
 		.endNamespace();
 }

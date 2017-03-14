@@ -1,6 +1,5 @@
 #include <utils\EnumParser.h>
 #include <Engine.h>
-#include <utils\OnClickFunctions.h>
 #include <Camera\Camera.h>
 #include <Components\ComponentType.h>
 #include <Input.h>
@@ -29,18 +28,6 @@ EnumParser<KeyEventType>::EnumParser()
 	map["key_released"] = KeyEventType::KEY_RELEASED;
 	map["KEY_REPEATED"] = KeyEventType::KEY_REPEATED;
 	map["key_repeated"] = KeyEventType::KEY_REPEATED;
-}
-
-EnumParser<OnClickFunctions::FunctionType>::EnumParser()
-{
-	map["SWITCH_SCREEN"] = OnClickFunctions::FunctionType::SWITCH_SCREEN;
-	map["switch_screen"] = OnClickFunctions::FunctionType::SWITCH_SCREEN;
-	map["REPLACE_SCREEN"] = OnClickFunctions::FunctionType::REPLACE_SCREEN;
-	map["replace_screen"] = OnClickFunctions::FunctionType::REPLACE_SCREEN;
-	map["EXIT"] = OnClickFunctions::FunctionType::EXIT;
-	map["exit"] = OnClickFunctions::FunctionType::EXIT;
-	map["DO_NOTHING"] = OnClickFunctions::FunctionType::DO_NOTHING;
-	map["do_nothing"] = OnClickFunctions::FunctionType::DO_NOTHING;
 }
 
 EnumParser<Camera::CameraClass>::EnumParser()

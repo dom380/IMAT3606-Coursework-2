@@ -7,8 +7,8 @@
 #include <Screens\GameScreen.h>
 #include <GameObject.h>
 #include <Components\LogicComponent.h>
-#include "OnClickFunctions.h"
 #include "tinyxml2.h"
+#include <Scripting\ScriptEngine.h>
 #ifndef NDEBUG
 #include "Timer.h"
 #endif
@@ -191,59 +191,41 @@ private:
 		shared_ptr<Button> button = std::make_shared<Button>(text, font, transform, renderer, colour, id);
 		menuScreen->addButton(button);
 		input->registerMouseListener(button);
-		string funcName = string(buttonElement->FirstChildElement("function")->Attribute("type"));
-		loadButtonFunc(funcName, buttonElement, button, engine);
+		//string funcName = string(buttonElement->FirstChildElement("function")->Attribute("type"));
+		loadButtonFunc(buttonElement, button, engine);
 	}
 
 	/*
-	Utility method to bind the supplied parameters to the requested callback function.
+		Utility method to bind the supplied parameters to the requested callback function.
 	*/
-	static void loadButtonFunc(string funcName, tinyxml2::XMLElement* buttonElement, shared_ptr<Button> button, Engine* engine)
+	static void loadButtonFunc(tinyxml2::XMLElement* buttonElement, shared_ptr<Button> button, Engine* engine)
 	{
-		switch (funcEnumParser.parse(funcName))
-		{
-		case OnClickFunctions::FunctionType::SWITCH_SCREEN: {
-			tinyxml2::XMLElement* paramElement = buttonElement->FirstChildElement("function")->FirstChildElement("params")->FirstChildElement();
-			while (paramElement != NULL) {
-				string paramName = paramElement->Attribute("name");
-				std::transform(paramName.begin(), paramName.end(), paramName.begin(), std::tolower);
-				if (paramName == "screenid") break;
-				paramElement = paramElement->NextSiblingElement();
-			}
-			string temp = paramElement->GetText();
-			button->addOnClickFn(std::bind(OnClickFunctions::switchScreen, engine, temp));
-			break;
+		tinyxml2::XMLElement* onClickElement = buttonElement->FirstChildElement("onClick");
+		string scriptName = onClickElement->FirstChildElement("script") != NULL ? onClickElement->FirstChildElement("script")->GetText() : "default.lua"; 
+		string scriptFile = AssetManager::getInstance()->getScript(scriptName.c_str());
+		string function = onClickElement->FirstChildElement("function") != NULL ? onClickElement->FirstChildElement("function")->GetText() : "doNothing";
+		//Remove file extension then load the script into lua
+		size_t lastindex = scriptName.find_last_of(".");
+		string rawname = scriptName.substr(0, lastindex);
+		ScriptEngine::getInstance()->loadScript(scriptFile, rawname);
+		//Retrieve a reference to the onClick function
+		auto callback = ScriptEngine::getInstance()->getFunction(rawname, function);
+		//Build up a table of the provided parameters for the lua script
+		luabridge::LuaRef paramTable = luabridge::newTable(LuaStateHolder::getLuaState());
+		tinyxml2::XMLElement* paramElement = onClickElement->FirstChildElement("params") != NULL ? onClickElement->FirstChildElement("params")->FirstChildElement():NULL;
+		while (paramElement != NULL) {
+			string paramName = paramElement->Attribute("name");
+			std::transform(paramName.begin(), paramName.end(), paramName.begin(), std::tolower);
+			paramTable[paramName] = paramElement->GetText();
+			paramElement = paramElement->NextSiblingElement();
 		}
-		case OnClickFunctions::FunctionType::REPLACE_SCREEN:
-		{
-			tinyxml2::XMLElement* paramElement = buttonElement->FirstChildElement("function")->FirstChildElement("params")->FirstChildElement();
-			while (paramElement != NULL) {
-				string paramName = paramElement->Attribute("name");
-				std::transform(paramName.begin(), paramName.end(), paramName.begin(), std::tolower);
-				if (paramName == "screenid") break;
-				paramElement = paramElement->NextSiblingElement();
-			}
-			string temp = paramElement->GetText();
-			button->addOnClickFn(std::bind(OnClickFunctions::replaceScreen, engine, temp));
-			break;
-		}
-		case OnClickFunctions::FunctionType::EXIT:
-		{
-			button->addOnClickFn(std::bind(OnClickFunctions::exit, engine));
-			break;
-		}
-		case OnClickFunctions::FunctionType::DO_NOTHING:
-		default:
-		{
-			button->addOnClickFn(std::bind(OnClickFunctions::doNothing));
-			break;
-		}
-		}
+		//Bind the lua callback function, engine and parameter table as a c++ function for the button.
+		button->addOnClickFn(std::bind(callback, engine, paramTable));
 	}
 
 	/*
-	Utility method to load GameScreens
-	Returns true on sucess.
+		Utility method to load GameScreens
+		Returns true on sucess.
 	*/
 	static bool loadGameLevel(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, tinyxml2::XMLElement* screenElement)
 	{
@@ -438,7 +420,6 @@ private:
 		);
 	}
 
-	static EnumParser<OnClickFunctions::FunctionType> funcEnumParser;
 	static EnumParser<ComponentType> componentEnumParser;
 
 };

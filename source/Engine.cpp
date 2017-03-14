@@ -3,7 +3,6 @@
 #include <Renderers\RenderGL.h>
 #include <algorithm>
 #include <utils\tinyxml2.h>
-#include <utils\OnClickFunctions.h>
 #include <utils\LevelLoader.h>
 #include <Screens\LoadingScreen.h>
 #include <InputGLFW.h>
@@ -103,7 +102,10 @@ void Engine::exit()
 	timer.stop();
 	if(renderer != nullptr)
 		renderer->exit();
-	AssetManager::getInstance()->exit();
+	inputHandler->exit();
+	AssetManager::getInstance()->exit();	
+	activeScreen.second.reset();
+	gameScreens.clear();
 	ScriptEngine::getInstance()->close();
 	if(window != nullptr)
 		window->close();

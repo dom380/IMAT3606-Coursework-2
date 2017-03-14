@@ -17,11 +17,12 @@ gold_collectable.update = function(logicComponent, dt)
 	logicComponent:applyTransform(pos, scale, angle);
 end
 
+-- process message function
 gold_collectable.RecieveMessage = function (logicComponent, msg, msgType)
 	if msgType == "LOCATION" then
-		dist = engine.vec3();
-		pos = logicComponent:getPosition();
-		location = msg.location;
+		local dist = engine.vec3();
+		local pos = logicComponent:getPosition();
+		local location = msg.location;
 		dist.x = location.x - pos.x;
 		dist.y = 0;
 		dist.z = location.z - pos.z;

@@ -212,9 +212,6 @@
     <ClInclude Include="include\utils\Timer.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
-    <ClInclude Include="include\utils\OnClickFunctions.h">
-      <Filter>Header Files\utils</Filter>
-    </ClInclude>
     <ClInclude Include="include\GUI\TextBox.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>

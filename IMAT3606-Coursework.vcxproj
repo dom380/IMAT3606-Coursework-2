@@ -173,11 +173,13 @@
     <ClCompile Include="source\Screens\MenuScreen.cpp" />
     <ClCompile Include="source\utils\DirectoryReader.cpp" />
     <ClCompile Include="source\utils\EnumParser.cpp" />
+    <ClCompile Include="source\utils\FileSaver.cpp" />
     <ClCompile Include="source\utils\Handle.cpp" />
     <ClCompile Include="source\utils\LevelLoader.cpp" />
     <ClCompile Include="source\utils\ObjReader.cpp" />
     <ClCompile Include="source\utils\Timer.cpp" />
     <ClCompile Include="source\utils\tinyxml2.cpp" />
+    <ClCompile Include="source\utils\XMLReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AssetManager.h" />
@@ -235,6 +237,7 @@
     <ClInclude Include="include\utils\DirectoryReader.h" />
     <ClInclude Include="include\utils\EnumParser.h" />
     <ClInclude Include="include\utils\FbxReader.h" />
+    <ClInclude Include="include\utils\FileSaver.h" />
     <ClInclude Include="include\utils\GLSupport.h" />
     <ClInclude Include="include\utils\Handle.h" />
     <ClInclude Include="include\utils\HandleManager.h" />
@@ -244,6 +247,7 @@
     <ClInclude Include="include\utils\OnClickFunctions.h" />
     <ClInclude Include="include\utils\Timer.h" />
     <ClInclude Include="include\utils\tinyxml2.h" />
+    <ClInclude Include="include\utils\XMLReader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\basic.frag" />

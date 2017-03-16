@@ -28,19 +28,19 @@ public:
 	{
 		try
 		{
-			tinyxml2::XMLDocument doc;
-			tinyxml2::XMLError check = doc.LoadFile(filePath);
+			tinyxml2::XMLDocument* doc = new tinyxml2::XMLDocument();
+			tinyxml2::XMLError check = doc->LoadFile(filePath);
 			if (check != tinyxml2::XML_SUCCESS) {
 				std::cerr << "Failed to load file" << filePath << std::endl;
 				return false;
 			}
-			tinyxml2::XMLElement* screenElement = doc.FirstChildElement("screen");
+			tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");
 			const char* type = screenElement->Attribute("type");
 			if (string(type) == string("menu")) {
-				return loadMenu(engine, renderer, input, screenElement);
+				return loadMenu(engine, renderer, input, doc, filePath);
 			}
 			else if (string(type) == string("level")) {
-				return loadGameLevel(engine, renderer, input, screenElement);
+				return loadGameLevel(engine, renderer, input, doc, filePath);
 			}
 			else
 			{
@@ -137,10 +137,13 @@ private:
 		Utility method to load MenuScreens
 		Returns true on success.
 	*/
-	static bool loadMenu(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, tinyxml2::XMLElement* screenElement)
+	static bool loadMenu(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, tinyxml2::XMLDocument* screenDocument, string filepath)
 	{
+		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
 		shared_ptr<MenuScreen> menuScreen = std::make_shared<MenuScreen>(renderer, engine);
 		menuScreen->setID(screenElement->Attribute("name"));
+		menuScreen->setXMLDocument(screenDocument);
+		menuScreen->setXMLFilePath(filepath);
 		tinyxml2::XMLElement* stringElement = screenElement->FirstChildElement("strings");
 		if (stringElement != NULL) stringElement = stringElement->FirstChildElement();
 		while (stringElement != NULL) {
@@ -243,15 +246,18 @@ private:
 		Utility method to load GameScreens
 		Returns true on sucess.
 	*/
-	static bool loadGameLevel(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, tinyxml2::XMLElement* screenElement)
+	static bool loadGameLevel(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, tinyxml2::XMLDocument* screenDocument, string filepath)
 	{
 #ifndef NDEBUG
 			Timer timer;
 			timer.start();
 #endif
+		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
 		shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>(engine->getWindowWidth(), engine->getWindowHeight(), 45.f);
 		shared_ptr<GameScreen> gameScreen = std::make_shared<GameScreen>(renderer, input, camera);
 		gameScreen->setID(screenElement->Attribute("name"));
+		gameScreen->setXMLDocument(screenDocument);
+		gameScreen->setXMLFilePath(filepath);
 		tinyxml2::XMLElement* gameObjElement = screenElement->FirstChildElement("gameObjects")->FirstChildElement();
 		while (gameObjElement != NULL) {
 			loadGameObject(renderer, gameScreen, gameObjElement, gameScreen->getComponentStore());

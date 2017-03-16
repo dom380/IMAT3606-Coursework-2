@@ -30,6 +30,8 @@ private:
 	*/
 	bool showCube;
 	bool showGameObjects;
+	bool popupActive;
+	string popupText;
 
 	//
 	vector<std::string> objList;
@@ -50,6 +52,12 @@ private:
 	void debugGameObjectsMenu();
 
 	/*
+		File Menus
+	*/
+	bool saveCurrentLevel();
+	bool saveAsLevel();
+
+	/*
 		Create menus
 	*/
 	void createCubeMenu();
@@ -64,6 +72,11 @@ private:
 	void gameObjectsMenuRigidBody();
 	void gameObjectsMenuLogic();
 	void gameObjectsMenuTransform(int i, ModelComponent* model);
+
+	/*
+		popups
+	*/
+	void popup(string text);
 
 public:
 	static shared_ptr<DebugMenu> getInstance();

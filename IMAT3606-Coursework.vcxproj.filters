@@ -180,6 +180,12 @@
     <ClCompile Include="source\Editor\imgui\ImguiHandler.cpp">
       <Filter>Source Files\Editor\imgui</Filter>
     </ClCompile>
+    <ClCompile Include="source\utils\FileSaver.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\utils\XMLReader.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\utils\GLSupport.h">
@@ -373,6 +379,12 @@
     </ClInclude>
     <ClInclude Include="include\Editor\imgui\ImguiHandler.h">
       <Filter>Header Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utils\FileSaver.h">
+      <Filter>Header Files\utils\FileParsers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utils\XMLReader.h">
+      <Filter>Header Files\utils\FileParsers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

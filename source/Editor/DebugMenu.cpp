@@ -1,11 +1,19 @@
 #include "Editor/DebugMenu.h"
 #include "utils/levelloader.h"
 #include <utils\DirectoryReader.h>
+#include <utils\FileSaver.h>
 
 bool DebugMenu::initialised = false;
 shared_ptr<DebugMenu> DebugMenu::instance;
 
 
+
+void DebugMenu::popup(string text)
+{
+
+
+
+}
 
 shared_ptr<DebugMenu> DebugMenu::getInstance()
 {
@@ -21,6 +29,7 @@ void DebugMenu::init()
 {
 	showGameObjects = false;
 	showCube = false;
+	popupActive = false;
 }
 
 void DebugMenu::update()
@@ -31,8 +40,28 @@ void DebugMenu::update()
 
 void DebugMenu::updateMainMenu()
 {
+	
 	if (ImGui::BeginMainMenuBar())
 	{
+		if (ImGui::BeginMenu("File"))
+		{
+			if (ImGui::Button("Save"))
+			{
+				if (saveCurrentLevel())
+				{
+					
+					popupText = "Saved successfully";
+				} 
+				else
+				{
+					popupText = "Save FAILED";
+				}
+				popupActive = true;
+	
+
+			}
+			ImGui::EndMenu();
+		}
 		if (ImGui::BeginMenu("Debug"))
 		{
 			if (ImGui::Button("Objects"))
@@ -72,6 +101,7 @@ void DebugMenu::updateMainMenu()
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
+		
 	}
 }
 
@@ -89,6 +119,18 @@ void DebugMenu::updateLogic()
 	{
 		debugGameObjectsMenu();
 	}
+	if (popupActive)
+	{
+		ImGui::OpenPopup("Popup");
+		popupActive = false;
+	}
+	if (ImGui::BeginPopup("Popup"))
+	{
+		ImGui::Text(popupText.c_str());
+		ImGui::EndPopup();
+	}
+
+	
 }
 
 void DebugMenu::debugGameObjectsMenu()
@@ -108,7 +150,8 @@ void DebugMenu::debugGameObjectsMenu()
 		auto model =  gameScreen->getComponentStore()->getComponent<ModelComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
 		if (model)
 		{
-			snprintf(goName, sizeof(goName), "GO_%s", model->getId().c_str());
+			//snprintf(goName, sizeof(goName), "GO_%s", model->getId().c_str());
+			snprintf(goName, sizeof(goName), "GO_%s_%d", model->getId().c_str(), x);
 		}
 		else {
 			snprintf(goName, sizeof(goName), "GO_%s_%d", "ID_ERROR", x);
@@ -159,6 +202,163 @@ void DebugMenu::debugGameObjectsMenu()
 		ImGui::PopID();
 	}
 	ImGui::End();
+}
+
+bool DebugMenu::saveCurrentLevel()
+{
+	shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
+	//string levelPath = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::LEVEL) + "Level1" + ".xml";
+	/*
+	Every game object from the vector is listed.
+	*/
+	for (int x = 0; x < gameScreen->getGameObjects().size(); x++)
+	{
+		auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
+
+		/*
+		Inside the gameobject is a list of the components
+		*/
+		for (int i = ComponentType::MODEL; i < ComponentType::COMPONENT_TYPE_COUNT; i++)
+		{
+			ComponentType cType = static_cast<ComponentType>(i);
+
+			if (gameScreen->getGameObjects()[x]->HasComponent(cType))
+			{
+				char compName[14];
+				snprintf(compName, sizeof(compName), "COMP_%d", i);
+				//Each component has editable stuff
+
+				switch (cType)
+				{
+				case MODEL:
+
+					break;
+				case ANIMATION:
+
+					break;
+				case RIGID_BODY:
+
+					break;
+				case LOGIC:
+
+					break;
+				case TRANSFORM:
+					string transformInnerElement;
+					for (int z = 0; z < 3; z++)
+					{
+						switch (z)
+						{
+						case 0:
+							transformInnerElement = "position";
+							for (int y = 0; y < 3; y++)
+							{
+								std::ostringstream ss;
+								ss << model->getTransform()->position[y];
+								switch (y)
+								{
+								case 0:
+									//Save func
+									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "x", string(ss.str())))
+										return false;
+									break;
+								case 1:
+									//Save func
+
+									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "y", string(ss.str())))
+										return false;
+									break;
+								case 2:
+									//Save func
+
+									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "z", string(ss.str())))
+										return false;
+									break;
+								}
+
+							}
+
+							break;
+						case 1:
+							transformInnerElement = "scale";
+							for (int y = 0; y < 3; y++)
+							{
+								std::ostringstream ss;
+								ss << model->getTransform()->scale[y];
+								switch (y)
+								{
+								case 0:
+									//Save func
+
+									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "x", string(ss.str())))
+										return false;
+									break;
+								case 1:
+									//Save func
+
+									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "y", string(ss.str())))
+										return false;
+									break;
+								case 2:
+									//Save func
+
+									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "z", string(ss.str())))
+										return false;
+									break;
+								}
+
+							}
+							break;
+						case 2:
+
+							transformInnerElement = "orientation";
+							for (int y = 0; y < 4; y++)
+							{
+								std::ostringstream ss;
+								ss << model->getTransform()->orientation[y];
+								switch (y)
+								{
+								case 0:
+									//Save func
+
+									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "x", string(ss.str())))
+										return false;
+									break;
+								case 1:
+									//Save func
+
+									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "y", string(ss.str())))
+										return false;
+									break;
+								case 2:
+									//Save func
+
+									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "z", string(ss.str())))
+										return false;
+									break;
+								case 4:
+									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "w", string(ss.str())))
+										return false;
+									break;
+								}
+
+							}
+							break;
+						}
+					}
+
+					break;
+				}
+			}
+		}
+
+
+	}
+	return FileSaver::SaveFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), Engine::g_pEngine->getActiveScreen()->getXMLFilePath());
+}
+
+bool DebugMenu::saveAsLevel()
+{
+	return false;
 }
 
 void DebugMenu::createCubeMenu()

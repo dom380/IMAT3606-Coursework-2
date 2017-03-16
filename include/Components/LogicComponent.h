@@ -38,6 +38,7 @@ private:
 	std::weak_ptr<GameObject> owner;
 	std::weak_ptr<GameScreen> screen;
 	const char* script;
+	string scriptName;
 	//private member functions
 	void registerLuaBindings();
 	//private lua bindings

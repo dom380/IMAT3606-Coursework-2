@@ -1,11 +1,14 @@
 #include "Components\LogicComponent.h"
 #include <Scripting\ScriptEngine.h>
+#include <utils/Utilities.h>
 
 LogicComponent::LogicComponent(std::weak_ptr<GameObject> owner, std::weak_ptr<GameScreen> screen, const char* scriptFile) : Component(ComponentType::LOGIC), updateFunc(luaState), recieveMsgFunc(luaState)
 {
 	this->owner = owner;
 	this->screen = screen;
 	script = scriptFile;
+	auto splitPath = Utilities::splitFilePath(script);
+	scriptName = Utilities::removeExtension(splitPath.at(splitPath.size() - 1));
 	registerLuaBindings();
 }
 
@@ -67,9 +70,9 @@ void LogicComponent::RecieveMessage(Message * msg)
 void LogicComponent::registerLuaBindings()
 {
 	auto scriptEngine = ScriptEngine::getInstance();
-	scriptEngine->loadScript(script, "gold_collectable");
-	updateFunc = scriptEngine->getFunction("gold_collectable", "update");
-	recieveMsgFunc = scriptEngine->getFunction("gold_collectable", "RecieveMessage");
+	scriptEngine->loadScript(script, scriptName);
+	updateFunc = scriptEngine->getFunction(scriptName, "update");
+	recieveMsgFunc = scriptEngine->getFunction(scriptName, "RecieveMessage");
 }
 
 void LogicComponent::applyTransform(glm::vec3 position, float scale, float orientation)

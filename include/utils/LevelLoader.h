@@ -9,6 +9,7 @@
 #include <Components\LogicComponent.h>
 #include "tinyxml2.h"
 #include <Scripting\ScriptEngine.h>
+#include <Utils/Utilities.h>
 #ifndef NDEBUG
 #include "Timer.h"
 #endif
@@ -205,8 +206,7 @@ private:
 		string scriptFile = AssetManager::getInstance()->getScript(scriptName.c_str());
 		string function = onClickElement->FirstChildElement("function") != NULL ? onClickElement->FirstChildElement("function")->GetText() : "doNothing";
 		//Remove file extension then load the script into lua
-		size_t lastindex = scriptName.find_last_of(".");
-		string rawname = scriptName.substr(0, lastindex);
+		string rawname = Utilities::removeExtension(scriptName);
 		ScriptEngine::getInstance()->loadScript(scriptFile, rawname);
 		//Retrieve a reference to the onClick function
 		auto callback = ScriptEngine::getInstance()->getFunction(rawname, function);

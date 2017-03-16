@@ -180,6 +180,7 @@
     <ClCompile Include="source\utils\ObjReader.cpp" />
     <ClCompile Include="source\utils\Timer.cpp" />
     <ClCompile Include="source\utils\tinyxml2.cpp" />
+    <ClCompile Include="source\utils\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AssetManager.h" />
@@ -245,6 +246,7 @@
     <ClInclude Include="include\utils\ObjReader.h" />
     <ClInclude Include="include\utils\Timer.h" />
     <ClInclude Include="include\utils\tinyxml2.h" />
+    <ClInclude Include="include\utils\Utilities.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\basic.frag" />

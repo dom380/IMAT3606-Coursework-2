@@ -30,7 +30,9 @@ private:
 	*/
 	bool showCube;
 	bool showGameObjects;
+	bool showSaveAsMenu;
 	bool popupActive;
+
 	string popupText;
 
 	//
@@ -54,8 +56,9 @@ private:
 	/*
 		File Menus
 	*/
-	bool saveCurrentLevel();
-	bool saveAsLevel();
+	bool saveCurrentLevel(string fileName);
+	bool saveAsLevel(string fileName);
+	void saveAsMenu();
 
 	/*
 		Create menus

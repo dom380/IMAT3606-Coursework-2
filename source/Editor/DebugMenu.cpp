@@ -30,35 +30,40 @@ void DebugMenu::init()
 	showGameObjects = false;
 	showCube = false;
 	popupActive = false;
+	showSaveAsMenu = false;
 }
 
 void DebugMenu::update()
 {
 	updateMainMenu();
-	updateLogic();	
+updateLogic();
 }
 
 void DebugMenu::updateMainMenu()
 {
-	
+
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::Button("Save"))
 			{
-				if (saveCurrentLevel())
+				if (saveCurrentLevel(Engine::g_pEngine->getActiveScreen()->getXMLFilePath()))
 				{
-					
+
 					popupText = "Saved successfully";
-				} 
+				}
 				else
 				{
 					popupText = "Save FAILED";
 				}
 				popupActive = true;
-	
 
+
+			}
+			if (ImGui::Button("SaveAs..."))
+			{
+				showSaveAsMenu = true;
 			}
 			ImGui::EndMenu();
 		}
@@ -76,7 +81,7 @@ void DebugMenu::updateMainMenu()
 			{
 				std::string path = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::MODEL) + "*.obj";
 				objList = DirectoryReader::getFilesInDirectory(path.c_str());
-				
+
 			}
 			for (int x = 0; x < objList.size(); x++)
 			{
@@ -87,7 +92,7 @@ void DebugMenu::updateMainMenu()
 				}
 				if (ImGui::Button(objList[x].c_str()))
 				{
-					
+
 					objCreateActive[x] = true;
 					//showCube = true;
 				}
@@ -97,11 +102,11 @@ void DebugMenu::updateMainMenu()
 				}
 				ImGui::PopID();
 			}
-			
+
 			ImGui::EndMenu();
 		}
 		ImGui::EndMainMenuBar();
-		
+
 	}
 }
 
@@ -128,6 +133,11 @@ void DebugMenu::updateLogic()
 	{
 		ImGui::Text(popupText.c_str());
 		ImGui::EndPopup();
+	}
+
+	if (showSaveAsMenu)
+	{
+		saveAsMenu();
 	}
 
 	
@@ -204,7 +214,7 @@ void DebugMenu::debugGameObjectsMenu()
 	ImGui::End();
 }
 
-bool DebugMenu::saveCurrentLevel()
+bool DebugMenu::saveCurrentLevel(string fileName)
 {
 	shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
 	//string levelPath = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::LEVEL) + "Level1" + ".xml";
@@ -350,15 +360,34 @@ bool DebugMenu::saveCurrentLevel()
 				}
 			}
 		}
-
-
 	}
-	return FileSaver::SaveFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), Engine::g_pEngine->getActiveScreen()->getXMLFilePath());
+	return FileSaver::SaveFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(),fileName);
 }
 
-bool DebugMenu::saveAsLevel()
+bool DebugMenu::saveAsLevel(string fileName)
 {
 	return false;
+}
+
+void DebugMenu::saveAsMenu()
+{
+	ImGui::Begin("SaveAs", &showSaveAsMenu);
+	static char Buffer[50] = "";
+	ImGui::InputText("File Name", Buffer, sizeof(Buffer));
+	if (ImGui::Button("Save"))
+	{
+		if (saveCurrentLevel(string(AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::LEVEL) + Buffer)))
+		{
+			popupText = "Saved successfully";
+		}
+		else
+		{
+			popupText = "Save FAILED";
+		}
+		popupActive = true;
+		
+	}
+	ImGui::End();
 }
 
 void DebugMenu::createCubeMenu()

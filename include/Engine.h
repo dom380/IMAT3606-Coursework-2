@@ -1,7 +1,6 @@
 #pragma once
 #ifndef ENGINE_H
 #define ENGINE_H
-#define NOMINMAX
 #include "utils\Timer.h"
 #include "AssetManager.h"
 #include "Renderers\Graphics.h"

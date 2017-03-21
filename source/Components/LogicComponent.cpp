@@ -1,10 +1,14 @@
 #include "Components\LogicComponent.h"
+#include <Scripting\ScriptEngine.h>
+#include <utils/Utilities.h>
 
-LogicComponent::LogicComponent(std::weak_ptr<GameObject> owner, std::weak_ptr<GameScreen> screen, const char* scriptFile) : Component(ComponentType::LOGIC)
+LogicComponent::LogicComponent(std::weak_ptr<GameObject> owner, std::weak_ptr<GameScreen> screen, const char* scriptFile) : Component(ComponentType::LOGIC), updateFunc(luaState), recieveMsgFunc(luaState)
 {
 	this->owner = owner;
 	this->screen = screen;
 	script = scriptFile;
+	auto splitPath = Utilities::splitFilePath(script);
+	scriptName = Utilities::removeExtension(splitPath.at(splitPath.size() - 1));
 	registerLuaBindings();
 }
 
@@ -65,52 +69,10 @@ void LogicComponent::RecieveMessage(Message * msg)
 
 void LogicComponent::registerLuaBindings()
 {
-	if (!luaL_loadfile(luaState, script) == LUA_OK)
-	{
-		std::string errorString = "Failed to load script file ";
-		errorString += script;
-		throw std::runtime_error(errorString);
-	}
-	luaL_openlibs(luaState);
-	luabridge::getGlobalNamespace(luaState)
-		.beginNamespace("engine")
-			.beginClass<glm::vec3>("vec3")
-				.addConstructor<void(*) (void)>()
-				.addData("x", &glm::vec3::x)
-				.addData("y", &glm::vec3::y)
-				.addData("z", &glm::vec3::z)
-			.endClass()
-			.beginClass<glm::quat>("quat")
-				.addConstructor<void(*) (void)>()
-				.addData("w", &glm::quat::w)
-				.addData("x", &glm::quat::x)
-				.addData("y", &glm::quat::y)
-				.addData("z", &glm::quat::z)
-			.endClass()
-			.beginClass<LogicComponent>("LogicComponent")
-				.addFunction("applyTransform", &LogicComponent::applyTransform)
-				.addFunction("getPosition", &LogicComponent::getPosition)
-				.addFunction("toggleRender", &LogicComponent::toggleRender)
-				.addFunction("isRendering", &LogicComponent::isRendering)
-				.addFunction("updateScore", &LogicComponent::updateScore)
-			.endClass()
-			.beginClass<MsgType>("MsgType")
-			.endClass()
-			.beginClass<Message>("Message")
-				.addData("id", &Message::id)
-			.endClass()
-			.deriveClass<LocationMessage, Message> ("LocationMessage")
-				.addData("location", &LocationMessage::location)
-			.endClass()
-		.endNamespace();
-	if (luaL_dofile(luaState, script) != 0) {
-		//todo error handling
-		std::string errorString = "Failed to read script file ";
-		errorString += script;
-		throw std::runtime_error(errorString);
-	}
-	updateFunc = luabridge::getGlobal(luaState, "update");
-	recieveMsgFunc = luabridge::getGlobal(luaState, "RecieveMessage");
+	auto scriptEngine = ScriptEngine::getInstance();
+	scriptEngine->loadScript(script, scriptName);
+	updateFunc = scriptEngine->getFunction(scriptName, "update");
+	recieveMsgFunc = scriptEngine->getFunction(scriptName, "RecieveMessage");
 }
 
 void LogicComponent::applyTransform(glm::vec3 position, float scale, float orientation)

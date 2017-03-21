@@ -107,6 +107,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ShowIncludes>false</ShowIncludes>
+      <AdditionalOptions>-DNOMINMAX %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>lua53.lib;freetype27.lib;glew32.lib;opengl32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -136,6 +137,7 @@
       <SDLCheck>true</SDLCheck>
       <ShowIncludes>false</ShowIncludes>
       <PreprocessorDefinitions>NDEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>-DNOMINMAX %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -170,12 +172,15 @@
     <ClCompile Include="source\Robot.cpp" />
     <ClCompile Include="source\Screens\GameScreen.cpp" />
     <ClCompile Include="source\Screens\MenuScreen.cpp" />
+    <ClCompile Include="source\Scripting\LuaStateHolder.cpp" />
+    <ClCompile Include="source\Scripting\ScriptEngine.cpp" />
     <ClCompile Include="source\utils\EnumParser.cpp" />
     <ClCompile Include="source\utils\Handle.cpp" />
     <ClCompile Include="source\utils\LevelLoader.cpp" />
     <ClCompile Include="source\utils\ObjReader.cpp" />
     <ClCompile Include="source\utils\Timer.cpp" />
     <ClCompile Include="source\utils\tinyxml2.cpp" />
+    <ClCompile Include="source\utils\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AssetManager.h" />
@@ -228,6 +233,8 @@
     <ClInclude Include="include\Screens\LoadingScreen.h" />
     <ClInclude Include="include\Screens\MenuScreen.h" />
     <ClInclude Include="include\Screens\Screen.h" />
+    <ClInclude Include="include\Scripting\LuaStateHolder.h" />
+    <ClInclude Include="include\Scripting\ScriptEngine.h" />
     <ClInclude Include="include\utils\DaeReader.h" />
     <ClInclude Include="include\utils\EnumParser.h" />
     <ClInclude Include="include\utils\FbxReader.h" />
@@ -237,9 +244,9 @@
     <ClInclude Include="include\utils\LevelLoader.h" />
     <ClInclude Include="include\utils\ModelFileReader.h" />
     <ClInclude Include="include\utils\ObjReader.h" />
-    <ClInclude Include="include\utils\OnClickFunctions.h" />
     <ClInclude Include="include\utils\Timer.h" />
     <ClInclude Include="include\utils\tinyxml2.h" />
+    <ClInclude Include="include\utils\Utilities.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\basic.frag" />

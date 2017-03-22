@@ -14,6 +14,24 @@ tinyxml2::XMLDocument* XMLReader::GetDoc(string i_sDocName)
 		return docToRead;
 	}
 }
+int XMLReader::GetNumberOfGameObjectsInFile(tinyxml2::XMLDocument * doc)
+{
+	int objectCount = 0;
+	if (doc)
+	{
+		tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");
+		const char* type = screenElement->Attribute("type");
+		if (string(type) == string("level")) {
+			tinyxml2::XMLElement* gameObjElement = screenElement->FirstChildElement("gameObjects")->FirstChildElement();
+			while (gameObjElement != NULL) {
+				objectCount++;
+				gameObjElement = gameObjElement->NextSiblingElement();
+			}
+
+		}
+	}
+	return objectCount;
+}
 /*
 bool XMLReader::LoadDoc(string i_sDocName)
 {

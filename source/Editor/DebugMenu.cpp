@@ -157,7 +157,7 @@ void DebugMenu::debugGameObjectsMenu()
 		ImGui::PushID(x);
 		static bool showMore = false;
 		char goName[50];
-		auto model =  gameScreen->getComponentStore()->getComponent<ModelComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
+		auto model =  gameScreen->getComponentStore()->getComponent<ModelComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::ComponentTypes::MODEL), ComponentType::ComponentTypes::MODEL);
 		if (model)
 		{
 			//snprintf(goName, sizeof(goName), "GO_%s", model->getId().c_str());
@@ -172,9 +172,9 @@ void DebugMenu::debugGameObjectsMenu()
 			/*
 				Inside the gameobject is a list of the components
 			*/
-			for (int i = ComponentType::MODEL; i < ComponentType::COMPONENT_TYPE_COUNT; i++)
+			for (int i = ComponentType::ComponentTypes::MODEL; i < ComponentType::ComponentTypes::COMPONENT_TYPE_COUNT; i++)
 			{
-				ComponentType cType = static_cast<ComponentType>(i);
+				ComponentType::ComponentTypes cType = static_cast<ComponentType::ComponentTypes>(i);
 					
 				if (gameScreen->getGameObjects()[x]->HasComponent(cType))
 				{
@@ -186,19 +186,19 @@ void DebugMenu::debugGameObjectsMenu()
 					{
 						switch (cType)
 						{
-						case MODEL:
+						case ComponentType::MODEL:
 							gameObjectsMenuModel(i, model);
 							break;
-						case ANIMATION:
+						case ComponentType::ANIMATION:
 							gameObjectsMenuAnimation();
 							break;
-						case RIGID_BODY:
+						case ComponentType::RIGID_BODY:
 							gameObjectsMenuRigidBody();
 							break;
-						case LOGIC:
+						case ComponentType::LOGIC:
 							gameObjectsMenuLogic();
 							break;
-						case TRANSFORM:
+						case ComponentType::TRANSFORM:
 							gameObjectsMenuTransform(i, model);
 							break;
 						}
@@ -218,146 +218,19 @@ bool DebugMenu::saveCurrentLevel(string fileName)
 {
 	shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
 	//string levelPath = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::LEVEL) + "Level1" + ".xml";
+	int numberOfObjectsInFile = XMLReader::GetNumberOfGameObjectsInFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument());
 	/*
 	Every game object from the vector is listed.
 	*/
 	for (int x = 0; x < gameScreen->getGameObjects().size(); x++)
 	{
-		auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
-
-		/*
-		Inside the gameobject is a list of the components
-		*/
-		for (int i = ComponentType::MODEL; i < ComponentType::COMPONENT_TYPE_COUNT; i++)
+		FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getGameObjects()[x], gameScreen);
+		//If there is a new object not saved on file
+		if (x >= numberOfObjectsInFile)
 		{
-			ComponentType cType = static_cast<ComponentType>(i);
-
-			if (gameScreen->getGameObjects()[x]->HasComponent(cType))
+			//addto
+			if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getGameObjects()[x], gameScreen))
 			{
-				char compName[14];
-				snprintf(compName, sizeof(compName), "COMP_%d", i);
-				//Each component has editable stuff
-
-				switch (cType)
-				{
-				case MODEL:
-
-					break;
-				case ANIMATION:
-
-					break;
-				case RIGID_BODY:
-
-					break;
-				case LOGIC:
-
-					break;
-				case TRANSFORM:
-					string transformInnerElement;
-					for (int z = 0; z < 3; z++)
-					{
-						switch (z)
-						{
-						case 0:
-							transformInnerElement = "position";
-							for (int y = 0; y < 3; y++)
-							{
-								std::ostringstream ss;
-								ss << model->getTransform()->position[y];
-								switch (y)
-								{
-								case 0:
-									//Save func
-									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "x", string(ss.str())))
-										return false;
-									break;
-								case 1:
-									//Save func
-
-									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "y", string(ss.str())))
-										return false;
-									break;
-								case 2:
-									//Save func
-
-									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "z", string(ss.str())))
-										return false;
-									break;
-								}
-
-							}
-
-							break;
-						case 1:
-							transformInnerElement = "scale";
-							for (int y = 0; y < 3; y++)
-							{
-								std::ostringstream ss;
-								ss << model->getTransform()->scale[y];
-								switch (y)
-								{
-								case 0:
-									//Save func
-
-									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "x", string(ss.str())))
-										return false;
-									break;
-								case 1:
-									//Save func
-
-									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "y", string(ss.str())))
-										return false;
-									break;
-								case 2:
-									//Save func
-
-									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "z", string(ss.str())))
-										return false;
-									break;
-								}
-
-							}
-							break;
-						case 2:
-
-							transformInnerElement = "orientation";
-							for (int y = 0; y < 4; y++)
-							{
-								std::ostringstream ss;
-								ss << model->getTransform()->orientation[y];
-								switch (y)
-								{
-								case 0:
-									//Save func
-
-									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "x", string(ss.str())))
-										return false;
-									break;
-								case 1:
-									//Save func
-
-									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "y", string(ss.str())))
-										return false;
-									break;
-								case 2:
-									//Save func
-
-									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "z", string(ss.str())))
-										return false;
-									break;
-								case 4:
-									if (!FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, model->getId(), transformInnerElement, "w", string(ss.str())))
-										return false;
-									break;
-								}
-
-							}
-							break;
-						}
-					}
-
-					break;
-				}
 			}
 		}
 	}
@@ -403,15 +276,6 @@ void DebugMenu::createCubeMenu()
 
 	if (ImGui::Button("Create"))
 	{
-		/*tinyxml2::XMLDocument doc;
-		string filePath = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::LEVEL) + "level1" + ".xml";
-		tinyxml2::XMLError check = doc.LoadFile(filePath.c_str());
-		if (check != tinyxml2::XML_SUCCESS) {
-			std::cerr << "Failed to load file" << filePath << std::endl;
-
-		}
-		tinyxml2::XMLElement* screenElement = doc.FirstChildElement("screen");
-		tinyxml2::XMLElement* gameObjElement = screenElement->FirstChildElement("gameObjects")->FirstChildElement();*/
 		//Load cube, overide
 		shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
 		shared_ptr<Transform> transform = std::make_shared<Transform>();

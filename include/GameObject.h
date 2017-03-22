@@ -21,7 +21,7 @@ public:
 		Returns the handle to the component of specified type.
 		If Object doesn't have the specified component type an empty handle is return;
 	*/
-	Handle GetComponentHandle (ComponentType type);
+	Handle GetComponentHandle (ComponentType::ComponentTypes type);
 
 	/*
 		Returns a pointer to the component of the specified type.
@@ -30,7 +30,7 @@ public:
 		This is to avoid the caller having to perform a dynamic cast on the returned pointer.
 	*/
 	template <typename T>
-	T* getComponent(ComponentType type)
+	T* getComponent(ComponentType::ComponentTypes type)
 	{
 		if (!HasComponent(type))
 		{
@@ -51,13 +51,13 @@ public:
 		Adds the specified component to the GameObject.
 		T comp, The component to add.
 	*/
-	void AddComponent(std::shared_ptr<Component> comp, ComponentType type);
+	void AddComponent(std::shared_ptr<Component> comp, ComponentType::ComponentTypes type);
 	/*
 		Checks if GameObject has component of this type.
 		ComponentType type, The type to check for.
 		Returns true if Object has a component of this type.
 	*/
-	bool HasComponent(ComponentType type);
+	bool HasComponent(ComponentType::ComponentTypes type);
 private:
 	Handle componentHandles[ComponentType::COMPONENT_TYPE_COUNT];
 	std::weak_ptr<ComponentStore> componentStore;

@@ -1,6 +1,6 @@
 #include "Graphics\ModelComponent.h"
 
-ModelComponent::ModelComponent(shared_ptr<Graphics>& graphics, std::weak_ptr<GameObject> owner) : Component(ComponentType::MODEL)
+ModelComponent::ModelComponent(shared_ptr<Graphics>& graphics, std::weak_ptr<GameObject> owner) : Component(ComponentType::ComponentTypes::MODEL)
 {
 	this->graphics = graphics;
 	this->owner = owner;
@@ -16,9 +16,18 @@ void ModelComponent::init(const char * objFile, const char * textureFile, string
 	shared_ptr<ModelData> modelData = AssetManager::getInstance()->getModelData(objFile, graphics);
 	vboHandles = modelData->vboHandles;
 
+	
 	// Load the texture
-	if(textureFile != NULL)
+	if (textureFile == NULL)
+	{
+		textureName = "";
+	}
+	else
+	{
+		textureName = textureFile;
 		texture = AssetManager::getInstance()->getTexture(textureFile);
+	}
+		
 	indexSize = modelData->indexSize;
 	material = modelData->material;
 
@@ -105,7 +114,7 @@ Transform * ModelComponent::getTransform()
 	auto spOwner = owner.lock();
 	if (spOwner != nullptr) 
 	{
-		return spOwner->getComponent<Transform>(ComponentType::TRANSFORM);
+		return spOwner->getComponent<Transform>(ComponentType::ComponentTypes::TRANSFORM);
 	}
 	return nullptr;
 }

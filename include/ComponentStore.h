@@ -12,27 +12,27 @@ class ComponentStore
 {
 public:
 	template <typename T>
-	T* getComponent(Handle handle, ComponentType type)
+	T* getComponent(Handle handle, ComponentType::ComponentTypes type)
 	{
 		static_assert(std::is_base_of<Component, T>::value, "T must derive from component");
 		switch (type)
 		{
-		case MODEL:
+		case ComponentType::ComponentTypes::MODEL:
 			return (T*)models.get(handle);
 			break;
-		case ANIMATION:
+		case ComponentType::ComponentTypes::ANIMATION:
 			return nullptr;
 			break;
-		case RIGID_BODY:
+		case ComponentType::ComponentTypes::RIGID_BODY:
 			return nullptr;
 			break;
-		case LOGIC:
+		case ComponentType::ComponentTypes::LOGIC:
 			return (T*)logic.get(handle);
 			break;
-		case TRANSFORM:
+		case ComponentType::ComponentTypes::TRANSFORM:
 			return (T*)transforms.get(handle);
 			break;
-		case COMPONENT_TYPE_COUNT:
+		case ComponentType::ComponentTypes::COMPONENT_TYPE_COUNT:
 			//no-op
 			return nullptr;
 			break;
@@ -50,27 +50,27 @@ public:
 	
 
 	template <typename T>
-	std::vector<std::pair<int, T>>* getAllComponents(ComponentType type)
+	std::vector<std::pair<int, T>>* getAllComponents(ComponentType::ComponentTypes type)
 	{
 		static_assert(std::is_base_of<Component, T>::value, "T must derive from component");
 		switch (type)
 		{
-		case MODEL:
+		case ComponentType::ComponentTypes::MODEL:
 			return (std::vector<std::pair<int, T>>*)models.getAll();
 			break;
-		case ANIMATION:
+		case ComponentType::ComponentTypes::ANIMATION:
 			return nullptr;
 			break;
-		case RIGID_BODY:
+		case ComponentType::ComponentTypes::RIGID_BODY:
 			return nullptr;
 			break;
-		case LOGIC:
+		case ComponentType::ComponentTypes::LOGIC:
 			return (std::vector<std::pair<int, T>>*)logic.getAll();
 			break;
-		case TRANSFORM:
+		case ComponentType::ComponentTypes::TRANSFORM:
 			return (std::vector<std::pair<int, T>>*)transforms.getAll();
 			break;
-		case COMPONENT_TYPE_COUNT:
+		case ComponentType::ComponentTypes::COMPONENT_TYPE_COUNT:
 			//no-op
 			return nullptr;
 			break;

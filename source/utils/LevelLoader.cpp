@@ -1,4 +1,4 @@
 #include <Utils/LevelLoader.h>
 
 EnumParser<OnClickFunctions::FunctionType> LevelLoader::funcEnumParser;
-EnumParser<ComponentType> LevelLoader::componentEnumParser;
+EnumParser<ComponentType::ComponentTypes> LevelLoader::componentEnumParser;

@@ -69,6 +69,10 @@ public:
 	/*
 		Returns a Handle to the GameObject's Transform this model belongs to.
 	*/
+	string getTextureName()
+	{
+		return textureName;
+	}
 	Handle transformHandle;
 	/*
 		Returns a pointer to the GameObject's Transform this model belongs to.
@@ -105,6 +109,7 @@ private:
 	unsigned int vaoHandle = 0;
 	shared_ptr<Shader> shader;
 	shared_ptr<Texture> texture;
+	string textureName;
 	Material material;
 	string id;
 	bool drawing = true;

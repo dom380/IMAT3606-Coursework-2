@@ -4,14 +4,16 @@
 /*
 	Enum specifying the type of component. Also used to index the component array of GameObjects
 */
-enum ComponentType
-{
-	MODEL,
-	ANIMATION,
-	RIGID_BODY,
-	LOGIC,
-	TRANSFORM,
-	COMPONENT_TYPE_COUNT //ALWAYS LEAVE THIS AS THE LAST ENUM
-};
-
+namespace ComponentType {
+	enum ComponentTypes
+	{
+		MODEL,
+		ANIMATION,
+		RIGID_BODY,
+		LOGIC,
+		TRANSFORM,
+		COMPONENT_TYPE_COUNT //ALWAYS LEAVE THIS AS THE LAST ENUM
+	};
+	static const char* ComponentNames[] = { "model", "animation", "rigid_body", "logic", "transform" };
+}
 #endif // !COMPONENTTYPE_H

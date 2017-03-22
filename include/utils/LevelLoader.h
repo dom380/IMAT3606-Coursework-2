@@ -77,39 +77,39 @@ public:
 				std::cerr << "Unknown component type, skipping" << std::endl;
 				continue;
 			}
-			ComponentType type = componentEnumParser.parse(string(componentElement->Attribute("type")));
+			ComponentType::ComponentTypes type = componentEnumParser.parse(string(componentElement->Attribute("type")));
 			switch (type)
 			{
-			case ComponentType::MODEL:
+			case ComponentType::ComponentTypes::MODEL:
 				loadModel(renderer, gameObject, componentElement);
 				break;
-			case ComponentType::ANIMATION:
+			case ComponentType::ComponentTypes::ANIMATION:
 				//todo
 				break;
-			case ComponentType::RIGID_BODY:
+			case ComponentType::ComponentTypes::RIGID_BODY:
 				//todo
 				break;
-			case ComponentType::LOGIC:
+			case ComponentType::ComponentTypes::LOGIC:
 			{
 				shared_ptr<LogicComponent> logicComp = std::make_shared<LogicComponent>(gameObject, gameSceen);
-				gameObject->AddComponent(logicComp, ComponentType::LOGIC);
+				gameObject->AddComponent(logicComp, ComponentType::ComponentTypes::LOGIC);
 			}
 			break;
 			case ComponentType::TRANSFORM:
 			{
 				shared_ptr<Transform> transform = std::make_shared<Transform>();
 				loadTransform(transform, componentElement);
-				gameObject->AddComponent(transform, ComponentType::TRANSFORM);
+				gameObject->AddComponent(transform, ComponentType::ComponentTypes::TRANSFORM);
 			}
 			break;
 			default:
 				break;
 			}
-			if (gameObject->HasComponent(ComponentType::TRANSFORM) && gameObject->HasComponent(ComponentType::MODEL)) //Ensure the model is using the same transform as the object
+			if (gameObject->HasComponent(ComponentType::ComponentTypes::TRANSFORM) && gameObject->HasComponent(ComponentType::ComponentTypes::MODEL)) //Ensure the model is using the same transform as the object
 			{
 				//auto transform = componentStore->getComponent<Transform>(gameObject->GetComponent(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
-				auto model = componentStore->getComponent<ModelComponent>(gameObject->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
-				model->transformHandle = gameObject->GetComponentHandle(ComponentType::TRANSFORM);//transform;
+				auto model = componentStore->getComponent<ModelComponent>(gameObject->GetComponentHandle(ComponentType::ComponentTypes::MODEL), ComponentType::ComponentTypes::MODEL);
+				model->transformHandle = gameObject->GetComponentHandle(ComponentType::ComponentTypes::TRANSFORM);//transform;
 			}
 			componentElement = componentElement->NextSiblingElement();
 		}
@@ -122,13 +122,13 @@ public:
 		shared_ptr<ComponentStore> componentStore = gameScreen->getComponentStore();
 		shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(componentStore);
 		loadModel(renderer, gameObject, objectInfo.first, objectInfo.second);
-		gameObject->AddComponent(transform, ComponentType::TRANSFORM);
+		gameObject->AddComponent(transform, ComponentType::ComponentTypes::TRANSFORM);
 		
-		if (gameObject->HasComponent(ComponentType::TRANSFORM) && gameObject->HasComponent(ComponentType::MODEL)) //Ensure the model is using the same transform as the object
+		if (gameObject->HasComponent(ComponentType::ComponentTypes::TRANSFORM) && gameObject->HasComponent(ComponentType::ComponentTypes::MODEL)) //Ensure the model is using the same transform as the object
 		{
 			//auto transform = componentStore->getComponent<Transform>(gameObject->GetComponent(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
-			auto model = componentStore->getComponent<ModelComponent>(gameObject->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
-			model->transformHandle = gameObject->GetComponentHandle(ComponentType::TRANSFORM);//transform;
+			auto model = componentStore->getComponent<ModelComponent>(gameObject->GetComponentHandle(ComponentType::ComponentTypes::MODEL), ComponentType::ComponentTypes::MODEL);
+			model->transformHandle = gameObject->GetComponentHandle(ComponentType::ComponentTypes::TRANSFORM);//transform;
 		}
 		gameScreen->addGameObject(gameObject);
 	}
@@ -302,7 +302,7 @@ private:
 		//modelElement->Attribute("id") != NULL ? id = modelElement->Attribute("id") : id = "";
 		mesh->init(modelPath, texturePath, id);
 		//loadTransform(mesh->transform, modelElement);
-		gameObject->AddComponent(mesh, ComponentType::MODEL);
+		gameObject->AddComponent(mesh, ComponentType::ComponentTypes::MODEL);
 	}
 
 	/*
@@ -319,7 +319,7 @@ private:
 		modelElement->Attribute("id") != NULL ? id = modelElement->Attribute("id") : id = modelPath;
 		mesh->init(modelPath, texturePath, id);
 		//loadTransform(mesh->transform, modelElement);
-		gameObject->AddComponent(mesh, ComponentType::MODEL);
+		gameObject->AddComponent(mesh, ComponentType::ComponentTypes::MODEL);
 	}
 
 	/*
@@ -443,7 +443,7 @@ private:
 	}
 
 	static EnumParser<OnClickFunctions::FunctionType> funcEnumParser;
-	static EnumParser<ComponentType> componentEnumParser;
+	static EnumParser<ComponentType::ComponentTypes> componentEnumParser;
 
 };
 

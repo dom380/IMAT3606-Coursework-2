@@ -78,7 +78,14 @@ public:
 		Returns a pointer to the GameObject's Transform this model belongs to.
 	*/
 	Transform* getTransform();
+	/*
+		GetID of object
+	*/
 	string getId();
+	/* 
+		SetID of object
+	*/
+	void setID(string id);
 	/*
 		Toggles the drawing flag to enable and disable rendering of this model.
 	*/

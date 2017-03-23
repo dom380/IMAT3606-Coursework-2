@@ -124,6 +124,11 @@ string ModelComponent::getId()
 	return id;
 }
 
+void ModelComponent::setID(string passedId)
+{
+	id = passedId;
+}
+
 void ModelComponent::toggleDrawing()
 {
 	drawing = !drawing;

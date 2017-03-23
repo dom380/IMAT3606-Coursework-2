@@ -5,7 +5,7 @@
 
 bool DebugMenu::initialised = false;
 shared_ptr<DebugMenu> DebugMenu::instance;
-
+#define IM_ARRAYSIZE(_ARR)  ((int)(sizeof(_ARR)/sizeof(*_ARR)))
 
 
 void DebugMenu::popup(string text)
@@ -308,10 +308,9 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 	ImGui::DragFloat3("Scale", createScale, 0.5f);
 	ImGui::DragFloat3("Orientation", createOrientation, 0.5f);
 	
-	//Texture Name code
-	string objTextureName;
-	static char Buffer[50] = "";
-	ImGui::InputText("Texture Name", Buffer, sizeof(Buffer));
+	//Texture Name code error
+	static char textureNameBuf[32] = ""; 
+	ImGui::InputText("Texture Name", textureNameBuf, 32);
 
 	if (ImGui::Button("Create"))
 	{
@@ -321,10 +320,9 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 		transform->position = glm::vec3(createPosition[0], createPosition[1], createPosition[2]);
 		transform->orientation = glm::vec3(createOrientation[0], createOrientation[1], createOrientation[2]);
 		transform->scale = glm::vec3(createScale[0], createScale[1], createScale[2]);
-		objTextureName = Buffer;
-		std::pair<string, string> objInfo(objName, objTextureName) ;
+		std::pair<string, string> objInfo(objName, textureNameBuf) ;
 		LevelLoader::loadGameObject(Engine::g_pEngine->getRenderer(), gameScreen, objInfo, transform);
-
+		
 	}
 	ImGui::PopID();
 	ImGui::End();
@@ -338,9 +336,24 @@ void DebugMenu::render()
 void DebugMenu::gameObjectsMenuModel(int i, ModelComponent* model)
 {
 	ImGui::PushID(i);
+	
+	static char objNameBuf[64] = "";
+
+	if (strlen(objNameBuf) == 0)
+	{
+		strncpy_s(objNameBuf, model->getId().c_str(), IM_ARRAYSIZE(model->getId().c_str()));
+	}
+	
+	ImGui::InputText("Object Name", objNameBuf, IM_ARRAYSIZE(objNameBuf));
+	
 	if (ImGui::Button("Toggle"))
 	{
 		model->toggleDrawing();
+	}
+
+	if (ImGui::Button("Update"))
+	{
+		model->setID(objNameBuf);
 	}
 	ImGui::PopID();
 }

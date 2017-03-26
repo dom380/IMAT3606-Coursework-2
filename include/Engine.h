@@ -97,10 +97,24 @@ public:
 	*/
 	string getInitialScreenId();
 
+	/*
+		Return engine window
+	*/
 	shared_ptr<Window> GetWindow();
 
+	/*
+		Return engine renderer
+	*/
 	shared_ptr<Graphics> Engine::getRenderer();
 
+	/*
+		Return ptr to InputHandler
+	*/
+	shared_ptr<Input> getInput();
+
+	/*
+		Global accesor to the game engine.
+	*/
 	static shared_ptr<Engine> g_pEngine;
 
 private:

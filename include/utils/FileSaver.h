@@ -21,7 +21,7 @@ public:
 	/*
 		Update existing game objects inside of the current screen doc
 	*/
-	static bool UpdateFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<GameObject> go, shared_ptr<GameScreen> gameScreen);
+	static bool UpdateFile(tinyxml2::XMLDocument* doc, string levelID, int iObjectCount, shared_ptr<GameObject> go, shared_ptr<GameScreen> gameScreen);
 	/*
 		Add a new game object to the current screen doc
 	*/

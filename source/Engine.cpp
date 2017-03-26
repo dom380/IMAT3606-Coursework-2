@@ -199,6 +199,11 @@ shared_ptr<Graphics> Engine::getRenderer()
 	return renderer;
 }
 
+shared_ptr<Input> Engine::getInput()
+{
+	return inputHandler;
+}
+
 int Engine::getWindowWidth()
 {
 	return width;

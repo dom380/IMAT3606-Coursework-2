@@ -1,13 +1,18 @@
 #include <utils\FileSaver.h>
 #include <utils\XMLReader.h>
 using namespace ComponentType;
-bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, int iObjectCount, shared_ptr<GameObject> go, shared_ptr<GameScreen> gameScreen)
+bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObjectCount, shared_ptr<GameObject> go, shared_ptr<GameScreen> gameScreen)
 {
 	int XMLObjectCount = 0;
 	bool SkipObject = false;
 	if (doc)
 	{
 		tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");
+		int strSize = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::LEVEL).size();
+		int idsize = levelID.size();
+		string levelIDStripped = levelID.substr(AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::LEVEL).size(), levelID.size());
+		levelIDStripped = levelIDStripped.substr(0, levelIDStripped.size()-4);
+		screenElement->SetAttribute("name", levelIDStripped.c_str());
 		const char* type = screenElement->Attribute("type");
 		if (string(type) == string("level")) {
 			tinyxml2::XMLElement* gameObjElement = screenElement->FirstChildElement("gameObjects")->FirstChildElement();

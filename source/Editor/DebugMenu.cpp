@@ -36,7 +36,7 @@ void DebugMenu::init()
 void DebugMenu::update()
 {
 	updateMainMenu();
-updateLogic();
+	updateLogic();
 }
 
 void DebugMenu::updateMainMenu()
@@ -65,6 +65,26 @@ void DebugMenu::updateMainMenu()
 			{
 				showSaveAsMenu = true;
 			}
+
+			if (ImGui::Button("Reload Scene"))
+			{
+				if (loadLevel(Engine::g_pEngine->getActiveScreen()->getXMLFilePath()))
+				{
+					Engine::g_pEngine->replaceScreen(Engine::g_pEngine->getActiveScreen()->getID());
+					popupText = "Load successfully";
+				}
+				else
+				{
+					popupText = "Load FAILED";
+				}
+				popupActive = true;
+			}
+
+			if (ImGui::Button("Load..."))
+			{
+				showLoadMenu = true;
+			}
+
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Debug"))
@@ -112,12 +132,20 @@ void DebugMenu::updateMainMenu()
 void DebugMenu::updateLogic()
 {
 	//Create Object window active
+	bool allCreateWindowsClosed = true;
 	for (int x = 0; x < objCreateActive.size(); x++)
 	{
 		if (objCreateActive[x])
 		{
 			createObjectWindow(objList[x], x);
+			allCreateWindowsClosed = false;
 		}
+	}
+	if (allCreateWindowsClosed)
+	{
+		//reload textures when windows are closed
+		if (!textureList.empty())
+			textureList.clear();
 	}
 	if (showGameObjects)
 	{
@@ -137,6 +165,19 @@ void DebugMenu::updateLogic()
 	if (showSaveAsMenu)
 	{
 		saveAsMenu();
+	}
+
+	if (showLoadMenu)
+	{
+		loadSpecificLevel();
+	}
+	else
+	{
+		//reload levels list when the windows are closed
+		if (!levelList.empty())
+		{
+			levelList.clear();
+		}
 	}
 
 	
@@ -223,7 +264,7 @@ bool DebugMenu::saveCurrentLevel(string fileName)
 	*/
 	for (int x = 0; x < gameScreen->getGameObjects().size(); x++)
 	{
-		FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getGameObjects()[x], gameScreen);
+		FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, gameScreen->getGameObjects()[x], gameScreen);
 		//If there is a new object not saved on file
 		if (x >= numberOfObjectsInFile)
 		{
@@ -234,11 +275,6 @@ bool DebugMenu::saveCurrentLevel(string fileName)
 		}
 	}
 	return FileSaver::SaveFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(),fileName);
-}
-
-bool DebugMenu::saveAsLevel(string fileName)
-{
-	return false;
 }
 
 void DebugMenu::saveAsMenu()
@@ -258,6 +294,65 @@ void DebugMenu::saveAsMenu()
 		}
 		popupActive = true;
 		
+	}
+	ImGui::End();
+}
+
+bool DebugMenu::loadLevel(string fileName)
+{
+	return LevelLoader::loadLevel(Engine::g_pEngine.get(), Engine::g_pEngine->getRenderer(), Engine::g_pEngine->getInput(), fileName.c_str());
+}
+
+void DebugMenu::loadSpecificLevel()
+{
+	ImGui::Begin("Load", &showLoadMenu);
+	static std::vector<const char *> levelCStyleArray;
+	if (levelList.empty())
+	{
+		//Gets all levelsin levels dir
+		//vector<std::string> tempTextureList;
+		std::string path = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::LEVEL) + "*.xml";
+		levelList = DirectoryReader::getFilesInDirectory(path.c_str());
+
+		//For specific file types
+
+		/*path = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::TEXTURE) + "*.jpg";
+		tempTextureList = DirectoryReader::getFilesInDirectory(path.c_str());
+		textureList.insert(textureList.end(), tempTextureList.begin(), tempTextureList.end());
+
+		path = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::TEXTURE) + "*.tga";
+		tempTextureList = DirectoryReader::getFilesInDirectory(path.c_str());
+		textureList.insert(textureList.end(), tempTextureList.begin(), tempTextureList.end());*/
+		if (!levelCStyleArray.empty())
+			levelCStyleArray.clear();
+		levelCStyleArray.reserve(levelList.size());
+		for (int index = 0; index < levelList.size(); ++index)
+		{
+			levelCStyleArray.push_back(levelList[index].c_str());
+		}
+	}
+	/*
+	Create a selectable list for levels
+	*/
+	static int listbox_item_current = 1;
+	ImGui::ListBox("Levels Available", &listbox_item_current, &levelCStyleArray[0], levelCStyleArray.size(), 4);
+
+	if (ImGui::Button("Load"))
+	{
+		if (loadLevel(string(AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::LEVEL) + levelCStyleArray[listbox_item_current])))
+		{
+			//remove .xml from string
+			string levelID = levelCStyleArray[listbox_item_current];
+			levelID = levelID.substr(0, levelID.size()-4);
+			Engine::g_pEngine->replaceScreen(levelID);
+			popupText = "Load successfully";
+		}
+		else
+		{
+			popupText = "Load FAILED";
+		}
+		popupActive = true;
+
 	}
 	ImGui::End();
 }
@@ -325,6 +420,8 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 		tempTextureList = DirectoryReader::getFilesInDirectory(path.c_str());
 		textureList.insert(textureList.end(), tempTextureList.begin(), tempTextureList.end());*/
 
+		if (!textureCStyleArray.empty())
+			textureCStyleArray.clear();
 		textureCStyleArray.reserve(textureList.size());
 		for (int index = 0; index < textureList.size(); ++index)
 		{
@@ -347,7 +444,6 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 		transform->scale = glm::vec3(createScale[0], createScale[1], createScale[2]);
 		std::pair<string, string> objInfo(objName, textureCStyleArray[listbox_item_current]) ;
 		LevelLoader::loadGameObject(Engine::g_pEngine->getRenderer(), gameScreen, objInfo, transform);
-		
 	}
 	ImGui::PopID();
 	ImGui::End();

@@ -31,13 +31,15 @@ private:
 	bool showCube;
 	bool showGameObjects;
 	bool showSaveAsMenu;
+	bool showLoadMenu;
 	bool popupActive;
 
 	string popupText;
 
-	//
+	//vectors
 	vector<std::string> objList;
 	vector<std::string> textureList;
+	vector<std::string> levelList;
 	vector<bool> objCreateActive;
 
 	/*
@@ -57,8 +59,21 @@ private:
 		File Menus
 	*/
 	bool saveCurrentLevel(string fileName);
-	bool saveAsLevel(string fileName);
+	/*
+		Choose a name for the save file, reuses savecurrentlevel to do saving.
+		NOTE: duplicates active screen as its base and then changes file name
+		DOES NOT CHANGE TO THAT SCENE, ACTIVE SCENE IS STILL THE ORIGINAL LOADED FILE.
+	*/
 	void saveAsMenu();
+
+	/*
+		Load level provided by file name, reusues level loader class
+	*/
+	bool loadLevel(string fileName);
+	/*
+		Choose from a list of available levels. Then reuse loadLevel()
+	*/
+	void loadSpecificLevel();
 
 	/*
 		Create menus

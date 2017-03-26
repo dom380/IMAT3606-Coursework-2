@@ -77,7 +77,7 @@ void DebugMenu::updateMainMenu()
 		}
 		if (ImGui::BeginMenu("Create"))
 		{
-			if (objModelList.empty())
+			if (objList.empty())
 			{
 				std::string path = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::MODEL) + "*.obj";
 				objList = DirectoryReader::getFilesInDirectory(path.c_str());
@@ -92,7 +92,6 @@ void DebugMenu::updateMainMenu()
 				}
 				if (ImGui::Button(objList[x].c_str()))
 				{
-
 					objCreateActive[x] = true;
 					//showCube = true;
 				}
@@ -307,11 +306,37 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 	ImGui::DragFloat3("Position", createPosition, 0.5f);
 	ImGui::DragFloat3("Scale", createScale, 0.5f);
 	ImGui::DragFloat3("Orientation", createOrientation, 0.5f);
-	
-	//Texture Name code error
-	static char textureNameBuf[32] = ""; 
-	ImGui::InputText("Texture Name", textureNameBuf, 32);
 
+	static std::vector<const char *> textureCStyleArray;
+	if (textureList.empty())
+	{
+		//Gets all textures in tex dir
+		//vector<std::string> tempTextureList;
+		std::string path = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::TEXTURE) + "*";
+		textureList = DirectoryReader::getFilesInDirectory(path.c_str());
+
+		//For specific file types
+
+		/*path = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::TEXTURE) + "*.jpg";
+		tempTextureList = DirectoryReader::getFilesInDirectory(path.c_str());
+		textureList.insert(textureList.end(), tempTextureList.begin(), tempTextureList.end());
+
+		path = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::TEXTURE) + "*.tga";
+		tempTextureList = DirectoryReader::getFilesInDirectory(path.c_str());
+		textureList.insert(textureList.end(), tempTextureList.begin(), tempTextureList.end());*/
+
+		textureCStyleArray.reserve(textureList.size());
+		for (int index = 0; index < textureList.size(); ++index)
+		{
+			textureCStyleArray.push_back(textureList[index].c_str());
+		}
+	}
+	/*
+		Create a selectable list for textures
+	*/
+	static int listbox_item_current = 1;
+	ImGui::ListBox("Textures Available", &listbox_item_current, &textureCStyleArray[0], textureCStyleArray.size(), 4);
+	
 	if (ImGui::Button("Create"))
 	{
 		//Load object, overide
@@ -320,7 +345,7 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 		transform->position = glm::vec3(createPosition[0], createPosition[1], createPosition[2]);
 		transform->orientation = glm::vec3(createOrientation[0], createOrientation[1], createOrientation[2]);
 		transform->scale = glm::vec3(createScale[0], createScale[1], createScale[2]);
-		std::pair<string, string> objInfo(objName, textureNameBuf) ;
+		std::pair<string, string> objInfo(objName, textureCStyleArray[listbox_item_current]) ;
 		LevelLoader::loadGameObject(Engine::g_pEngine->getRenderer(), gameScreen, objInfo, transform);
 		
 	}

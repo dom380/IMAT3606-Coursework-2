@@ -37,8 +37,8 @@ private:
 
 	//
 	vector<std::string> objList;
+	vector<std::string> textureList;
 	vector<bool> objCreateActive;
-	vector<ModelComponent*> objModelList;
 
 	/*
 		MainMenu bar update.

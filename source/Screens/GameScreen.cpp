@@ -133,9 +133,9 @@ void GameScreen::handle(KeyEvent event)
 	}
 }
 
-void GameScreen::updateScore()
+void GameScreen::updateScore(int amountToAdd)
 {
-	currentScore++;
+	currentScore += amountToAdd;
 	for (shared_ptr<TextBox> textbox : textBoxes)
 	{
 		if (textbox->getId() == string("score_string"))

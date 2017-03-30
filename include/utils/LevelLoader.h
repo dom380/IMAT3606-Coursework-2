@@ -7,22 +7,23 @@
 #include <Screens\GameScreen.h>
 #include <GameObject.h>
 #include <Components\LogicComponent.h>
-#include "OnClickFunctions.h"
 #include "tinyxml2.h"
+#include <Scripting\ScriptEngine.h>
+#include <Utils/Utilities.h>
 #ifndef NDEBUG
-	#include "Timer.h"
+#include "Timer.h"
 #endif
 /*
-	Factory class to parse level XML descriptors and create the relevant objects.
-	Calling these methods on a separate thread using OpenGL implementation requires a second 
-	context and all Vertex Array Objects to be rebuild on the rendering thread.
+Factory class to parse level XML descriptors and create the relevant objects.
+Calling these methods on a separate thread using OpenGL implementation requires a second
+context and all Vertex Array Objects to be rebuild on the rendering thread.
 */
 class LevelLoader {
 public:
 	/*
-		Read the specified XML file then load the requested objects and register the screen with the engine.
+	Read the specified XML file then load the requested objects and register the screen with the engine.
 
-		Returns false if an error occured.
+	Returns false if an error occured.
 	*/
 	static bool loadLevel(Engine* engine, shared_ptr<Graphics> renderer, shared_ptr<Input> input, const char* filePath)
 	{
@@ -91,7 +92,9 @@ public:
 				break;
 			case ComponentType::LOGIC:
 			{
-				shared_ptr<LogicComponent> logicComp = std::make_shared<LogicComponent>(gameObject, gameSceen);
+				auto scriptElement = componentElement->FirstChildElement("script");
+				const char* scriptName = scriptElement != NULL ? scriptElement->GetText() : "default.lua";
+				shared_ptr<LogicComponent> logicComp = std::make_shared<LogicComponent>(gameObject, gameSceen, AssetManager::getInstance()->getScript(scriptName));
 				gameObject->AddComponent(logicComp, ComponentType::LOGIC);
 			}
 			break;
@@ -123,7 +126,7 @@ public:
 		shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(componentStore);
 		loadModel(renderer, gameObject, objectInfo.first, objectInfo.second);
 		gameObject->AddComponent(transform, ComponentType::TRANSFORM);
-		
+
 		if (gameObject->HasComponent(ComponentType::TRANSFORM) && gameObject->HasComponent(ComponentType::MODEL)) //Ensure the model is using the same transform as the object
 		{
 			//auto transform = componentStore->getComponent<Transform>(gameObject->GetComponent(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
@@ -134,8 +137,8 @@ public:
 	}
 private:
 	/*
-		Utility method to load MenuScreens
-		Returns true on success.
+	Utility method to load MenuScreens
+	Returns true on success.
 	*/
 	static bool loadMenu(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, tinyxml2::XMLDocument* screenDocument, string filepath)
 	{
@@ -160,12 +163,12 @@ private:
 	}
 
 	/*
-		Utility method to load Text elements
+	Utility method to load Text elements
 	*/
 	static void loadStringElement(shared_ptr<Graphics>& renderer, shared_ptr<Screen> screen, tinyxml2::XMLElement* stringElement)
 	{
 		Font font = *AssetManager::getInstance()->getFont("arial.ttf", renderer);
-		const char* text = stringElement->FirstChildElement("value")!=NULL ? stringElement->FirstChildElement("value")->GetText() : "MISSING_STRING";
+		const char* text = stringElement->FirstChildElement("value") != NULL ? stringElement->FirstChildElement("value")->GetText() : "MISSING_STRING";
 		shared_ptr<Transform> transform = std::make_shared<Transform>();
 		loadTransform(transform, stringElement);
 		glm::vec3 colour;
@@ -177,12 +180,12 @@ private:
 	}
 
 	/*
-		Utility method to load Button elements
+	Utility method to load Button elements
 	*/
 	static void loadButtonElement(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input> input, shared_ptr<MenuScreen> menuScreen, tinyxml2::XMLElement* buttonElement)
 	{
 		Font font = *AssetManager::getInstance()->getFont("arial.ttf", renderer);
-		const char* text = buttonElement->FirstChildElement("value")!=NULL ? buttonElement->FirstChildElement("value")->GetText() : "MISSING_STRING";
+		const char* text = buttonElement->FirstChildElement("value") != NULL ? buttonElement->FirstChildElement("value")->GetText() : "MISSING_STRING";
 		shared_ptr<Transform> transform = std::make_shared<Transform>();
 		loadTransform(transform, buttonElement);
 		glm::vec3 colour;
@@ -192,54 +195,35 @@ private:
 		shared_ptr<Button> button = std::make_shared<Button>(text, font, transform, renderer, colour, id);
 		menuScreen->addButton(button);
 		input->registerMouseListener(button);
-		string funcName = string(buttonElement->FirstChildElement("function")->Attribute("type"));
-		loadButtonFunc(funcName, buttonElement, button, engine);
+		//string funcName = string(buttonElement->FirstChildElement("function")->Attribute("type"));
+		loadButtonFunc(buttonElement, button, engine);
 	}
 
 	/*
 		Utility method to bind the supplied parameters to the requested callback function.
 	*/
-	static void loadButtonFunc(string funcName, tinyxml2::XMLElement* buttonElement, shared_ptr<Button> button, Engine* engine)
+	static void loadButtonFunc(tinyxml2::XMLElement* buttonElement, shared_ptr<Button> button, Engine* engine)
 	{
-		switch (funcEnumParser.parse(funcName))
-		{
-			case OnClickFunctions::FunctionType::SWITCH_SCREEN: {
-				tinyxml2::XMLElement* paramElement = buttonElement->FirstChildElement("function")->FirstChildElement("params")->FirstChildElement();
-				while (paramElement != NULL) {
-					string paramName = paramElement->Attribute("name");
-					std::transform(paramName.begin(), paramName.end(), paramName.begin(), std::tolower);
-					if (paramName == "screenid") break;
-					paramElement = paramElement->NextSiblingElement();
-				}
-				string temp = paramElement->GetText();
-				button->addOnClickFn(std::bind(OnClickFunctions::switchScreen, engine, temp));
-				break;
-			}
-			case OnClickFunctions::FunctionType::REPLACE_SCREEN:
-			{
-				tinyxml2::XMLElement* paramElement = buttonElement->FirstChildElement("function")->FirstChildElement("params")->FirstChildElement();
-				while (paramElement != NULL) {
-					string paramName = paramElement->Attribute("name");
-					std::transform(paramName.begin(), paramName.end(), paramName.begin(), std::tolower);
-					if (paramName == "screenid") break;
-					paramElement = paramElement->NextSiblingElement();
-				}
-				string temp = paramElement->GetText();
-				button->addOnClickFn(std::bind(OnClickFunctions::replaceScreen, engine, temp));
-				break;
-			}
-			case OnClickFunctions::FunctionType::EXIT:
-			{
-				button->addOnClickFn(std::bind(OnClickFunctions::exit, engine));
-				break;
-			}
-			case OnClickFunctions::FunctionType::DO_NOTHING:
-			default:
-			{
-				button->addOnClickFn(std::bind(OnClickFunctions::doNothing));
-				break;
-			}
+		tinyxml2::XMLElement* onClickElement = buttonElement->FirstChildElement("onClick");
+		string scriptName = onClickElement->FirstChildElement("script") != NULL ? onClickElement->FirstChildElement("script")->GetText() : "default.lua"; 
+		string scriptFile = AssetManager::getInstance()->getScript(scriptName.c_str());
+		string function = onClickElement->FirstChildElement("function") != NULL ? onClickElement->FirstChildElement("function")->GetText() : "doNothing";
+		//Remove file extension then load the script into lua
+		string rawname = Utilities::removeExtension(scriptName);
+		ScriptEngine::getInstance()->loadScript(scriptFile, rawname);
+		//Retrieve a reference to the onClick function
+		auto callback = ScriptEngine::getInstance()->getFunction(rawname, function);
+		//Build up a table of the provided parameters for the lua script
+		luabridge::LuaRef paramTable = luabridge::newTable(LuaStateHolder::getLuaState());
+		tinyxml2::XMLElement* paramElement = onClickElement->FirstChildElement("params") != NULL ? onClickElement->FirstChildElement("params")->FirstChildElement():NULL;
+		while (paramElement != NULL) {
+			string paramName = paramElement->Attribute("name");
+			std::transform(paramName.begin(), paramName.end(), paramName.begin(), std::tolower);
+			paramTable[paramName] = paramElement->GetText();
+			paramElement = paramElement->NextSiblingElement();
 		}
+		//Bind the lua callback function, engine and parameter table as a c++ function for the button.
+		button->addOnClickFn(std::bind(callback, engine, paramTable));
 	}
 
 	/*
@@ -249,8 +233,8 @@ private:
 	static bool loadGameLevel(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, tinyxml2::XMLDocument* screenDocument, string filepath)
 	{
 #ifndef NDEBUG
-			Timer timer;
-			timer.start();
+		Timer timer;
+		timer.start();
 #endif
 		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
 		shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>(engine->getWindowWidth(), engine->getWindowHeight(), 45.f);
@@ -286,12 +270,12 @@ private:
 		return true;
 	}
 
-	
+
 
 	/*
-		Utility method to load a Model from obj name
+	Utility method to load a Model from obj name
 
-		Currently only supports Wavefront .obj format.
+	Currently only supports Wavefront .obj format.
 	*/
 	static void loadModel(shared_ptr<Graphics>& renderer, shared_ptr<GameObject> gameObject, string objName, string textureName="")
 	{
@@ -323,12 +307,12 @@ private:
 	}
 
 	/*
-		Utility method to load Transform objects
+	Utility method to load Transform objects
 	*/
-	static void loadTransform(Transform &transform, tinyxml2::XMLElement* element) 
+	static void loadTransform(Transform &transform, tinyxml2::XMLElement* element)
 	{
 		glm::vec3 pos;
-		glm::vec3 scale = glm::vec3(1.0,1.0,1.0);
+		glm::vec3 scale = glm::vec3(1.0, 1.0, 1.0);
 		glm::quat quat; quat.y = 1.0f; quat.w = 0.0f;
 		readTransformData(pos, scale, quat, element);
 		transform.orientation = quat;
@@ -368,48 +352,48 @@ private:
 		tinyxml2::XMLElement* posElement = element->FirstChildElement("position");
 		if (posElement != NULL) {
 			pos = glm::vec3
-				(
-					posElement->FirstChildElement("x") != NULL ? posElement->FirstChildElement("x")->FloatText() : 0.0f,
-					posElement->FirstChildElement("y") != NULL ? posElement->FirstChildElement("y")->FloatText() : 0.0f,
-					posElement->FirstChildElement("z") != NULL ? posElement->FirstChildElement("z")->FloatText() : 0.0f
-					);
+			(
+				posElement->FirstChildElement("x") != NULL ? posElement->FirstChildElement("x")->FloatText() : 0.0f,
+				posElement->FirstChildElement("y") != NULL ? posElement->FirstChildElement("y")->FloatText() : 0.0f,
+				posElement->FirstChildElement("z") != NULL ? posElement->FirstChildElement("z")->FloatText() : 0.0f
+			);
 		}
 		tinyxml2::XMLElement* scaleElement = element->FirstChildElement("scale");
 		if (scaleElement != NULL) {
 			scale = glm::vec3
-				(
-					scaleElement->FirstChildElement("x") != NULL ? scaleElement->FirstChildElement("x")->FloatText(1.0f) : 1.0f,
-					scaleElement->FirstChildElement("y") != NULL ? scaleElement->FirstChildElement("y")->FloatText(1.0f) : 1.0f,
-					scaleElement->FirstChildElement("z") != NULL ? scaleElement->FirstChildElement("z")->FloatText(1.0f) : 1.0f
-					);
+			(
+				scaleElement->FirstChildElement("x") != NULL ? scaleElement->FirstChildElement("x")->FloatText(1.0f) : 1.0f,
+				scaleElement->FirstChildElement("y") != NULL ? scaleElement->FirstChildElement("y")->FloatText(1.0f) : 1.0f,
+				scaleElement->FirstChildElement("z") != NULL ? scaleElement->FirstChildElement("z")->FloatText(1.0f) : 1.0f
+			);
 		}
 		tinyxml2::XMLElement* quatElement = element->FirstChildElement("orientation");
 		if (quatElement != NULL) {
 			quat = glm::quat
-				(
-					quatElement->FirstChildElement("w") != NULL ? quatElement->FirstChildElement("w")->FloatText() : 0.0f,
-					quatElement->FirstChildElement("x") != NULL ? quatElement->FirstChildElement("x")->FloatText() : 0.0f,
-					quatElement->FirstChildElement("y") != NULL ? quatElement->FirstChildElement("y")->FloatText(1.0f) : 1.0f, //default to be orientated around y axis
-					quatElement->FirstChildElement("z") != NULL ? quatElement->FirstChildElement("z")->FloatText() : 0.0f
-					);
+			(
+				quatElement->FirstChildElement("w") != NULL ? quatElement->FirstChildElement("w")->FloatText() : 0.0f,
+				quatElement->FirstChildElement("x") != NULL ? quatElement->FirstChildElement("x")->FloatText() : 0.0f,
+				quatElement->FirstChildElement("y") != NULL ? quatElement->FirstChildElement("y")->FloatText(1.0f) : 1.0f, //default to be orientated around y axis
+				quatElement->FirstChildElement("z") != NULL ? quatElement->FirstChildElement("z")->FloatText() : 0.0f
+			);
 		}
 	}
 
 	/*
-		Utility method to load Light objcts
+	Utility method to load Light objcts
 	*/
 	static void loadLight(shared_ptr<GameScreen> gameScreen, tinyxml2::XMLElement* element)
 	{
 		Light light = Light();
 		tinyxml2::XMLElement* posElement = element->FirstChildElement("position");
-		if (posElement != NULL) 
+		if (posElement != NULL)
 		{
 			light.pos = glm::vec3
-				(
-					posElement->FirstChildElement("x") != NULL ? posElement->FirstChildElement("x")->FloatText() : 0.0f, 
-					posElement->FirstChildElement("y") != NULL ? posElement->FirstChildElement("y")->FloatText() : 0.0f, 
-					posElement->FirstChildElement("z") != NULL ? posElement->FirstChildElement("z")->FloatText() : 0.0f
-				);
+			(
+				posElement->FirstChildElement("x") != NULL ? posElement->FirstChildElement("x")->FloatText() : 0.0f,
+				posElement->FirstChildElement("y") != NULL ? posElement->FirstChildElement("y")->FloatText() : 0.0f,
+				posElement->FirstChildElement("z") != NULL ? posElement->FirstChildElement("z")->FloatText() : 0.0f
+			);
 		}
 		tinyxml2::XMLElement* lightElement = element->FirstChildElement("ambient");
 		if (lightElement != NULL)
@@ -430,22 +414,20 @@ private:
 	}
 
 	/*
-		Utility method to load Colour objcts
+	Utility method to load Colour objcts
 	*/
-	static void loadColour(glm::vec3& colour, tinyxml2::XMLElement* element, glm::vec3 defaultVal = glm::vec3(0.0,0.0,0.0))
+	static void loadColour(glm::vec3& colour, tinyxml2::XMLElement* element, glm::vec3 defaultVal = glm::vec3(0.0, 0.0, 0.0))
 	{
 		colour = glm::vec3
-			(
-				element->FirstChildElement("r") != NULL ? element->FirstChildElement("r")->FloatText() : defaultVal.r, 
-				element->FirstChildElement("g") != NULL ? element->FirstChildElement("g")->FloatText() : defaultVal.g, 
-				element->FirstChildElement("b") != NULL ? element->FirstChildElement("b")->FloatText() : defaultVal.b
-			);
+		(
+			element->FirstChildElement("r") != NULL ? element->FirstChildElement("r")->FloatText() : defaultVal.r,
+			element->FirstChildElement("g") != NULL ? element->FirstChildElement("g")->FloatText() : defaultVal.g,
+			element->FirstChildElement("b") != NULL ? element->FirstChildElement("b")->FloatText() : defaultVal.b
+		);
 	}
 
-	static EnumParser<OnClickFunctions::FunctionType> funcEnumParser;
 	static EnumParser<ComponentType> componentEnumParser;
 
 };
 
 #endif // !LEVELLOADER_H
-

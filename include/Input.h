@@ -31,6 +31,7 @@ public:
 		Removes an EventListener from the Mouse listeners.
 	*/
 	virtual void removeMouseListener(shared_ptr<EventListener> listener);
+	void exit();
 	/*
 		Enum specifying the implementation of the Input system.
 	*/
@@ -42,6 +43,7 @@ public:
 protected:
 	vector<shared_ptr<EventListener>>keySubs;
 	vector<shared_ptr<EventListener>>mouseSubs;
+	bool closed = false;
 };
 
 #endif // !INPUT_H

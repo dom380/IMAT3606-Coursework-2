@@ -31,11 +31,13 @@
 		</scale>
 		<value>Start</value>
 		
-		<function type="REPLACE_SCREEN">
+		<onClick>
+			<script>ui_button_callbacks.lua</script>
+			<function>replaceScreen</function>
 			<params>
-				<param name="screenId" type="int" >Level1</param>
+				<param name="screenId">Level1</param>
 			</params>
-		</function>
+		</onClick>
 	</button>
 	<button>
 		<position>
@@ -48,7 +50,10 @@
 			<z>1.0</z>
 		</scale>
 		<value>Exit</value>
-		<function type="EXIT"></function>
+		<onClick>
+			<script>ui_button_callbacks.lua</script>
+			<function>exit</function>
+		</onClick>
 	</button>
 </buttons>
 </screen>

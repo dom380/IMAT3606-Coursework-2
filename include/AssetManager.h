@@ -46,6 +46,13 @@ public:
 		shared_ptr<Graphics>& graphics, Pointer to the graphics system.
 	*/
 	shared_ptr<ModelData> getModelData(const char* fileName, shared_ptr<Graphics> graphics);
+
+	/*
+		Returns the full file path of the given script name.
+		const char* fileName, The name of the script to retrieve.
+	*/
+	string getScript(const char* fileName);
+
 	/*
 		Enum specifying the type of resource.
 	*/
@@ -54,7 +61,8 @@ public:
 		TEXTURE,
 		MODEL,
 		FONT,
-		SHADER
+		SHADER,
+		SCRIPT
 	};
 	/*
 		Returns the file path of to the folder containing files of the specified resource type.
@@ -100,11 +108,13 @@ private:
 	map<string, shared_ptr<Texture>> textures;
 	map<std::pair<string, string>, shared_ptr<Shader>> shaders;
 	map<string, shared_ptr<ModelData>> modelData;
+	map<string, string> scripts;
 	string fontFolder;
 	string levelFolder;
 	string modelFolder;
 	string textureFolder;
 	string shaderFolder;
+	string scriptFolder;
 	shared_ptr<ModelFileReader> modelFileReader;
 };
 

@@ -76,6 +76,12 @@
     <Filter Include="Source Files\Editor\imgui">
       <UniqueIdentifier>{521470e1-e946-4403-a9e4-4dd8ea4d5203}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Scripting">
+      <UniqueIdentifier>{ab4ee1ad-bb6e-4f43-962c-4b59b0c880c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scripting">
+      <UniqueIdentifier>{cba1652d-db09-49fb-8bdf-0d34ab0d4d3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -186,6 +192,15 @@
     <ClCompile Include="source\utils\XMLReader.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="source\Scripting\ScriptEngine.cpp">
+      <Filter>Source Files\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scripting\LuaStateHolder.cpp">
+      <Filter>Source Files\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="source\utils\Utilities.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\utils\GLSupport.h">
@@ -210,9 +225,6 @@
       <Filter>Header Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="include\utils\Timer.h">
-      <Filter>Header Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="include\utils\OnClickFunctions.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="include\GUI\TextBox.h">
@@ -385,6 +397,15 @@
     </ClInclude>
     <ClInclude Include="include\utils\XMLReader.h">
       <Filter>Header Files\utils\FileParsers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripting\ScriptEngine.h">
+      <Filter>Header Files\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripting\LuaStateHolder.h">
+      <Filter>Header Files\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utils\Utilities.h">
+      <Filter>Header Files\utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

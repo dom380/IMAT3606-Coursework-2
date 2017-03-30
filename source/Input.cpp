@@ -28,10 +28,19 @@ void Input::removeMouseListener(shared_ptr<EventListener> listener)
 	}
 }
 
+void Input::exit()
+{
+	if (!closed)
+	{
+		keySubs.clear();
+		mouseSubs.clear();
+		closed = true;
+	}
+}
+
 Input::~Input()
 {
-	keySubs.clear();
-	mouseSubs.clear();
+	exit();
 }
 
 Input::Input()

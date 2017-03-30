@@ -12,27 +12,27 @@ class ComponentStore
 {
 public:
 	template <typename T>
-	T* getComponent(Handle handle, ComponentType::ComponentTypes type)
+	T* getComponent(Handle handle, ComponentType type)
 	{
 		static_assert(std::is_base_of<Component, T>::value, "T must derive from component");
 		switch (type)
 		{
-		case ComponentType::ComponentTypes::MODEL:
+		case ComponentType::MODEL:
 			return (T*)models.get(handle);
 			break;
-		case ComponentType::ComponentTypes::ANIMATION:
+		case ComponentType::ANIMATION:
 			return nullptr;
 			break;
-		case ComponentType::ComponentTypes::RIGID_BODY:
+		case ComponentType::RIGID_BODY:
 			return nullptr;
 			break;
-		case ComponentType::ComponentTypes::LOGIC:
+		case ComponentType::LOGIC:
 			return (T*)logic.get(handle);
 			break;
-		case ComponentType::ComponentTypes::TRANSFORM:
+		case ComponentType::TRANSFORM:
 			return (T*)transforms.get(handle);
 			break;
-		case ComponentType::ComponentTypes::COMPONENT_TYPE_COUNT:
+		case ComponentType::COMPONENT_TYPE_COUNT:
 			//no-op
 			return nullptr;
 			break;
@@ -50,27 +50,27 @@ public:
 	
 
 	template <typename T>
-	std::vector<std::pair<int, T>>* getAllComponents(ComponentType::ComponentTypes type)
+	std::vector<std::pair<int, T>>* getAllComponents(ComponentType type)
 	{
 		static_assert(std::is_base_of<Component, T>::value, "T must derive from component");
 		switch (type)
 		{
-		case ComponentType::ComponentTypes::MODEL:
+		case ComponentType::MODEL:
 			return (std::vector<std::pair<int, T>>*)models.getAll();
 			break;
-		case ComponentType::ComponentTypes::ANIMATION:
+		case ComponentType::ANIMATION:
 			return nullptr;
 			break;
-		case ComponentType::ComponentTypes::RIGID_BODY:
+		case ComponentType::RIGID_BODY:
 			return nullptr;
 			break;
-		case ComponentType::ComponentTypes::LOGIC:
+		case ComponentType::LOGIC:
 			return (std::vector<std::pair<int, T>>*)logic.getAll();
 			break;
-		case ComponentType::ComponentTypes::TRANSFORM:
+		case ComponentType::TRANSFORM:
 			return (std::vector<std::pair<int, T>>*)transforms.getAll();
 			break;
-		case ComponentType::ComponentTypes::COMPONENT_TYPE_COUNT:
+		case ComponentType::COMPONENT_TYPE_COUNT:
 			//no-op
 			return nullptr;
 			break;

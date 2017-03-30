@@ -11,7 +11,7 @@ using std::shared_ptr;
 
 
 class Window;
-class ImguiGLFWHandler : ImguiHandler
+class ImguiGLFWHandler : public ImguiHandler
 {
 private:
 	/*
@@ -55,6 +55,5 @@ public:
 	void        imGuiScrollCallback(shared_ptr<Window>, double xoffset, double yoffset);
 	void        imGuiKeyCallback(shared_ptr<Window>, int key, int scancode, int action, int mods);
 	void        imGuiCharCallback(shared_ptr<Window>, unsigned int c);
-
 };
 #endif // ! IMGUIGLFWHANDER_H

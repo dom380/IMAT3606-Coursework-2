@@ -1,6 +1,7 @@
 #include <utils\FileSaver.h>
 #include <utils\XMLReader.h>
-using namespace ComponentType;
+#include <utils\EnumParser.h>
+
 bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObjectCount, shared_ptr<GameObject> go, shared_ptr<GameScreen> gameScreen)
 {
 	int XMLObjectCount = 0;
@@ -45,15 +46,14 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 							/*
 								Iterate through GO components
 							*/
-							for (int i = ComponentTypes::MODEL; i < ComponentTypes::COMPONENT_TYPE_COUNT; i++)
+							for (int i = ComponentType::MODEL; i < ComponentType::COMPONENT_TYPE_COUNT; i++)
 							{
-								ComponentTypes cType = static_cast<ComponentType::ComponentTypes>(i);
-								string ObjectCompType = ComponentNames[cType];
+								ComponentType cType = static_cast<ComponentType>(i);
 								
 								if (go->HasComponent(cType))
 								{
 									//XML current GO and passedGO have same component
-									if (XMLCompType == ObjectCompType)
+									if (cType == EnumParser<ComponentType>().parse(XMLCompType))
 									{
 										/*
 											Switch between all components
@@ -62,7 +62,7 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 										{
 										case MODEL:
 										{
-											auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::ComponentTypes::MODEL), ComponentType::ComponentTypes::MODEL);
+											auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
 											tinyxml2::XMLElement* nameElement = componentElement->FirstChildElement("file");
 											string NameElementText = nameElement->GetText();
 											/*
@@ -101,7 +101,7 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 											/*
 											 Iterate through all inner transforms and their xyz and update doc
 											*/
-											auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::ComponentTypes::MODEL), ComponentType::ComponentTypes::MODEL);
+											auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
 											for (int transformElement = 0; transformElement < 3; transformElement++)
 											{
 												switch (transformElement)
@@ -250,17 +250,17 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 		tinyxml2::XMLElement* componentsElement = doc->NewElement("components");
 		
 		//go through each component
-		for (int i = ComponentTypes::MODEL; i < ComponentTypes::COMPONENT_TYPE_COUNT; i++)
+		for (int i = ComponentType::MODEL; i < ComponentType::COMPONENT_TYPE_COUNT; i++)
 		{
-			ComponentTypes cType = static_cast<ComponentType::ComponentTypes>(i);
-			string ObjectCompType = ComponentNames[cType];
+			ComponentType cType = static_cast<ComponentType>(i);
+			//string ObjectCompType = ComponentNames[cType];
 			if (go->HasComponent(cType))
 			{
 				/*
 					Add new component as child of components
 				*/
 				tinyxml2::XMLElement* componentElement = doc->NewElement("component");
-				componentElement->SetAttribute("type", ObjectCompType.c_str());
+				componentElement->SetAttribute("type", EnumParser<ComponentType>().getString(cType).c_str());
 				componentsElement->InsertEndChild(componentElement);
 				switch (cType)
 				{
@@ -269,7 +269,7 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 					/*
 						Give component model information, optional texture
 					*/
-					auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::ComponentTypes::MODEL), ComponentType::ComponentTypes::MODEL);
+					auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
 					tinyxml2::XMLElement* nameElement = doc->NewElement("file");
 					componentElement->InsertEndChild(nameElement);
 					nameElement->SetText(model->getId().c_str());
@@ -296,7 +296,7 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 					Give component transform information adding xyz from transform elements
 					*/
 					
-					auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::ComponentTypes::MODEL), ComponentType::ComponentTypes::MODEL);
+					auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
 					for (int transformElement = 0; transformElement < 3; transformElement++)
 					{
 						switch (transformElement)

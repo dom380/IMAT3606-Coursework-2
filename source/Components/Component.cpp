@@ -1,16 +1,16 @@
 #include "Components\Component.h"
 
-Component::Component(ComponentType::ComponentTypes type)
+Component::Component(ComponentType type)
 {
 	this->type = type;
 }
 
-ComponentType::ComponentTypes Component::getType()
+ComponentType Component::getType()
 {
 	return type;
 }
 
-bool Component::isType(ComponentType::ComponentTypes type)
+bool Component::isType(ComponentType type)
 {
 	return this->type == type;
 }

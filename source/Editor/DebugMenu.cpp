@@ -197,7 +197,7 @@ void DebugMenu::debugGameObjectsMenu()
 		ImGui::PushID(x);
 		static bool showMore = false;
 		char goName[50];
-		auto model =  gameScreen->getComponentStore()->getComponent<ModelComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::ComponentTypes::MODEL), ComponentType::ComponentTypes::MODEL);
+		auto model =  gameScreen->getComponentStore()->getComponent<ModelComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
 		if (model)
 		{
 			//snprintf(goName, sizeof(goName), "GO_%s", model->getId().c_str());
@@ -212,9 +212,9 @@ void DebugMenu::debugGameObjectsMenu()
 			/*
 				Inside the gameobject is a list of the components
 			*/
-			for (int i = ComponentType::ComponentTypes::MODEL; i < ComponentType::ComponentTypes::COMPONENT_TYPE_COUNT; i++)
+			for (int i = ComponentType::MODEL; i < ComponentType::COMPONENT_TYPE_COUNT; i++)
 			{
-				ComponentType::ComponentTypes cType = static_cast<ComponentType::ComponentTypes>(i);
+				ComponentType cType = static_cast<ComponentType>(i);
 					
 				if (gameScreen->getGameObjects()[x]->HasComponent(cType))
 				{
@@ -494,8 +494,9 @@ void DebugMenu::gameObjectsMenuLogic()
 void DebugMenu::gameObjectsMenuTransform(int i, ModelComponent* model)
 {
 	ImGui::PushID(i);
-	ImGui::DragFloat3("Position", &model->getTransform()->position[0], 0.25f);
-	ImGui::DragFloat3("Orientation", &model->getTransform()->orientation[0], 0.25f);
-	ImGui::DragFloat3("Scale", &model->getTransform()->scale[0], 0.25f);
+	float dragSpeed = 0.25f;
+	ImGui::DragFloat3("Position", &model->getTransform()->position[0], dragSpeed);
+	ImGui::DragFloat3("Orientation", &model->getTransform()->orientation[0], dragSpeed);
+	ImGui::DragFloat3("Scale", &model->getTransform()->scale[0], dragSpeed);
 	ImGui::PopID();
 }

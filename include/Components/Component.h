@@ -14,17 +14,17 @@ public:
 		Constructor
 		ComponentType type, Enum specifying the type of the Component.
 	*/
-	Component(ComponentType::ComponentTypes type);
+	Component(ComponentType type);
 	/*
 		Returns the component's type.
 	*/
-	ComponentType::ComponentTypes getType();
+	ComponentType getType();
 	/*
 		Checks if the component is the specified type.
 		ComponentType type, Type to check against.
 		Returns true if the same type.
 	*/
-	bool isType(ComponentType::ComponentTypes type);
+	bool isType(ComponentType type);
 	/*
 		Pure Virtual update function. 
 		Implementations can use this method to handle time based processing that occurs 
@@ -42,7 +42,7 @@ public:
 	*/
 	virtual void RecieveMessage(Message* msg) = 0;
 private:
-	ComponentType::ComponentTypes type;
+	ComponentType type;
 
 };
 #endif // !COMPONENT_H

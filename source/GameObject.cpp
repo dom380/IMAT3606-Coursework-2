@@ -6,12 +6,12 @@ GameObject::GameObject(std::shared_ptr<ComponentStore> componentStore)
 }
 
 
-Handle GameObject::GetComponentHandle(ComponentType::ComponentTypes type)
+Handle GameObject::GetComponentHandle(ComponentType type)
 {
 	return componentHandles[type];
 }
 
-void GameObject::AddComponent(std::shared_ptr<Component> comp, ComponentType::ComponentTypes type)
+void GameObject::AddComponent(std::shared_ptr<Component> comp, ComponentType type)
 {
 	auto storePtr = componentStore.lock();
 	if (storePtr != nullptr)
@@ -38,7 +38,7 @@ void GameObject::AddComponent(std::shared_ptr<Component> comp, ComponentType::Co
 }
 
 
-bool GameObject::HasComponent(ComponentType::ComponentTypes type)
+bool GameObject::HasComponent(ComponentType type)
 {
 	Handle handle = componentHandles[type];
 	return !handle.isNull(); //If handle is not null, it has the component

@@ -42,6 +42,10 @@ public:
 	virtual void        imGuiScrollCallback(shared_ptr<Window> window, double xoffset, double yoffset) = 0;
 	virtual void        imGuiKeyCallback(shared_ptr<Window> window, int key, int scancode, int action, int mods) = 0;
 	virtual void        imGuiCharCallback(shared_ptr<Window> window, unsigned int c) = 0;
+	/*
+	Check if imGUI has requested input
+	*/
+	virtual bool		imGuiHasInputFocus();
 };
 
 #endif

@@ -51,18 +51,24 @@ EnumParser<Camera::CameraClass>::EnumParser()
 	map["orthographic"] = Camera::CameraClass::ORTHOGRAPHIC;
 }
 
-EnumParser<ComponentType::ComponentTypes>::EnumParser()
+EnumParser<ComponentType>::EnumParser()
 {
-	map["MODEL"] = ComponentType::ComponentTypes::MODEL;
-	map["model"] = ComponentType::ComponentTypes::MODEL;
-	map["ANIMATION"] = ComponentType::ComponentTypes::ANIMATION;
-	map["animation"] = ComponentType::ComponentTypes::ANIMATION;
-	map["RIGID_BODY"] = ComponentType::ComponentTypes::RIGID_BODY;
-	map["rigid_body"] = ComponentType::ComponentTypes::RIGID_BODY;
-	map["LOGIC"] = ComponentType::ComponentTypes::LOGIC;
-	map["logic"] = ComponentType::ComponentTypes::LOGIC;
-	map["TRANSFORM"] = ComponentType::ComponentTypes::TRANSFORM;
-	map["transform"] = ComponentType::ComponentTypes::TRANSFORM;
+	map["MODEL"] = ComponentType::MODEL;
+	map["model"] = ComponentType::MODEL;
+	map["ANIMATION"] = ComponentType::ANIMATION;
+	map["animation"] = ComponentType::ANIMATION;
+	map["RIGID_BODY"] = ComponentType::RIGID_BODY;
+	map["rigid_body"] = ComponentType::RIGID_BODY;
+	map["LOGIC"] = ComponentType::LOGIC;
+	map["logic"] = ComponentType::LOGIC;
+	map["TRANSFORM"] = ComponentType::TRANSFORM;
+	map["transform"] = ComponentType::TRANSFORM;
+
+	strmap[ComponentType::MODEL] = "model";
+	strmap[ComponentType::ANIMATION] = "animation";
+	strmap[ComponentType::RIGID_BODY] = "rigid_body";
+	strmap[ComponentType::LOGIC] = "logic";
+	strmap[ComponentType::TRANSFORM] = "transform";
 }
 
 EnumParser<Input::InputImpl>::EnumParser()

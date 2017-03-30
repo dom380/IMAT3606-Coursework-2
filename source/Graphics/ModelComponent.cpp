@@ -1,6 +1,6 @@
 #include "Graphics\ModelComponent.h"
 
-ModelComponent::ModelComponent(shared_ptr<Graphics>& graphics, std::weak_ptr<GameObject> owner) : Component(ComponentType::ComponentTypes::MODEL)
+ModelComponent::ModelComponent(shared_ptr<Graphics>& graphics, std::weak_ptr<GameObject> owner) : Component(ComponentType::MODEL)
 {
 	this->graphics = graphics;
 	this->owner = owner;
@@ -114,7 +114,7 @@ Transform * ModelComponent::getTransform()
 	auto spOwner = owner.lock();
 	if (spOwner != nullptr) 
 	{
-		return spOwner->getComponent<Transform>(ComponentType::ComponentTypes::TRANSFORM);
+		return spOwner->getComponent<Transform>(ComponentType::TRANSFORM);
 	}
 	return nullptr;
 }

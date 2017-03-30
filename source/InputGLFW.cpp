@@ -22,6 +22,8 @@ void InputGLFW::mouseButtonCallback(GLFWwindow * window, int button, int action,
 #ifndef NDEBUG
 	WindowGLFW* gw = (WindowGLFW*) Engine::g_pEngine->GetWindow().get();
 	gw->getImGuiHandler()->imGuiMouseButtonCallback(Engine::g_pEngine->GetWindow(), button, action, mods);
+	if (gw->getImGuiHandler()->imGuiHasInputFocus())
+		return;
 #endif
 	double cursorPosX, cursorPosY;
 	glfwGetCursorPos(window, &cursorPosX, &cursorPosY);
@@ -39,6 +41,8 @@ void InputGLFW::keyboardCallback(GLFWwindow * window, int key, int scancode, int
 #ifndef NDEBUG
 	WindowGLFW* gw = (WindowGLFW*)Engine::g_pEngine->GetWindow().get(); 
 	gw->getImGuiHandler()->imGuiKeyCallback(Engine::g_pEngine->GetWindow(), key, scancode, action, mods);
+	if (gw->getImGuiHandler()->imGuiHasInputFocus())
+		return;
 #endif
 	KeyEventType type;
 	switch (action)
@@ -67,5 +71,7 @@ void InputGLFW::charCallback(GLFWwindow * window, unsigned int c)
 #ifndef NDEBUG
 	WindowGLFW* gw = (WindowGLFW*)Engine::g_pEngine->GetWindow().get(); 
 	gw->getImGuiHandler()->imGuiCharCallback(Engine::g_pEngine->GetWindow(), c);
+	if (gw->getImGuiHandler()->imGuiHasInputFocus())
+		return;
 #endif
 }

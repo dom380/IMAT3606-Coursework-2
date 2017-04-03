@@ -39,6 +39,7 @@ void ModelComponent::init(const char * objFile, const char * textureFile, string
 	{
 		shader = AssetManager::getInstance()->getShader(std::pair<string, string>("basic.vert", "basic.frag"));
 	}
+	this->objFileName = objFile;
 	this->id = id;
 	initalised = true;
 }
@@ -117,6 +118,11 @@ Transform * ModelComponent::getTransform()
 		return spOwner->getComponent<Transform>(ComponentType::TRANSFORM);
 	}
 	return nullptr;
+}
+
+string ModelComponent::getObjFileName()
+{
+	return objFileName;
 }
 
 string ModelComponent::getId()

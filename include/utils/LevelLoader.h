@@ -315,6 +315,15 @@ private:
 		shared_ptr<ModelComponent> mesh = std::make_shared<ModelComponent>(renderer, gameObject);
 		const char* modelPath = modelElement->FirstChildElement("file")->GetText();
 		const char* texturePath = modelElement->FirstChildElement("texture") != NULL ? modelElement->FirstChildElement("texture")->GetText() : NULL;
+		const char* active = modelElement->FirstChildElement("active") != NULL ? modelElement->FirstChildElement("active")->GetText() : NULL;
+		if (active)
+		{ 
+			if (strcmp(active, "false") == 0)
+			{
+				mesh->toggleDrawing();
+			}
+		}
+		
 		string id;
 		modelElement->Attribute("id") != NULL ? id = modelElement->Attribute("id") : id = modelPath;
 		mesh->init(modelPath, texturePath, id);

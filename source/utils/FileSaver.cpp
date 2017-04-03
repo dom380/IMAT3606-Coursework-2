@@ -63,29 +63,51 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 										case MODEL:
 										{
 											auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
-											tinyxml2::XMLElement* nameElement = componentElement->FirstChildElement("file");
-											string NameElementText = nameElement->GetText();
-											/*
-												Check our XML GO name is the same as the GO name
-											*/
-											if (NameElementText == model->getId())
+											tinyxml2::XMLElement* objNameElement = componentElement->FirstChildElement("file");
+											tinyxml2::XMLElement* textureElement = objNameElement->NextSiblingElement("texture");
+											tinyxml2::XMLElement* renderActiveElement = objNameElement->NextSiblingElement("active");
+											
+											//check for objects with the same name (multiple wall.obj for example)
+											if (XMLObjectCount != iObjectCount)
 											{
-												//check for objects with the same name (multiple wall.obj for example)
-												if (XMLObjectCount != iObjectCount)
-												{
-													SkipObject = true;
-													break;
-												}
-												else
-												{
-													SkipObject = false;
-													break;
-												}
-											}
-											else {
 												SkipObject = true;
 												break;
 											}
+											else
+											{
+												/*
+													Some elements may not exist yet, or require changing
+												*/
+												if (objNameElement)
+													objNameElement->SetText(model->getObjFileName().c_str());
+			
+												componentElement->SetAttribute("id",model->getId().c_str());
+							
+												if (textureElement)
+												{
+													textureElement->SetText(model->getTextureName().c_str());
+												}
+												else if (strcmp(model->getTextureName().c_str(), "") != 0)
+												{
+													textureElement = doc->NewElement("texture");
+													textureElement->SetText(model->getTextureName().c_str());
+													componentElement->InsertEndChild(textureElement);
+												}
+												if (renderActiveElement)
+												{
+													renderActiveElement->SetText(model->isDrawing());
+												}
+												else
+												{
+													renderActiveElement = doc->NewElement("active");
+													renderActiveElement->SetText(model->isDrawing());
+													componentElement->InsertEndChild(renderActiveElement);
+												}
+												SkipObject = false;
+												break;
+											}
+											
+										
 											break;
 										}
 										case ANIMATION:
@@ -270,16 +292,20 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 						Give component model information, optional texture
 					*/
 					auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
-					tinyxml2::XMLElement* nameElement = doc->NewElement("file");
-					componentElement->InsertEndChild(nameElement);
-					nameElement->SetText(model->getId().c_str());
-					if (model->getTextureName() != "")
+					tinyxml2::XMLElement* objNameElement = doc->NewElement("file");
+					componentElement->InsertEndChild(objNameElement);
+					objNameElement->SetText(model->getObjFileName().c_str());
+					componentElement->SetAttribute("id", model->getId().c_str());
+					//If there is a texture to add
+					if (strcmp(model->getTextureName().c_str(), "") != 0)
 					{
 						tinyxml2::XMLElement* textureElement = doc->NewElement("texture");
 						componentElement->InsertEndChild(textureElement);
 						textureElement->SetText(model->getTextureName().c_str());
 					}
-					
+					tinyxml2::XMLElement* renderActiveElement = doc->NewElement("active");
+					componentElement->InsertEndChild(renderActiveElement);
+					renderActiveElement->SetText(model->isDrawing());
 					break;
 				}
 				case ANIMATION:

@@ -79,6 +79,11 @@ public:
 	*/
 	Transform* getTransform();
 	/*
+		Get Obj Name of object
+	*/
+	string getObjFileName();
+	
+	/*
 		GetID of object
 	*/
 	string getId();
@@ -119,6 +124,7 @@ private:
 	string textureName;
 	Material material;
 	string id;
+	string objFileName;
 	bool drawing = true;
 };
 #endif // !MODEL_H

@@ -3,10 +3,10 @@
 #include <Renderers\RenderGL.h>
 #include <algorithm>
 #include <utils\tinyxml2.h>
-#include <utils\OnClickFunctions.h>
 #include <utils\LevelLoader.h>
 #include <Screens\LoadingScreen.h>
 #include <InputGLFW.h>
+#include <Scripting\ScriptEngine.h>
 
 #ifndef NDEBUG
 #include <Editor\imgui\imgui.h>
@@ -104,7 +104,11 @@ void Engine::exit()
 	timer.stop();
 	if(renderer != nullptr)
 		renderer->exit();
-	AssetManager::getInstance()->exit();
+	inputHandler->exit();
+	AssetManager::getInstance()->exit();	
+	activeScreen.second.reset();
+	gameScreens.clear();
+	ScriptEngine::getInstance()->close();
 	if(window != nullptr)
 		window->close();
 	closed = true;
@@ -163,21 +167,24 @@ void Engine::loadConfig()
 	initialScreenId = element->FirstChildElement("initScreen") != NULL ? element->FirstChildElement("initScreen")->GetText() : "MainMenu";
 	string renderer = element->FirstChildElement("renderer")!= NULL ? element->FirstChildElement("renderer")->GetText() : "OPEN_GL";
 	graphicsContext = enumParser.parse(renderer);
-
+	auto assetMng = AssetManager::getInstance();
 	string resourceLocation = element->FirstChildElement("fontLocation") != NULL ? element->FirstChildElement("fontLocation")->GetText() : "./resources/fonts/";
-	AssetManager::getInstance()->setAssetFolder(resourceLocation, AssetManager::ResourceType::FONT);
+	assetMng->setAssetFolder(resourceLocation, AssetManager::ResourceType::FONT);
 
 	resourceLocation = element->FirstChildElement("levelLocation") != NULL ? element->FirstChildElement("levelLocation")->GetText() : "./resources/levels/";
-	AssetManager::getInstance()->setAssetFolder(resourceLocation, AssetManager::ResourceType::LEVEL);
+	assetMng->setAssetFolder(resourceLocation, AssetManager::ResourceType::LEVEL);
 
 	resourceLocation = element->FirstChildElement("modelLocation") != NULL ? element->FirstChildElement("modelLocation")->GetText() : "./resources/models/";
-	AssetManager::getInstance()->setAssetFolder(resourceLocation, AssetManager::ResourceType::MODEL);
+	assetMng->setAssetFolder(resourceLocation, AssetManager::ResourceType::MODEL);
 
 	resourceLocation = element->FirstChildElement("textureLocation") != NULL ? element->FirstChildElement("textureLocation")->GetText() : "./resources/textures/";
-	AssetManager::getInstance()->setAssetFolder(resourceLocation, AssetManager::ResourceType::TEXTURE);
+	assetMng->setAssetFolder(resourceLocation, AssetManager::ResourceType::TEXTURE);
 
 	resourceLocation = element->FirstChildElement("shaderLocation") != NULL ? element->FirstChildElement("shaderLocation")->GetText() : "./shaders/";
-	AssetManager::getInstance()->setAssetFolder(resourceLocation, AssetManager::ResourceType::SHADER);
+	assetMng->setAssetFolder(resourceLocation, AssetManager::ResourceType::SHADER);
+
+	resourceLocation = element->FirstChildElement("scriptLocation") != NULL ? element->FirstChildElement("scriptLocation")->GetText() : "./resources/scripts";
+	assetMng->setAssetFolder(resourceLocation, AssetManager::ResourceType::SCRIPT);
 
 	auto inputEnumParser = EnumParser<Input::InputImpl>();
 	string input = element->FirstChildElement("input") != NULL ? element->FirstChildElement("input")->GetText() : "GLFW";

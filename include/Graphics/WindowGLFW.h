@@ -59,8 +59,9 @@ public:
 	Get GLFW window
 	*/
 	GLFWwindow* getWindow();
-
+#ifndef NDEBUG
 	shared_ptr<ImguiGLFWHandler> getImGuiHandler();
+#endif
 private:
 	GLFWwindow* window;
 	GLFWwindow* offscreen_context;

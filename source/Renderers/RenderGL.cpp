@@ -70,7 +70,11 @@ void RenderGL::buildTextShader(unsigned int &vertArrayObj, unsigned int &vertBuf
 #endif
 	glm::mat4 projection = glm::ortho(0.0f, (float)width, 0.0f, (float)height);
 	textShader->setUniform("projection", projection);
+
+#ifndef NDEBUG
 	check = OpenGLSupport().GetError();
+#endif
+
 	textShader->setUniform("textColour", glm::vec4(1.0, 1.0, 1.0, 1.0));
 	textShader->setUniform("tex", 0);
 	glFlush();

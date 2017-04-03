@@ -6,6 +6,7 @@
 	<modelLocation>./resources/models/</modelLocation>
 	<textureLocation>./resources/textures/</textureLocation>
 	<shaderLocation>./shaders/</shaderLocation>
+	<scriptLocation>./resources/scripts/</scriptLocation>
 	<initScreen>MainMenu</initScreen>
 	<renderer>OPEN_GL</renderer>
 	<input>GLFW</input>

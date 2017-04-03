@@ -1,6 +1,5 @@
 #ifndef DEBUGMENU_H
 #define DEBUGMENU_H
-#define NOMINMAX
 
 #include <algorithm>
 #include <memory>

@@ -1,4 +1,5 @@
 #include "Editor/DebugMenu.h"
+#include "utils\DebugUtils.h"
 #include "utils/levelloader.h"
 #include <utils\DirectoryReader.h>
 #include <utils\FileSaver.h>
@@ -7,13 +8,6 @@ bool DebugMenu::initialised = false;
 shared_ptr<DebugMenu> DebugMenu::instance;
 #define IM_ARRAYSIZE(_ARR)  ((int)(sizeof(_ARR)/sizeof(*_ARR)))
 
-
-void DebugMenu::popup(string text)
-{
-
-
-
-}
 
 shared_ptr<DebugMenu> DebugMenu::getInstance()
 {
@@ -29,7 +23,6 @@ void DebugMenu::init()
 {
 	showGameObjects = false;
 	showCube = false;
-	popupActive = false;
 	showSaveAsMenu = false;
 }
 
@@ -37,6 +30,7 @@ void DebugMenu::update()
 {
 	updateMainMenu();
 	updateLogic();
+	DebugUtils::getInstance()->update();
 }
 
 void DebugMenu::updateMainMenu()
@@ -50,14 +44,13 @@ void DebugMenu::updateMainMenu()
 			{
 				if (saveCurrentLevel(Engine::g_pEngine->getActiveScreen()->getXMLFilePath()))
 				{
-
 					popupText = "Saved successfully";
 				}
 				else
 				{
 					popupText = "Save FAILED";
 				}
-				popupActive = true;
+				DebugUtils::getInstance()->popup(popupText);
 
 
 			}
@@ -77,7 +70,7 @@ void DebugMenu::updateMainMenu()
 				{
 					popupText = "Load FAILED";
 				}
-				popupActive = true;
+				DebugUtils::getInstance()->popup(popupText);
 			}
 
 			if (ImGui::Button("Load..."))
@@ -151,7 +144,7 @@ void DebugMenu::updateLogic()
 	{
 		debugGameObjectsMenu();
 	}
-	if (popupActive)
+	/*if (popupActive)
 	{
 		ImGui::OpenPopup("Popup");
 		popupActive = false;
@@ -160,7 +153,7 @@ void DebugMenu::updateLogic()
 	{
 		ImGui::Text(popupText.c_str());
 		ImGui::EndPopup();
-	}
+	}*/
 
 	if (showSaveAsMenu)
 	{
@@ -290,7 +283,7 @@ void DebugMenu::saveAsMenu()
 		{
 			popupText = "Save FAILED";
 		}
-		popupActive = true;
+		DebugUtils::getInstance()->popup(popupText);
 		
 	}
 	ImGui::End();
@@ -349,7 +342,7 @@ void DebugMenu::loadSpecificLevel()
 		{
 			popupText = "Load FAILED";
 		}
-		popupActive = true;
+		DebugUtils::getInstance()->popup(popupText);
 
 	}
 	ImGui::End();

@@ -173,6 +173,7 @@
     <ClCompile Include="source\Robot.cpp" />
     <ClCompile Include="source\Screens\GameScreen.cpp" />
     <ClCompile Include="source\Screens\MenuScreen.cpp" />
+    <ClCompile Include="source\utils\DebugUtils.cpp" />
     <ClCompile Include="source\utils\DirectoryReader.cpp" />
     <ClCompile Include="source\Scripting\LuaStateHolder.cpp" />
     <ClCompile Include="source\Scripting\ScriptEngine.cpp" />
@@ -241,6 +242,7 @@
     <ClInclude Include="include\Scripting\LuaStateHolder.h" />
     <ClInclude Include="include\Scripting\ScriptEngine.h" />
     <ClInclude Include="include\utils\DaeReader.h" />
+    <ClInclude Include="include\utils\DebugUtils.h" />
     <ClInclude Include="include\utils\DirectoryReader.h" />
     <ClInclude Include="include\utils\EnumParser.h" />
     <ClInclude Include="include\utils\FbxReader.h" />

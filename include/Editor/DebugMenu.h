@@ -31,7 +31,6 @@ private:
 	bool showGameObjects;
 	bool showSaveAsMenu;
 	bool showLoadMenu;
-	bool popupActive;
 
 	string popupText;
 
@@ -89,11 +88,6 @@ private:
 	void gameObjectsMenuRigidBody();
 	void gameObjectsMenuLogic();
 	void gameObjectsMenuTransform(int i, ModelComponent* model);
-
-	/*
-		popups
-	*/
-	void popup(string text);
 
 public:
 	static shared_ptr<DebugMenu> getInstance();

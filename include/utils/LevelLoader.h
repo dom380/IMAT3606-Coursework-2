@@ -12,6 +12,7 @@
 #include <Utils/Utilities.h>
 #ifndef NDEBUG
 #include "Timer.h"
+#include "utils\DebugUtils.h"
 #endif
 /*
 Factory class to parse level XML descriptors and create the relevant objects.
@@ -46,6 +47,9 @@ public:
 			if (strcmp(fileName.c_str(), screenElement->Attribute("name")) != 0)
 			{
 				std::cerr << "Failed to load file, filename != to levelname" << filePath << std::endl;
+#ifndef NDEBUG
+				DebugUtils::getInstance()->popup("FAIL","Failed to load file, filename != to levelname");
+#endif
 				return false;
 			}
 			const char* type = screenElement->Attribute("type");

@@ -35,7 +35,6 @@ void DebugMenu::update()
 
 void DebugMenu::updateMainMenu()
 {
-
 	if (ImGui::BeginMainMenuBar())
 	{
 		if (ImGui::BeginMenu("File"))
@@ -117,6 +116,32 @@ void DebugMenu::updateMainMenu()
 
 			ImGui::EndMenu();
 		}
+		/*
+
+		inherit from.
+		class debugmenuitem
+
+
+		provide definition for:
+		virtual update;
+
+		example
+		update()
+		{
+		if(beginmenu "")
+		{
+		dostuff.
+		}
+		}
+
+		debugmenu has list of debugmenuitems.
+		iterates -> update().
+		instansiation adds to list of.
+		*/
+		for (int x = 0; x < mainMenuBarItems.size(); x++)
+		{
+			mainMenuBarItems[x]->debugMenuItemUpdate();
+		}
 		ImGui::EndMainMenuBar();
 
 	}
@@ -144,16 +169,6 @@ void DebugMenu::updateLogic()
 	{
 		debugGameObjectsMenu();
 	}
-	/*if (popupActive)
-	{
-		ImGui::OpenPopup("Popup");
-		popupActive = false;
-	}
-	if (ImGui::BeginPopup("Popup"))
-	{
-		ImGui::Text(popupText.c_str());
-		ImGui::EndPopup();
-	}*/
 
 	if (showSaveAsMenu)
 	{
@@ -444,6 +459,12 @@ void DebugMenu::render()
 {
 	ImGui::Render();
 }
+
+void DebugMenu::addMenuItem(DebugMenuItem* dmi)
+{
+	mainMenuBarItems.push_back(dmi);
+}
+
 
 void DebugMenu::gameObjectsMenuModel(int i, ModelComponent* model)
 {

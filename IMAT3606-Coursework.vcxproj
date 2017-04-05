@@ -152,6 +152,7 @@
     <ClCompile Include="source\Components\Component.cpp" />
     <ClCompile Include="source\Components\LogicComponent.cpp" />
     <ClCompile Include="source\Editor\DebugMenu.cpp" />
+    <ClCompile Include="source\Editor\DebugMenuItem.cpp" />
     <ClCompile Include="source\Editor\imgui\imgui.cpp" />
     <ClCompile Include="source\Editor\imgui\ImguiGLFWHandler.cpp" />
     <ClCompile Include="source\Editor\imgui\ImguiHandler.cpp" />
@@ -201,6 +202,7 @@
     <ClInclude Include="include\Components\MessageType.h" />
     <ClInclude Include="include\Components\RenderMessage.h" />
     <ClInclude Include="include\Editor\DebugMenu.h" />
+    <ClInclude Include="include\Editor\DebugMenuItem.h" />
     <ClInclude Include="include\Editor\imgui\imconfig.h" />
     <ClInclude Include="include\Editor\imgui\imgui.h" />
     <ClInclude Include="include\Editor\imgui\ImguiGLFWHandler.h" />

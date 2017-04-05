@@ -9,6 +9,7 @@
 #include "Screens\MenuScreen.h"
 #include "Graphics\Window.h"
 #include <utils\EnumParser.h>
+#include <Editor\DebugMenu.h>
 #include <map>
 using std::map;
 /*
@@ -110,6 +111,8 @@ public:
 		Return ptr to InputHandler
 	*/
 	shared_ptr<Input> getInput();
+
+	shared_ptr<DebugMenu> getDebugMenu();
 
 	/*
 		Global accesor to the game engine.

@@ -204,6 +204,9 @@
     <ClCompile Include="source\utils\DebugUtils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
+    <ClCompile Include="source\Editor\DebugMenuItem.cpp">
+      <Filter>Source Files\Editor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\utils\GLSupport.h">
@@ -412,6 +415,9 @@
     </ClInclude>
     <ClInclude Include="include\utils\DebugUtils.h">
       <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\DebugMenuItem.h">
+      <Filter>Header Files\Editor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

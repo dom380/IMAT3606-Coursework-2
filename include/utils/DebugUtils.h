@@ -1,12 +1,14 @@
+#pragma once
 #ifndef DEBUGUTILS_H
 #define DEBUGUTILS_H
 
-#include <algorithm>
-#include <memory>
 #include <Editor/imgui/imgui.h>
-#include <Graphics\ModelComponent.h>
+#include <memory>
+#include <string>
+
 
 using std::shared_ptr;
+using namespace std;
 /*
 DEBUG UTILS
 SINGLETON (Not static, requires updating in order to maintain what debug utils are active)

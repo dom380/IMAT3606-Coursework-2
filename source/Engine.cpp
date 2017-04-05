@@ -211,6 +211,11 @@ shared_ptr<Input> Engine::getInput()
 	return inputHandler;
 }
 
+shared_ptr<DebugMenu> Engine::getDebugMenu()
+{
+	return DebugMenu::getInstance();
+}
+
 int Engine::getWindowWidth()
 {
 	return width;

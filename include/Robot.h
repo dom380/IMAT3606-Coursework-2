@@ -8,7 +8,7 @@ using std::shared_ptr;
 using std::vector;
 #include <GUI\EventListener.h>
 #include <Camera\Camera.h>
-
+#include <Editor\DebugMenuItem.h>
 // constants for arm and leg movement states
 const char BACKWARD_STATE = 0;
 const char FORWARD_STATE = 1;
@@ -20,7 +20,7 @@ const char RIGHT = 1;
 /*
 	Player Character
 */
-class Robot : public EventListener
+class Robot : public EventListener, DebugMenuItem
 {
 private:
 	char legStates[2];
@@ -63,6 +63,9 @@ private:
 	void DrawFoot(float xPos, float yPos, float zPos, glm::mat4 modelMatrix);
 
 	void updateCamera();
+
+	void debugMenuItemUpdate();
+	
 
 public:
 

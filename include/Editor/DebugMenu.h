@@ -5,8 +5,10 @@
 #include <memory>
 #include <Editor/imgui/imgui.h>
 #include <Graphics\ModelComponent.h>
+#include <Editor\DebugMenuItem.h>
 
 using std::shared_ptr;
+
 /*
 DEBUG MENU
 SINGLETON
@@ -35,6 +37,7 @@ private:
 	string popupText;
 
 	//vectors
+	vector<DebugMenuItem*> mainMenuBarItems;
 	vector<std::string> objList;
 	vector<std::string> textureList;
 	vector<std::string> levelList;
@@ -99,5 +102,7 @@ public:
 	void update();
 
 	void render();
+
+	void addMenuItem(DebugMenuItem* dmi);
 };
 #endif // !DEBUGMENU_h

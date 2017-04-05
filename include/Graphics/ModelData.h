@@ -14,6 +14,7 @@ public:
 	unsigned int vaoHandle;
 	vector<unsigned int> vboHandles;
 	size_t indexSize;
+	vector<glm::vec4> vertices;
 };
 
 #endif // !MODELDATA_H

@@ -6,6 +6,7 @@
 #include "Graphics\ModelComponent.h"
 #include "Graphics\Transform.h"
 #include <Components\LogicComponent.h>
+#include <Components\PhysicsComponent.h>
 class LogicComponent;
 
 class ComponentStore
@@ -24,7 +25,7 @@ public:
 			return nullptr;
 			break;
 		case RIGID_BODY:
-			return nullptr;
+			return (T*)physics.get(handle);
 			break;
 		case LOGIC:
 			return (T*)logic.get(handle);
@@ -47,6 +48,8 @@ public:
 	Handle storeComponent(std::shared_ptr<LogicComponent> component);
 
 	Handle storeComponent(std::shared_ptr<Transform> component);
+
+	Handle storeComponent(std::shared_ptr<PhysicsComponent> component);
 	
 
 	template <typename T>
@@ -62,7 +65,7 @@ public:
 			return nullptr;
 			break;
 		case RIGID_BODY:
-			return nullptr;
+			return (std::vector<std::pair<int, T>>*)physics.getAll();
 			break;
 		case LOGIC:
 			return (std::vector<std::pair<int, T>>*)logic.getAll();
@@ -83,6 +86,7 @@ private:
 	HandleManager<ModelComponent> models;
 	HandleManager<LogicComponent> logic;
 	HandleManager<Transform> transforms;
+	HandleManager<PhysicsComponent> physics;
 };
 
 #endif // !COMPONENTSTORE_H

@@ -72,6 +72,7 @@ shared_ptr<ModelData> AssetManager::getModelData(const char * fileName, shared_p
 	readModelFile(fullPath, vertices, normals, textures, indices, data);
 	data->vboHandles = graphics->bufferModelData(vertices, normals, textures, indices, data->vaoHandle);
 	data->indexSize = indices.size();
+	data->vertices = vertices;
 	modelData.emplace(std::pair<string, shared_ptr<ModelData>>(fileName, data));
 	return data;
 }

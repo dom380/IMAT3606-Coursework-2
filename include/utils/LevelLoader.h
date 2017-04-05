@@ -36,6 +36,18 @@ public:
 				return false;
 			}
 			tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");
+			/*
+				Safety check, filename must be the same as the name attribute in file!
+			*/
+			string fileName = filePath;
+			std::size_t pos = fileName.find_last_of("/");
+			fileName = fileName.substr(pos+1, fileName.length());
+			fileName = fileName.substr(0, fileName.length()-4);
+			if (strcmp(fileName.c_str(), screenElement->Attribute("name")) != 0)
+			{
+				std::cerr << "Failed to load file, filename != to levelname" << filePath << std::endl;
+				return false;
+			}
 			const char* type = screenElement->Attribute("type");
 			if (string(type) == string("menu")) {
 				return loadMenu(engine, renderer, input, doc, filePath);

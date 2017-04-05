@@ -200,7 +200,6 @@ void DebugMenu::debugGameObjectsMenu()
 		auto model =  gameScreen->getComponentStore()->getComponent<ModelComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
 		if (model)
 		{
-			//snprintf(goName, sizeof(goName), "GO_%s", model->getId().c_str());
 			snprintf(goName, sizeof(goName), "GO_%s_%d", model->getId().c_str(), x);
 		}
 		else {
@@ -257,7 +256,6 @@ void DebugMenu::debugGameObjectsMenu()
 bool DebugMenu::saveCurrentLevel(string fileName)
 {
 	shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
-	//string levelPath = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::LEVEL) + "Level1" + ".xml";
 	int numberOfObjectsInFile = XMLReader::GetNumberOfGameObjectsInFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument());
 	/*
 	Every game object from the vector is listed.

@@ -300,6 +300,20 @@ private:
 		gameObject->AddComponent(mesh, ComponentType::MODEL);
 	}
 
+	static void loadAnimation(shared_ptr<Graphics>& renderer, shared_ptr<GameObject> gameObject, tinyxml2::XMLElement* animElement)
+	{
+		shared_ptr<AnimatedModelComponent> animation = std::make_shared<AnimatedModelComponent>(renderer, gameObject);
+		tinyxml2::XMLElement* fileElement = animElement->FirstChildElement("files");
+		std::vector<const char*> files;
+		if (fileElement != NULL) fileElement = fileElement->FirstChildElement();
+		while (fileElement != NULL) {
+			files.push_back(fileElement->GetText());
+			//loadStringElement(renderer, gameScreen, stringElement);
+			fileElement = fileElement->NextSiblingElement();
+		}
+		animation->init(files, "");
+	}
+
 	/*
 	Utility method to load Transform objects
 	*/

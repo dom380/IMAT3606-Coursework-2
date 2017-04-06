@@ -59,6 +59,15 @@ void GameScreen::render()
 		if(it->first != -1)
 			it->second.RecieveMessage(renderMsg);
 	}
+
+	std::vector<std::pair<int, AnimatedModelComponent>>* animations = componentStore->getAllComponents<AnimatedModelComponent>(ComponentType::ANIMATION);
+	std::vector<std::pair<int, AnimatedModelComponent>>::iterator animIt;
+	for (animIt = animations->begin(); animIt != animations->end(); ++animIt)
+	{
+		if (animIt->first != -1)
+			animIt->second.RecieveMessage(renderMsg);
+	}
+
 	delete renderMsg;
 	for (shared_ptr<TextBox> textBox : textBoxes)
 	{

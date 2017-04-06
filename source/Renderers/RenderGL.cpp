@@ -329,3 +329,33 @@ void RenderGL::renderModel(ModelComponent & model, shared_ptr<Shader>& shaderPro
 #endif
 	glBindVertexArray(0);
 }
+
+//TO DO
+void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera)
+{
+
+}
+//TO DO
+void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, vector<Light>& lights)
+{
+
+}
+//TO DO - put opengl code into renderer and not within animation class
+void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, unsigned int lightingBuffer, unsigned int lightingBlockId)
+{
+	shaderProgram->bindShader();
+
+	Transform* transform = model.getTransform();
+	glm::quat orientation = transform->orientation;
+	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::rotate(glm::radians(orientation.w), glm::vec3(orientation.x, orientation.y, orientation.z)) * glm::scale(transform->scale);
+	shaderProgram->setUniform("mView", camera->getView());
+	shaderProgram->setUniform("mProjection", camera->getProjection());
+	shaderProgram->setUniform("mModel", mMat);
+	shaderProgram->setUniform("viewPos", camera->getPosition());
+
+	//set shader uniform
+
+	glBindBufferBase(GL_UNIFORM_BUFFER, lightingBlockId, lightingBuffer); //Bind lighting data
+
+	model.
+}

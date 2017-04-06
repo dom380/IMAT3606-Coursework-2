@@ -11,6 +11,7 @@ using std::shared_ptr;
 using std::vector;
 class Font;
 class ModelComponent;
+class AnimatedModelComponent;
 /*
 	Interface for the Graphics system.
 */
@@ -120,6 +121,13 @@ public:
 		unsigned int lightingBlockId, The Id of the uniform block binding point.
 	*/
 	virtual void renderModel(ModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, unsigned int lightingBuffer, unsigned int lightingBlockId) = 0;
+
+	//TO DO
+	virtual void renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera) = 0;
+	//TO DO
+	virtual void renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, vector<Light>& lights) = 0;
+	//TO DO
+	virtual void renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, unsigned int lightingBuffer, unsigned int lightingBlockId) = 0;
 
 	/*
 		Method called on engine shutdown. 

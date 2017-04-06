@@ -21,7 +21,7 @@ public:
 			return (T*)models.get(handle);
 			break;
 		case ANIMATION:
-			return nullptr;
+			return (T*)animatedModels.get(handle);
 			break;
 		case RIGID_BODY:
 			return nullptr;
@@ -47,8 +47,9 @@ public:
 	Handle storeComponent(std::shared_ptr<LogicComponent> component);
 
 	Handle storeComponent(std::shared_ptr<Transform> component);
-	
 
+	Handle storeComponent(std::shared_ptr<AnimatedModelComponent> component);
+	
 	template <typename T>
 	std::vector<std::pair<int, T>>* getAllComponents(ComponentType type)
 	{
@@ -59,7 +60,7 @@ public:
 			return (std::vector<std::pair<int, T>>*)models.getAll();
 			break;
 		case ANIMATION:
-			return nullptr;
+			return (std::vector<std::pair<int, T>>*)animatedModels.getAll();
 			break;
 		case RIGID_BODY:
 			return nullptr;
@@ -81,6 +82,7 @@ public:
 	}
 private:
 	HandleManager<ModelComponent> models;
+	HandleManager<AnimatedModelComponent> animatedModels;
 	HandleManager<LogicComponent> logic;
 	HandleManager<Transform> transforms;
 };

@@ -146,6 +146,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\Animation\Math3D.cpp" />
+    <ClCompile Include="source\Animation\SkeletalModel.cpp" />
     <ClCompile Include="source\AssetManager.cpp" />
     <ClCompile Include="source\Camera\PerspectiveCamera.cpp" />
     <ClCompile Include="source\ComponentStore.cpp" />
@@ -183,11 +185,15 @@
     <ClCompile Include="source\utils\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Animation\defines.h" />
+    <ClInclude Include="include\Animation\Math3D.h" />
+    <ClInclude Include="include\Animation\SkeletalModel.h" />
     <ClInclude Include="include\AssetManager.h" />
     <ClInclude Include="include\Camera\Camera.h" />
     <ClInclude Include="include\Camera\OrthographicCamera.h" />
     <ClInclude Include="include\Camera\PerspectiveCamera.h" />
     <ClInclude Include="include\ComponentStore.h" />
+    <ClInclude Include="include\Components\AnimatedModelComponent.h" />
     <ClInclude Include="include\Components\Component.h" />
     <ClInclude Include="include\Components\ComponentType.h" />
     <ClInclude Include="include\Components\LocationMessage.h" />

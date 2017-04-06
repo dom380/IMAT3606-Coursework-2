@@ -337,7 +337,7 @@ void Robot::setCamera(shared_ptr<Camera> newCamera)
 {
 	camera = newCamera;
 	camera->move(glm::vec3(robot_Pos.x, robot_Pos.y , robot_Pos.z));
-	camera->lookAt(robot_front_Dir - glm::vec3(0.0f,0.25f,0.0f));
+	camera->lookAt(robot_front_Dir );
 }
 
 shared_ptr<Camera> Robot::getCamera()

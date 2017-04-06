@@ -26,7 +26,20 @@ public:
 	FollowCamera(int width, int height, float aspect, glm::vec3 targetDistance, glm::vec3 pos = glm::vec3(0.0, 0.0, 0.0), glm::vec3 up = glm::vec3(0.0, 1.0, 0.0), glm::vec3 direction = glm::vec3(0.0, 0.0, -1.0));
 
 	void move(glm::vec3 newPosition);
-	
+	/*
+	Points the camera at the specified direction vector.
+	Assumes the vector has been normalised.
+	float x, The x component of the vector.
+	float y, The y component of the vector.
+	float z, The z component of the vector.
+	*/
+	void lookAt(float x, float y, float z);
+	/*
+	Points the camera at the specified direction vector.
+	Assumes the vector has been normalised.
+	glm::vec3 target, The 3 component target vector.
+	*/
+	void lookAt(glm::vec3 target);
 	/*
 	Method to process mouse events. See EventListener interface.
 	Camera tracks the mouse movement similar to first person cameras.

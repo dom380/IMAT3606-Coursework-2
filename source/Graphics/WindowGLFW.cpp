@@ -43,7 +43,13 @@ bool WindowGLFW::inititalise()
 	{
 		static_cast<InputGLFW*>(glfwGetWindowUserPointer(window))->mouseButtonCallback(window, button, action, mods);
 	};
+
+	auto charCallback = [](GLFWwindow * window, unsigned int c)
+	{
+		static_cast<InputGLFW*>(glfwGetWindowUserPointer(window))->charCallback(window, c);
+	};
 	glfwSetKeyCallback(window, keyCallback);
+	glfwSetCharCallback(window, charCallback);
 	glfwSetMouseButtonCallback(window, mouseCickCallback);
 	glfwSetCursorPosCallback(window, mouseMoveCallback);
 
@@ -59,7 +65,7 @@ bool WindowGLFW::inititalise()
 
 #ifndef NDEBUG
 	ImGuiGLFWHandler = std::make_shared<ImguiGLFWHandler>();
-	if (!ImGuiGLFWHandler->init(window, false))
+	if (!ImGuiGLFWHandler->init(this))
 	{
 		return false;
 	}
@@ -104,3 +110,14 @@ void WindowGLFW::close()
 	// Close window and terminate GLFW
 	glfwTerminate();
 }
+
+GLFWwindow * WindowGLFW::getWindow()
+{
+	return window;
+}
+#ifndef NDEBUG
+shared_ptr<ImguiGLFWHandler> WindowGLFW::getImGuiHandler()
+{
+	return ImGuiGLFWHandler;
+}
+#endif

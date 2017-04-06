@@ -18,17 +18,17 @@ void GameObject::AddComponent(std::shared_ptr<Component> comp, ComponentType typ
 	{
 		switch (type)
 		{
-		case MODEL:
+		case ComponentType::MODEL:
 			componentHandles[type] = storePtr->storeComponent(std::dynamic_pointer_cast<ModelComponent>(comp));
 			break;
-		case ANIMATION:
+		case ComponentType::ANIMATION:
 			break;
-		case RIGID_BODY:
+		case ComponentType::RIGID_BODY:
 			break;
-		case LOGIC:
+		case ComponentType::LOGIC:
 			componentHandles[type] = storePtr->storeComponent(std::dynamic_pointer_cast<LogicComponent>(comp));
 			break;
-		case TRANSFORM:
+		case ComponentType::TRANSFORM:
 			componentHandles[type] = storePtr->storeComponent(std::dynamic_pointer_cast<Transform>(comp));
 			break;
 		default:

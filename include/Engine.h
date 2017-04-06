@@ -9,6 +9,7 @@
 #include "Screens\MenuScreen.h"
 #include "Graphics\Window.h"
 #include <utils\EnumParser.h>
+#include <Editor\DebugMenu.h>
 #include <map>
 using std::map;
 /*
@@ -96,8 +97,26 @@ public:
 	*/
 	string getInitialScreenId();
 
+	/*
+		Return engine window
+	*/
+	shared_ptr<Window> GetWindow();
+
+	/*
+		Return engine renderer
+	*/
 	shared_ptr<Graphics> Engine::getRenderer();
 
+	/*
+		Return ptr to InputHandler
+	*/
+	shared_ptr<Input> getInput();
+
+	shared_ptr<DebugMenu> getDebugMenu();
+
+	/*
+		Global accesor to the game engine.
+	*/
 	static shared_ptr<Engine> g_pEngine;
 
 private:

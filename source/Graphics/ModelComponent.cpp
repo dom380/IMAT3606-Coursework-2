@@ -16,9 +16,18 @@ void ModelComponent::init(const char * objFile, const char * textureFile, string
 	shared_ptr<ModelData> modelData = AssetManager::getInstance()->getModelData(objFile, graphics);
 	vboHandles = modelData->vboHandles;
 
+	
 	// Load the texture
-	if(textureFile != NULL)
+	if (textureFile == NULL)
+	{
+		textureName = "";
+	}
+	else
+	{
+		textureName = textureFile;
 		texture = AssetManager::getInstance()->getTexture(textureFile);
+	}
+		
 	indexSize = modelData->indexSize;
 	material = modelData->material;
 
@@ -30,6 +39,7 @@ void ModelComponent::init(const char * objFile, const char * textureFile, string
 	{
 		shader = AssetManager::getInstance()->getShader(std::pair<string, string>("basic.vert", "basic.frag"));
 	}
+	this->objFileName = objFile;
 	this->id = id;
 	initalised = true;
 }
@@ -110,9 +120,19 @@ Transform * ModelComponent::getTransform()
 	return nullptr;
 }
 
+string ModelComponent::getObjFileName()
+{
+	return objFileName;
+}
+
 string ModelComponent::getId()
 {
 	return id;
+}
+
+void ModelComponent::setID(string passedId)
+{
+	id = passedId;
 }
 
 void ModelComponent::toggleDrawing()

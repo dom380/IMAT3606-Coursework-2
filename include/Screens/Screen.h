@@ -5,7 +5,10 @@
 using std::string;
 #include <memory>
 using std::shared_ptr;
+
 #include <GUI\TextBox.h>
+#include <utils\XMLReader.h>
+
 /*
 	Abstract base class that represents a single arbitrary 'Screen' within the game.
 	Implementations of this class provide the best place for game specific code.
@@ -47,8 +50,38 @@ public:
 	string getID() {
 		return screenId;
 	}
+
+	void setXMLFilePath(string filePath)
+	{
+		xmlFilePath = filePath;
+	}
+
+	string getXMLFilePath()
+	{
+		return xmlFilePath;
+	}
+	void setXMLDocument(tinyxml2::XMLDocument* doc)
+	{
+		screenXmlDocument = doc;
+	}
+	void setXMLDocument(std::string fileName)
+	{
+		screenXmlDocument = XMLReader::GetDoc(fileName);
+	}
+	void setXMLDocument()
+	{
+		screenXmlDocument = XMLReader::GetDoc(xmlFilePath);
+	}
+
+	tinyxml2::XMLDocument* getXMLDocument()
+	{
+		return screenXmlDocument;
+	}
 protected:
 	string screenId;
+	string xmlFilePath;
+	tinyxml2::XMLDocument* screenXmlDocument;
+
 };
 
 #endif // !SCREEN_H

@@ -11,6 +11,7 @@
 #include <gl\glm\glm\gtx\transform.hpp>
 #ifndef NDEBUG
 #include <utils\GLSupport.h>
+#include <Editor\DebugMenu.h>
 #endif
 
 
@@ -195,6 +196,14 @@ void Robot::updateCamera()
 {
 	if(camera != nullptr)
 		camera->move(glm::vec3(robot_Pos.x, robot_Pos.y, robot_Pos.z));
+}
+
+void Robot::debugMenuItemUpdate()
+{
+	if (ImGui::BeginMenu("Robot"))
+	{
+		ImGui::EndMenu();
+	}
 }
 
 void Robot::DrawRobot(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)

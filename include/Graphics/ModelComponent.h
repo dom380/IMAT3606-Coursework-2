@@ -69,12 +69,28 @@ public:
 	/*
 		Returns a Handle to the GameObject's Transform this model belongs to.
 	*/
+	string getTextureName()
+	{
+		return textureName;
+	}
 	Handle transformHandle;
 	/*
 		Returns a pointer to the GameObject's Transform this model belongs to.
 	*/
 	Transform* getTransform();
+	/*
+		Get Obj Name of object
+	*/
+	string getObjFileName();
+	
+	/*
+		GetID of object
+	*/
 	string getId();
+	/* 
+		SetID of object
+	*/
+	void setID(string id);
 	/*
 		Toggles the drawing flag to enable and disable rendering of this model.
 	*/
@@ -105,8 +121,10 @@ private:
 	unsigned int vaoHandle = 0;
 	shared_ptr<Shader> shader;
 	shared_ptr<Texture> texture;
+	string textureName;
 	Material material;
 	string id;
+	string objFileName;
 	bool drawing = true;
 };
 #endif // !MODEL_H

@@ -153,8 +153,10 @@
     <ClCompile Include="source\Components\Component.cpp" />
     <ClCompile Include="source\Components\LogicComponent.cpp" />
     <ClCompile Include="source\Editor\DebugMenu.cpp" />
+    <ClCompile Include="source\Editor\DebugMenuItem.cpp" />
     <ClCompile Include="source\Editor\imgui\imgui.cpp" />
     <ClCompile Include="source\Editor\imgui\ImguiGLFWHandler.cpp" />
+    <ClCompile Include="source\Editor\imgui\ImguiHandler.cpp" />
     <ClCompile Include="source\Editor\imgui\imgui_demo.cpp" />
     <ClCompile Include="source\Editor\imgui\imgui_draw.cpp" />
     <ClCompile Include="source\Engine.cpp" />
@@ -173,14 +175,18 @@
     <ClCompile Include="source\Robot.cpp" />
     <ClCompile Include="source\Screens\GameScreen.cpp" />
     <ClCompile Include="source\Screens\MenuScreen.cpp" />
+    <ClCompile Include="source\utils\DebugUtils.cpp" />
+    <ClCompile Include="source\utils\DirectoryReader.cpp" />
     <ClCompile Include="source\Scripting\LuaStateHolder.cpp" />
     <ClCompile Include="source\Scripting\ScriptEngine.cpp" />
     <ClCompile Include="source\utils\EnumParser.cpp" />
+    <ClCompile Include="source\utils\FileSaver.cpp" />
     <ClCompile Include="source\utils\Handle.cpp" />
     <ClCompile Include="source\utils\LevelLoader.cpp" />
     <ClCompile Include="source\utils\ObjReader.cpp" />
     <ClCompile Include="source\utils\Timer.cpp" />
     <ClCompile Include="source\utils\tinyxml2.cpp" />
+    <ClCompile Include="source\utils\XMLReader.cpp" />
     <ClCompile Include="source\utils\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -198,9 +204,11 @@
     <ClInclude Include="include\Components\MessageType.h" />
     <ClInclude Include="include\Components\RenderMessage.h" />
     <ClInclude Include="include\Editor\DebugMenu.h" />
+    <ClInclude Include="include\Editor\DebugMenuItem.h" />
     <ClInclude Include="include\Editor\imgui\imconfig.h" />
     <ClInclude Include="include\Editor\imgui\imgui.h" />
     <ClInclude Include="include\Editor\imgui\ImguiGLFWHandler.h" />
+    <ClInclude Include="include\Editor\imgui\ImguiHandler.h" />
     <ClInclude Include="include\Editor\imgui\imgui_internal.h" />
     <ClInclude Include="include\Editor\imgui\stb_rect_pack.h" />
     <ClInclude Include="include\Editor\imgui\stb_textedit.h" />
@@ -238,8 +246,11 @@
     <ClInclude Include="include\Scripting\LuaStateHolder.h" />
     <ClInclude Include="include\Scripting\ScriptEngine.h" />
     <ClInclude Include="include\utils\DaeReader.h" />
+    <ClInclude Include="include\utils\DebugUtils.h" />
+    <ClInclude Include="include\utils\DirectoryReader.h" />
     <ClInclude Include="include\utils\EnumParser.h" />
     <ClInclude Include="include\utils\FbxReader.h" />
+    <ClInclude Include="include\utils\FileSaver.h" />
     <ClInclude Include="include\utils\GLSupport.h" />
     <ClInclude Include="include\utils\Handle.h" />
     <ClInclude Include="include\utils\HandleManager.h" />
@@ -248,6 +259,7 @@
     <ClInclude Include="include\utils\ObjReader.h" />
     <ClInclude Include="include\utils\Timer.h" />
     <ClInclude Include="include\utils\tinyxml2.h" />
+    <ClInclude Include="include\utils\XMLReader.h" />
     <ClInclude Include="include\utils\Utilities.h" />
   </ItemGroup>
   <ItemGroup>

@@ -17,22 +17,22 @@ public:
 		static_assert(std::is_base_of<Component, T>::value, "T must derive from component");
 		switch (type)
 		{
-		case MODEL:
+		case ComponentType::MODEL:
 			return (T*)models.get(handle);
 			break;
-		case ANIMATION:
+		case ComponentType::ANIMATION:
 			return nullptr;
 			break;
-		case RIGID_BODY:
+		case ComponentType::RIGID_BODY:
 			return nullptr;
 			break;
-		case LOGIC:
+		case ComponentType::LOGIC:
 			return (T*)logic.get(handle);
 			break;
-		case TRANSFORM:
+		case ComponentType::TRANSFORM:
 			return (T*)transforms.get(handle);
 			break;
-		case COMPONENT_TYPE_COUNT:
+		case ComponentType::COMPONENT_TYPE_COUNT:
 			//no-op
 			return nullptr;
 			break;
@@ -55,22 +55,22 @@ public:
 		static_assert(std::is_base_of<Component, T>::value, "T must derive from component");
 		switch (type)
 		{
-		case MODEL:
+		case ComponentType::MODEL:
 			return (std::vector<std::pair<int, T>>*)models.getAll();
 			break;
-		case ANIMATION:
+		case ComponentType::ANIMATION:
 			return nullptr;
 			break;
-		case RIGID_BODY:
+		case ComponentType::RIGID_BODY:
 			return nullptr;
 			break;
-		case LOGIC:
+		case ComponentType::LOGIC:
 			return (std::vector<std::pair<int, T>>*)logic.getAll();
 			break;
-		case TRANSFORM:
+		case ComponentType::TRANSFORM:
 			return (std::vector<std::pair<int, T>>*)transforms.getAll();
 			break;
-		case COMPONENT_TYPE_COUNT:
+		case ComponentType::COMPONENT_TYPE_COUNT:
 			//no-op
 			return nullptr;
 			break;

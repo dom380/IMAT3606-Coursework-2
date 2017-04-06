@@ -5,8 +5,10 @@
 #include <memory>
 #include <Editor/imgui/imgui.h>
 #include <Graphics\ModelComponent.h>
+#include <Editor\DebugMenuItem.h>
 
 using std::shared_ptr;
+
 /*
 DEBUG MENU
 SINGLETON
@@ -29,6 +31,17 @@ private:
 	*/
 	bool showCube;
 	bool showGameObjects;
+	bool showSaveAsMenu;
+	bool showLoadMenu;
+
+	string popupText;
+
+	//vectors
+	vector<DebugMenuItem*> mainMenuBarItems;
+	vector<std::string> objList;
+	vector<std::string> textureList;
+	vector<std::string> levelList;
+	vector<bool> objCreateActive;
 
 	/*
 		MainMenu bar update.
@@ -44,9 +57,30 @@ private:
 	void debugGameObjectsMenu();
 
 	/*
+		File Menus
+	*/
+	bool saveCurrentLevel(string fileName);
+	/*
+		Choose a name for the save file, reuses savecurrentlevel to do saving.
+		NOTE: duplicates active screen as its base and then changes file name
+		DOES NOT CHANGE TO THAT SCENE, ACTIVE SCENE IS STILL THE ORIGINAL LOADED FILE.
+	*/
+	void saveAsMenu();
+
+	/*
+		Load level provided by file name, reusues level loader class
+	*/
+	bool loadLevel(string fileName);
+	/*
+		Choose from a list of available levels. Then reuse loadLevel()
+	*/
+	void loadSpecificLevel();
+
+	/*
 		Create menus
 	*/
 	void createCubeMenu();
+	void createObjectWindow(std::string objName, int iterator);
 
 	/*
 		debugGameObjectsMenu Component Functions
@@ -68,5 +102,7 @@ public:
 	void update();
 
 	void render();
+
+	void addMenuItem(DebugMenuItem* dmi);
 };
 #endif // !DEBUGMENU_h

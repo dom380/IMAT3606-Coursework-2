@@ -1,6 +1,7 @@
 #include "utils\GLSupport.h"
 #include "Editor/imgui/imgui.h"
 #include "Editor/imgui/ImguiGLFWHandler.h"
+#include "Graphics\WindowGLFW.h"
 
 #include "GL/glfw3.h"
 #ifdef _WIN32
@@ -128,9 +129,11 @@ void ImguiGLFWHandler::SetClipboardText(void * user_data, const char * text)
 	glfwSetClipboardString((GLFWwindow*)user_data, text);
 }
 
-bool ImguiGLFWHandler::init(GLFWwindow * window, bool install_callbacks)
+
+bool ImguiGLFWHandler::init(Window * window)
 {
-	g_Window = window;
+	WindowGLFW* gW = (WindowGLFW*)window;
+	g_Window = gW->getWindow();
 
 	ImGuiIO& io = ImGui::GetIO();
 	io.KeyMap[ImGuiKey_Tab] = GLFW_KEY_TAB;                         // Keyboard mapping. ImGui will use those indices to peek into the io.KeyDown[] array.
@@ -160,14 +163,6 @@ bool ImguiGLFWHandler::init(GLFWwindow * window, bool install_callbacks)
 #ifdef _WIN32
 	io.ImeWindowHandle = glfwGetWin32Window(g_Window);
 #endif
-
-	if (install_callbacks)
-	{
-		/*glfwSetMouseButtonCallback(window, ImGui_ImplGlfwGL3_MouseButtonCallback);
-		glfwSetScrollCallback(window, ImGui_ImplGlfwGL3_ScrollCallback);
-		glfwSetKeyCallback(window, ImGui_ImplGlfwGL3_KeyCallback);
-		glfwSetCharCallback(window, ImGui_ImplGlfwGL3_CharCallback);*/
-	}
 
 	return true;
 }
@@ -357,4 +352,37 @@ bool ImguiGLFWHandler::createFontsTexture()
 	glBindTexture(GL_TEXTURE_2D, last_texture);
 
 	return true;
+}
+
+void ImguiGLFWHandler::imGuiMouseButtonCallback(shared_ptr<Window>, int button, int action, int /*mods*/)
+{
+	if (action == GLFW_PRESS && button >= 0 && button < 3)
+		g_MousePressed[button] = true;
+}
+
+void ImguiGLFWHandler::imGuiScrollCallback(shared_ptr<Window>, double /*xoffset*/, double yoffset)
+{
+	g_MouseWheel += (float)yoffset; // Use fractional mouse wheel, 1.0 unit 5 lines.
+}
+
+void ImguiGLFWHandler::imGuiKeyCallback(shared_ptr<Window>, int key, int, int action, int mods)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	if (action == GLFW_PRESS)
+		io.KeysDown[key] = true;
+	if (action == GLFW_RELEASE)
+		io.KeysDown[key] = false;
+
+	(void)mods; // Modifiers are not reliable across systems
+	io.KeyCtrl = io.KeysDown[GLFW_KEY_LEFT_CONTROL] || io.KeysDown[GLFW_KEY_RIGHT_CONTROL];
+	io.KeyShift = io.KeysDown[GLFW_KEY_LEFT_SHIFT] || io.KeysDown[GLFW_KEY_RIGHT_SHIFT];
+	io.KeyAlt = io.KeysDown[GLFW_KEY_LEFT_ALT] || io.KeysDown[GLFW_KEY_RIGHT_ALT];
+	io.KeySuper = io.KeysDown[GLFW_KEY_LEFT_SUPER] || io.KeysDown[GLFW_KEY_RIGHT_SUPER];
+}
+
+void ImguiGLFWHandler::imGuiCharCallback(shared_ptr<Window>, unsigned int c)
+{
+	ImGuiIO& io = ImGui::GetIO();
+	if (c > 0 && c < 0x10000)
+		io.AddInputCharacter((unsigned short)c);
 }

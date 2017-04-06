@@ -12,6 +12,7 @@
 #include <Utils/Utilities.h>
 #ifndef NDEBUG
 #include "Timer.h"
+#include "utils\DebugUtils.h"
 #endif
 /*
 Factory class to parse level XML descriptors and create the relevant objects.
@@ -29,19 +30,34 @@ public:
 	{
 		try
 		{
-			tinyxml2::XMLDocument doc;
-			tinyxml2::XMLError check = doc.LoadFile(filePath);
+			tinyxml2::XMLDocument* doc = new tinyxml2::XMLDocument();
+			tinyxml2::XMLError check = doc->LoadFile(filePath);
 			if (check != tinyxml2::XML_SUCCESS) {
 				std::cerr << "Failed to load file" << filePath << std::endl;
 				return false;
 			}
-			tinyxml2::XMLElement* screenElement = doc.FirstChildElement("screen");
+			tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");
+			/*
+				Safety check, filename must be the same as the name attribute in file!
+			*/
+			string fileName = filePath;
+			std::size_t pos = fileName.find_last_of("/");
+			fileName = fileName.substr(pos+1, fileName.length());
+			fileName = fileName.substr(0, fileName.length()-4);
+			if (strcmp(fileName.c_str(), screenElement->Attribute("name")) != 0)
+			{
+				std::cerr << "Failed to load file, filename != to levelname" << filePath << std::endl;
+#ifndef NDEBUG
+				DebugUtils::getInstance()->popup("FAIL","Failed to load file, filename != to levelname");
+#endif
+				return false;
+			}
 			const char* type = screenElement->Attribute("type");
 			if (string(type) == string("menu")) {
-				return loadMenu(engine, renderer, input, screenElement);
+				return loadMenu(engine, renderer, input, doc, filePath);
 			}
 			else if (string(type) == string("level")) {
-				return loadGameLevel(engine, renderer, input, screenElement);
+				return loadGameLevel(engine, renderer, input, doc, filePath);
 			}
 			else
 			{
@@ -119,12 +135,12 @@ public:
 		gameSceen->addGameObject(gameObject);
 
 	}
-	static void loadGameObject(shared_ptr<Graphics>& renderer, shared_ptr<GameScreen> gameScreen, string objFileName, shared_ptr<Transform> transform)
+	static void loadGameObject(shared_ptr<Graphics>& renderer, shared_ptr<GameScreen> gameScreen, std::pair<string,string>objectInfo, shared_ptr<Transform> transform)
 	{
 
 		shared_ptr<ComponentStore> componentStore = gameScreen->getComponentStore();
 		shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(componentStore);
-		loadModel(renderer, gameObject, objFileName);
+		loadModel(renderer, gameObject, objectInfo.first, objectInfo.second);
 		gameObject->AddComponent(transform, ComponentType::TRANSFORM);
 
 		if (gameObject->HasComponent(ComponentType::TRANSFORM) && gameObject->HasComponent(ComponentType::MODEL)) //Ensure the model is using the same transform as the object
@@ -140,10 +156,13 @@ private:
 	Utility method to load MenuScreens
 	Returns true on success.
 	*/
-	static bool loadMenu(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, tinyxml2::XMLElement* screenElement)
+	static bool loadMenu(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, tinyxml2::XMLDocument* screenDocument, string filepath)
 	{
+		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
 		shared_ptr<MenuScreen> menuScreen = std::make_shared<MenuScreen>(renderer, engine);
 		menuScreen->setID(screenElement->Attribute("name"));
+		menuScreen->setXMLDocument(screenDocument);
+		menuScreen->setXMLFilePath(filepath);
 		tinyxml2::XMLElement* stringElement = screenElement->FirstChildElement("strings");
 		if (stringElement != NULL) stringElement = stringElement->FirstChildElement();
 		while (stringElement != NULL) {
@@ -227,15 +246,18 @@ private:
 		Utility method to load GameScreens
 		Returns true on sucess.
 	*/
-	static bool loadGameLevel(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, tinyxml2::XMLElement* screenElement)
+	static bool loadGameLevel(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, tinyxml2::XMLDocument* screenDocument, string filepath)
 	{
 #ifndef NDEBUG
 		Timer timer;
 		timer.start();
 #endif
+		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
 		shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>(engine->getWindowWidth(), engine->getWindowHeight(), 45.f);
 		shared_ptr<GameScreen> gameScreen = std::make_shared<GameScreen>(renderer, input, camera);
 		gameScreen->setID(screenElement->Attribute("name"));
+		gameScreen->setXMLDocument(screenDocument);
+		gameScreen->setXMLFilePath(filepath);
 		tinyxml2::XMLElement* gameObjElement = screenElement->FirstChildElement("gameObjects")->FirstChildElement();
 		while (gameObjElement != NULL) {
 			loadGameObject(renderer, gameScreen, gameObjElement, gameScreen->getComponentStore());
@@ -271,14 +293,14 @@ private:
 
 	Currently only supports Wavefront .obj format.
 	*/
-	static void loadModel(shared_ptr<Graphics>& renderer, shared_ptr<GameObject> gameObject, string objName)
+	static void loadModel(shared_ptr<Graphics>& renderer, shared_ptr<GameObject> gameObject, string objName, string textureName="")
 	{
 		shared_ptr<ModelComponent> mesh = std::make_shared<ModelComponent>(renderer, gameObject);
 		const char* modelPath = objName.c_str();
-		//const char* texturePath = modelElement->FirstChildElement("texture")!=NULL ? modelElement->FirstChildElement("texture")->GetText():NULL;
-		string id = modelPath;
+		const char* texturePath = textureName.empty() ? NULL : textureName.c_str();
+		string id = objName;
 		//modelElement->Attribute("id") != NULL ? id = modelElement->Attribute("id") : id = "";
-		mesh->init(modelPath, NULL, id);
+		mesh->init(modelPath, texturePath, id);
 		//loadTransform(mesh->transform, modelElement);
 		gameObject->AddComponent(mesh, ComponentType::MODEL);
 	}
@@ -293,6 +315,15 @@ private:
 		shared_ptr<ModelComponent> mesh = std::make_shared<ModelComponent>(renderer, gameObject);
 		const char* modelPath = modelElement->FirstChildElement("file")->GetText();
 		const char* texturePath = modelElement->FirstChildElement("texture") != NULL ? modelElement->FirstChildElement("texture")->GetText() : NULL;
+		const char* active = modelElement->FirstChildElement("active") != NULL ? modelElement->FirstChildElement("active")->GetText() : NULL;
+		if (active)
+		{ 
+			if (strcmp(active, "false") == 0)
+			{
+				mesh->toggleDrawing();
+			}
+		}
+		
 		string id;
 		modelElement->Attribute("id") != NULL ? id = modelElement->Attribute("id") : id = modelPath;
 		mesh->init(modelPath, texturePath, id);

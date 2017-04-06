@@ -50,6 +50,12 @@ EnumParser<ComponentType>::EnumParser()
 	map["logic"] = ComponentType::LOGIC;
 	map["TRANSFORM"] = ComponentType::TRANSFORM;
 	map["transform"] = ComponentType::TRANSFORM;
+
+	strmap[ComponentType::MODEL] = "model";
+	strmap[ComponentType::ANIMATION] = "animation";
+	strmap[ComponentType::RIGID_BODY] = "rigid_body";
+	strmap[ComponentType::LOGIC] = "logic";
+	strmap[ComponentType::TRANSFORM] = "transform";
 }
 
 EnumParser<Input::InputImpl>::EnumParser()

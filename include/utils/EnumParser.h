@@ -22,8 +22,20 @@ public:
 		}
 		throw std::runtime_error("Unable to parse \""+ value +"\" into enum");
 	}
+
+	string getString(T& type)
+	{
+		auto it = strmap.find(type);
+		if (it != strmap.end())
+		{
+			return it->second;
+		}
+		throw std::runtime_error("Unable to find type");
+	}
 private:
+	map<T, string> strmap;
 	map<string, T> map;
+	
 };
 
 #endif // !ENUMPARSER_H

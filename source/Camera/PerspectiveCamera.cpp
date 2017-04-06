@@ -45,7 +45,7 @@ void PerspectiveCamera::handle(MouseEvent event)
 	{
 		case MouseEventType::MOUSE_MOVE:
 		{
-			if (previousX < 0) previousX = event.x;
+			/*if (previousX < 0) previousX = event.x;
 			if (previousY < 0) previousY = event.y;
 			float yaw = (event.x - previousX); 
 			float pitch = (event.y - previousY);
@@ -58,7 +58,7 @@ void PerspectiveCamera::handle(MouseEvent event)
 			orientation = glm::normalize(orientation * yawRotation);
 			previousX = event.x;
 			previousY = event.y;
-			update();
+			update();*/
 			break;
 		}
 		default:

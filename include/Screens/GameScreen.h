@@ -6,6 +6,7 @@
 using std::shared_ptr;
 #include <Camera\Camera.h>
 #include <Camera\PerspectiveCamera.h>
+#include <Camera\FollowCamera.h>
 #include <Input.h>
 #include <vector>
 using std::vector;

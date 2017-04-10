@@ -8,6 +8,7 @@
 #include <Components\LogicComponent.h>
 #include <Components\PhysicsComponent.h>
 class LogicComponent;
+class PhysicsComponent;
 
 class ComponentStore
 {

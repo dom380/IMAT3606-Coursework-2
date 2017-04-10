@@ -8,6 +8,7 @@
 #include "Screens\Screen.h"
 #include "Screens\MenuScreen.h"
 #include "Graphics\Window.h"
+#include "Physics\Physics.h"
 #include <utils\EnumParser.h>
 #include <map>
 using std::map;
@@ -95,6 +96,11 @@ public:
 		Returns the Id of the initial screen as specified in the configuration file.
 	*/
 	string getInitialScreenId();
+	
+	/*
+		Returns a pointer to the physics implementation.
+	*/
+	shared_ptr<Physics> getPhysics();
 
 	shared_ptr<Graphics> Engine::getRenderer();
 
@@ -105,6 +111,7 @@ private:
 	shared_ptr<Window> window;
 	shared_ptr<Graphics> renderer;
 	shared_ptr<Input> inputHandler;
+	shared_ptr<Physics> physics;
 	map<string, shared_ptr<Screen>> gameScreens;
 	std::pair<string,shared_ptr<Screen>> activeScreen;
 	bool closed;
@@ -115,10 +122,12 @@ private:
 	EnumParser<GraphicsContext> enumParser = EnumParser<GraphicsContext>();
 	GraphicsContext graphicsContext;
 	Input::InputImpl inputImplementation;
+	Physics::PhysicsImpl physicsImplementation;
 	//Private Methods
 	shared_ptr<Graphics> buildRenderer(GraphicsContext renderType);
 	shared_ptr<Window> buildWindow(GraphicsContext context);
 	shared_ptr<Input> buildInput(Input::InputImpl impl);
+	shared_ptr<Physics> buildPhysics(Physics::PhysicsImpl impl);
 };
 
 #endif // !ENGINE_H

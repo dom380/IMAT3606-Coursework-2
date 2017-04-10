@@ -65,7 +65,7 @@ public:
 			return false;
 		}
 	}
-	static void loadGameObject(shared_ptr<Graphics>& renderer, shared_ptr<GameScreen> gameSceen, tinyxml2::XMLElement* gameObjElement, shared_ptr<ComponentStore> componentStore)
+	static void loadGameObject(shared_ptr<Graphics>& renderer, shared_ptr<Physics>& physics, shared_ptr<GameScreen> gameSceen, tinyxml2::XMLElement* gameObjElement, shared_ptr<ComponentStore> componentStore)
 	{
 		if (gameObjElement->FirstChildElement("components") == NULL)
 			return;
@@ -88,7 +88,7 @@ public:
 				//todo
 				break;
 			case ComponentType::RIGID_BODY:
-				//todo
+				loadPhysics(renderer, physics, gameObject, componentElement);
 				break;
 			case ComponentType::LOGIC:
 			{
@@ -234,11 +234,11 @@ private:
 		timer.start();
 #endif
 		shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>(engine->getWindowWidth(), engine->getWindowHeight(), 45.f);
-		shared_ptr<GameScreen> gameScreen = std::make_shared<GameScreen>(renderer, input, camera);
+		shared_ptr<GameScreen> gameScreen = std::make_shared<GameScreen>(renderer, input, engine->getPhysics(), camera);
 		gameScreen->setID(screenElement->Attribute("name"));
 		tinyxml2::XMLElement* gameObjElement = screenElement->FirstChildElement("gameObjects")->FirstChildElement();
 		while (gameObjElement != NULL) {
-			loadGameObject(renderer, gameScreen, gameObjElement, gameScreen->getComponentStore());
+			loadGameObject(renderer, engine->getPhysics(), gameScreen, gameObjElement, gameScreen->getComponentStore());
 			gameObjElement = gameObjElement->NextSiblingElement();
 		}
 		tinyxml2::XMLElement* lightElement = screenElement->FirstChildElement("lights")->FirstChildElement();
@@ -298,6 +298,19 @@ private:
 		mesh->init(modelPath, texturePath, id);
 		//loadTransform(mesh->transform, modelElement);
 		gameObject->AddComponent(mesh, ComponentType::MODEL);
+	}
+
+	/*
+		Utility method to load physics component.
+	*/
+	static void loadPhysics(shared_ptr<Graphics>& graphics, shared_ptr<Physics>& physics, shared_ptr<GameObject> gameObject, tinyxml2::XMLElement* physicsElement)
+	{
+		float mass = 0.f;
+		mass = physicsElement->FirstChildElement("mass") != NULL ? physicsElement->FirstChildElement("mass")->FloatText() : 0.f;
+		const char* meshFile = physicsElement->FirstChildElement("collision_mesh")->GetText();
+		auto mesh = AssetManager::getInstance()->getModelData(meshFile, graphics);
+		shared_ptr<PhysicsComponent> physComp = std::make_shared<PhysicsComponent>(physics, std::weak_ptr<GameObject>(gameObject), mesh, mass, true);
+		gameObject->AddComponent(physComp, ComponentType::RIGID_BODY);
 	}
 
 	/*

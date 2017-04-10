@@ -101,7 +101,7 @@ private:
 		Utility method to read a model file.
 		Checks the file extension and uses the relevant ModelFileReader implementation.
 	*/
-	void readModelFile(string fullPath, vector<glm::vec4>& vertices, vector<glm::vec3>& normals, vector<glm::vec2>& textures, vector<unsigned short>& indices, shared_ptr<ModelData>& data);
+	void readModelFile(string fullPath, vector<glm::vec4>& vertices, vector<glm::vec3>& normals, vector<glm::vec2>& textures, vector<unsigned short>& indices, shared_ptr<ModelData>& data, vector<glm::vec4>& points);
 	static bool initialised;
 	static shared_ptr<AssetManager> instance;
 	map<string, shared_ptr<Font>> fonts;

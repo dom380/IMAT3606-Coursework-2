@@ -13,7 +13,14 @@ using std::shared_ptr;
 class Screen {
 public:
 	/*
-		Pure Virtual method. Implementations can use this to update an time based operations.
+		Pure Virtual method. 
+		This function is called when the screen is first displayed. Implmentations
+		may use this for any logic that should run once the screen becomes active.
+	*/
+	virtual void show() = 0;
+
+	/*
+		Pure Virtual method. Implementations can use this to update any time based operations.
 		This is called at least once (If current active screen) every frame before rendering.
 		double dt, The time passed since last update call.
 	*/

@@ -15,6 +15,8 @@ public:
 	vector<unsigned int> vboHandles;
 	size_t indexSize;
 	vector<glm::vec4> vertices;
+	vector<glm::vec4> points;
+	vector<unsigned short> indices;
 };
 
 #endif // !MODELDATA_H

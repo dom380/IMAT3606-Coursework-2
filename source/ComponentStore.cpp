@@ -14,3 +14,8 @@ Handle ComponentStore::storeComponent(std::shared_ptr<Transform> component)
 {
 	return transforms.add(*component);
 }
+
+Handle ComponentStore::storeComponent(std::shared_ptr<PhysicsComponent> component)
+{
+	return physics.add(*component);
+}

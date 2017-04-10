@@ -8,7 +8,7 @@ ObjReader::~ObjReader()
 {
 }
 
-void ObjReader::readFile(const char * filePath, vector<glm::vec4>& vertices, vector<glm::vec3>& normals, vector<glm::vec2>& textures, vector<unsigned short>&indices, Material& material)
+void ObjReader::readFile(const char * filePath, vector<glm::vec4>& vertices, vector<glm::vec3>& normals, vector<glm::vec2>& textures, vector<unsigned short>&indices, Material& material, vector<glm::vec4>& points)
 {
 	unpackedVertices.clear();
 	unpackedNormals.clear();
@@ -96,6 +96,7 @@ void ObjReader::readFile(const char * filePath, vector<glm::vec4>& vertices, vec
 		} //end if
 	
 	}
+	points = unpackedVertices;
 	unsigned short nextIndex = 0;
 	size_t arraySize = faceIndices.size(); //static_cast<int>(faceIndices.size());
 	for (int i = 0; i < arraySize; i += 3) {

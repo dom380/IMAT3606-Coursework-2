@@ -23,6 +23,10 @@
 						<w>90</w>
 					</orientation>
 				</component>
+				<component type = "rigid_body">
+					<mass>0.0</mass>
+					<collision_mesh>wall.obj</collision_mesh>
+				</component>
 			</components>
 		</gameObject>
 		<gameObject>
@@ -41,6 +45,10 @@
 						<y>10.0</y>
 						<z>0.5</z>
 					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>0.0</mass>
+					<collision_mesh>wall.obj</collision_mesh>
 				</component>
 			</components>
 		</gameObject>
@@ -67,6 +75,10 @@
 						<w>90</w>
 					</orientation>
 				</component>
+				<component type = "rigid_body">
+					<mass>0.0</mass>
+					<collision_mesh>wall.obj</collision_mesh>
+				</component>
 			</components>
 		</gameObject>
 		<gameObject>
@@ -92,6 +104,10 @@
 						<w>-90</w>
 					</orientation>
 				</component>
+				<component type = "rigid_body">
+					<mass>0.0</mass>
+					<collision_mesh>wall.obj</collision_mesh>
+				</component>
 			</components>
 		</gameObject>
 		<gameObject>
@@ -110,6 +126,10 @@
 						<y>10.0</y>
 						<z>0.5</z>
 					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>0.0</mass>
+					<collision_mesh>wall.obj</collision_mesh>
 				</component>
 			</components>
 		</gameObject>
@@ -136,6 +156,10 @@
 						<w>-90</w>
 					</orientation>
 				</component>
+				<component type = "rigid_body">
+					<mass>0.0</mass>
+					<collision_mesh>wall.obj</collision_mesh>
+				</component>
 			</components>
 		</gameObject>
 		<gameObject>
@@ -161,6 +185,10 @@
 						<w>-90</w>
 					</orientation>
 				</component>
+				<component type = "rigid_body">
+					<mass>0.0</mass>
+					<collision_mesh>wall.obj</collision_mesh>
+				</component>
 			</components>
 		</gameObject>
 		<gameObject>
@@ -180,6 +208,34 @@
 						<y>1.0</y>
 						<z>75.0</z>
 					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>0.0</mass>
+					<collision_mesh>ground.obj</collision_mesh>
+				</component>
+			</components>
+		</gameObject>
+		<!-- physics testing block -->
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>0.0</x>
+						<y>20.0</y>
+						<z>0.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<collision_mesh>cube.obj</collision_mesh>
 				</component>
 			</components>
 		</gameObject>

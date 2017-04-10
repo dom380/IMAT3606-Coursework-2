@@ -3,6 +3,7 @@
 #include <Camera\Camera.h>
 #include <Components\ComponentType.h>
 #include <Input.h>
+#include <Physics\Physics.h>
 
 EnumParser<Engine::GraphicsContext>::EnumParser()
 {
@@ -58,4 +59,10 @@ EnumParser<Input::InputImpl>::EnumParser()
 	map["glfw"] = Input::InputImpl::GLFW;
 	map["GLUT"] = Input::InputImpl::GLUT;
 	map["glut"] = Input::InputImpl::GLUT;
+}
+
+EnumParser<Physics::PhysicsImpl>::EnumParser()
+{
+	map["BULLET"] = Physics::PhysicsImpl::BULLET;
+	map["bullet"] = Physics::PhysicsImpl::BULLET;
 }

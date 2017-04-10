@@ -35,7 +35,6 @@ bool RenderGL::init()
 void RenderGL::prepare()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//buttonTest->render();
 }
 
 void RenderGL::exit() {

@@ -13,7 +13,7 @@
 #include <Editor\DebugMenu.h>
 #endif
 
-
+#define FRAMERATE  0.0166666667 //60 FPS (1/60)
 
 Engine::Engine()
 {
@@ -50,6 +50,10 @@ void Engine::init()
 
 	renderer = buildRenderer(graphicsContext);
 	renderer->init();
+
+	physics = buildPhysics(physicsImplementation);
+	physics->init();
+
 	loadFirstLevel();
 
 #ifndef NDEBUG
@@ -60,7 +64,7 @@ void Engine::init()
 void Engine::mainLoop()
 {
 	double t = 0.0;
-	double dt = 1 / 60.0;
+	double dt = FRAMERATE;
 	timer.start();
 	auto currentTime = timer.getElapsedTime();
 	bool show_another_window = true;
@@ -82,7 +86,8 @@ void Engine::mainLoop()
 
 			frameTime -= deltaTime;
 			t += deltaTime;
-			//todo pass t and delta time to physics sim here
+			
+			physics->update(deltaTime);
 		}
 
 		renderer->prepare();
@@ -134,6 +139,7 @@ void Engine::switchScreen(string screenId)
 	else {
 		activeScreen = *it;
 	}
+	activeScreen.second->show();
 }
 
 void Engine::replaceScreen(string screenId)
@@ -148,6 +154,7 @@ void Engine::replaceScreen(string screenId)
 		activeScreen = *it;
 		gameScreens.erase(idToRemove);
 	}
+	activeScreen.second->show();
 }
 
 void Engine::loadConfig()
@@ -187,6 +194,10 @@ void Engine::loadConfig()
 	auto inputEnumParser = EnumParser<Input::InputImpl>();
 	string input = element->FirstChildElement("input") != NULL ? element->FirstChildElement("input")->GetText() : "GLFW";
 	inputImplementation = inputEnumParser.parse(input);
+
+	auto physicsEnumParser = EnumParser<Physics::PhysicsImpl>();
+	string physics = element->FirstChildElement("physics") != NULL ? element->FirstChildElement("physics")->GetText() : "BULLET";
+	physicsImplementation = physicsEnumParser.parse(physics);
 }
 
 void Engine::loadFirstLevel()
@@ -197,6 +208,11 @@ void Engine::loadFirstLevel()
 		std::exit(1);
 	}
 	this->switchScreen(initialScreenId);
+}
+
+shared_ptr<Physics> Engine::getPhysics()
+{
+	return physics;
 }
 
 shared_ptr<Graphics> Engine::getRenderer()
@@ -255,5 +271,26 @@ shared_ptr<Input> Engine::buildInput(Input::InputImpl impl)
 		return nullptr; //TODO... maybe
 	default: //Default to GLFW
 		return std::make_shared<InputGLFW>();
+	}
+}
+
+shared_ptr<Physics> Engine::buildPhysics(Physics::PhysicsImpl impl)
+{
+	switch (impl)
+	{
+	case  Physics::PhysicsImpl::BULLET: 
+		{
+			auto bulletPhysics = std::make_shared<BulletPhysics>();
+			std::shared_ptr<EventListener> physicsEventPtr = bulletPhysics;
+			inputHandler->registerKeyListener(physicsEventPtr);
+			return bulletPhysics;
+		}
+	default: //Default to bullet
+		{
+			auto bulletPhysics = std::make_shared<BulletPhysics>();
+			std::shared_ptr<EventListener> physicsEventPtr = bulletPhysics;
+			inputHandler->registerKeyListener(physicsEventPtr);
+			return bulletPhysics;
+		}
 	}
 }

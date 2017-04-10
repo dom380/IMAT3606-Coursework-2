@@ -12,43 +12,102 @@ PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_
 	btTransform transform;
 	auto sp = owner.lock();
 	auto tp = sp != nullptr ? sp->getComponent<Transform>(ComponentType::TRANSFORM) : nullptr;
-	auto rotMat = tp->orientation.w != 0.f ? glm::rotate(glm::radians(tp->orientation.w), glm::vec3(tp->orientation.x, tp->orientation.y, tp->orientation.z)) : glm::mat4(1.0);
-	auto scaleMat = glm::scale(glm::mat4(1.0), tp->scale);
-	auto transMat = glm::translate(glm::mat4(1.0f), tp->position);
-	glm::mat4 result = tp != nullptr ? transMat * rotMat : glm::mat4(1.0);
-	transform.setFromOpenGLMatrix(glm::value_ptr(result));
+	transform.setOrigin(btVector3(tp->position.x, tp->position.y, tp->position.z));
+	transform.setRotation(btQuaternion(tp->orientation.x, tp->orientation.y, tp->orientation.z, tp->orientation.w));
 
+	//Build collision shape
 	buildCollisionShape(mesh, convex, tp->scale);
+	
+	if (mass > 0.f)
+		shape->calculateLocalInertia(mass, localInertia);
 
 	//Make sure the rigid body is in the same position as the mesh
 	btDefaultMotionState* ms = new btDefaultMotionState(transform);
-	body = new btRigidBody(mass, ms, shape, localInertia);
+
+	btRigidBody::btRigidBodyConstructionInfo bodyInfo(mass, ms, shape, localInertia);
+	
+	//Construct rigid body and save pointer to this component
+	body = new btRigidBody(bodyInfo);
+	body->setUserPointer(this);
 
 	//Add the body to the physics system
 	physics->addBody(*this); 
 }
 
+PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics>& physics, std::weak_ptr<GameObject>& owner, ShapeData& boundingShape, float mass) : Component(ComponentType::RIGID_BODY)
+{
+	this->owner = owner;
+	this->mass = mass;
+
+	//Retrieve the transform of the mesh
+	btTransform transform;
+	auto sp = owner.lock();
+	auto tp = sp != nullptr ? sp->getComponent<Transform>(ComponentType::TRANSFORM) : nullptr;
+	transform.setOrigin(btVector3(tp->position.x, tp->position.y, tp->position.z));
+	transform.setRotation(btQuaternion(tp->orientation.x, tp->orientation.y, tp->orientation.z, tp->orientation.w));
+
+	auto scale = tp->scale;
+	//Build Collision shape
+	switch (boundingShape.boundingShape)
+	{
+		case ShapeData::BoundingShape::BOX:
+			shape = new btBoxShape(btVector3(boundingShape.halfExtents.x, boundingShape.halfExtents.y, boundingShape.halfExtents.z));
+			break;
+		case ShapeData::BoundingShape::SPHERE:
+			shape = new btSphereShape(boundingShape.radius);
+			break;
+		case ShapeData::BoundingShape::CONE:
+			shape = new btConeShape(boundingShape.radius, boundingShape.height);
+			break;
+		case ShapeData::BoundingShape::CYLINDER:
+			shape = new btCylinderShape(btVector3(boundingShape.halfExtents.x, boundingShape.halfExtents.y, boundingShape.halfExtents.z));
+			break;
+	}
+
+	if (mass > 0.f)
+		shape->calculateLocalInertia(mass, localInertia);
+
+	//Make sure the rigid body is in the same position as the mesh
+	btDefaultMotionState* ms = new btDefaultMotionState(transform);
+
+	btRigidBody::btRigidBodyConstructionInfo bodyInfo(mass, ms, shape, localInertia);
+
+	//Construct rigid body and save pointer to this component
+	body = new btRigidBody(bodyInfo);
+	body->setUserPointer(this);
+
+	//Add the body to the physics system
+	physics->addBody(*this);
+
+
+}
+
 void PhysicsComponent::update(double dt)
 {
+	if (constVelocity) 
+	{
+		btVector3 currentVelDir = body->getLinearVelocity();
+		btScalar currentVel = currentVelDir.length();
+		btScalar desiredVel = velocity.length();
+		if (currentVel < desiredVel) //If velocity has slowed, set back to the desired value
+		{
+			currentVelDir *= desiredVel / currentVel;
+			body->setLinearVelocity(currentVelDir);
+		}
+	}
+
 	if (mass == 0.0f) return; //If mass is 0, it's not moving so no point updating the transform
+	
 	//Sync Transform with rigid body position
-	auto ms = body->getMotionState();
 	auto ownerPtr = owner.lock();
 	auto transformPtr = ownerPtr != nullptr ? ownerPtr->getComponent<Transform>(ComponentType::TRANSFORM) : nullptr;
 	if (transformPtr == nullptr) //This shouldn't happen. A game object with physics but no transform doesn't make much sense. Check for it anyway just to be safe.
 	{
 		return;
 	}
-	else //Note this won't work with negative scaling (Reflection). So don't do that.
+	else 
 	{
-		btTransform transform;
-		glm::mat4 mat;
-		ms->getWorldTransform(transform);
-		transform.getOpenGLMatrix(glm::value_ptr(mat));
-		transformPtr->position = mat[3];
-		transformPtr->scale = glm::vec3(glm::length(mat[0]), glm::length(mat[1]), glm::length(mat[2]));
-		glm::mat4 rotMatrix = glm::lookAt(glm::vec3(0), glm::vec3(mat[2]), glm::vec3(mat[1]));
-		transformPtr->orientation = glm::quat_cast(rotMatrix);
+		updateTransform(transformPtr);
 	}
 }
 
@@ -62,16 +121,33 @@ btRigidBody * PhysicsComponent::getBody()
 	return body;
 }
 
+void PhysicsComponent::setRestitution(double restitution)
+{
+	body->setRestitution(btScalar(restitution));
+}
+
+void PhysicsComponent::setVelocity(double x, double y, double z)
+{
+	velocity = btVector3(x, y, z);
+	body->setLinearVelocity(velocity);
+}
+
+void PhysicsComponent::setConstVelocity(bool flag)
+{
+	constVelocity = flag;
+}
+
 void PhysicsComponent::buildCollisionShape(std::shared_ptr<ModelData>& mesh, bool& convex, glm::vec3& scale)
 {
 	//if (mass > 0.f) 
 	//{
+
 		if (convex)
 		{
-			if (mesh->vertices.size() > 100) //If the mesh is too complex to directly use, simplify it.
+			if (mesh->points.size() > 100) //If the mesh is too complex to directly use, simplify it.
 			{
 				btConvexHullShape* originalConvexShape = new btConvexHullShape();
-				for (glm::vec3 point : mesh->vertices)
+				for (glm::vec3 point : mesh->points)
 				{
 					originalConvexShape->addPoint(btVector3(point.x, point.y, point.z));
 				}
@@ -135,4 +211,19 @@ void PhysicsComponent::buildCollisionShape(std::shared_ptr<ModelData>& mesh, boo
 		//shape = new btBvhTriangleMeshShape(collisionMesh, true);
 		//shape = new btBoxShape(scale/2.0);
 	//}
+}
+
+void PhysicsComponent::updateTransform(Transform* transformPtr)
+{
+	auto ms = body->getMotionState();
+	btTransform transform;
+	ms->getWorldTransform(transform);
+	
+	auto pos = transform.getOrigin();
+	transformPtr->position = glm::vec3(pos.x(), pos.y(), pos.z());
+	auto q = transform.getRotation();
+	transformPtr->orientation.w = q.getW();
+	transformPtr->orientation.x = q.getX();
+	transformPtr->orientation.y = q.getY();
+	transformPtr->orientation.z = q.getZ();
 }

@@ -212,6 +212,7 @@
 				<component type = "rigid_body">
 					<mass>0.0</mass>
 					<collision_mesh>ground.obj</collision_mesh>
+					<restitution>0.8</restitution>
 				</component>
 			</components>
 		</gameObject>
@@ -219,13 +220,14 @@
 		<gameObject>
 			<components>
 				<component type ="model">
+					<!-- <file>sphere.obj</file> -->
 					<file>cube.obj</file>
 				</component>
 				<component type="transform">
 					<position>
 						<x>0.0</x>
-						<y>20.0</y>
-						<z>0.0</z>
+						<y>7.0</y>
+						<z>0</z>
 					</position>
 					<scale>
 						<x>1.0</x>
@@ -236,9 +238,81 @@
 				<component type = "rigid_body">
 					<mass>1.0</mass>
 					<collision_mesh>cube.obj</collision_mesh>
+					<!-- <collision_mesh>sphere.obj</collision_mesh> -->
+					<restitution>0.4</restitution>
+					<velocity>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</velocity>
+					<constant_velocity>false</constant_velocity>
 				</component>
 			</components>
 		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>-1.75</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>5.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>0.0</mass>
+					<collision_mesh>cube.obj</collision_mesh>
+					<restitution>0.0</restitution>
+					<velocity>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</velocity>
+					<constant_velocity>false</constant_velocity>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>sphere.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>5.0</x>
+						<y>15.0</y>
+						<z>0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<!-- <collision_mesh>sphere.obj</collision_mesh> -->
+					<bounding_shape type="SPHERE">
+						<radius>1.0</radius>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+					<velocity>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</velocity>
+					<constant_velocity>false</constant_velocity>
+				</component>
+			</components>
+		</gameObject>
+		<!-- end -->		
 		<gameObject>
 			<components>
 				<component type ="model">

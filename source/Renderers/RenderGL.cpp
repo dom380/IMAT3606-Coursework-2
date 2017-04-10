@@ -312,7 +312,8 @@ void RenderGL::renderModel(ModelComponent & model, shared_ptr<Shader>& shaderPro
 	}
 	Transform* transform = model.getTransform();
 	glm::quat orientation = transform->orientation;
-	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::rotate(glm::radians(orientation.w), glm::vec3(orientation.x, orientation.y, orientation.z)) * glm::scale(transform->scale);
+//	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::rotate(glm::radians(orientation.w), glm::vec3(orientation.x, orientation.y, orientation.z)) * glm::scale(transform->scale);
+	glm::mat4 mMat = glm::translate(transform->position) * glm::mat4_cast(orientation) * glm::scale(transform->scale);
 	shaderProgram->setUniform("mView", camera->getView());
 	shaderProgram->setUniform("mProjection", camera->getProjection());
 	shaderProgram->setUniform("mModel", mMat);

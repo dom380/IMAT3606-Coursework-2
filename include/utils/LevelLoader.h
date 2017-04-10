@@ -10,6 +10,8 @@
 #include "tinyxml2.h"
 #include <Scripting\ScriptEngine.h>
 #include <Utils/Utilities.h>
+#include <gl/glm/glm/gtc/quaternion.hpp>
+#include <gl/glm/glm/gtx/quaternion.hpp>
 #ifndef NDEBUG
 #include "Timer.h"
 #endif
@@ -306,11 +308,86 @@ private:
 	static void loadPhysics(shared_ptr<Graphics>& graphics, shared_ptr<Physics>& physics, shared_ptr<GameObject> gameObject, tinyxml2::XMLElement* physicsElement)
 	{
 		float mass = 0.f;
+		shared_ptr<PhysicsComponent> physComp;
 		mass = physicsElement->FirstChildElement("mass") != NULL ? physicsElement->FirstChildElement("mass")->FloatText() : 0.f;
-		const char* meshFile = physicsElement->FirstChildElement("collision_mesh")->GetText();
-		auto mesh = AssetManager::getInstance()->getModelData(meshFile, graphics);
-		shared_ptr<PhysicsComponent> physComp = std::make_shared<PhysicsComponent>(physics, std::weak_ptr<GameObject>(gameObject), mesh, mass, true);
+		if (physicsElement->FirstChildElement("collision_mesh") != NULL)
+		{
+			const char* meshFile = physicsElement->FirstChildElement("collision_mesh")->GetText();
+			auto mesh = AssetManager::getInstance()->getModelData(meshFile, graphics);
+			physComp = std::make_shared<PhysicsComponent>(physics, std::weak_ptr<GameObject>(gameObject), mesh, mass, true);
+		}
+		else
+		{
+			ShapeData shapeData;
+			readShapeData(physicsElement, shapeData);
+			physComp = std::make_shared<PhysicsComponent>(physics, std::weak_ptr<GameObject>(gameObject), shapeData, mass);
+		}
+		double restitution = physicsElement->FirstChildElement("restitution") != NULL ? physicsElement->FirstChildElement("restitution")->DoubleText() : 0.0f;
+		physComp->setRestitution(restitution);
+		bool constVel = physicsElement->FirstChildElement("constant_velocity") != NULL ? physicsElement->FirstChildElement("constant_velocity")->BoolText() : false;
+		physComp->setConstVelocity(constVel);
+		tinyxml2::XMLElement* velElement = physicsElement->FirstChildElement("velocity");
+		glm::vec3 velocity;
+		if (velElement != NULL) 
+		{
+			velocity = glm::vec3
+				(
+					velElement->FirstChildElement("x") != NULL ? velElement->FirstChildElement("x")->FloatText() : 0.0f,
+					velElement->FirstChildElement("y") != NULL ? velElement->FirstChildElement("y")->FloatText() : 0.0f,
+					velElement->FirstChildElement("z") != NULL ? velElement->FirstChildElement("z")->FloatText() : 0.0f
+				);
+		}
+		physComp->setVelocity(velocity.x, velocity.y, velocity.z);
 		gameObject->AddComponent(physComp, ComponentType::RIGID_BODY);
+	}
+
+	/*
+		Utility method to pare bounding shape data from XML
+	*/
+	static void readShapeData(tinyxml2::XMLElement* physicsElement, ShapeData& shapeData)
+	{
+		EnumParser<ShapeData::BoundingShape> boundingParser;
+		tinyxml2::XMLElement* shapeElement = physicsElement->FirstChildElement("bounding_shape");
+		const char* shapeStr = shapeElement != NULL ? shapeElement->Attribute("type") : NULL;
+		if (shapeStr == NULL)
+		{
+			throw std::runtime_error("No collision mesh or bounding shape specified for physics component");
+		}
+		
+		ShapeData::BoundingShape shapeType = boundingParser.parse(string(shapeStr));
+		shapeData.boundingShape = shapeType;
+		switch (shapeType)
+		{
+			case ShapeData::BoundingShape::BOX:
+			{
+				tinyxml2::XMLElement* extentsElemenet = shapeElement->FirstChildElement("half_extents");
+				shapeData.halfExtents = glm::vec3
+					(
+						extentsElemenet->FirstChildElement("x") != NULL ? extentsElemenet->FirstChildElement("x")->FloatText() : 1.0f,
+						extentsElemenet->FirstChildElement("y") != NULL ? extentsElemenet->FirstChildElement("y")->FloatText() : 1.0f,
+						extentsElemenet->FirstChildElement("z") != NULL ? extentsElemenet->FirstChildElement("z")->FloatText() : 1.0f
+						);
+				break;
+			}
+			case ShapeData::BoundingShape::SPHERE:
+				shapeData.radius = shapeElement->FirstChildElement("radius") != NULL ? shapeElement->FirstChildElement("radius")->FloatText() : 1.0f;
+				break;
+			case ShapeData::BoundingShape::CONE:
+				shapeData.radius = shapeElement->FirstChildElement("radius") != NULL ? shapeElement->FirstChildElement("radius")->FloatText() : 1.0f;
+				shapeData.height = shapeElement->FirstChildElement("height") != NULL ? shapeElement->FirstChildElement("height")->FloatText() : 1.0f;
+				break;
+			case ShapeData::BoundingShape::CYLINDER:
+			{
+				tinyxml2::XMLElement* extentsElemenet = shapeElement->FirstChildElement("half_extents");
+				shapeData.halfExtents = glm::vec3
+					(
+						extentsElemenet->FirstChildElement("x") != NULL ? extentsElemenet->FirstChildElement("x")->FloatText() : 1.0f,
+						extentsElemenet->FirstChildElement("y") != NULL ? extentsElemenet->FirstChildElement("y")->FloatText() : 1.0f,
+						extentsElemenet->FirstChildElement("z") != NULL ? extentsElemenet->FirstChildElement("z")->FloatText() : 1.0f
+						);
+				break;
+			}
+		}
 	}
 
 	/*
@@ -347,7 +424,7 @@ private:
 	{
 		glm::vec3 pos;
 		glm::vec3 scale = glm::vec3(1.0, 1.0, 1.0);
-		glm::quat quat; quat.y = 1.0f; quat.w = 0.0f;
+		glm::quat quat;
 		readTransformData(pos, scale, quat, element);
 		transform->orientation = quat;
 		transform->position = pos;
@@ -380,9 +457,10 @@ private:
 			(
 				quatElement->FirstChildElement("w") != NULL ? quatElement->FirstChildElement("w")->FloatText() : 0.0f,
 				quatElement->FirstChildElement("x") != NULL ? quatElement->FirstChildElement("x")->FloatText() : 0.0f,
-				quatElement->FirstChildElement("y") != NULL ? quatElement->FirstChildElement("y")->FloatText(1.0f) : 1.0f, //default to be orientated around y axis
-				quatElement->FirstChildElement("z") != NULL ? quatElement->FirstChildElement("z")->FloatText() : 0.0f
+				quatElement->FirstChildElement("y") != NULL ? quatElement->FirstChildElement("y")->FloatText() : 0.0f,
+				quatElement->FirstChildElement("z") != NULL ? quatElement->FirstChildElement("z")->FloatText() : 1.0f
 			);
+			quat = glm::angleAxis(glm::radians(quat.w), glm::vec3(quat.x, quat.y, quat.z));
 		}
 	}
 

@@ -4,6 +4,7 @@
 #include <Components\ComponentType.h>
 #include <Input.h>
 #include <Physics\Physics.h>
+#include <Physics\ShapeData.h>
 
 EnumParser<Engine::GraphicsContext>::EnumParser()
 {
@@ -65,4 +66,16 @@ EnumParser<Physics::PhysicsImpl>::EnumParser()
 {
 	map["BULLET"] = Physics::PhysicsImpl::BULLET;
 	map["bullet"] = Physics::PhysicsImpl::BULLET;
+}
+
+EnumParser<ShapeData::BoundingShape>::EnumParser()
+{
+	map["BOX"] = ShapeData::BoundingShape::BOX;
+	map["box"] = ShapeData::BoundingShape::BOX;
+	map["SPHERE"] = ShapeData::BoundingShape::SPHERE;
+	map["sphere"] = ShapeData::BoundingShape::SPHERE;
+	map["CONE"] = ShapeData::BoundingShape::CONE;
+	map["cone"] = ShapeData::BoundingShape::CONE;
+	map["CYLINDER"] = ShapeData::BoundingShape::CYLINDER;
+	map["cylinder"] = ShapeData::BoundingShape::CYLINDER;
 }

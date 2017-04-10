@@ -236,6 +236,7 @@
     <ClInclude Include="include\InputGLFW.h" />
     <ClInclude Include="include\Physics\BulletPhysics.h" />
     <ClInclude Include="include\Physics\Physics.h" />
+    <ClInclude Include="include\Physics\ShapeData.h" />
     <ClInclude Include="include\Renderers\Graphics.h" />
     <ClInclude Include="include\Renderers\RenderGL.h" />
     <ClInclude Include="include\Robot.h" />

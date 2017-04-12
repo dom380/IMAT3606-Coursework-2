@@ -1,7 +1,9 @@
 #pragma once
 #ifndef PHYSICS_H
 #define PHYSICS_H
+#include <vector>
 class PhysicsComponent;
+
 /*
 	Interface for the Physics system.
 */

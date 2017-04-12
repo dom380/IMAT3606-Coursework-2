@@ -19,3 +19,8 @@ Handle ComponentStore::storeComponent(std::shared_ptr<PhysicsComponent> componen
 {
 	return physics.add(*component);
 }
+
+Handle ComponentStore::storeComponent(std::shared_ptr<CollisionTrigger> component)
+{
+	return triggers.add(*component);
+}

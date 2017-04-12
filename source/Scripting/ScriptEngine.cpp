@@ -122,5 +122,8 @@ ScriptEngine::ScriptEngine()
 				.addFunction("replaceScreen", &Engine::replaceScreen)
 				.addFunction("exit", &Engine::exit)
 			.endClass()
+			.beginClass<GameObject>("GameObject")
+				
+			.endClass()
 		.endNamespace();
 }

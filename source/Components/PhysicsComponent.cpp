@@ -5,46 +5,20 @@
 
 PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject> owner, std::shared_ptr<ModelData> mesh, float mass, bool convex) : Component(ComponentType::RIGID_BODY)
 {
-	this->owner = owner;
-	this->mass = mass;
-
 	//Retrieve the transform of the mesh
 	btTransform transform;
 	auto sp = owner.lock();
 	auto tp = sp != nullptr ? sp->getComponent<Transform>(ComponentType::TRANSFORM) : nullptr;
-	transform.setOrigin(btVector3(tp->position.x, tp->position.y, tp->position.z));
-	transform.setRotation(btQuaternion(tp->orientation.x, tp->orientation.y, tp->orientation.z, tp->orientation.w));
 
 	//Build collision shape
 	buildCollisionShape(mesh, convex, tp->scale);
-	
-	if (mass > 0.f)
-		shape->calculateLocalInertia(mass, localInertia);
-
-	//Make sure the rigid body is in the same position as the mesh
-	btDefaultMotionState* ms = new btDefaultMotionState(transform);
-
-	btRigidBody::btRigidBodyConstructionInfo bodyInfo(mass, ms, shape, localInertia);
-	
-	//Construct rigid body and save pointer to this component
-	body = new btRigidBody(bodyInfo);
-	body->setUserPointer(this);
-
-	//Add the body to the physics system
-	physics->addBody(*this); 
+	init(physics, owner, mass);
 }
 
 PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics>& physics, std::weak_ptr<GameObject>& owner, ShapeData& boundingShape, float mass) : Component(ComponentType::RIGID_BODY)
 {
-	this->owner = owner;
-	this->mass = mass;
-
-	//Retrieve the transform of the mesh
-	btTransform transform;
 	auto sp = owner.lock();
 	auto tp = sp != nullptr ? sp->getComponent<Transform>(ComponentType::TRANSFORM) : nullptr;
-	transform.setOrigin(btVector3(tp->position.x, tp->position.y, tp->position.z));
-	transform.setRotation(btQuaternion(tp->orientation.x, tp->orientation.y, tp->orientation.z, tp->orientation.w));
 
 	auto scale = tp->scale;
 	//Build Collision shape
@@ -63,23 +37,7 @@ PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics>& physics, std::weak_
 			shape = new btCylinderShape(btVector3(boundingShape.halfExtents.x, boundingShape.halfExtents.y, boundingShape.halfExtents.z));
 			break;
 	}
-
-	if (mass > 0.f)
-		shape->calculateLocalInertia(mass, localInertia);
-
-	//Make sure the rigid body is in the same position as the mesh
-	btDefaultMotionState* ms = new btDefaultMotionState(transform);
-
-	btRigidBody::btRigidBodyConstructionInfo bodyInfo(mass, ms, shape, localInertia);
-
-	//Construct rigid body and save pointer to this component
-	body = new btRigidBody(bodyInfo);
-	body->setUserPointer(this);
-
-	//Add the body to the physics system
-	physics->addBody(*this);
-
-
+	init(physics, owner, mass);
 }
 
 void PhysicsComponent::update(double dt)
@@ -126,15 +84,38 @@ void PhysicsComponent::setRestitution(double restitution)
 	body->setRestitution(btScalar(restitution));
 }
 
+void PhysicsComponent::setFriction(double friction)
+{
+	body->setFriction(btScalar(friction));
+}
+
+void PhysicsComponent::setRotationalFriction(double friction)
+{
+	btScalar frictionScalar = btScalar(friction);
+	body->setRollingFriction(frictionScalar);
+	//body->setSpinningFriction(frictionScalar);
+}
+
 void PhysicsComponent::setVelocity(double x, double y, double z)
 {
-	velocity = btVector3(x, y, z);
+	velocity = btVector3(btScalar(x), btScalar(y), btScalar(z));
 	body->setLinearVelocity(velocity);
 }
 
 void PhysicsComponent::setConstVelocity(bool flag)
 {
 	constVelocity = flag;
+}
+
+void PhysicsComponent::setTransform(Transform * transformPtr)
+{
+	btTransform transform = btTransform::getIdentity();
+	auto pos = transformPtr->position;
+	transform.setOrigin(btVector3(pos.x, pos.y, pos.z));
+	auto orientation = transformPtr->orientation;
+	transform.setRotation(btQuaternion(orientation.x, orientation.y, orientation.z, orientation.w));
+	auto ms = body->getMotionState();
+	ms->setWorldTransform(transform);
 }
 
 void PhysicsComponent::buildCollisionShape(std::shared_ptr<ModelData>& mesh, bool& convex, glm::vec3& scale)
@@ -226,4 +207,32 @@ void PhysicsComponent::updateTransform(Transform* transformPtr)
 	transformPtr->orientation.x = q.getX();
 	transformPtr->orientation.y = q.getY();
 	transformPtr->orientation.z = q.getZ();
+}
+
+void PhysicsComponent::init(std::shared_ptr<Physics>& physics, std::weak_ptr<GameObject> owner, float mass)
+{
+	this->owner = owner;
+	this->mass = mass;
+
+	//Retrieve the transform of the mesh
+	btTransform transform;
+	auto sp = owner.lock();
+	auto tp = sp != nullptr ? sp->getComponent<Transform>(ComponentType::TRANSFORM) : nullptr;
+	transform.setOrigin(btVector3(tp->position.x, tp->position.y, tp->position.z));
+	transform.setRotation(btQuaternion(tp->orientation.x, tp->orientation.y, tp->orientation.z, tp->orientation.w));
+
+	if (mass > 0.f)
+		shape->calculateLocalInertia(mass, localInertia);
+
+	//Make sure the rigid body is in the same position as the mesh
+	btDefaultMotionState* ms = new btDefaultMotionState(transform);
+
+	btRigidBody::btRigidBodyConstructionInfo bodyInfo(mass, ms, shape, localInertia);
+
+	//Construct rigid body and save pointer to this component's game object so it can be used in collision response.
+	body = new btRigidBody(bodyInfo);
+	body->setUserPointer(sp.get());
+	
+	//Add the body to the physics system
+	physics->addBody(*this);
 }

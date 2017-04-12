@@ -153,6 +153,7 @@
     <ClCompile Include="source\AssetManager.cpp" />
     <ClCompile Include="source\Camera\PerspectiveCamera.cpp" />
     <ClCompile Include="source\ComponentStore.cpp" />
+    <ClCompile Include="source\Components\CollisionTrigger.cpp" />
     <ClCompile Include="source\Components\Component.cpp" />
     <ClCompile Include="source\Components\LogicComponent.cpp" />
     <ClCompile Include="source\Components\PhysicsComponent.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="include\Camera\OrthographicCamera.h" />
     <ClInclude Include="include\Camera\PerspectiveCamera.h" />
     <ClInclude Include="include\ComponentStore.h" />
+    <ClInclude Include="include\Components\CollisionTrigger.h" />
     <ClInclude Include="include\Components\Component.h" />
     <ClInclude Include="include\Components\ComponentType.h" />
     <ClInclude Include="include\Components\LocationMessage.h" />

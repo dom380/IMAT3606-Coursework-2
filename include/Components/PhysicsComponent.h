@@ -56,6 +56,16 @@ public:
 	*/
 	void setRestitution(double restitution);
 	/*
+		Sets the friction coefficent of the GameObject.
+		double friction - A value between 0..1 specifying the frictional coefficent.
+	*/
+	void setFriction(double friction);
+	/*
+		Sets the rotational friction coefficent of the GameObject.
+		double friction - A value between 0..1 specifying the rotational frictional coefficent.
+	*/
+	void setRotationalFriction(double friction);
+	/*
 		Sets the object's linear velocity. Note this overrides the object's current velocity.
 		double x - The X component of the velocity vector.
 		double y - The Y component of the velocity vector.
@@ -67,7 +77,10 @@ public:
 	*/
 	void setConstVelocity(bool flag);
 
-	
+	/*
+		Aplies the specified transform to the physics object to.
+	*/
+	void setTransform(Transform* transformPtr);
 private:
 	std::weak_ptr<GameObject> owner;
 	float mass;
@@ -76,8 +89,19 @@ private:
 	btVector3 localInertia = btVector3(0.0, 0.0, 0.0);
 	btVector3 velocity = btVector3(0.0, 0.0, 0.0);
 	bool constVelocity = false;
+	//private utility methods
+	/*
+		Constructs the collision shape from the specified mesh
+	*/
 	void buildCollisionShape(std::shared_ptr<ModelData>& mesh, bool& convex, glm::vec3& scale);
+	/*
+		Synchronizes the Transform component with the physics simulation transform
+	*/
 	void updateTransform(Transform* transformPtr);
+	/*
+		Shared initialization code between constructors.
+	*/
+	void init(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject> owner, float mass);
 };
 
 #endif // !PHYSICSCOMPONENT_H

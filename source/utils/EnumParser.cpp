@@ -52,6 +52,8 @@ EnumParser<ComponentType>::EnumParser()
 	map["logic"] = ComponentType::LOGIC;
 	map["TRANSFORM"] = ComponentType::TRANSFORM;
 	map["transform"] = ComponentType::TRANSFORM;
+	map["TRIGGER"] = ComponentType::TRIGGER;
+	map["trigger"] = ComponentType::TRIGGER;
 }
 
 EnumParser<Input::InputImpl>::EnumParser()

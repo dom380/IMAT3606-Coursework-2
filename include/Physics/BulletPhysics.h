@@ -1,11 +1,13 @@
 #pragma once
 #ifndef BULLETPHYSICS_H
 #define BULLETPHYSICS_H
+#include <Engine.h>
 #include "Physics.h"
 #include <Components\PhysicsComponent.h>
+#include <Components\CollisionTrigger.h>
 #include "btBulletDynamicsCommon.h"
 #include <GUI\EventListener.h>
-
+class CollisionTrigger;
 /*
 	The bullet 2.8x implementation of the Physics system
 */
@@ -45,6 +47,18 @@ public:
 	*/
 	void addBody(PhysicsComponent comp);
 
+	/*
+		Add the specified CollisionTrigger to the dymaic world.
+	*/
+	void addTrigger(CollisionTrigger* trigger);
+
+	std::vector<CollisionTrigger*> getCollisionTriggers();
+
+	/*
+		Per step callback function for the simulation.
+	*/
+	static void tickCallback(btDynamicsWorld *world, btScalar timeStep);
+
 	//Event Listener methods
 	/*
 		stub method
@@ -61,6 +75,7 @@ private:
 	btCollisionDispatcher* dispatcher;
 	btSequentialImpulseConstraintSolver* solver;
 	btDiscreteDynamicsWorld* world;
+	std::vector<CollisionTrigger*> collisionTriggers;
 };
 
 #endif // !BULLETPHYSICS_H

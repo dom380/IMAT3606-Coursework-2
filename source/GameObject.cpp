@@ -32,6 +32,8 @@ void GameObject::AddComponent(std::shared_ptr<Component> comp, ComponentType typ
 		case TRANSFORM:
 			componentHandles[type] = storePtr->storeComponent(std::dynamic_pointer_cast<Transform>(comp));
 			break;
+		case TRIGGER:
+			componentHandles[type] = storePtr->storeComponent(std::dynamic_pointer_cast<CollisionTrigger>(comp));
 		default:
 			break;
 		}

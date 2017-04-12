@@ -107,6 +107,10 @@ public:
 				gameObject->AddComponent(transform, ComponentType::TRANSFORM);
 			}
 			break;
+			case ComponentType::TRIGGER:
+			{
+				loadCollisionTrigger(physics, gameObject, componentElement);
+			}
 			default:
 				break;
 			}
@@ -309,7 +313,9 @@ private:
 	{
 		float mass = 0.f;
 		shared_ptr<PhysicsComponent> physComp;
+		//Get mass
 		mass = physicsElement->FirstChildElement("mass") != NULL ? physicsElement->FirstChildElement("mass")->FloatText() : 0.f;
+		//Load collision shape
 		if (physicsElement->FirstChildElement("collision_mesh") != NULL)
 		{
 			const char* meshFile = physicsElement->FirstChildElement("collision_mesh")->GetText();
@@ -322,10 +328,19 @@ private:
 			readShapeData(physicsElement, shapeData);
 			physComp = std::make_shared<PhysicsComponent>(physics, std::weak_ptr<GameObject>(gameObject), shapeData, mass);
 		}
+		//Get restitution
 		double restitution = physicsElement->FirstChildElement("restitution") != NULL ? physicsElement->FirstChildElement("restitution")->DoubleText() : 0.0f;
 		physComp->setRestitution(restitution);
+		//Get friction
+		double friction = physicsElement->FirstChildElement("friction") != NULL ? physicsElement->FirstChildElement("friction")->DoubleText() : 0.5;
+		physComp->setFriction(friction);
+		//Get rotational friction. 
+		friction = physicsElement->FirstChildElement("rotational_friction") != NULL ? physicsElement->FirstChildElement("rotational_friction")->DoubleText() : 0.0;
+		physComp->setRotationalFriction(friction);
+		//Get constant velocity
 		bool constVel = physicsElement->FirstChildElement("constant_velocity") != NULL ? physicsElement->FirstChildElement("constant_velocity")->BoolText() : false;
 		physComp->setConstVelocity(constVel);
+		//Get Velocity
 		tinyxml2::XMLElement* velElement = physicsElement->FirstChildElement("velocity");
 		glm::vec3 velocity;
 		if (velElement != NULL) 
@@ -388,6 +403,21 @@ private:
 				break;
 			}
 		}
+	}
+
+	/*
+		Utility method to load collision triggers.
+	*/
+	static void loadCollisionTrigger(shared_ptr<Physics>& physics, shared_ptr<GameObject> gameObject, tinyxml2::XMLElement* triggerElement)
+	{
+		shared_ptr<CollisionTrigger> collisionTrigger;
+		ShapeData shapeData;
+		readShapeData(triggerElement, shapeData);
+		const char* scriptName = triggerElement->FirstChildElement("script") != NULL ? triggerElement->FirstChildElement("script")->GetText() : "default.lua";
+		auto scriptPath = AssetManager::getInstance()->getScript(scriptName);
+		bool triggerOnce = triggerElement->FirstChildElement("trigger_once") != NULL ? triggerElement->FirstChildElement("trigger_once")->BoolText() : true;
+		collisionTrigger = std::make_shared<CollisionTrigger>(physics, std::weak_ptr<GameObject>(gameObject), shapeData, scriptPath, triggerOnce);
+		gameObject->AddComponent(collisionTrigger, ComponentType::TRIGGER);
 	}
 
 	/*

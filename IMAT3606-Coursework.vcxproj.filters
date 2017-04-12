@@ -204,6 +204,9 @@
     <ClCompile Include="source\Physics\Physics.cpp">
       <Filter>Source Files\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="source\Components\CollisionTrigger.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\utils\GLSupport.h">
@@ -409,6 +412,9 @@
     </ClInclude>
     <ClInclude Include="include\Physics\ShapeData.h">
       <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\CollisionTrigger.h">
+      <Filter>Header Files\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

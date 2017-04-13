@@ -418,6 +418,11 @@ private:
 		bool triggerOnce = triggerElement->FirstChildElement("trigger_once") != NULL ? triggerElement->FirstChildElement("trigger_once")->BoolText() : true;
 		collisionTrigger = std::make_shared<CollisionTrigger>(physics, std::weak_ptr<GameObject>(gameObject), shapeData, scriptPath, triggerOnce);
 		gameObject->AddComponent(collisionTrigger, ComponentType::TRIGGER);
+		std::shared_ptr<BulletPhysics> physicsPtr = std::dynamic_pointer_cast<BulletPhysics>(physics);
+		if (physicsPtr != nullptr)
+		{
+			physicsPtr->addTrigger(collisionTrigger);
+		}
 	}
 
 	/*

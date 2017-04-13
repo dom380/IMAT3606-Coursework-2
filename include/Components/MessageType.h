@@ -10,7 +10,8 @@ enum class MsgType
 	ACTIVATE,
 	DEACTIVATE,
 	RENDER,
-	LOCATION
+	LOCATION,
+	MATERIAL
 };
 
 #endif // !MESSAGETYPE_H

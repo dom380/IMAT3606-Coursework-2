@@ -201,6 +201,7 @@
     <ClInclude Include="include\Components\ComponentType.h" />
     <ClInclude Include="include\Components\LocationMessage.h" />
     <ClInclude Include="include\Components\LogicComponent.h" />
+    <ClInclude Include="include\Components\MaterialMessage.h" />
     <ClInclude Include="include\Components\Message.h" />
     <ClInclude Include="include\Components\MessageType.h" />
     <ClInclude Include="include\Components\PhysicsComponent.h" />

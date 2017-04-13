@@ -33,6 +33,7 @@ CollisionTrigger::CollisionTrigger(std::shared_ptr<Physics> &physics, std::weak_
 	body = new btGhostObject();
 	body->setCollisionShape(shape);
 	body->setWorldTransform(transform);
+	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
 
 	script = scriptFile;
 	auto splitPath = Utilities::splitFilePath(scriptFile);
@@ -40,12 +41,6 @@ CollisionTrigger::CollisionTrigger(std::shared_ptr<Physics> &physics, std::weak_
 	auto scriptEngine = ScriptEngine::getInstance();
 	scriptEngine->loadScript(script, scriptName);
 	triggerFunc = scriptEngine->getFunction(scriptName, "trigger");
-
-	std::shared_ptr<BulletPhysics> physicsPtr = std::dynamic_pointer_cast<BulletPhysics>(physics);
-	if (physicsPtr != nullptr)
-	{
-		physicsPtr->addTrigger(this);
-	}
 }
 
 CollisionTrigger::CollisionTrigger(std::shared_ptr<Physics>& physics, std::weak_ptr<GameObject>& owner, ShapeData & boundingShape, std::string scriptFile, bool triggerOnce)

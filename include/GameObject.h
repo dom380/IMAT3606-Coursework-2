@@ -6,7 +6,13 @@ using std::vector;
 #include <memory>
 #include "utils\Handle.h"
 #include "ComponentStore.h"
+#include <utils\EnumParser.h>
 class ComponentStore;
+class ModelComponent;
+class Transform;
+class PhysicsComponent;
+class LogicComponent;
+class CollisionTrigger;
 /*
 	Generic GameObject class.
 */
@@ -47,6 +53,13 @@ public:
 		}
 	};
 
+	//TODO think of a better way of exposing this to lua
+	ModelComponent* getModel();
+	Transform* getTransform();
+	PhysicsComponent* getPhysics();
+	LogicComponent* getLogic();
+	CollisionTrigger* getTrigger();
+	
 	/*
 		Adds the specified component to the GameObject.
 		T comp, The component to add.
@@ -61,6 +74,7 @@ public:
 private:
 	Handle componentHandles[ComponentType::COMPONENT_TYPE_COUNT];
 	std::weak_ptr<ComponentStore> componentStore;
+	EnumParser<ComponentType> typeParser;
 };
 
 #endif // !GAMEOBJECT_H

@@ -34,7 +34,7 @@ private:
 	lua_State* luaState = LuaStateHolder::getLuaState();
 	luabridge::LuaRef triggerFunc;
 	bool triggerOnce = false;
-	bool triggered;
+	bool triggered = false;
 	//TODO - This is tied to the bullet physics implementation. Make Generic.
 	btGhostObject* body;
 	btCollisionShape* shape;

@@ -93,7 +93,7 @@ void PhysicsComponent::setRotationalFriction(double friction)
 {
 	btScalar frictionScalar = btScalar(friction);
 	body->setRollingFriction(frictionScalar);
-	//body->setSpinningFriction(frictionScalar);
+	body->setSpinningFriction(frictionScalar/btScalar(2.0));
 }
 
 void PhysicsComponent::setVelocity(double x, double y, double z)

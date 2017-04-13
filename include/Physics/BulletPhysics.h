@@ -50,9 +50,9 @@ public:
 	/*
 		Add the specified CollisionTrigger to the dymaic world.
 	*/
-	void addTrigger(CollisionTrigger* trigger);
+	void addTrigger(std::shared_ptr<CollisionTrigger> trigger);
 
-	std::vector<CollisionTrigger*> getCollisionTriggers();
+	std::vector<std::shared_ptr<CollisionTrigger>> getCollisionTriggers();
 
 	/*
 		Per step callback function for the simulation.
@@ -75,7 +75,7 @@ private:
 	btCollisionDispatcher* dispatcher;
 	btSequentialImpulseConstraintSolver* solver;
 	btDiscreteDynamicsWorld* world;
-	std::vector<CollisionTrigger*> collisionTriggers;
+	std::vector<std::shared_ptr<CollisionTrigger>> collisionTriggers;
 };
 
 #endif // !BULLETPHYSICS_H

@@ -11,6 +11,33 @@ Handle GameObject::GetComponentHandle(ComponentType type)
 	return componentHandles[type];
 }
 
+ModelComponent* GameObject::getModel()
+{
+	return getComponent<ModelComponent>(ComponentType::MODEL);
+}
+
+Transform* GameObject::getTransform()
+{
+	return getComponent<Transform>(ComponentType::TRANSFORM);
+}
+
+PhysicsComponent* GameObject::getPhysics()
+{
+	return getComponent<PhysicsComponent>(ComponentType::RIGID_BODY);
+}
+
+LogicComponent* GameObject::getLogic()
+{
+	return getComponent<LogicComponent>(ComponentType::LOGIC);
+}
+
+CollisionTrigger* GameObject::getTrigger()
+{
+	return getComponent<CollisionTrigger>(ComponentType::TRIGGER);
+}
+
+
+
 void GameObject::AddComponent(std::shared_ptr<Component> comp, ComponentType type)
 {
 	auto storePtr = componentStore.lock();
@@ -39,7 +66,6 @@ void GameObject::AddComponent(std::shared_ptr<Component> comp, ComponentType typ
 		}
 	}
 }
-
 
 bool GameObject::HasComponent(ComponentType type)
 {

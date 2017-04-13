@@ -44,13 +44,13 @@ void BulletPhysics::addBody(PhysicsComponent comp)
 	world->addRigidBody(comp.getBody());
 }
 
-void BulletPhysics::addTrigger(CollisionTrigger* trigger)
+void BulletPhysics::addTrigger(std::shared_ptr<CollisionTrigger> trigger)
 {
 	world->addCollisionObject(trigger->getBody());
 	collisionTriggers.push_back(trigger);
 }
 
-std::vector<CollisionTrigger*> BulletPhysics::getCollisionTriggers()
+std::vector<std::shared_ptr<CollisionTrigger>> BulletPhysics::getCollisionTriggers()
 {
 	return collisionTriggers;
 }
@@ -65,7 +65,7 @@ void BulletPhysics::tickCallback(btDynamicsWorld * world, btScalar timeStep)
 	if (physicsPtr != nullptr) //Can't hurt to check though.
 	{
 		auto collisionTriggers = physicsPtr->getCollisionTriggers();
-		for (CollisionTrigger* trigger : collisionTriggers)
+		for (std::shared_ptr<CollisionTrigger> trigger : collisionTriggers)
 		{
 			if (trigger == nullptr)
 				continue;
@@ -87,6 +87,30 @@ void BulletPhysics::tickCallback(btDynamicsWorld * world, btScalar timeStep)
 					}
 				}
 			}		
+		}
+	}
+	//Now iterate over the contact manifolds and notify any colliding objects
+	auto dispatcher = world->getDispatcher();
+	int numOfManifolds = dispatcher->getNumManifolds();
+	for (int i = 0; i < numOfManifolds; ++i)
+	{
+		auto contactManifold = dispatcher->getManifoldByIndexInternal(i);
+		if (contactManifold->getNumContacts() > 0)
+		{
+			//Get the colliding objects
+			const btCollisionObject* objA = contactManifold->getBody0();
+			const btCollisionObject* objB = contactManifold->getBody1();
+			//We only care about dynamic objects colliding. Use a collision trigger if that is needed.
+			if (objA->isStaticObject() || objB->isStaticObject()) 
+			{
+				continue;
+			}
+			else
+			{
+				/*TODO - Get both GameObjects from user ptr and send a contact message. 
+				Again, need some kind of tagging system so we know what the objects are meant to be
+				Anything I do here may get called multiple times every frame, need some way of limiting*/
+			}
 		}
 	}
 }

@@ -88,6 +88,9 @@
     <Filter Include="Source Files\Physics">
       <UniqueIdentifier>{cc926aa1-1fcc-4348-af83-4b8bb7df69a1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Components\Messages">
+      <UniqueIdentifier>{08f9a3c5-20b1-4b3a-8454-88944b760835}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -305,19 +308,7 @@
     <ClInclude Include="include\Components\ComponentType.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="include\Components\LocationMessage.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="include\Components\LogicComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Components\Message.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Components\MessageType.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Components\RenderMessage.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="include\Renderers\Graphics.h">
@@ -415,6 +406,21 @@
     </ClInclude>
     <ClInclude Include="include\Components\CollisionTrigger.h">
       <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\LocationMessage.h">
+      <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\Message.h">
+      <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\MessageType.h">
+      <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\RenderMessage.h">
+      <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\MaterialMessage.h">
+      <Filter>Header Files\Components\Messages</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

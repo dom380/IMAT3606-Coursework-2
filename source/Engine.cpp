@@ -111,6 +111,7 @@ void Engine::exit()
 	AssetManager::getInstance()->exit();	
 	activeScreen.second.reset();
 	gameScreens.clear();
+	physics.reset();
 	ScriptEngine::getInstance()->close();
 	if(window != nullptr)
 		window->close();

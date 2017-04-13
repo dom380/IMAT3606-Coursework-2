@@ -17,7 +17,7 @@ gold_collectable.update = function(logicComponent, dt)
 	pos.x = 0.0;
 	pos.y = 0.0;
 	pos.z = 0.0;
-	scale = 1.0;
+	local scale = 1.0;
 	logicComponent:applyTransform(pos, scale, gold_collectable.angle);
 end
 

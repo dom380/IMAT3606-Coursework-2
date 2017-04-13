@@ -309,9 +309,1175 @@
 						<z>0.0</z>
 					</velocity>
 					<constant_velocity>false</constant_velocity>
+					<friction>0.5</friction>
+					<rotational_friction>0.5</rotational_friction>
 				</component>
 			</components>
 		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>-8.0</x>
+						<y>25.0</y>
+						<z>16.5</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<collision_mesh>cube.obj</collision_mesh>
+					<restitution>0.4</restitution>
+					<velocity>
+						<x>20.0</x>
+						<y>20.0</y>
+						<z>0.0</z>
+					</velocity>
+					<constant_velocity>false</constant_velocity>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>25.0</y>
+						<z>16.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<collision_mesh>cube.obj</collision_mesh>
+					<restitution>0.4</restitution>
+					<velocity>
+						<x>-20.0</x>
+						<y>20.0</y>
+						<z>0.0</z>
+					</velocity>
+					<constant_velocity>false</constant_velocity>
+				</component>
+			</components>
+		</gameObject>
+		
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>1.0</x>
+							<y>1.0</y>
+							<z>1.0</z>
+						</half_extents>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>sphere.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>40.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="SPHERE">
+						<radius>1.0</radius>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+					<friction>0.5</friction>
+					<rotational_friction>0.5</rotational_friction>
+				</component>
+			</components>
+		</gameObject>
+		
+		<gameObject>
+			<components>
+				<component type="transform">
+					<position>
+						<x>8.0</x>
+						<y>0.0</y>
+						<z>22.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type="TRIGGER">
+					<script>trigger_test.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>3.0</radius>
+					</bounding_shape>
+					<trigger_once>false</trigger_once>
+				</component>
+			</components>
+		</gameObject>
+		
 		<!-- end -->		
 		<gameObject>
 			<components>
@@ -522,6 +1688,11 @@
 						<z>0.0</z>
 						<w>180</w>
 					</orientation>
+				</component>
+				<component type = "rigid_body">
+					<mass>0.0</mass>
+					<collision_mesh>bookshelf.obj</collision_mesh>
+					<restitution>0.1</restitution>
 				</component>
 			</components>
 		</gameObject>

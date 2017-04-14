@@ -147,6 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\AssetManager.cpp" />
+    <ClCompile Include="source\Camera\EngineCamera.cpp" />
     <ClCompile Include="source\Camera\FollowCamera.cpp" />
     <ClCompile Include="source\Camera\PerspectiveCamera.cpp" />
     <ClCompile Include="source\ComponentStore.cpp" />
@@ -192,6 +193,7 @@
   <ItemGroup>
     <ClInclude Include="include\AssetManager.h" />
     <ClInclude Include="include\Camera\Camera.h" />
+    <ClInclude Include="include\Camera\EngineCamera.h" />
     <ClInclude Include="include\Camera\FollowCamera.h" />
     <ClInclude Include="include\Camera\OrthographicCamera.h" />
     <ClInclude Include="include\Camera\PerspectiveCamera.h" />
@@ -229,6 +231,7 @@
     <ClInclude Include="include\GUI\Button.h" />
     <ClInclude Include="include\GUI\KeyEvent.h" />
     <ClInclude Include="include\GUI\KeyEventType.h" />
+    <ClInclude Include="include\GUI\MouseActionType.h" />
     <ClInclude Include="include\GUI\MouseEvent.h" />
     <ClInclude Include="include\GUI\EventListener.h" />
     <ClInclude Include="include\GUI\MouseEventType.h" />

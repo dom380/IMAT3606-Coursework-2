@@ -10,12 +10,17 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 	cameras.push_back(camera);
 	cameras.push_back(std::make_shared<PerspectiveCamera>(renderer->getWidth(), renderer->getHeight(), 45.0f, glm::vec3(-58,41,-68),glm::vec3(0,1,0), glm::vec3(0.63,-0.36,0.67)));
 	cameras.push_back(std::make_shared<PerspectiveCamera>(renderer->getWidth(), renderer->getHeight(), 45.0f, glm::vec3(-58, 41, 68), glm::vec3(0, 1, 0), glm::vec3(0.59,-0.39,-0.7)));
-	*/cameras.push_back(std::make_shared<PerspectiveCamera>(renderer->getWidth(), renderer->getHeight(), 45.0f, glm::vec3(58, 42, -68), glm::vec3(0, 1, 0), glm::vec3(-0.8,-0.42,0.42)));
-	
+	*/
+	cameras.push_back(std::make_shared<PerspectiveCamera>(renderer->getWidth(), renderer->getHeight(), 45.0f, glm::vec3(58, 42, -68), glm::vec3(0, 1, 0), glm::vec3(-0.8,-0.42,0.42)));
+	/*
+		Read cameraDistanceToPlayer from file?
+		Perhaps a mechanics file, for all things regardless of level.
+	*/
 	cameraDistanceToPlayer = glm::vec3(0, -12, -35);
-	shared_ptr<FollowCamera> robotCam = std::make_shared<FollowCamera>(renderer->getWidth(), renderer->getHeight(), 45.0f, cameraDistanceToPlayer);
-	cameras.push_back(robotCam);
-	robot->setCamera(robotCam);
+	float aspect = 45.0f;
+	shared_ptr<FollowCamera> playerCam = std::make_shared<FollowCamera>(renderer->getWidth(), renderer->getHeight(), aspect, cameraDistanceToPlayer);
+	cameras.push_back(playerCam);
+	robot->setCamera(playerCam);
 #ifndef NDEBUG
 	glm::quat quat; quat.y = 1.0f; quat.w = 0.0f;
 	shared_ptr<Transform> textPos = std::make_shared<Transform>(glm::vec3(30, 30, 0), glm::vec3(0.5, 0.5, 0.5), quat);
@@ -25,7 +30,7 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 	this->input = input;
 	this->input->registerKeyListener(robot);
 	//this->registerKeyListener(cameras.at(0));
-	this->input->registerMouseListener(robotCam);
+	this->input->registerMouseListener(playerCam);
 	activeCamera = 0;
 }
 

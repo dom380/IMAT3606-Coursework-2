@@ -99,6 +99,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ShowIncludes>false</ShowIncludes>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);GUID_WINDOWS</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -109,6 +110,7 @@
       <ShowIncludes>false</ShowIncludes>
       <AdditionalOptions>-DNOMINMAX %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>./lib/bullet3-2.86.1/src;</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);GUID_WINDOWS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>LinearMath_Debug.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;lua53.lib;freetype27.lib;glew32.lib;opengl32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -124,6 +126,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ShowIncludes>false</ShowIncludes>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);GUID_WINDOWS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -138,7 +141,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ShowIncludes>false</ShowIncludes>
-      <PreprocessorDefinitions>NDEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_MBCS;%(PreprocessorDefinitions);GUID_WINDOWS</PreprocessorDefinitions>
       <AdditionalOptions>-DNOMINMAX %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>./lib/bullet3-2.86.1/src;</AdditionalIncludeDirectories>
     </ClCompile>
@@ -189,6 +192,7 @@
     <ClCompile Include="source\utils\Timer.cpp" />
     <ClCompile Include="source\utils\tinyxml2.cpp" />
     <ClCompile Include="source\utils\Utilities.cpp" />
+    <ClCompile Include="source\utils\UUID\guid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\AssetManager.h" />
@@ -196,6 +200,7 @@
     <ClInclude Include="include\Camera\OrthographicCamera.h" />
     <ClInclude Include="include\Camera\PerspectiveCamera.h" />
     <ClInclude Include="include\ComponentStore.h" />
+    <ClInclude Include="include\Components\CollisionMessage.h" />
     <ClInclude Include="include\Components\CollisionTrigger.h" />
     <ClInclude Include="include\Components\Component.h" />
     <ClInclude Include="include\Components\ComponentType.h" />
@@ -216,6 +221,7 @@
     <ClInclude Include="include\Editor\imgui\stb_truetype.h" />
     <ClInclude Include="include\Engine.h" />
     <ClInclude Include="include\GameObject.h" />
+    <ClInclude Include="include\GameObjectTag.h" />
     <ClInclude Include="include\Graphics\Bitmap.h" />
     <ClInclude Include="include\Graphics\Light.h" />
     <ClInclude Include="include\Graphics\Material.h" />
@@ -261,6 +267,7 @@
     <ClInclude Include="include\utils\Timer.h" />
     <ClInclude Include="include\utils\tinyxml2.h" />
     <ClInclude Include="include\utils\Utilities.h" />
+    <ClInclude Include="include\utils\UUID\guid.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\basic.frag" />

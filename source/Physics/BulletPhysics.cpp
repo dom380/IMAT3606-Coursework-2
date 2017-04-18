@@ -107,9 +107,20 @@ void BulletPhysics::tickCallback(btDynamicsWorld * world, btScalar timeStep)
 			}
 			else
 			{
-				/*TODO - Get both GameObjects from user ptr and send a contact message. 
-				Again, need some kind of tagging system so we know what the objects are meant to be
-				Anything I do here may get called multiple times every frame, need some way of limiting*/
+				//TODO - This may message the objects multiple times a frame and certainly multiple times a second. Look into collision callback to avoid this.
+				auto gameObjA = static_cast<GameObject*>(objA->getUserPointer());
+				auto gameObjB = static_cast<GameObject*>(objB->getUserPointer());
+
+				Message* collisionMessageA = new CollisionMessage(gameObjB);
+				Message* collisionMessageB = new CollisionMessage(gameObjA);
+				auto logicComp = gameObjA->getLogic(); //Send collision message to ObjectA 
+				if (logicComp != nullptr)
+					logicComp->RecieveMessage(collisionMessageA);
+				logicComp = gameObjB->getLogic();  //Send collision message to ObjectB
+				if (logicComp != nullptr)
+					logicComp->RecieveMessage(collisionMessageB);
+				delete collisionMessageA;
+				delete collisionMessageB;
 			}
 		}
 	}

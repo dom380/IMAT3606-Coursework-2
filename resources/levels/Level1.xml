@@ -218,6 +218,7 @@
 		</gameObject>
 		<!-- physics testing block -->
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<!-- <file>sphere.obj</file> -->
@@ -250,6 +251,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -280,6 +282,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>sphere.obj</file>
@@ -315,6 +318,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -345,6 +349,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -376,6 +381,7 @@
 		</gameObject>
 		
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -406,6 +412,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -436,6 +443,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -466,6 +474,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -496,6 +505,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -526,6 +536,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -556,6 +567,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -586,6 +598,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -616,6 +629,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -646,6 +660,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -676,6 +691,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -706,6 +722,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -736,6 +753,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -766,6 +784,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -796,6 +815,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -826,6 +846,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -856,6 +877,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -886,6 +908,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -916,6 +939,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -946,6 +970,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -976,6 +1001,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -1006,6 +1032,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -1036,6 +1063,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -1066,6 +1094,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -1096,6 +1125,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -1126,6 +1156,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -1156,6 +1187,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -1186,6 +1218,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -1216,6 +1249,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -1246,6 +1280,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -1276,6 +1311,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -1306,6 +1342,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -1336,6 +1373,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -1366,6 +1404,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -1396,6 +1435,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>cube.obj</file>
@@ -1426,6 +1466,7 @@
 			</components>
 		</gameObject>
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
 					<file>sphere.obj</file>
@@ -1455,6 +1496,7 @@
 		</gameObject>
 		
 		<gameObject>
+			<tag>PHY_OBJ</tag>
 			<components>
 				<component type="transform">
 					<position>
@@ -1471,7 +1513,7 @@
 				<component type="TRIGGER">
 					<script>trigger_test.lua</script>
 					<bounding_shape type="SPHERE">
-						<radius>3.0</radius>
+						<radius>10.0</radius>
 					</bounding_shape>
 					<trigger_once>false</trigger_once>
 				</component>

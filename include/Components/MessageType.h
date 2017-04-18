@@ -11,7 +11,8 @@ enum class MsgType
 	DEACTIVATE,
 	RENDER,
 	LOCATION,
-	MATERIAL
+	MATERIAL,
+	COLLISION
 };
 
 #endif // !MESSAGETYPE_H

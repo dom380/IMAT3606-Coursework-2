@@ -2,6 +2,7 @@
 #include <Components\LogicComponent.h>
 #include <Engine.h>
 #include <Graphics\Material.h>
+#include <utils\UUID\guid.h>
 
 bool ScriptEngine::initialised = false;
 shared_ptr<ScriptEngine> ScriptEngine::instance;
@@ -103,6 +104,9 @@ ScriptEngine::ScriptEngine()
 				.addData("y", &glm::quat::y)
 				.addData("z", &glm::quat::z)
 			.endClass()
+			.beginClass<Guid>("Guid")
+				.addFunction("__eq", &Guid::operator==)
+			.endClass()
 			.beginClass<Material>("Material")
 				.addConstructor<void(*) (void)>()
 				.addData("Kd", &Material::Kd)
@@ -147,6 +151,8 @@ ScriptEngine::ScriptEngine()
 				.addFunction("getLogic", &GameObject::getLogic)
 				.addFunction("getPhysics", &GameObject::getPhysics)
 				.addFunction("getTrigger", &GameObject::getTrigger)
+				.addFunction("getId", &GameObject::getId)
+				.addFunction("getTag", &GameObject::getTagString)
 			.endClass()
 		.endNamespace();
 }

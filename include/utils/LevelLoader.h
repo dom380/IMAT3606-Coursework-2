@@ -71,7 +71,10 @@ public:
 	{
 		if (gameObjElement->FirstChildElement("components") == NULL)
 			return;
-		shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(componentStore);
+		EnumParser<GameObjectTag> tagParser;
+		std::string tagText = gameObjElement->FirstChildElement("tag") != NULL ? gameObjElement->FirstChildElement("tag")->GetText() : "UNKNOWN";
+		GameObjectTag tag = tagParser.parse(tagText);
+		shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(componentStore, tag);
 		tinyxml2::XMLElement* componentElement = gameObjElement->FirstChildElement("components")->FirstChildElement();
 		while (componentElement != NULL)
 		{

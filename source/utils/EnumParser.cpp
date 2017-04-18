@@ -5,6 +5,7 @@
 #include <Input.h>
 #include <Physics\Physics.h>
 #include <Physics\ShapeData.h>
+#include <GameObjectTag.h>
 
 EnumParser<Engine::GraphicsContext>::EnumParser()
 {
@@ -80,4 +81,16 @@ EnumParser<ShapeData::BoundingShape>::EnumParser()
 	map["cone"] = ShapeData::BoundingShape::CONE;
 	map["CYLINDER"] = ShapeData::BoundingShape::CYLINDER;
 	map["cylinder"] = ShapeData::BoundingShape::CYLINDER;
+}
+
+EnumParser<GameObjectTag>::EnumParser()
+{
+	map["PLAYER"] = GameObjectTag::PLAYER;
+	map["player"] = GameObjectTag::PLAYER;
+	map["ENEMY"] = GameObjectTag::ENEMY;
+	map["enemy"] = GameObjectTag::ENEMY;
+	map["PHY_OBJ"] = GameObjectTag::PHY_OBJ;
+	map["phy_obj"] = GameObjectTag::PHY_OBJ;
+	map["UNKNOWN"] = GameObjectTag::UNKNOWN;
+	map["unknown"] = GameObjectTag::UNKNOWN;
 }

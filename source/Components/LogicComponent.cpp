@@ -62,6 +62,24 @@ void LogicComponent::RecieveMessage(Message * msg)
 		}
 	}
 	break;
+	case MsgType::COLLISION:
+	{
+		CollisionMessage* collisionMsg = ((CollisionMessage *)msg);
+		try
+		{
+			if (recieveMsgFunc.isFunction())
+			{
+				recieveMsgFunc(this, collisionMsg, "COLLISION"); //TODO - Lua doesn't support enums so find better way of translating to scripts
+			}
+		}
+		catch (luabridge::LuaException e)
+		{
+			//Todo - better error handling here
+			std::cout << e.what() << std::endl;
+			throw std::runtime_error(e.what());
+		}
+	}
+	break;
 	default:
 		break;
 	}

@@ -1,8 +1,16 @@
 #include "..\include\GameObject.h"
 
-GameObject::GameObject(std::shared_ptr<ComponentStore> componentStore)
+GameObject::GameObject(std::shared_ptr<ComponentStore> componentStore):
+	GameObject(componentStore, GameObjectTag::UNKNOWN)
+{
+	
+}
+
+GameObject::GameObject(std::shared_ptr<ComponentStore> componentStore, GameObjectTag tag)
 {
 	this->componentStore = componentStore;
+	this->tag = tag;
+	id = guidGen.newGuid();
 }
 
 
@@ -71,4 +79,19 @@ bool GameObject::HasComponent(ComponentType type)
 {
 	Handle handle = componentHandles[type];
 	return !handle.isNull(); //If handle is not null, it has the component
+}
+
+Guid GameObject::getId()
+{
+	return id;
+}
+
+GameObjectTag GameObject::getTag()
+{
+	return tag;
+}
+
+string GameObject::getTagString()
+{
+	return tagParser.parse(tag);
 }

@@ -7,6 +7,8 @@
 #include <Components\CollisionTrigger.h>
 #include "btBulletDynamicsCommon.h"
 #include <GUI\EventListener.h>
+#include <utils\UUID\guid.h>
+#include <map>
 class CollisionTrigger;
 /*
 	The bullet 2.8x implementation of the Physics system

@@ -91,6 +91,12 @@
     <Filter Include="Header Files\Components\Messages">
       <UniqueIdentifier>{08f9a3c5-20b1-4b3a-8454-88944b760835}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\utils\UUID">
+      <UniqueIdentifier>{f08e8db4-4b8f-48b5-9027-760805fff6a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utils\UUID">
+      <UniqueIdentifier>{cad94e63-0f31-453f-b92a-feaf406d7126}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -209,6 +215,9 @@
     </ClCompile>
     <ClCompile Include="source\Components\CollisionTrigger.cpp">
       <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="source\utils\UUID\guid.cpp">
+      <Filter>Source Files\utils\UUID</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -421,6 +430,15 @@
     </ClInclude>
     <ClInclude Include="include\Components\MaterialMessage.h">
       <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utils\UUID\guid.h">
+      <Filter>Header Files\utils\UUID</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\CollisionMessage.h">
+      <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameObjectTag.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

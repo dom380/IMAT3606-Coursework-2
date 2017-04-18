@@ -106,7 +106,6 @@ public:
 private:
 	shared_ptr<ComponentStore> componentStore;
 	vector<shared_ptr<GameObject>> gameObjects;
-	vector<shared_ptr<TextBox>> textBoxes;
 	shared_ptr<Input> input;
 	shared_ptr<Graphics> renderer;
 	int activeCamera = 0;

@@ -26,17 +26,5 @@ void MenuScreen::resize(int width, int height)
 
 void MenuScreen::dispose()
 {
-	for (auto button : buttons) {
-		button.reset();
-	}
-}
-
-void MenuScreen::addButton(shared_ptr<Button> button)
-{
-	buttons.push_back(button);
-}
-
-void MenuScreen::addTextBox(shared_ptr<TextBox> textbox)
-{
-	textBoxes.push_back(textbox);
+	disposeButtons();
 }

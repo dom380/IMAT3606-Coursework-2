@@ -6,6 +6,7 @@ using std::string;
 #include <memory>
 using std::shared_ptr;
 
+#include <GUI\Button.h>
 #include <GUI\TextBox.h>
 #include <utils\XMLReader.h>
 
@@ -36,7 +37,6 @@ public:
 		Pure Virtual method. Implementations should free any resources here.
 	*/
 	virtual void dispose() = 0;
-	virtual void addTextBox(shared_ptr<TextBox> textbox) = 0;
 	/*
 		Sets the screen's Id.
 		string id, The Id.
@@ -77,11 +77,37 @@ public:
 	{
 		return screenXmlDocument;
 	}
+	/*
+	Clean up button resources.
+	*/
+	void disposeButtons()
+	{
+		for (auto button : buttons) {
+			button.reset();
+		}
+	}
+	/*
+	Adds a new Button to the screen.
+	shared_ptr<Button> button, Button to add.
+	*/
+	virtual void addButton(shared_ptr<Button> button)
+	{
+		buttons.push_back(button);
+	}
+	/*
+	Adds a new TextBox to the screen.
+	shared_ptr<TextBox> textbox, TextBox to add.
+	*/
+	virtual void addTextBox(shared_ptr<TextBox> textbox)
+	{
+		textBoxes.push_back(textbox);
+	}
 protected:
 	string screenId;
 	string xmlFilePath;
 	tinyxml2::XMLDocument* screenXmlDocument;
-
+	vector<shared_ptr<Button>> buttons;
+	vector<shared_ptr<TextBox>> textBoxes;
 };
 
 #endif // !SCREEN_H

@@ -47,24 +47,11 @@ public:
 		Clean up resources.
 	*/
 	void dispose();
-	/*
-		Adds a new Button to the screen.
-		shared_ptr<Button> button, Button to add.
-	*/
-	void addButton(shared_ptr<Button> button);
-	/*
-		Adds a new TextBox to the screen.
-		shared_ptr<TextBox> textbox, TextBox to add.
-	*/
-	void addTextBox(shared_ptr<TextBox> textbox);
-
+	
 private:
 	//private memebers.
 	shared_ptr<Graphics> graphics;
 	Engine* engine;
-	vector<shared_ptr<Button>> buttons;
-	vector<shared_ptr<TextBox>> textBoxes;
-
 };
 
 #endif // !SCREENMENU_H

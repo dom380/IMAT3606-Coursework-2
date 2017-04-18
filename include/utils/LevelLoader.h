@@ -198,7 +198,7 @@ private:
 	/*
 	Utility method to load Button elements
 	*/
-	static void loadButtonElement(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input> input, shared_ptr<MenuScreen> menuScreen, tinyxml2::XMLElement* buttonElement)
+	static void loadButtonElement(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input> input, shared_ptr<Screen> screen, tinyxml2::XMLElement* buttonElement)
 	{
 		Font font = *AssetManager::getInstance()->getFont("arial.ttf", renderer);
 		const char* text = buttonElement->FirstChildElement("value") != NULL ? buttonElement->FirstChildElement("value")->GetText() : "MISSING_STRING";
@@ -209,7 +209,7 @@ private:
 		string id;
 		buttonElement->Attribute("id") != NULL ? id = buttonElement->Attribute("id") : id = "";
 		shared_ptr<Button> button = std::make_shared<Button>(text, font, transform, renderer, colour, id);
-		menuScreen->addButton(button);
+		screen->addButton(button);
 		input->registerMouseListener(button);
 		//string funcName = string(buttonElement->FirstChildElement("function")->Attribute("type"));
 		loadButtonFunc(buttonElement, button, engine);
@@ -276,6 +276,14 @@ private:
 		while (stringElement != NULL) {
 			loadStringElement(renderer, gameScreen, stringElement);
 			stringElement = stringElement->NextSiblingElement();
+		}
+
+		tinyxml2::XMLElement* buttonElement = screenElement->FirstChildElement("buttons");
+		if (buttonElement)
+			buttonElement = buttonElement->FirstChildElement();
+		while (buttonElement != NULL) {
+			loadButtonElement(engine, renderer, input, gameScreen, buttonElement);
+			buttonElement = buttonElement->NextSiblingElement();
 		}
 		gameScreen->updateLighting();
 		engine->registerScreen(gameScreen);

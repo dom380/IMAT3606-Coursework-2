@@ -64,6 +64,12 @@ void GameScreen::render()
 	{
 		textBox->render();
 	}
+	for (auto button : buttons) {
+		button->render();
+	}
+	for (auto text : textBoxes) {
+		text->render();
+	}
 #ifndef NDEBUG
 	double elapsedTime = timer.getElapsedTimeMilliSec();
 	string frameText = "Frame Time: " + std::to_string( elapsedTime ) + "ms";
@@ -93,6 +99,7 @@ void GameScreen::dispose()
 	robot.reset();
 	cameras.clear();
 	componentStore.reset();
+	disposeButtons();
 }
 
 void GameScreen::addLight(Light light)

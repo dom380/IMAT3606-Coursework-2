@@ -207,6 +207,9 @@
     <ClCompile Include="source\Editor\DebugMenuItem.cpp">
       <Filter>Source Files\Editor</Filter>
     </ClCompile>
+    <ClCompile Include="source\GUI\UIElement.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\utils\GLSupport.h">
@@ -418,6 +421,9 @@
     </ClInclude>
     <ClInclude Include="include\Editor\DebugMenuItem.h">
       <Filter>Header Files\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUI\UIElement.h">
+      <Filter>Header Files\GUI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

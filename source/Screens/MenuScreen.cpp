@@ -18,6 +18,9 @@ void MenuScreen::render()
 	for (auto text : textBoxes) {
 		text->render();
 	}
+	for (auto ui : uiElements) {
+		ui->render();
+	}
 }
 
 void MenuScreen::resize(int width, int height)
@@ -27,4 +30,5 @@ void MenuScreen::resize(int width, int height)
 void MenuScreen::dispose()
 {
 	disposeButtons();
+	uiElements.clear();
 }

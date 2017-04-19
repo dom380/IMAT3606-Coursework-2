@@ -8,6 +8,7 @@ using std::shared_ptr;
 
 #include <GUI\Button.h>
 #include <GUI\TextBox.h>
+#include <GUI\UIElement.h>
 #include <utils\XMLReader.h>
 
 /*
@@ -102,12 +103,18 @@ public:
 	{
 		textBoxes.push_back(textbox);
 	}
+
+	virtual void addUIElement(shared_ptr<UIElement> uiElement)
+	{
+		uiElements.push_back(uiElement);
+	}
 protected:
 	string screenId;
 	string xmlFilePath;
 	tinyxml2::XMLDocument* screenXmlDocument;
 	vector<shared_ptr<Button>> buttons;
 	vector<shared_ptr<TextBox>> textBoxes;
+	vector<shared_ptr<UIElement>> uiElements;
 };
 
 #endif // !SCREEN_H

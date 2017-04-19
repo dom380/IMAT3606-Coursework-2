@@ -10,6 +10,7 @@
 #include "tinyxml2.h"
 #include <Scripting\ScriptEngine.h>
 #include <Utils/Utilities.h>
+#include <GUI\UIElement.h>
 #ifndef NDEBUG
 #include "Timer.h"
 #include "utils\DebugUtils.h"
@@ -64,6 +65,7 @@ public:
 				std::cerr << "Unrecognised screen type: " << type << std::endl;
 				return false;
 			}
+
 		}
 		catch (const std::runtime_error& re)
 		{
@@ -174,6 +176,8 @@ private:
 			loadButtonElement(engine, renderer, input, menuScreen, buttonElement);
 			buttonElement = buttonElement->NextSiblingElement();
 		}
+
+		loadUIElements(menuScreen, screenDocument, filepath);
 		engine->registerScreen(menuScreen);
 		return true;
 	}
@@ -243,6 +247,35 @@ private:
 	}
 
 	/*
+		Load UI elements
+
+	*/
+	static bool loadUIElements(shared_ptr<Screen> screen, tinyxml2::XMLDocument* screenDocument, string filepath)
+	{
+		bool loadSuccess = true;
+
+		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
+		tinyxml2::XMLElement* UIDocElement = screenElement->FirstChildElement("uiElements");
+		if (UIDocElement)
+		{
+			UIDocElement = UIDocElement->FirstChildElement();
+		}
+		while (UIDocElement != NULL) {
+			//get ID
+			tinyxml2::XMLElement* UIID = UIDocElement->FirstChildElement("ID");
+			//load UI using texture
+			tinyxml2::XMLElement* UITexture = UIDocElement->FirstChildElement("Texture");
+			if (UIID && UITexture)
+			{
+				screen->addUIElement(std::make_shared<UIElement>(UIID->GetText(), UITexture->GetText()));
+			}
+			
+			UIDocElement = UIDocElement->NextSiblingElement();
+		}
+
+		return loadSuccess;
+	}
+	/*
 		Utility method to load GameScreens
 		Returns true on sucess.
 	*/
@@ -285,6 +318,9 @@ private:
 			loadButtonElement(engine, renderer, input, gameScreen, buttonElement);
 			buttonElement = buttonElement->NextSiblingElement();
 		}
+
+		loadUIElements(gameScreen, screenDocument, filepath);
+
 		gameScreen->updateLighting();
 		engine->registerScreen(gameScreen);
 		input->registerKeyListener(gameScreen);

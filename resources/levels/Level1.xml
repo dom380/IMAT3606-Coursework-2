@@ -842,4 +842,10 @@
             <value>Gold Collected: 0</value>
         </string>
     </strings>
+	<uiElements>
+		<uiElement>
+			<ID>uitest</ID>
+			<Texture>cloth.png</Texture>
+		</uiElement>
+	</uiElements>
 </screen>

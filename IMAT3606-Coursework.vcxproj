@@ -167,6 +167,7 @@
     <ClCompile Include="source\Graphics\WindowGLFW.cpp" />
     <ClCompile Include="source\GUI\Font.cpp" />
     <ClCompile Include="source\GUI\TextBox.cpp" />
+    <ClCompile Include="source\GUI\UIElement.cpp" />
     <ClCompile Include="source\Input.cpp" />
     <ClCompile Include="source\InputGLFW.cpp" />
     <ClCompile Include="source\Main.cpp" />
@@ -232,6 +233,7 @@
     <ClInclude Include="include\GUI\MouseEventType.h" />
     <ClInclude Include="include\GUI\Font.h" />
     <ClInclude Include="include\GUI\TextBox.h" />
+    <ClInclude Include="include\GUI\UIElement.h" />
     <ClInclude Include="include\Input.h" />
     <ClInclude Include="include\InputGLFW.h" />
     <ClInclude Include="include\Renderers\Graphics.h" />

@@ -49,6 +49,7 @@ void GameScreen::update(double dt)
 
 void GameScreen::render()
 {
+	
 	shared_ptr<Camera> camera = cameras.at(activeCamera);
 	robot->DrawRobot(camera->getView(), camera->getProjection());
 	Message* renderMsg = new RenderMessage(camera, lightingBufferId, lightingBlockId);
@@ -70,12 +71,17 @@ void GameScreen::render()
 	for (auto text : textBoxes) {
 		text->render();
 	}
+	for (auto ui : uiElements) {
+		ui->render();
+	}
+	
 #ifndef NDEBUG
 	double elapsedTime = timer.getElapsedTimeMilliSec();
 	string frameText = "Frame Time: " + std::to_string( elapsedTime ) + "ms";
 	frameTime->updateText(frameText);
 	timer.stop();
 #endif
+	
 }
 
 void GameScreen::resize(int width, int height)

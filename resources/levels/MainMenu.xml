@@ -56,4 +56,10 @@
 		</onClick>
 	</button>
 </buttons>
+<uiElements>
+		<uiElement>
+			<ID>uitest</ID>
+			<Texture>cloth.png</Texture>
+		</uiElement>
+	</uiElements>
 </screen>

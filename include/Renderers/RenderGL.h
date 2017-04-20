@@ -90,10 +90,7 @@ public:
 		Renders the requested model. See interface for details.
 	*/
 	void renderModel(ModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, unsigned int lightingBuffer, unsigned int lightingBlockId);
-	/*
-		UI
-	*/
-	void renderUI(UIElement& uiE, shared_ptr<Shader>& shaderProgram);
+
 private:
 	//private members
 	int width;

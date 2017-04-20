@@ -1,19 +1,31 @@
-#include "..\..\include\GUI\UIElement.h"
-#ifndef NDEBUG
-#include <utils\GLSupport.h>
-#endif
+#include "UITextureElement.h"
 
-UIElement::UIElement(shared_ptr<Graphics>& engineGraphics, shared_ptr<Transform>& passedTransform, const char * id, const char * textureName)
+UITextureElement::UITextureElement(shared_ptr<Graphics>& engineGraphics, shared_ptr<Transform>& passedTransform, const char * id, const char * textureName)
 {
 	haveVAO = false;
 	graphics = engineGraphics;
 	transform = passedTransform;
-	uiID = id;	
+	uiID = id;
+	// Load the texture
+	if (textureName == NULL)
+	{
+	}
+	else
+	{
+		texture = AssetManager::getInstance()->getTexture(textureName);
+
+	}
+	init();
+	//Set texture
+	glActiveTexture(GL_TEXTURE);
+	glBindTexture(GL_TEXTURE_2D, texture->object());
+	shader->setUniform("tex", 0);
+	//Set proj
 	glm::mat4 projection = glm::ortho(0.0f, (float)graphics->getWidth(), 0.0f, (float)graphics->getHeight());
 	shader->setUniform("projection", projection);
 }
 
-void UIElement::init()
+void UITextureElement::init()
 {
 	shader = AssetManager::getInstance()->getShader(std::pair<string, string>("ui.vert", "ui.frag"));
 	shader->bindShader();
@@ -54,48 +66,38 @@ void UIElement::init()
 	glBindVertexArray(0); // Unbind VAO
 }
 
-string UIElement::getID()
+void UITextureElement::render()
 {
-	return uiID;
-}
-
-shared_ptr<Transform> UIElement::getTransform()
-{
-	return transform;
-}
-
-GLuint UIElement::getVertArray()
-{
-	return vaoHandle;
-}
-
-glm::mat4 UIElement::getModel()
-{
-	return model;
-}
-
-void UIElement::setModel(glm::mat4 passedModel)
-{
-	model = passedModel;
-}
-
-void UIElement::updateModelUsingTransform(shared_ptr<Transform> passedTransform)
-{
-	if (passedTransform)
+	if (!haveVAO)
 	{
-		model[3][0] = passedTransform->position[0];
-		model[3][1] = passedTransform->position[1];
-		model[0][0] = passedTransform->scale[0];
-		model[1][1] = passedTransform->scale[1];
-		model = glm::rotate(model, glm::radians(passedTransform->orientation[2]), glm::vec3(0.0f, 0.0f, 1.0f));
+		vaoHandle = graphics->createUIVertextArrayObject(vboHandle, eboHandle, vertices, indices);
+		haveVAO = true;
 	}
-	else
-	{
-		model[3][0] = transform->position[0];
-		model[3][1] = transform->position[1];
-		model[0][0] = transform->scale[0];
-		model[1][1] = transform->scale[1];
-		model = glm::rotate(model, glm::radians(transform->orientation[2]), glm::vec3(0.0f, 0.0f, 1.0f));
-	}
-	
+		
+	glDisable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
+	shader->bindShader();
+
+#ifndef NDEBUG
+	//string check = OpenGLSupport().GetError();
+#endif
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture->object());
+	shader->setUniform("tex", 0);
+
+	shader->setUniform("model", model);
+	glBindVertexArray(vaoHandle);
+
+#ifndef NDEBUG
+	//check = OpenGLSupport().GetError();
+#endif
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+	glDepthMask(GL_TRUE);
+	glEnable(GL_DEPTH_TEST);
+}
+
+shared_ptr<Texture> UITextureElement::getTexture()
+{
+	return texture;
 }

@@ -62,6 +62,10 @@ void GameScreen::render()
 			it->second.RecieveMessage(renderMsg);
 	}
 	delete renderMsg;
+
+	for (auto ui : uiElements) {
+		ui->render();
+	}
 	for (shared_ptr<TextBox> textBox : textBoxes)
 	{
 		textBox->render();
@@ -71,9 +75,6 @@ void GameScreen::render()
 	}
 	for (auto text : textBoxes) {
 		text->render();
-	}
-	for (auto ui : uiElements) {
-		ui->render();
 	}
 	
 #ifndef NDEBUG

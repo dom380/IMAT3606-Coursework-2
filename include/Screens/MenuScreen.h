@@ -10,7 +10,6 @@
 using std::shared_ptr;
 #include <vector>
 using std::vector;
-class Engine;
 
 /*
 	A GUI/Menu system implementation of the Screen class.

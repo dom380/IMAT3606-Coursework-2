@@ -10,7 +10,7 @@
 #include "tinyxml2.h"
 #include <Scripting\ScriptEngine.h>
 #include <Utils/Utilities.h>
-#include <GUI\UIElement.h>
+#include <GUI\UITextureElement.h>
 #ifndef NDEBUG
 #include "Timer.h"
 #include "utils\DebugUtils.h"
@@ -267,9 +267,13 @@ private:
 			tinyxml2::XMLElement* UIID = UIDocElement->FirstChildElement("ID");
 			//load UI using texture
 			tinyxml2::XMLElement* UITexture = UIDocElement->FirstChildElement("Texture");
-			if (UIID && UITexture)
+			if (UITexture)
 			{
-				screen->addUIElement(std::make_shared<UIElement>(renderer, transform, UIID->GetText(), UITexture->GetText()));
+				screen->addUIElement(std::make_shared<UITextureElement>(renderer, transform, UIID->GetText(), UITexture->GetText()));
+			}
+			else
+			{
+				//text?
 			}
 			
 			UIDocElement = UIDocElement->NextSiblingElement();

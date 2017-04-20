@@ -12,14 +12,14 @@ void MenuScreen::update(double dt)
 
 void MenuScreen::render()
 {
+	for (auto ui : uiElements) {
+		ui->render();
+	}
 	for (auto button : buttons) {
 		button->render();
 	}
 	for (auto text : textBoxes) {
 		text->render();
-	}
-	for (auto ui : uiElements) {
-		ui->render();
 	}
 }
 

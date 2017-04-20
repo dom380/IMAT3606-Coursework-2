@@ -369,27 +369,3 @@ void RenderGL::renderModel(ModelComponent & model, shared_ptr<Shader>& shaderPro
 	glBindVertexArray(0);
 }
 
-void RenderGL::renderUI(UIElement & uiE, shared_ptr<Shader>& shaderProgram)
-{
-	glDisable(GL_DEPTH_TEST);
-	glDepthMask(GL_FALSE);
-	shaderProgram->bindShader();
-
-#ifndef NDEBUG
-	string check = OpenGLSupport().GetError();
-#endif
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, uiE.getTexture()->object());
-	shaderProgram->setUniform("tex", 0);
-	
-	shaderProgram->setUniform("model", uiE.getModel());
-	glBindVertexArray(uiE.getVertArray());
-
-#ifndef NDEBUG
-	check = OpenGLSupport().GetError();
-#endif
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-	glBindVertexArray(0);
-	glDepthMask(GL_TRUE);
-	glEnable(GL_DEPTH_TEST);
-}

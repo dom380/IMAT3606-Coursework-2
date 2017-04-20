@@ -318,12 +318,22 @@ private:
 		shared_ptr<PhysicsComponent> physComp;
 		//Get mass
 		mass = physicsElement->FirstChildElement("mass") != NULL ? physicsElement->FirstChildElement("mass")->FloatText() : 0.f;
+		//Check if convex
+		bool convex = physicsElement->FirstChildElement("convex") != NULL ? physicsElement->FirstChildElement("convex")->BoolText() : true;
 		//Load collision shape
 		if (physicsElement->FirstChildElement("collision_mesh") != NULL)
 		{
 			const char* meshFile = physicsElement->FirstChildElement("collision_mesh")->GetText();
-			auto mesh = AssetManager::getInstance()->getModelData(meshFile, graphics);
-			physComp = std::make_shared<PhysicsComponent>(physics, std::weak_ptr<GameObject>(gameObject), mesh, mass, true);
+			if (convex)
+			{
+				auto mesh = AssetManager::getInstance()->getModelData(meshFile, graphics);
+				physComp = std::make_shared<PhysicsComponent>(physics, std::weak_ptr<GameObject>(gameObject), mesh, mass, convex);
+			}
+			else
+			{
+				auto mesh = AssetManager::getInstance()->getCollisionData(meshFile);
+				physComp = std::make_shared<PhysicsComponent>(physics, std::weak_ptr<GameObject>(gameObject), mesh, mass, convex);
+			}
 		}
 		else
 		{

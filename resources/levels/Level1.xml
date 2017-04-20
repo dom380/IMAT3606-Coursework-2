@@ -366,6 +366,9 @@
 						<z>1.0</z>
 					</scale>
 				</component>
+				<component type="logic">
+					<script>collision_callback_test.lua</script>
+				</component>
 				<component type = "rigid_body">
 					<mass>1.0</mass>
 					<collision_mesh>cube.obj</collision_mesh>
@@ -1516,6 +1519,70 @@
 						<radius>10.0</radius>
 					</bounding_shape>
 					<trigger_once>false</trigger_once>
+				</component>
+			</components>
+		</gameObject>
+		
+		<gameObject>
+			<tag>PHY_OBJ</tag>
+			<components>
+				<component type ="model">
+					<file>chest.obj</file>
+					<texture>chest_diffuse.png</texture>
+				</component>
+				<component type="transform">
+					<position>
+						<x>18.0</x>
+						<y>0.0</y>
+						<z>-22.0</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>5.0</y>
+						<z>5.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>0.0</mass>
+					<collision_mesh>chest_collision.obj</collision_mesh>
+					<restitution>0.9</restitution>
+					<convex>false</convex>
+				</component>
+			</components>
+		</gameObject>
+		
+		<gameObject>
+			<tag>PHY_OBJ</tag>
+			<components>
+				<component type ="model">
+					<file>sphere.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>18.0</x>
+						<y>14.0</y>
+						<z>-10.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="SPHERE">
+						<radius>1.0</radius>
+					</bounding_shape>
+					<restitution>0.4</restitution>
+					<friction>0.5</friction>
+					<rotational_friction>0.5</rotational_friction>
+					<velocity>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>-10.0</z>
+					</velocity>
+					<constant_velocity>false</constant_velocity>
 				</component>
 			</components>
 		</gameObject>

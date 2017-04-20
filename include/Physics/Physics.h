@@ -2,6 +2,7 @@
 #ifndef PHYSICS_H
 #define PHYSICS_H
 #include <vector>
+#include <utils\UUID\guid.h>
 class PhysicsComponent;
 
 /*

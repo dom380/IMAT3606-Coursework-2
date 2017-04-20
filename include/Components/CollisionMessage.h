@@ -9,11 +9,13 @@ class CollisionMessage : public Message
 {
 public:
 
-	CollisionMessage(GameObject* other) : Message(MsgType::COLLISION)
+	CollisionMessage(GameObject* other, double dt) : Message(MsgType::COLLISION)
 	{
 		this->other = other;
+		this->dt = dt;
 	};
 	GameObject* other;
+	double dt;
 };
 
 #endif // !COLLISIONMESSAGE_H

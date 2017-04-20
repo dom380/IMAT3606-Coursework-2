@@ -1,5 +1,6 @@
 #include <Scripting\ScriptEngine.h>
 #include <Components\LogicComponent.h>
+#include <Components\CollisionMessage.h>
 #include <Engine.h>
 #include <Graphics\Material.h>
 #include <utils\UUID\guid.h>
@@ -30,6 +31,7 @@ bool ScriptEngine::loadScript(string filePath, string scriptName)
 		std::string errorMsg = "Failed to load script file ";
 		errorMsg += filePath;
 		errorMsg += " - " + errorString;
+		std::cout << errorMsg << std::endl;
 		return false;
 	}
 	if (luaL_dofile(luaState, filePath.c_str()) != LUA_OK) 
@@ -39,6 +41,7 @@ bool ScriptEngine::loadScript(string filePath, string scriptName)
 		std::string errorMsg = "Failed to read script file ";
 		errorMsg += filePath;
 		errorMsg += " - " + errorString;
+		std::cout << errorMsg << std::endl;
 		return false;
 	}
 	else 
@@ -139,6 +142,10 @@ ScriptEngine::ScriptEngine()
 			.deriveClass<MaterialMessage, Message>("MaterialMessage")
 				.addConstructor<void(*) (Material)>()
 				.addData("material", &MaterialMessage::material)
+			.endClass()
+			.deriveClass<CollisionMessage, Message>("CollisionMessage")
+				.addData("other", &CollisionMessage::other)
+				.addData("dt", &CollisionMessage::dt)
 			.endClass()
 			.beginClass<Engine>("engineObj")
 				.addFunction("switchScreen", &Engine::switchScreen)

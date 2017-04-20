@@ -79,6 +79,20 @@ shared_ptr<ModelData> AssetManager::getModelData(const char * fileName, shared_p
 	return data;
 }
 
+shared_ptr<std::vector<ConvexHull>> AssetManager::getCollisionData(const char * fileName)
+{
+	auto it = collisionData.find(fileName);
+	if (it != collisionData.end())
+	{
+		return it->second;
+	}
+	shared_ptr<std::vector<ConvexHull>> data = std::make_shared<std::vector<ConvexHull>>();
+	string fullPath = buildFilePath(ResourceType::MODEL, fileName);
+	readCollisionFile(fullPath, data);
+	collisionData.emplace(std::pair <string, shared_ptr<std::vector<ConvexHull>>>(fileName, data));
+	return data;
+}
+
 string AssetManager::getScript(const char * fileName)
 {
 	auto it = scripts.find(fileName);
@@ -189,6 +203,19 @@ void AssetManager::readModelFile(string fullPath, vector<glm::vec4>& vertices, v
 	{
 		modelFileReader = std::make_shared<FbxReader>();
 		modelFileReader->readFile(fullPath.c_str(), vertices, normals, textures, indices, data->material, points);
+	}
+	else
+	{
+		std::cerr << "Unsupported file format" << fullPath << std::endl;
+	}
+}
+
+void AssetManager::readCollisionFile(string fullPath, shared_ptr<vector<ConvexHull>>& convexHulls)
+{
+	string fileExtension = getFileExt(fullPath);
+	if (fileExtension == string("obj")) {
+		modelFileReader = std::make_shared<ObjReader>();
+		modelFileReader->readFile(fullPath.c_str(), convexHulls);
 	}
 	else
 	{

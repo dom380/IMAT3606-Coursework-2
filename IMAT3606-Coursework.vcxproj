@@ -244,6 +244,7 @@
     <ClInclude Include="include\Input.h" />
     <ClInclude Include="include\InputGLFW.h" />
     <ClInclude Include="include\Physics\BulletPhysics.h" />
+    <ClInclude Include="include\Physics\ConvexHull.h" />
     <ClInclude Include="include\Physics\Physics.h" />
     <ClInclude Include="include\Physics\ShapeData.h" />
     <ClInclude Include="include\Renderers\Graphics.h" />

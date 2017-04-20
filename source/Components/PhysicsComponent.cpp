@@ -11,7 +11,20 @@ PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_
 	auto tp = sp != nullptr ? sp->getComponent<Transform>(ComponentType::TRANSFORM) : nullptr;
 
 	//Build collision shape
-	buildCollisionShape(mesh, convex, tp->scale);
+	buildCollisionShape(mesh, tp->scale);
+	init(physics, owner, mass);
+}
+
+PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject> owner, std::shared_ptr<std::vector<ConvexHull>> mesh, float mass, bool convex) : Component(ComponentType::RIGID_BODY)
+{
+	//Retrieve the transform of the mesh
+	btTransform transform;
+	auto sp = owner.lock();
+	auto tp = sp != nullptr ? sp->getComponent<Transform>(ComponentType::TRANSFORM) : nullptr;
+
+	//Build collision shape
+	auto scale = tp->scale;
+	buildCollisionShape(mesh, tp->scale);
 	init(physics, owner, mass);
 }
 
@@ -118,46 +131,38 @@ void PhysicsComponent::setTransform(Transform * transformPtr)
 	ms->setWorldTransform(transform);
 }
 
-void PhysicsComponent::buildCollisionShape(std::shared_ptr<ModelData>& mesh, bool& convex, glm::vec3& scale)
+void PhysicsComponent::buildCollisionShape(std::shared_ptr<ModelData>& mesh, glm::vec3& scale)
 {
 	//if (mass > 0.f) 
 	//{
-
-		if (convex)
+		if (mesh->points.size() > 100) //If the mesh is too complex to directly use, simplify it.
 		{
-			if (mesh->points.size() > 100) //If the mesh is too complex to directly use, simplify it.
+			btConvexHullShape* originalConvexShape = new btConvexHullShape();
+			for (glm::vec3 point : mesh->points)
 			{
-				btConvexHullShape* originalConvexShape = new btConvexHullShape();
-				for (glm::vec3 point : mesh->points)
-				{
-					originalConvexShape->addPoint(btVector3(point.x, point.y, point.z));
-				}
+				originalConvexShape->addPoint(btVector3(point.x, point.y, point.z));
+			}
 
-				btShapeHull* hull = new btShapeHull(originalConvexShape);
-				btScalar margin = originalConvexShape->getMargin();
-				hull->buildHull(margin);
-				shape = new btConvexHullShape();
-				for (int i = 0; i < hull->numVertices(); i++)
-				{
-					((btConvexHullShape*)shape)->addPoint(hull->getVertexPointer()[i]);
-				}
-				delete originalConvexShape; //Delete temp pointers
-				delete hull;
-			}
-			else
+			btShapeHull* hull = new btShapeHull(originalConvexShape);
+			btScalar margin = originalConvexShape->getMargin();
+			hull->buildHull(margin);
+			shape = new btConvexHullShape();
+			for (int i = 0; i < hull->numVertices(); i++)
 			{
-				btVector4 point;
-				shape = new btConvexHullShape();
-				for (glm::vec3 p : mesh->points)
-				{
-					point = btVector4(p.x*scale.x, p.y*scale.y, p.z*scale.z, 1.0);
-					((btConvexHullShape*)shape)->addPoint(point);
-				}
+				((btConvexHullShape*)shape)->addPoint(hull->getVertexPointer()[i]);
 			}
+			delete originalConvexShape; //Delete temp pointers
+			delete hull;
 		}
 		else
 		{
-			///TODO - Do something with concave objects
+			btVector4 point;
+			shape = new btConvexHullShape();
+			for (glm::vec3 p : mesh->points)
+			{
+				point = btVector4(p.x*scale.x, p.y*scale.y, p.z*scale.z, 1.0);
+				((btConvexHullShape*)shape)->addPoint(point);
+			}
 		}
 		///TODOD - Fix building triangle collision meshes for static objects
 	//} 
@@ -186,12 +191,48 @@ void PhysicsComponent::buildCollisionShape(std::shared_ptr<ModelData>& mesh, boo
 		//	btVector3 bv1 = btVector3(p1.x, p1.y, p1.z);
 		//	btVector3 bv2 = btVector3(p2.x, p2.y, p2.z);
 		//	btVector3 bv3 = btVector3(p3.x, p3.y, p3.z);
-
 		//	collisionMesh->addTriangle(bv1, bv2, bv3);
 		//}
 		//shape = new btBvhTriangleMeshShape(collisionMesh, true);
 		//shape = new btBoxShape(scale/2.0);
 	//}
+}
+
+void PhysicsComponent::buildCollisionShape(std::shared_ptr<std::vector<ConvexHull>> mesh, glm::vec3 & scale)
+{
+	shape = new btCompoundShape();
+	for (ConvexHull ch : *mesh)
+	{
+		unsigned int numDoubles = ch.m_points.size();
+		btVector3 centroid(0.0, 0.0, 0.0);
+		//Calculate centre of mass
+		for (unsigned int indx = 0; indx < numDoubles; indx += 3)
+		{
+			centroid += btVector3(
+				(btScalar)ch.m_points[indx] * scale.x,
+				(btScalar)ch.m_points[indx + 1] * scale.y,
+				(btScalar)ch.m_points[indx + 2] * scale.z);
+		}
+		centroid /= (btScalar)ch.m_triangles.size();
+		// Create convex shape
+		// Adjust points such that the centroid is at (0,0,0)
+		btConvexHullShape* convexShape = new btConvexHullShape();
+		for (unsigned int i = 0; i < numDoubles; i += 3)
+		{
+			btVector3 point(
+				(btScalar)ch.m_points[i] * scale.x,
+				(btScalar)ch.m_points[i + 1] * scale.y,
+				(btScalar)ch.m_points[i + 2] * scale.z);
+			point -= centroid;
+			convexShape->addPoint(point, false);
+		}
+		convexShape->recalcLocalAabb();
+		// Append to the compound shape
+		btTransform transform;
+		transform.setIdentity();
+		transform.setOrigin(centroid);
+		((btCompoundShape*)shape)->addChildShape(transform, convexShape);
+	}
 }
 
 void PhysicsComponent::updateTransform(Transform* transformPtr)

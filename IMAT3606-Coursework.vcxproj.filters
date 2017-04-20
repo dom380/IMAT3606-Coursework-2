@@ -440,6 +440,9 @@
     <ClInclude Include="include\GameObjectTag.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Physics\ConvexHull.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\text.frag">

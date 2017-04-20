@@ -8,6 +8,7 @@
 #include <memory>
 #include <Physics\BulletPhysics.h>
 #include <Physics\ShapeData.h>
+#include <Physics\ConvexHull.h>
 class Physics;
 /*
 	Implementation of the Component interface responsible for holding
@@ -25,6 +26,15 @@ public:
 		bool convex - Specifies whether the collision mesh is convex.
 	*/
 	PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject> owner, std::shared_ptr<ModelData> mesh, float mass, bool convex);
+	/*
+		Constructor.
+		std::shared_ptr<Physics> &physics - Pointer to the Physics implementation,
+		std::weak_ptr<GameObject> owner - Pointer to the GameObject this component belongs to.
+		std::shared_ptr<ModelData> mesh - Pointer to this components collision mesh.
+		float mass - The mass of the GameObject. A value of 0.0 signifies an immovable object.
+		bool convex - Specifies whether the collision mesh is convex.
+	*/
+	PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject> owner, std::shared_ptr<std::vector<ConvexHull>> mesh, float mass, bool convex);
 	/*
 		Constructor.
 		std::shared_ptr<Physics> &physics - Pointer to the Physics implementation,
@@ -93,7 +103,11 @@ private:
 	/*
 		Constructs the collision shape from the specified mesh
 	*/
-	void buildCollisionShape(std::shared_ptr<ModelData>& mesh, bool& convex, glm::vec3& scale);
+	void buildCollisionShape(std::shared_ptr<ModelData>& mesh, glm::vec3& scale);
+	/*
+		Constructs the collision shape from the specified ConvexHulls
+	*/
+	void buildCollisionShape(std::shared_ptr<std::vector<ConvexHull>> mesh, glm::vec3& scale);
 	/*
 		Synchronizes the Transform component with the physics simulation transform
 	*/

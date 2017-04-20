@@ -7,7 +7,6 @@
 #include <Components\CollisionTrigger.h>
 #include "btBulletDynamicsCommon.h"
 #include <GUI\EventListener.h>
-#include <utils\UUID\guid.h>
 #include <map>
 class CollisionTrigger;
 /*
@@ -70,7 +69,7 @@ public:
 		Pauses and unpauses the physics simulation on 'P' key press.
 	*/
 	void handle(KeyEvent event);
-
+	
 private:
 	btBroadphaseInterface* broadphase;
 	btDefaultCollisionConfiguration* collisionConfiguration;

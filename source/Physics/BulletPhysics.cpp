@@ -2,6 +2,7 @@
 
 BulletPhysics::~BulletPhysics()
 {
+	world->getCollisionObjectArray().clear();
 	delete world;
 	delete solver;
 	delete broadphase;
@@ -57,6 +58,10 @@ std::vector<std::shared_ptr<CollisionTrigger>> BulletPhysics::getCollisionTrigge
 
 void BulletPhysics::tickCallback(btDynamicsWorld * world, btScalar timeStep)
 {
+#ifndef NDEBUG
+	Timer timer;
+	timer.start();
+#endif
 	/*
 		Exploiting the global engine ptr to get back to the actual BulletPhysics instance from this static method.
 		Cast should be safe as the callback is only registered if a BulletPhysics instance was initialised in the first place.
@@ -107,12 +112,24 @@ void BulletPhysics::tickCallback(btDynamicsWorld * world, btScalar timeStep)
 			}
 			else
 			{
-				//TODO - This may message the objects multiple times a frame and certainly multiple times a second. Look into collision callback to avoid this.
+				//Check if they're actually colliding and not just close
+				bool collided = false;
+				for (int j = 0; j < contactManifold->getNumContacts(); ++j)
+				{
+					auto cp = contactManifold->getContactPoint(j);
+					if (cp.getDistance() <= 0.f)
+					{
+						collided = true;
+						break;
+					}
+				}
+				if (!collided) continue;
+				
 				auto gameObjA = static_cast<GameObject*>(objA->getUserPointer());
 				auto gameObjB = static_cast<GameObject*>(objB->getUserPointer());
 
-				Message* collisionMessageA = new CollisionMessage(gameObjB);
-				Message* collisionMessageB = new CollisionMessage(gameObjA);
+				Message* collisionMessageA = new CollisionMessage(gameObjB, timeStep);
+				Message* collisionMessageB = new CollisionMessage(gameObjA, timeStep);
 				auto logicComp = gameObjA->getLogic(); //Send collision message to ObjectA 
 				if (logicComp != nullptr)
 					logicComp->RecieveMessage(collisionMessageA);
@@ -121,9 +138,14 @@ void BulletPhysics::tickCallback(btDynamicsWorld * world, btScalar timeStep)
 					logicComp->RecieveMessage(collisionMessageB);
 				delete collisionMessageA;
 				delete collisionMessageB;
+
 			}
 		}
 	}
+#ifndef NDEBUG
+	auto updateTime = timer.getElapsedTime();
+	timer.stop();
+#endif
 }
 
 void BulletPhysics::handle(MouseEvent event)

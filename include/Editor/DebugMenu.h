@@ -3,12 +3,13 @@
 
 #include <algorithm>
 #include <memory>
+#include <vector>
+#include <string>
 #include <Editor/imgui/imgui.h>
-#include <Graphics\ModelComponent.h>
+//#include <Graphics\ModelComponent.h>
 #include <Editor\DebugMenuItem.h>
 
-using std::shared_ptr;
-
+using namespace std;
 /*
 DEBUG MENU
 SINGLETON
@@ -16,7 +17,8 @@ SINGLETON
 Uses imgui to organise a menu bar full of options for debug.
 
 */
-
+class ModelComponent;
+class Transform;
 class DebugMenu
 {
 private:
@@ -82,15 +84,7 @@ private:
 	void createCubeMenu();
 	void createObjectWindow(std::string objName, int iterator);
 
-	/*
-		debugGameObjectsMenu Component Functions
-	*/
-
-	void gameObjectsMenuModel(int i, ModelComponent* model);
-	void gameObjectsMenuAnimation();
-	void gameObjectsMenuRigidBody();
-	void gameObjectsMenuLogic();
-	void gameObjectsMenuTransform(int i, ModelComponent* model);
+	
 
 public:
 	static shared_ptr<DebugMenu> getInstance();
@@ -104,5 +98,15 @@ public:
 	void render();
 
 	void addMenuItem(DebugMenuItem* dmi);
+
+	/*
+	debugGameObjectsMenu Component Functions
+	*/
+
+	void gameObjectsMenuModel(int i, ModelComponent* model);
+	void gameObjectsMenuAnimation();
+	void gameObjectsMenuRigidBody();
+	void gameObjectsMenuLogic();
+	void gameObjectsMenuTransform(int i, Transform* transform);
 };
 #endif // !DEBUGMENU_h

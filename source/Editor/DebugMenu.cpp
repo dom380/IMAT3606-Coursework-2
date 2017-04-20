@@ -246,7 +246,7 @@ void DebugMenu::debugGameObjectsMenu()
 							gameObjectsMenuLogic();
 							break;
 						case ComponentType::TRANSFORM:
-							gameObjectsMenuTransform(i, model);
+							gameObjectsMenuTransform(i, model->getTransform());
 							break;
 						}
 						ImGui::TreePop();
@@ -505,12 +505,12 @@ void DebugMenu::gameObjectsMenuLogic()
 {
 }
 
-void DebugMenu::gameObjectsMenuTransform(int i, ModelComponent* model)
+void DebugMenu::gameObjectsMenuTransform(int i, Transform* transform)
 {
 	ImGui::PushID(i);
 	float dragSpeed = 0.25f;
-	ImGui::DragFloat3("Position", &model->getTransform()->position[0], dragSpeed);
-	ImGui::DragFloat3("Orientation", &model->getTransform()->orientation[0], dragSpeed);
-	ImGui::DragFloat3("Scale", &model->getTransform()->scale[0], dragSpeed);
+	ImGui::DragFloat3("Position", &transform->position[0], dragSpeed);
+	ImGui::DragFloat3("Orientation", &transform->orientation[0], dragSpeed);
+	ImGui::DragFloat3("Scale", &transform->scale[0], dragSpeed);
 	ImGui::PopID();
 }

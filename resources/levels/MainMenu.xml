@@ -60,6 +60,15 @@
 		<uiElement>
 			<ID>uitest</ID>
 			<Texture>cloth.png</Texture>
+			<position>
+				<x>30</x>
+				<y>500</y>
+			</position>
+			<scale>
+				<x>1.0</x>
+				<y>1.0</y>
+				<z>1.0</z>
+			</scale>
 		</uiElement>
 	</uiElements>
 </screen>

@@ -255,6 +255,33 @@ unsigned int RenderGL::createTextVertexArrayObject(unsigned int & vboHandle)
 	return vertArrayObj;
 }
 
+unsigned int RenderGL::createUIVertextArrayObject(unsigned int & vboHandle, unsigned int& eboHandle, vector<GLfloat> vertices, vector<GLuint> indices)
+{
+	unsigned int vertArrayObj;
+	glGenVertexArrays(1, &vertArrayObj);
+	glGenBuffers(1, &vboHandle);
+	glGenBuffers(1, &eboHandle);
+
+	glBindVertexArray(vertArrayObj);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vboHandle);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboHandle);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * indices.size(), &indices[0], GL_STATIC_DRAW);
+
+	// Position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+	// Color attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+	// TexCoord attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(2);
+	return vertArrayObj;
+}
+
 void RenderGL::renderModel(ModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera)
 {
 	vector<Light> defaultLights;
@@ -340,4 +367,29 @@ void RenderGL::renderModel(ModelComponent & model, shared_ptr<Shader>& shaderPro
 	check = OpenGLSupport().GetError();
 #endif
 	glBindVertexArray(0);
+}
+
+void RenderGL::renderUI(UIElement & uiE, shared_ptr<Shader>& shaderProgram)
+{
+	glDisable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
+	shaderProgram->bindShader();
+
+#ifndef NDEBUG
+	string check = OpenGLSupport().GetError();
+#endif
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, uiE.getTexture()->object());
+	shaderProgram->setUniform("tex", 0);
+	
+	shaderProgram->setUniform("model", uiE.getModel());
+	glBindVertexArray(uiE.getVertArray());
+
+#ifndef NDEBUG
+	check = OpenGLSupport().GetError();
+#endif
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+	glDepthMask(GL_TRUE);
+	glEnable(GL_DEPTH_TEST);
 }

@@ -161,7 +161,7 @@ private:
 	static bool loadMenu(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, tinyxml2::XMLDocument* screenDocument, string filepath)
 	{
 		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
-		shared_ptr<MenuScreen> menuScreen = std::make_shared<MenuScreen>(renderer, engine);
+		shared_ptr<MenuScreen> menuScreen = std::make_shared<MenuScreen>(renderer);
 		menuScreen->setID(screenElement->Attribute("name"));
 		menuScreen->setXMLDocument(screenDocument);
 		menuScreen->setXMLFilePath(filepath);
@@ -177,7 +177,7 @@ private:
 			buttonElement = buttonElement->NextSiblingElement();
 		}
 
-		loadUIElements(menuScreen, screenDocument, filepath);
+		loadUIElements(renderer, menuScreen, screenDocument, filepath);
 		engine->registerScreen(menuScreen);
 		return true;
 	}
@@ -250,7 +250,7 @@ private:
 		Load UI elements
 
 	*/
-	static bool loadUIElements(shared_ptr<Screen> screen, tinyxml2::XMLDocument* screenDocument, string filepath)
+	static bool loadUIElements(shared_ptr<Graphics>& renderer, shared_ptr<Screen> screen, tinyxml2::XMLDocument* screenDocument, string filepath)
 	{
 		bool loadSuccess = true;
 
@@ -260,6 +260,8 @@ private:
 		{
 			UIDocElement = UIDocElement->FirstChildElement();
 		}
+		shared_ptr<Transform> transform = std::make_shared<Transform>();
+		loadTransform(transform, UIDocElement);
 		while (UIDocElement != NULL) {
 			//get ID
 			tinyxml2::XMLElement* UIID = UIDocElement->FirstChildElement("ID");
@@ -267,7 +269,7 @@ private:
 			tinyxml2::XMLElement* UITexture = UIDocElement->FirstChildElement("Texture");
 			if (UIID && UITexture)
 			{
-				screen->addUIElement(std::make_shared<UIElement>(UIID->GetText(), UITexture->GetText()));
+				screen->addUIElement(std::make_shared<UIElement>(renderer, transform, UIID->GetText(), UITexture->GetText()));
 			}
 			
 			UIDocElement = UIDocElement->NextSiblingElement();
@@ -319,7 +321,7 @@ private:
 			buttonElement = buttonElement->NextSiblingElement();
 		}
 
-		loadUIElements(gameScreen, screenDocument, filepath);
+		loadUIElements(renderer, gameScreen, screenDocument, filepath);
 
 		gameScreen->updateLighting();
 		engine->registerScreen(gameScreen);

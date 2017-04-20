@@ -11,16 +11,18 @@ using std::shared_ptr;
 using std::vector;
 #include <ComponentStore.h>
 #include <Robot.h>
+#include <GUI\UIManager.h>
 #include <GUI\TextBox.h>
 #include <GameObject.h>
 #include <Components\Message.h>
 #include <Components\LocationMessage.h>
 #include <Components\RenderMessage.h>
 #include <AssetManager.h>
+
 #ifndef NDEBUG
 #include <utils\Timer.h>
 #endif
-
+class Screen;
 class GameObject;
 class ComponentStore;
 class LogicComponent; //Forward declare a number of classes.

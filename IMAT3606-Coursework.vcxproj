@@ -146,6 +146,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\GUI\UIManager.cpp" />
     <ClCompile Include="source\AssetManager.cpp" />
     <ClCompile Include="source\Camera\PerspectiveCamera.cpp" />
     <ClCompile Include="source\ComponentStore.cpp" />
@@ -234,6 +235,7 @@
     <ClInclude Include="include\GUI\Font.h" />
     <ClInclude Include="include\GUI\TextBox.h" />
     <ClInclude Include="include\GUI\UIElement.h" />
+    <ClInclude Include="include\GUI\UIManager.h" />
     <ClInclude Include="include\Input.h" />
     <ClInclude Include="include\InputGLFW.h" />
     <ClInclude Include="include\Renderers\Graphics.h" />

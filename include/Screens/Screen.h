@@ -6,6 +6,7 @@ using std::string;
 #include <memory>
 using std::shared_ptr;
 
+
 #include <GUI\Button.h>
 #include <GUI\TextBox.h>
 #include <GUI\UIElement.h>
@@ -77,6 +78,11 @@ public:
 	tinyxml2::XMLDocument* getXMLDocument()
 	{
 		return screenXmlDocument;
+	}
+
+	vector<shared_ptr<UIElement>> getUIElements()
+	{
+		return uiElements;
 	}
 	/*
 	Clean up button resources.

@@ -4,7 +4,3 @@ DebugMenuItem::DebugMenuItem()
 {
 	Engine::g_pEngine->getDebugMenu()->addMenuItem(this);
 }
-
-void DebugMenuItem::debugMenuItemUpdate()
-{
-}

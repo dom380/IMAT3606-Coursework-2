@@ -1,9 +1,9 @@
 #include <Screens\MenuScreen.h>
 
-MenuScreen::MenuScreen(shared_ptr<Graphics>& graphics, Engine* engine)
+MenuScreen::MenuScreen(shared_ptr<Graphics>& graphics)
 {
-	this->engine = engine;
 	this->graphics = graphics;
+	UIManager::getInstance()->update();
 }
 
 void MenuScreen::update(double dt)

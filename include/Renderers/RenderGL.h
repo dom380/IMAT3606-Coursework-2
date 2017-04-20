@@ -75,6 +75,10 @@ public:
 	*/
 	unsigned int createTextVertexArrayObject(unsigned int& vboHandle);
 	/*
+	
+	*/
+	unsigned int createUIVertextArrayObject(unsigned int& vboHandle, unsigned int& eboHandle, vector<GLfloat> vertices, vector<GLuint> indices);
+	/*
 		Renders the requested model. See interface for details.
 	*/
 	void renderModel(ModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera);
@@ -86,7 +90,10 @@ public:
 		Renders the requested model. See interface for details.
 	*/
 	void renderModel(ModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, unsigned int lightingBuffer, unsigned int lightingBlockId);
-
+	/*
+		UI
+	*/
+	void renderUI(UIElement& uiE, shared_ptr<Shader>& shaderProgram);
 private:
 	//private members
 	int width;

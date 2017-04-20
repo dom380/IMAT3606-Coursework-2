@@ -25,6 +25,7 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 	//this->registerKeyListener(cameras.at(0));
 	this->input->registerMouseListener(robotCam);
 	activeCamera = 0;
+	UIManager::getInstance()->update();
 }
 
 void GameScreen::update(double dt)

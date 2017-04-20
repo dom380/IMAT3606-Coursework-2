@@ -2,10 +2,10 @@
 #ifndef MENUSCREEN_H
 #define MENUSCREEN_H
 #include <Screens\Screen.h>
+#include <GUI\UIManager.h>
 #include <GUI\Button.h>
 #include <GUI\TextBox.h>
 #include <AssetManager.h>
-#include <Engine.h>
 #include <memory>
 using std::shared_ptr;
 #include <vector>
@@ -28,7 +28,7 @@ public:
 		shared_ptr<Graphics>& graphics, Pointer to the graphics system.
 		Engine* engine, Pointer to the core engine.
 	*/
-	MenuScreen(shared_ptr<Graphics>& graphics, Engine* engine);
+	MenuScreen(shared_ptr<Graphics>& graphics);
 	/*
 		Empty implementation of update.
 	*/
@@ -51,7 +51,6 @@ public:
 private:
 	//private memebers.
 	shared_ptr<Graphics> graphics;
-	Engine* engine;
 };
 
 #endif // !SCREENMENU_H

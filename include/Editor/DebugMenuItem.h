@@ -18,10 +18,12 @@ a menu item to be added to the main menu bar in debug menu.
 
 class DebugMenuItem
 {
-private:
-
+protected:
+	int id;
+	bool clearable;
 public:
 	DebugMenuItem();
 	virtual void debugMenuItemUpdate() = 0;
+	bool canClear();
 };
 #endif // !DEBUGMENUITEM_H

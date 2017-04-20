@@ -261,6 +261,37 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 	return false;
 }
 
+bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObjectCount, shared_ptr<UIElement> uiElement, shared_ptr<GameScreen> gameScreen)
+{
+	int XMLObjectCount = 0;
+	bool SkipObject = false;
+	if (doc)
+	{
+		tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");
+
+		tinyxml2::XMLElement* XMLUIElement = screenElement->FirstChildElement("uiElements")->FirstChildElement();
+		/*
+		Iterate over all ui in XML doc
+		*/
+		while (XMLUIElement != NULL)
+		{
+			//check for objects with the same name (multiple wall.obj for example)
+			if (XMLObjectCount != iObjectCount)
+			{
+				SkipObject = true;
+				continue;
+			}
+			UpdateTransform(doc, XMLUIElement, uiElement->getTransform());
+			XMLObjectCount++;
+			SkipObject = false;
+			XMLUIElement = XMLUIElement->NextSiblingElement();
+		}
+
+		
+	}
+	return false;
+}
+
 bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<GameObject> go, shared_ptr<GameScreen> gameScreen)
 {
 	tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");
@@ -477,6 +508,163 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 
 	}
 	
+	return true;
+}
+
+bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* transformElement, shared_ptr<Transform> transform)
+{
+	for (int transformElementIt = 0; transformElementIt < 3; transformElementIt++)
+	{
+		switch (transformElementIt)
+		{
+		case 0:
+		{
+			tinyxml2::XMLElement* transformInnerElement = transformElement->FirstChildElement("position");
+			if (!transformInnerElement)
+			{
+				tinyxml2::XMLElement* xyzElement;
+				//Create a position element.
+				transformInnerElement = doc->NewElement("position");
+				xyzElement = doc->NewElement("x");
+				transformInnerElement->InsertEndChild(xyzElement);
+				xyzElement = doc->NewElement("y");
+				transformInnerElement->InsertEndChild(xyzElement);
+				xyzElement = doc->NewElement("z");
+				transformInnerElement->InsertEndChild(xyzElement);
+				transformElement->InsertEndChild(transformInnerElement);
+			}
+
+			for (int vector3 = 0; vector3 < 3; vector3++)
+			{
+				//xyz
+				switch (vector3)
+				{
+				case 0:
+				{
+					std::ostringstream ss;
+					ss << transform->position[vector3];
+					transformInnerElement->FirstChildElement("x")->SetText(string(ss.str()).c_str());
+					break;
+				}
+				case 1:
+				{
+					std::ostringstream ss;
+					ss << transform->position[vector3];
+					transformInnerElement->FirstChildElement("y")->SetText(string(ss.str()).c_str());
+					break;
+				}
+
+				case 2:
+				{
+					std::ostringstream ss;
+					ss << transform->position[vector3];
+					transformInnerElement->FirstChildElement("z")->SetText(string(ss.str()).c_str());
+					break;
+				}
+				}
+
+			}
+			break;
+		}
+		case 1:
+		{
+			tinyxml2::XMLElement* transformInnerElement = transformElement->FirstChildElement("scale");
+			if (!transformInnerElement)
+			{
+				tinyxml2::XMLElement* xyzElement;
+				//Create a scale element.
+				transformInnerElement = doc->NewElement("scale");
+				xyzElement = doc->NewElement("x");
+				transformInnerElement->InsertEndChild(xyzElement);
+				xyzElement = doc->NewElement("y");
+				transformInnerElement->InsertEndChild(xyzElement);
+				xyzElement = doc->NewElement("z");
+				transformInnerElement->InsertEndChild(xyzElement);
+				transformElement->InsertEndChild(transformInnerElement);
+			}
+			for (int vector3 = 0; vector3 < 3; vector3++)
+			{
+				//xyz
+				switch (vector3)
+				{
+				case 0:
+				{
+					std::ostringstream ss;
+					ss << transform->scale[vector3];
+					transformInnerElement->FirstChildElement("x")->SetText(string(ss.str()).c_str());
+					break;
+				}
+				case 1:
+				{
+					std::ostringstream ss;
+					ss << transform->scale[vector3];
+					transformInnerElement->FirstChildElement("y")->SetText(string(ss.str()).c_str());
+					break;
+				}
+
+				case 2:
+				{
+					std::ostringstream ss;
+					ss << transform->scale[vector3];
+					transformInnerElement->FirstChildElement("z")->SetText(string(ss.str()).c_str());
+					break;
+				}
+				}
+
+			}
+			break;
+		}
+		case 2:
+		{
+			tinyxml2::XMLElement* transformInnerElement = transformElement->FirstChildElement("orientation");
+			if (!transformInnerElement)
+			{
+				tinyxml2::XMLElement* xyzElement;
+				//Create a orientation element.
+				transformInnerElement = doc->NewElement("orientation");
+				xyzElement = doc->NewElement("x");
+				transformInnerElement->InsertEndChild(xyzElement);
+				xyzElement = doc->NewElement("y");
+				transformInnerElement->InsertEndChild(xyzElement);
+				xyzElement = doc->NewElement("z");
+				transformInnerElement->InsertEndChild(xyzElement);
+				transformElement->InsertEndChild(transformInnerElement);
+			}
+			for (int vector3 = 0; vector3 < 3; vector3++)
+			{
+				//xyz
+				switch (vector3)
+				{
+				case 0:
+				{
+					std::ostringstream ss;
+					ss << transform->orientation[vector3];
+					transformInnerElement->FirstChildElement("x")->SetText(string(ss.str()).c_str());
+					break;
+				}
+				case 1:
+				{
+					std::ostringstream ss;
+					ss << transform->orientation[vector3];
+					transformInnerElement->FirstChildElement("y")->SetText(string(ss.str()).c_str());
+					break;
+				}
+
+				case 2:
+				{
+					std::ostringstream ss;
+					ss << transform->orientation[vector3];
+					transformInnerElement->FirstChildElement("z")->SetText(string(ss.str()).c_str());
+					break;
+				}
+				}
+			}
+			break;
+		}
+		default:
+			break;
+		}
+	}
 	return true;
 }
 

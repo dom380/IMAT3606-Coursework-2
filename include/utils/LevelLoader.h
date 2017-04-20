@@ -53,6 +53,7 @@ public:
 #endif
 				return false;
 			}
+			engine->getDebugMenu()->refreshMenuItems();
 			const char* type = screenElement->Attribute("type");
 			if (string(type) == string("menu")) {
 				return loadMenu(engine, renderer, input, doc, filePath);
@@ -256,12 +257,14 @@ private:
 
 		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
 		tinyxml2::XMLElement* UIDocElement = screenElement->FirstChildElement("uiElements");
+		shared_ptr<Transform> transform = std::make_shared<Transform>();
 		if (UIDocElement)
 		{
 			UIDocElement = UIDocElement->FirstChildElement();
+			
+			loadTransform(transform, UIDocElement);
 		}
-		shared_ptr<Transform> transform = std::make_shared<Transform>();
-		loadTransform(transform, UIDocElement);
+		
 		while (UIDocElement != NULL) {
 			//get ID
 			tinyxml2::XMLElement* UIID = UIDocElement->FirstChildElement("ID");

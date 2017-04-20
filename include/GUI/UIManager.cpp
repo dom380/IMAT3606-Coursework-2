@@ -8,10 +8,12 @@ shared_ptr<UIManager> UIManager::instance;
 shared_ptr<UIManager> UIManager::getInstance()
 {
 	if (initialised) {
+		
 		return instance;
 	}
 	instance = shared_ptr<UIManager>(new UIManager());
 	initialised = true;
+	instance->clearable = false;
 	return instance;
 }
 

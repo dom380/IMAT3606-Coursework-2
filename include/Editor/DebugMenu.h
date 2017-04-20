@@ -98,6 +98,8 @@ public:
 	void render();
 
 	void addMenuItem(DebugMenuItem* dmi);
+	void refreshMenuItems();
+	vector<DebugMenuItem*> getMenuItems();
 
 	/*
 	debugGameObjectsMenu Component Functions

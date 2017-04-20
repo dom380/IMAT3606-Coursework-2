@@ -280,6 +280,21 @@ bool DebugMenu::saveCurrentLevel(string fileName)
 			}
 		}
 	}
+	/*
+		Every UI object
+	*/
+	for (int x = 0; x < gameScreen->getUIElements().size(); x++)
+	{
+		FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, gameScreen->getUIElements()[x], gameScreen);
+		//If there is a new object not saved on file
+		if (x >= numberOfObjectsInFile)
+		{
+			//TODO: addtofile.
+			/*if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getGameObjects()[x], gameScreen))
+			{
+			}*/
+		}
+	}
 	return FileSaver::SaveFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(),fileName);
 }
 
@@ -306,9 +321,8 @@ void DebugMenu::saveAsMenu()
 
 bool DebugMenu::loadLevel(string fileName)
 {
-	//When we load a scene, the runtime menu items need to be reset
-	mainMenuBarItems.clear();
-	return LevelLoader::loadLevel(Engine::g_pEngine.get(), Engine::g_pEngine->getRenderer(), Engine::g_pEngine->getInput(), fileName.c_str());
+	bool loadResult = LevelLoader::loadLevel(Engine::g_pEngine.get(), Engine::g_pEngine->getRenderer(), Engine::g_pEngine->getInput(), fileName.c_str());
+	return loadResult;
 }
 
 void DebugMenu::loadSpecificLevel()
@@ -465,6 +479,23 @@ void DebugMenu::render()
 void DebugMenu::addMenuItem(DebugMenuItem* dmi)
 {
 	mainMenuBarItems.push_back(dmi);
+}
+
+void DebugMenu::refreshMenuItems()
+{
+	//When we load a scene, the runtime menu items need to be reset
+	for (int x = 0; x < mainMenuBarItems.size(); x++)
+	{
+		if (mainMenuBarItems[x]->canClear())
+		{
+			mainMenuBarItems.erase(mainMenuBarItems.begin()+x);
+		}
+	}
+}
+
+vector<DebugMenuItem*> DebugMenu::getMenuItems()
+{
+	return mainMenuBarItems;
 }
 
 

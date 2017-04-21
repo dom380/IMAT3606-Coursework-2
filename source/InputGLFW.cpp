@@ -27,8 +27,10 @@ void InputGLFW::mouseButtonCallback(GLFWwindow * window, int button, int action,
 #endif
 	double cursorPosX, cursorPosY;
 	glfwGetCursorPos(window, &cursorPosX, &cursorPosY);
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
-		MouseEvent e(MouseEventType::LEFT_CLICK, cursorPosX, cursorPosY);
+
+
+	if (button == GLFW_MOUSE_BUTTON_LEFT) {
+		MouseEvent e(MouseEventType::LEFT_CLICK, (MouseActionType) action, cursorPosX, cursorPosY);
 		for (shared_ptr<EventListener> listener : mouseSubs) {
 			listener->handle(e);
 		}

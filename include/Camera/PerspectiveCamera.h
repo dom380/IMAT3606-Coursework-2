@@ -61,17 +61,17 @@ protected:
 	glm::vec3 worldX = glm::vec3(1.0f, 0.0f, 0.0f);
 	glm::vec3 worldZ = glm::vec3(0.0f, 0.0f, 1.0f);
 	glm::quat orientation;
-
-private:
-	//private methods
 	/*
-		Build a quaternion rotation.
-		glm::vec3 axis, The arbitrary axis to rotate around.
-		float angle, The amount to rotate by in radians.
+	Build a quaternion rotation.
+	glm::vec3 axis, The arbitrary axis to rotate around.
+	float angle, The amount to rotate by in radians.
 	*/
 	glm::quat getRotation(glm::vec3 axis, float angle);
 	//private members
 	int previousX, previousY;
+private:
+	//private methods
+	
 
 };
 

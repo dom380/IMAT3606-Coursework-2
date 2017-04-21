@@ -194,7 +194,7 @@ void RenderGL::bufferLightingData(vector<Light>& lights, shared_ptr<Shader> &sha
 {
 	shader->bindShader();
 	vector<glm::vec4> data;
-	int numOfLights = 0;
+	numOfLights = 0;
 	for (Light currLight : lights)
 	{
 		//GLSL pads vec3 as vec4 so when buffering store them as vec4.
@@ -203,8 +203,9 @@ void RenderGL::bufferLightingData(vector<Light>& lights, shared_ptr<Shader> &sha
 		data.push_back(glm::vec4(currLight.diffuse, 1.0));
 		data.push_back(glm::vec4(currLight.specular, 1.0));
 		numOfLights++;
-		if (numOfLights >= 10) break; //Only support 10 lights
+		if (numOfLights >= MAX_NUM_LIGHTS) break; //Only support MAX_NUM_LIGHTS lights
 	}
+	shader->setUniform("NUM_LIGHTS", numOfLights);
 	if (bindingPoint >= 0 && bindingPoint <= currBindingPoint) //If buffer has already been created, just update the data
 	{
 		glBindBuffer(GL_UNIFORM_BUFFER, uniformBuffer);
@@ -286,9 +287,14 @@ void RenderGL::renderModel(ModelComponent& model, shared_ptr<Shader>& shaderProg
 	{
 		shaderProgram->setUniform("material", model.getMaterial());
 	}
-	if (lights.size() > 0)
+	if (lights.size() > 0 && lights.size() <= MAX_NUM_LIGHTS)
 	{
 		shaderProgram->setUniform("lights", lights);
+		shaderProgram->setUniform("NUM_LIGHTS", (int)lights.size());
+	}
+	else
+	{
+		shaderProgram->setUniform("NUM_LIGHTS", 0);
 	}
 	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(model.getIndexSize()), GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));
 #ifndef NDEBUG
@@ -316,6 +322,8 @@ void RenderGL::renderModel(ModelComponent & model, shared_ptr<Shader>& shaderPro
 		shaderProgram = AssetManager::getInstance()->getShader(std::pair<std::string, std::string>("phong_no_texture.vert", "phong_no_texture.frag"));
 		shaderProgram->bindShader();
 	}
+	//Set number of lights
+	numOfLights <= MAX_NUM_LIGHTS ? shaderProgram->setUniform("NUM_LIGHTS", numOfLights) : shaderProgram->setUniform("NUM_LIGHTS", 0);
 	Transform* transform = model.getTransform();
 	glm::quat orientation = transform->orientation;
 	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::rotate(glm::radians(orientation.w), glm::vec3(orientation.x, orientation.y, orientation.z)) * glm::scale(transform->scale);

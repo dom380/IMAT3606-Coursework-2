@@ -62,6 +62,24 @@ void LogicComponent::RecieveMessage(Message * msg)
 		}
 	}
 	break;
+	case MsgType::COLLISION:
+	{
+		CollisionMessage* collisionMsg = ((CollisionMessage *)msg);
+		try
+		{
+			if (recieveMsgFunc.isFunction())
+			{
+				recieveMsgFunc(this, collisionMsg, "COLLISION"); //TODO - Lua doesn't support enums so find better way of translating to scripts
+			}
+		}
+		catch (luabridge::LuaException e)
+		{
+			//Todo - better error handling here
+			std::cout << e.what() << std::endl;
+			throw std::runtime_error(e.what());
+		}
+	}
+	break;
 	default:
 		break;
 	}
@@ -82,12 +100,20 @@ void LogicComponent::applyTransform(glm::vec3 position, float scale, float orien
 	if (sp_Owner != nullptr && sp_Screen != nullptr)  //If it still exists 
 	{
 		Handle comp = sp_Owner->GetComponentHandle (ComponentType::TRANSFORM);
-		if (!comp.isNull()) //If the GameObject has a transform component, update it's orientation.
+		Transform* transformPtr = nullptr;
+		if (!comp.isNull()) //If the GameObject has a transform component, update it's transform.
 		{ 
-			auto transformPtr = sp_Screen->getComponentStore()->getComponent<Transform>(comp, ComponentType::TRANSFORM);
+			transformPtr = sp_Screen->getComponentStore()->getComponent<Transform>(comp, ComponentType::TRANSFORM);
 			transformPtr->position += position;
 			transformPtr->scale *= scale;
-			transformPtr->orientation.w += orientation;
+			transformPtr->orientation = glm::angleAxis(glm::radians(orientation), glm::vec3(0.0, 1.0, 0.0));
+		}
+		comp = sp_Owner->GetComponentHandle(ComponentType::RIGID_BODY);
+		if (!comp.isNull()) //If the GameObject also has a physics component, update it's transform.
+		{
+			auto physicsPtr = sp_Screen->getComponentStore()->getComponent<PhysicsComponent>(comp, ComponentType::RIGID_BODY);
+			if(transformPtr != nullptr)
+				physicsPtr->setTransform(transformPtr);
 		}
 	}
 }

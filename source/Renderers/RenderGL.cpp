@@ -35,7 +35,6 @@ bool RenderGL::init()
 void RenderGL::prepare()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//buttonTest->render();
 }
 
 void RenderGL::exit() {
@@ -326,7 +325,8 @@ void RenderGL::renderModel(ModelComponent & model, shared_ptr<Shader>& shaderPro
 	numOfLights <= MAX_NUM_LIGHTS ? shaderProgram->setUniform("NUM_LIGHTS", numOfLights) : shaderProgram->setUniform("NUM_LIGHTS", 0);
 	Transform* transform = model.getTransform();
 	glm::quat orientation = transform->orientation;
-	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::rotate(glm::radians(orientation.w), glm::vec3(orientation.x, orientation.y, orientation.z)) * glm::scale(transform->scale);
+//	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::rotate(glm::radians(orientation.w), glm::vec3(orientation.x, orientation.y, orientation.z)) * glm::scale(transform->scale);
+	glm::mat4 mMat = glm::translate(transform->position) * glm::mat4_cast(orientation) * glm::scale(transform->scale);
 	shaderProgram->setUniform("mView", camera->getView());
 	shaderProgram->setUniform("mProjection", camera->getProjection());
 	shaderProgram->setUniform("mModel", mMat);

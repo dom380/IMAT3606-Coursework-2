@@ -8,7 +8,7 @@ ObjReader::~ObjReader()
 {
 }
 
-void ObjReader::readFile(const char * filePath, vector<glm::vec4>& vertices, vector<glm::vec3>& normals, vector<glm::vec2>& textures, vector<unsigned short>&indices, Material& material)
+void ObjReader::readFile(const char * filePath, vector<glm::vec4>& vertices, vector<glm::vec3>& normals, vector<glm::vec2>& textures, vector<unsigned short>&indices, Material& material, vector<glm::vec4>& points)
 {
 	unpackedVertices.clear();
 	unpackedNormals.clear();
@@ -96,6 +96,7 @@ void ObjReader::readFile(const char * filePath, vector<glm::vec4>& vertices, vec
 		} //end if
 	
 	}
+	points = unpackedVertices;
 	unsigned short nextIndex = 0;
 	size_t arraySize = faceIndices.size(); //static_cast<int>(faceIndices.size());
 	for (int i = 0; i < arraySize; i += 3) {
@@ -122,6 +123,43 @@ void ObjReader::readFile(const char * filePath, vector<glm::vec4>& vertices, vec
 			}
 
 		}
+	}
+}
+
+void ObjReader::readFile(const char * filePath, shared_ptr<vector<ConvexHull>>& convexHulls)
+{
+	std::fstream inStream;
+	inStream.open(filePath);
+	if (!inStream.is_open()) {
+		std::string errorMsg = "Error opening file ";
+		errorMsg += filePath;
+		throw std::runtime_error(errorMsg);
+	}
+
+	std::string newLine;
+	while (std::getline(inStream, newLine)) {
+		std::string lineStart = newLine.substr(0, 2);
+		if (lineStart.length() == 0 || lineStart == "# ") {
+			continue;
+		}
+		std::istringstream stringStream(newLine.substr(2));
+		if (lineStart == "o ") {
+			convexHulls->push_back(ConvexHull());
+		}
+		else if (lineStart == "v ") {
+			glm::vec4 vertex(readVec3(stringStream), 1.0f);
+			convexHulls->back().m_points.push_back(vertex.x);
+			convexHulls->back().m_points.push_back(vertex.y);
+			convexHulls->back().m_points.push_back(vertex.z);
+		}
+		else if (lineStart == "f ") {
+			float indexValue;
+			while (stringStream >> indexValue)
+			{
+				convexHulls->back().m_triangles.push_back(indexValue - 1); //Position index
+			}
+		} //end if
+
 	}
 }
 

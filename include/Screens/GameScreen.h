@@ -19,6 +19,7 @@ using std::vector;
 #include <Components\LocationMessage.h>
 #include <Components\RenderMessage.h>
 #include <AssetManager.h>
+#include <Physics\Physics.h>
 #ifndef NDEBUG
 #include <utils\Timer.h>
 #endif
@@ -40,8 +41,13 @@ public:
 		shared_ptr<Input>& input, Pointer to the input system.
 		shared_ptr<Camera> camera, Pointer to a Camera. Defaulted to PerspectiveCamera.
 	*/
-	GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>());
+	GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, shared_ptr<Physics>& physics, shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>());
 	~GameScreen() {};
+
+	/*
+		Unpauses the physics simulation.
+	*/
+	void show();
 	/*
 		Update this screen's objects.
 		double dt, Current time step.
@@ -111,6 +117,7 @@ private:
 	vector<shared_ptr<TextBox>> textBoxes;
 	shared_ptr<Input> input;
 	shared_ptr<Graphics> renderer;
+	shared_ptr<Physics> physics;
 	int activeCamera = 0;
 	vector<shared_ptr<Camera>> cameras;
 	vector<Light> lights;

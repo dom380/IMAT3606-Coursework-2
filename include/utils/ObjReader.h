@@ -25,7 +25,8 @@ public:
 		vector<unsigned short>&indices, std::vector to be loaded with indices.
 		Material& material, Material to be loaded with the model's material properties (If a .mtl is specified).
 	*/
-	void readFile(const char * filePath, vector<glm::vec4>& vertices, vector<glm::vec3>& normals, vector<glm::vec2>& textures, vector<unsigned short>&indices, Material& material);
+	void readFile(const char * filePath, vector<glm::vec4>& vertices, vector<glm::vec3>& normals, vector<glm::vec2>& textures, vector<unsigned short>&indices, Material& material, vector<glm::vec4>& points);
+	void readFile(const char * filePath, shared_ptr<vector<ConvexHull>>& convexHulls);
 private:
 	//private memebers
 	vector<glm::vec3> faceIndices; //x = position index. y = texture index. z = normal index

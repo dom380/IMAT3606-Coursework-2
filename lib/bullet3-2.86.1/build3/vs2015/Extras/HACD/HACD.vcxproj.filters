@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="H:\Desktop\bullet3-2.86.1\Extras\HACD\hacdGraph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="H:\Desktop\bullet3-2.86.1\Extras\HACD\hacdHACD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="H:\Desktop\bullet3-2.86.1\Extras\HACD\hacdICHull.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="H:\Desktop\bullet3-2.86.1\Extras\HACD\hacdManifoldMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="H:\Desktop\bullet3-2.86.1\Extras\HACD\hacdCircularList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="H:\Desktop\bullet3-2.86.1\Extras\HACD\hacdGraph.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="H:\Desktop\bullet3-2.86.1\Extras\HACD\hacdHACD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="H:\Desktop\bullet3-2.86.1\Extras\HACD\hacdICHull.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="H:\Desktop\bullet3-2.86.1\Extras\HACD\hacdManifoldMesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="H:\Desktop\bullet3-2.86.1\Extras\HACD\hacdVector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="H:\Desktop\bullet3-2.86.1\Extras\HACD\hacdVersion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="H:\Desktop\bullet3-2.86.1\Extras\HACD\hacdCircularList.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="H:\Desktop\bullet3-2.86.1\Extras\HACD\hacdVector.inl">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="H:\Desktop\bullet3-2.86.1\Extras\HACD\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{985B9288-321F-3AF4-98E6-F69F80741943}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{BCAAF683-0F98-36E8-B42D-9C4C7C9E663A}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

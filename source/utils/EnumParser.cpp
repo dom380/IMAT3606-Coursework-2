@@ -3,6 +3,9 @@
 #include <Camera\Camera.h>
 #include <Components\ComponentType.h>
 #include <Input.h>
+#include <Physics\Physics.h>
+#include <Physics\ShapeData.h>
+#include <GameObjectTag.h>
 
 EnumParser<Engine::GraphicsContext>::EnumParser()
 {
@@ -50,12 +53,15 @@ EnumParser<ComponentType>::EnumParser()
 	map["logic"] = ComponentType::LOGIC;
 	map["TRANSFORM"] = ComponentType::TRANSFORM;
 	map["transform"] = ComponentType::TRANSFORM;
+	map["TRIGGER"] = ComponentType::TRIGGER;
+	map["trigger"] = ComponentType::TRIGGER;
 
 	strmap[ComponentType::MODEL] = "model";
 	strmap[ComponentType::ANIMATION] = "animation";
 	strmap[ComponentType::RIGID_BODY] = "rigid_body";
 	strmap[ComponentType::LOGIC] = "logic";
 	strmap[ComponentType::TRANSFORM] = "transform";
+	strmap[ComponentType::TRIGGER] = "trigger";
 }
 
 EnumParser<Input::InputImpl>::EnumParser()
@@ -64,4 +70,34 @@ EnumParser<Input::InputImpl>::EnumParser()
 	map["glfw"] = Input::InputImpl::GLFW;
 	map["GLUT"] = Input::InputImpl::GLUT;
 	map["glut"] = Input::InputImpl::GLUT;
+}
+
+EnumParser<Physics::PhysicsImpl>::EnumParser()
+{
+	map["BULLET"] = Physics::PhysicsImpl::BULLET;
+	map["bullet"] = Physics::PhysicsImpl::BULLET;
+}
+
+EnumParser<ShapeData::BoundingShape>::EnumParser()
+{
+	map["BOX"] = ShapeData::BoundingShape::BOX;
+	map["box"] = ShapeData::BoundingShape::BOX;
+	map["SPHERE"] = ShapeData::BoundingShape::SPHERE;
+	map["sphere"] = ShapeData::BoundingShape::SPHERE;
+	map["CONE"] = ShapeData::BoundingShape::CONE;
+	map["cone"] = ShapeData::BoundingShape::CONE;
+	map["CYLINDER"] = ShapeData::BoundingShape::CYLINDER;
+	map["cylinder"] = ShapeData::BoundingShape::CYLINDER;
+}
+
+EnumParser<GameObjectTag>::EnumParser()
+{
+	map["PLAYER"] = GameObjectTag::PLAYER;
+	map["player"] = GameObjectTag::PLAYER;
+	map["ENEMY"] = GameObjectTag::ENEMY;
+	map["enemy"] = GameObjectTag::ENEMY;
+	map["PHY_OBJ"] = GameObjectTag::PHY_OBJ;
+	map["phy_obj"] = GameObjectTag::PHY_OBJ;
+	map["UNKNOWN"] = GameObjectTag::UNKNOWN;
+	map["unknown"] = GameObjectTag::UNKNOWN;
 }

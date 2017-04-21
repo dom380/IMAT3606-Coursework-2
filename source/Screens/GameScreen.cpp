@@ -1,9 +1,10 @@
 #include "Screens\GameScreen.h"
 
-GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, shared_ptr<Camera> camera) :
+GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, shared_ptr<Physics>& physics, shared_ptr<Camera> camera) :
 	robot(std::make_shared<Robot>(AssetManager::getInstance()->getShader(std::pair<string, string>("colour.vert", "colour.frag"))))
 {
 	this->renderer = renderer;
+	this->physics = physics;
 	componentStore = std::make_shared<ComponentStore>();
 	/*camera->move(58.0, 41.0f, 68.0f);
 	camera->lookAt(glm::vec3(-1.0,-0.6,-1.0));
@@ -34,6 +35,12 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 	this->input->registerMouseListener(engineCam);
 
 	activeCamera = 0;
+	
+}
+
+void GameScreen::show()
+{
+	physics->setPaused(false);
 }
 
 void GameScreen::update(double dt)
@@ -41,6 +48,15 @@ void GameScreen::update(double dt)
 #ifndef NDEBUG
 	timer.start();
 #endif
+	auto physicsComponents = componentStore->getAllComponents<PhysicsComponent>(ComponentType::RIGID_BODY);
+	for (auto it = physicsComponents->begin(); it != physicsComponents->end(); ++it)
+	{
+		if (it->first != -1)
+		{
+			it->second.update(dt);
+		}
+	}
+
 	robot->Prepare(dt);
 	Message* robotLocMsg = new LocationMessage(robot->getPosition());
 	std::vector<std::pair<int, LogicComponent>>* logicComponents = componentStore->getAllComponents<LogicComponent>(ComponentType::LOGIC);
@@ -92,6 +108,7 @@ shared_ptr<ComponentStore> GameScreen::getComponentStore()
 
 void GameScreen::dispose()
 {
+	physics->setPaused(true);
 	for (shared_ptr<Camera> camera : cameras) {
 		input->removeMouseListener(camera);
 		input->removeKeyListener(camera);

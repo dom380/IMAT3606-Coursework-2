@@ -6,6 +6,10 @@ MenuScreen::MenuScreen(shared_ptr<Graphics>& graphics, Engine* engine)
 	this->graphics = graphics;
 }
 
+void MenuScreen::show()
+{
+}
+
 void MenuScreen::update(double dt)
 {
 }

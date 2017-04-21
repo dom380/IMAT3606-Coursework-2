@@ -1,6 +1,8 @@
 #ifndef DEBUGMENU_H
 #define DEBUGMENU_H
 
+#ifndef NDEBUG
+
 #include <algorithm>
 #include <memory>
 #include <Editor/imgui/imgui.h>
@@ -105,4 +107,6 @@ public:
 
 	void addMenuItem(DebugMenuItem* dmi);
 };
+#endif
+
 #endif // !DEBUGMENU_h

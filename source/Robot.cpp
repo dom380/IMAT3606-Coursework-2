@@ -197,7 +197,7 @@ void Robot::updateCamera()
 	if(camera != nullptr)
 		camera->move(glm::vec3(robot_Pos.x, robot_Pos.y, robot_Pos.z));
 }
-
+#ifndef NDEBUG
 void Robot::debugMenuItemUpdate()
 {
 	if (ImGui::BeginMenu("Robot"))
@@ -205,7 +205,7 @@ void Robot::debugMenuItemUpdate()
 		ImGui::EndMenu();
 	}
 }
-
+#endif
 void Robot::DrawRobot(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
 {
 	shader->bindShader();

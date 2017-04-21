@@ -1,7 +1,7 @@
 #pragma once
 #ifndef DEBUGMENUITEM_H
 #define DEBUGMENUITEM_H
-
+#ifndef NDEBUG
 #include <algorithm>
 #include <memory>
 class DebugMenuItem;
@@ -24,4 +24,5 @@ public:
 	DebugMenuItem();
 	virtual void debugMenuItemUpdate();
 };
+#endif
 #endif // !DEBUGMENUITEM_H

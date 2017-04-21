@@ -14,6 +14,7 @@
 class PerspectiveCamera : public Camera
 {
 public:
+	PerspectiveCamera() {};
 	/*
 		Constructor
 		int width, The viewport width in screen pixels.
@@ -53,6 +54,7 @@ public:
 		The 'A' and 'D' keys pan the camera left and right, relative to it's current direction, respectively.
 	*/
 	void handle(KeyEvent event);
+
 protected:
 	//protected members
 	glm::vec3 worldY = glm::vec3(0.0f, 1.0f, 0.0f);

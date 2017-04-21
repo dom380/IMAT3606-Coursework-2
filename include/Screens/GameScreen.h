@@ -6,6 +6,7 @@
 using std::shared_ptr;
 #include <Camera\Camera.h>
 #include <Camera\PerspectiveCamera.h>
+#include <Camera\FollowCamera.h>
 #include <Input.h>
 #include <vector>
 using std::vector;
@@ -116,6 +117,7 @@ private:
 	unsigned int lightingBufferId = -1;
 	shared_ptr<Robot> robot;
 	int currentScore = 0;
+	glm::vec3 cameraDistanceToPlayer;
 #ifndef NDEBUG //If debugging display how long the frame took in ms.
 	Timer timer;
 	shared_ptr<TextBox> frameTime;

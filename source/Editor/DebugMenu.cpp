@@ -306,6 +306,8 @@ void DebugMenu::saveAsMenu()
 
 bool DebugMenu::loadLevel(string fileName)
 {
+	//When we load a scene, the runtime menu items need to be reset
+	mainMenuBarItems.clear();
 	return LevelLoader::loadLevel(Engine::g_pEngine.get(), Engine::g_pEngine->getRenderer(), Engine::g_pEngine->getInput(), fileName.c_str());
 }
 

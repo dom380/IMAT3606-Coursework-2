@@ -8,7 +8,8 @@
 #include <vector>
 #include <map>
 #include "Math3D.h"
-//#include "shader.h"
+#include "Graphics/Shader.h"
+#include <memory>
 #include <assimp/types.h>
 //#include <SOIL\SOIL.h>
 
@@ -71,12 +72,12 @@ struct BoneInfo
 	}
 };
 
-struct Texture //!< Struct to hold data for a texture
-{
-	GLuint id;
-	std::string type;
-	aiString path;
-};
+//struct Texture //!< Struct to hold data for a texture
+//{
+//	GLuint id;
+//	std::string type;
+//	aiString path;
+//};
 
 // A mesh entry for each mesh read in from the Assimp scene. A model is usually consisted of a collection of these. 
 #define INVALID_MATERIAL 0xFFFFFFFF
@@ -87,7 +88,7 @@ struct MeshEntry {
 	unsigned int BaseIndex; //!< The base vertex of this mesh in the vertices array for the entire model.
 	unsigned int NumIndices; //!< The base index of this mesh in the indices array for the entire model. 
 	unsigned int MaterialIndex;
-	Texture texture; //make this a vector to hold multiple textures ->>to do
+	//Texture texture; //make this a vector to hold multiple textures ->>to do
 
 
 	MeshEntry()
@@ -106,11 +107,11 @@ class SkeletalModel
 {
 public:
 
-	SkeletalModel(Shader* shaderProgIn); //!< Constructor 
+	SkeletalModel(std::shared_ptr<Shader> shaderProgIn); //!< Constructor 
 
 	~SkeletalModel(); //!< Destructor 
 
-	void LoadMesh(const std::string& Filename, bool isTextured); //!< Loads an animated mesh from a given file path and if the mesh is textured
+	void LoadMesh(const std::string& Filename/*, bool isTextured*/); //!< Loads an animated mesh from a given file path and if the mesh is textured
 
 	void BoneTransform(float TimeInSeconds, std::vector<Matrix4f>& Transforms); //!< Traverses the scene hierarchy and fetches the matrix transformation for each bone given the time. 
 
@@ -137,14 +138,13 @@ private:
 
 	void ReadNodeHierarchy(float AnimationTime, const aiNode* pNode, const Matrix4f& ParentTransform); //!< Recursive function that traverses the scene's node hierarchy and combines the matrix transformations. 
 
-
 	void InitFromScene(const aiScene* pScene, const std::string& Filename); //!< Prepares the model for rendering. 
 	void InitMesh(unsigned int index, const aiMesh* paiMesh, std::vector<VertexStruct>& Vertices,
-		std::vector<GLuint>& Indices, std::vector<VertexBoneData>& Bones, Texture& texture); //!< Fetches mesh data from given Assimp mesh. 
+		std::vector<GLuint>& Indices, std::vector<VertexBoneData>& Bones/*, Texture& texture*/); //!< Fetches mesh data from given Assimp mesh. 
 
 	void Clear(); //!< Deletes the vertex array object. 
 
-	Texture LoadMeshTexture(aiMaterial *mat, aiTextureType type, std::string typeName)
+	/*Texture LoadMeshTexture(aiMaterial *mat, aiTextureType type, std::string typeName)
 	{
 		Texture l_texture;
 
@@ -185,9 +185,9 @@ private:
 		//}
 
 		return l_texture;
-	}
+	}*/
 
-	Shader* m_pShaderProg;
+	std::shared_ptr<Shader> m_pShaderProg;
 
 	GLuint m_VAO; // Vertex array object. 
 	GLuint vbo; //!< Vertex buffer object. 

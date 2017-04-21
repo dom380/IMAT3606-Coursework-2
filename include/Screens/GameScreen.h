@@ -17,6 +17,7 @@ using std::vector;
 #include <Components\LocationMessage.h>
 #include <Components\RenderMessage.h>
 #include <AssetManager.h>
+#include "Components/AnimatedModelComponent.h"
 #ifndef NDEBUG
 #include <utils\Timer.h>
 #endif

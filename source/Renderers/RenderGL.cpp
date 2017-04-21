@@ -357,5 +357,8 @@ void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& sh
 
 	glBindBufferBase(GL_UNIFORM_BUFFER, lightingBlockId, lightingBuffer); //Bind lighting data
 
-	model.
+	for (auto it : model.models)
+	{
+		it->render();
+	}
 }

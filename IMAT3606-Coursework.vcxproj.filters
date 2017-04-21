@@ -433,5 +433,7 @@
     <None Include="shaders\colour.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="shaders\animation.frag" />
+    <None Include="shaders\animation.vert" />
   </ItemGroup>
 </Project>

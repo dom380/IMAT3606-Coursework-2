@@ -9,6 +9,7 @@
 #include <Components\LogicComponent.h>
 #include "tinyxml2.h"
 #include <Scripting\ScriptEngine.h>
+#include <Components\AnimatedModelComponent.h>
 #include <Utils/Utilities.h>
 #ifndef NDEBUG
 #include "Timer.h"

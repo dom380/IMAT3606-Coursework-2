@@ -1,6 +1,6 @@
 #include "Animation/SkeletalModel.h"
 
-SkeletalModel::SkeletalModel(Shader* shaderProgIn)
+SkeletalModel::SkeletalModel(std::shared_ptr<Shader> shaderProgIn)
 {
 	m_VAO = 0;
 
@@ -27,10 +27,8 @@ void SkeletalModel::Clear()
 	}
 }
 
-void SkeletalModel::LoadMesh(const std::string& Filename, bool isTextured)
+void SkeletalModel::LoadMesh(const std::string& Filename)
 {
-	m_isTextured = isTextured;
-
 	this->m_sDirectory = Filename.substr(0, Filename.find_last_of('/'));
 
 	// Release the previously loaded mesh (if it exists)
@@ -76,7 +74,7 @@ void SkeletalModel::InitFromScene(const aiScene* pScene, const std::string& File
 	std::vector<VertexStruct> vertices;
 	std::vector<VertexBoneData> bones;
 	std::vector<unsigned int> Indices;
-	Texture texture; //use vector of textures here
+	//Texture texture; //use vector of textures here
 
 	unsigned int NumVertices = 0;
 	unsigned int NumIndices = 0;
@@ -104,8 +102,8 @@ void SkeletalModel::InitFromScene(const aiScene* pScene, const std::string& File
 	// Initialize the meshes in the scene one by one
 	for (unsigned int i = 0; i < m_Entries.size(); i++) {
 		const aiMesh* paiMesh = pScene->mMeshes[i];
-		InitMesh(i, paiMesh, vertices, Indices, bones, texture);
-		m_Entries[i].texture = texture;
+		InitMesh(i, paiMesh, vertices, Indices, bones);
+		//m_Entries[i].texture = texture;
 	}
 
 	// Generate and populate the buffers with vertex attributes and the indices
@@ -148,7 +146,7 @@ void SkeletalModel::InitFromScene(const aiScene* pScene, const std::string& File
 	bones.clear();
 }
 
-void SkeletalModel::InitMesh(unsigned int index, const aiMesh* paiMesh, std::vector<VertexStruct>& Vertices, std::vector<GLuint>& Indices, std::vector<VertexBoneData>& Bones, Texture& texture)
+void SkeletalModel::InitMesh(unsigned int index, const aiMesh* paiMesh, std::vector<VertexStruct>& Vertices, std::vector<GLuint>& Indices, std::vector<VertexBoneData>& Bones/*, Texture& texture*/)
 {
 	const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
 	VertexStruct v;
@@ -159,13 +157,13 @@ void SkeletalModel::InitMesh(unsigned int index, const aiMesh* paiMesh, std::vec
 		//B
 		aiMaterial *material = pScene->mMaterials[paiMesh->mMaterialIndex];
 
-		if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0)
-		{
-			//load material
-			texture = LoadMeshTexture(material, aiTextureType_DIFFUSE, "material.texture_diffuse");
-		}
-		else
-		{
+		//if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0)
+		//{
+		//	//load material
+		//	//texture = LoadMeshTexture(material, aiTextureType_DIFFUSE, "material.texture_diffuse");
+		//}
+		//else
+		//{
 			//aiColor3D ambient = aiColor3D(0.f);
 			aiColor3D diffuse = aiColor3D(0.f);
 			//aiColor3D specular = aiColor3D(0.f);
@@ -177,7 +175,7 @@ void SkeletalModel::InitMesh(unsigned int index, const aiMesh* paiMesh, std::vec
 			v.colour = glm::vec3(diffuse.r, diffuse.g, diffuse.b);
 
 			//store colours in buffer and send to shader
-		}
+		//}
 		//loop through each texture in material and add item to vector of textures
 	}
 
@@ -425,9 +423,9 @@ void SkeletalModel::render()
 
 	// Render all the model's meshes.
 	for (unsigned int i = 0; i < m_Entries.size(); i++) {
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, m_Entries.at(i).texture.id);
-		m_pShaderProg->setUniform("material.texture_diffuse", 0);
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, m_Entries.at(i).texture.id);
+		//m_pShaderProg->setUniform("material.texture_diffuse", 0);
 
 		glDrawElementsBaseVertex(GL_TRIANGLES,
 			m_Entries[i].NumIndices,

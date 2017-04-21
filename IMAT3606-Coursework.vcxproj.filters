@@ -437,6 +437,9 @@
     <ClInclude Include="include\GUI\UITextureElement.h">
       <Filter>Header Files\GUI</Filter>
     </ClInclude>
+    <ClInclude Include="include\GUI\UIType.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\text.frag">

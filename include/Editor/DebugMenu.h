@@ -8,6 +8,7 @@
 #include <Editor/imgui/imgui.h>
 //#include <Graphics\ModelComponent.h>
 #include <Editor\DebugMenuItem.h>
+#include <GUI\UIType.h>
 
 using namespace std;
 /*
@@ -42,9 +43,16 @@ private:
 	vector<DebugMenuItem*> mainMenuBarItems;
 	vector<std::string> objList;
 	vector<std::string> textureList;
+	std::vector<const char *> textureCStyleArray;
 	vector<std::string> levelList;
+	/*
+		Vectors test if the window is active.
+	*/
 	vector<bool> objCreateActive;
+	bool uiCreateActive[UIType::UI_TYPE_COUNT];
 
+	//The current selected item in a listbox
+	int listbox_item_current;
 	/*
 		MainMenu bar update.
 	*/
@@ -83,8 +91,12 @@ private:
 	*/
 	void createCubeMenu();
 	void createObjectWindow(std::string objName, int iterator);
-
-	
+	void createUIWindow(UIType type, int iterator);
+	/*
+		Creates a list box of textures that are loaded from texture dir.
+		discards textures with size < 4
+	*/
+	void createTextureListBox();
 
 public:
 	static shared_ptr<DebugMenu> getInstance();

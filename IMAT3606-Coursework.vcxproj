@@ -238,6 +238,7 @@
     <ClInclude Include="include\GUI\UIElement.h" />
     <ClInclude Include="include\GUI\UIManager.h" />
     <ClInclude Include="include\GUI\UITextureElement.h" />
+    <ClInclude Include="include\GUI\UIType.h" />
     <ClInclude Include="include\Input.h" />
     <ClInclude Include="include\InputGLFW.h" />
     <ClInclude Include="include\Renderers\Graphics.h" />

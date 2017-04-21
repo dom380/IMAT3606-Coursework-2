@@ -69,6 +69,11 @@ GLuint UIElement::getVertArray()
 	return vaoHandle;
 }
 
+UIType UIElement::getType()
+{
+	return type;
+}
+
 glm::mat4 UIElement::getModel()
 {
 	return model;

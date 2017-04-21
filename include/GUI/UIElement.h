@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <string>
+#include <GUI\UIType.h>
 #include <Graphics\Shader.h>
 #include "GL\glm\glm\gtc\matrix_transform.hpp"
 #include "GL\glm\glm\gtx\transform.hpp"
@@ -27,7 +28,7 @@ protected:
 	shared_ptr<Graphics> graphics;
 	shared_ptr<Transform> transform;
 	glm::mat4 model;
-
+	UIType type;
 public:
 	UIElement() {};
 	UIElement(shared_ptr<Graphics>& graphics, shared_ptr<Transform>& transform,const char* id, const char* textureName);
@@ -36,9 +37,8 @@ public:
 
 	string getID();
 	shared_ptr<Transform> getTransform();
-	//shared_ptr<Texture> getTexture();
 	GLuint getVertArray();
-
+	UIType getType();
 	glm::mat4 getModel();
 	void setModel(glm::mat4 model);
 	void updateModelUsingTransform(shared_ptr<Transform> transform=NULL);

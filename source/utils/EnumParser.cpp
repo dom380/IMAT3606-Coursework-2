@@ -2,6 +2,7 @@
 #include <Engine.h>
 #include <Camera\Camera.h>
 #include <Components\ComponentType.h>
+#include <GUI\UIType.h>
 #include <Input.h>
 
 EnumParser<Engine::GraphicsContext>::EnumParser()
@@ -56,6 +57,13 @@ EnumParser<ComponentType>::EnumParser()
 	strmap[ComponentType::RIGID_BODY] = "rigid_body";
 	strmap[ComponentType::LOGIC] = "logic";
 	strmap[ComponentType::TRANSFORM] = "transform";
+}
+
+EnumParser<UIType>::EnumParser()
+{
+	strmap[UIType::TEXT] = "text";
+	strmap[UIType::TEXTURE] = "texture";
+	strmap[UIType::BUTTON] = "button";
 }
 
 EnumParser<Input::InputImpl>::EnumParser()

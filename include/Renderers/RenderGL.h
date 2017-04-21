@@ -91,6 +91,8 @@ private:
 	//private members
 	int width;
 	int height;
+	int numOfLights;
+	const int MAX_NUM_LIGHTS = 10;
 	unsigned int currBindingPoint = 0;
 	glm::mat4 modelMat = glm::mat4();
 };

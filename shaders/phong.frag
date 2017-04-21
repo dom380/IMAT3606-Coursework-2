@@ -24,6 +24,7 @@ layout (std140) uniform LightingBlock
 };
 
 uniform Material material;
+uniform int NUM_LIGHTS;
 
 in vec2 texCoord;
 in vec3 Normal;
@@ -44,7 +45,7 @@ void main()
 	
 
 	vec3 result;
-	for(int i=0; i < 10; i++)
+	for(int i=0; i < NUM_LIGHTS; i++)
 	{
 		result += calcLight(lights[i], material, norm, fragmentPos, viewDir);
 	}

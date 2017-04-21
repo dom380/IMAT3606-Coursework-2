@@ -1,6 +1,6 @@
 #include "UITextureElement.h"
 
-UITextureElement::UITextureElement(shared_ptr<Graphics>& engineGraphics, shared_ptr<Transform>& passedTransform, const char * id, const char * textureName)
+UITextureElement::UITextureElement(shared_ptr<Graphics>& engineGraphics, shared_ptr<Transform>& passedTransform, const char * id, const char * passedTextureName)
 {
 	haveVAO = false;
 	graphics = engineGraphics;
@@ -8,14 +8,14 @@ UITextureElement::UITextureElement(shared_ptr<Graphics>& engineGraphics, shared_
 	updateModelUsingTransform();
 	type = UIType::TEXTURE;
 	uiID = id;
+	textureName = passedTextureName;
 	// Load the texture
-	if (textureName == NULL)
+	if (textureName == "")
 	{
 	}
 	else
 	{
-		texture = AssetManager::getInstance()->getTexture(textureName);
-
+		texture = AssetManager::getInstance()->getTexture(textureName.c_str());
 	}
 	init();
 	//Set texture
@@ -102,4 +102,9 @@ void UITextureElement::render()
 shared_ptr<Texture> UITextureElement::getTexture()
 {
 	return texture;
+}
+
+string UITextureElement::getTextureName()
+{
+	return textureName;
 }

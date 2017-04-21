@@ -1,6 +1,7 @@
 #include <utils\FileSaver.h>
 #include <utils\XMLReader.h>
 #include <utils\EnumParser.h>
+#include <GUI\UITextureElement.h>
 
 bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObjectCount, shared_ptr<GameObject> go, shared_ptr<GameScreen> gameScreen)
 {
@@ -279,9 +280,11 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 			if (XMLObjectCount != iObjectCount)
 			{
 				SkipObject = true;
-				continue;
 			}
-			UpdateTransform(doc, XMLUIElement, uiElement->getTransform());
+			else
+			{
+				UpdateTransform(doc, XMLUIElement, uiElement->getTransform());
+			}
 			XMLObjectCount++;
 			SkipObject = false;
 			XMLUIElement = XMLUIElement->NextSiblingElement();
@@ -317,184 +320,46 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 				componentsElement->InsertEndChild(componentElement);
 				switch (cType)
 				{
-				case MODEL:
-				{
-					/*
-						Give component model information, optional texture
-					*/
-					auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
-					tinyxml2::XMLElement* objNameElement = doc->NewElement("file");
-					componentElement->InsertEndChild(objNameElement);
-					objNameElement->SetText(model->getObjFileName().c_str());
-					componentElement->SetAttribute("id", model->getId().c_str());
-					//If there is a texture to add
-					if (strcmp(model->getTextureName().c_str(), "") != 0)
+					case MODEL:
 					{
-						tinyxml2::XMLElement* textureElement = doc->NewElement("texture");
-						componentElement->InsertEndChild(textureElement);
-						textureElement->SetText(model->getTextureName().c_str());
+						/*
+							Give component model information, optional texture
+						*/
+						auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
+						tinyxml2::XMLElement* objNameElement = doc->NewElement("file");
+						componentElement->InsertEndChild(objNameElement);
+						objNameElement->SetText(model->getObjFileName().c_str());
+						componentElement->SetAttribute("id", model->getId().c_str());
+						//If there is a texture to add
+						if (strcmp(model->getTextureName().c_str(), "") != 0)
+						{
+							tinyxml2::XMLElement* textureElement = doc->NewElement("texture");
+							componentElement->InsertEndChild(textureElement);
+							textureElement->SetText(model->getTextureName().c_str());
+						}
+						tinyxml2::XMLElement* renderActiveElement = doc->NewElement("active");
+						componentElement->InsertEndChild(renderActiveElement);
+						renderActiveElement->SetText(model->isDrawing());
+						break;
 					}
-					tinyxml2::XMLElement* renderActiveElement = doc->NewElement("active");
-					componentElement->InsertEndChild(renderActiveElement);
-					renderActiveElement->SetText(model->isDrawing());
-					break;
-				}
-				case ANIMATION:
+					case ANIMATION:
 
-					break;
-				case RIGID_BODY:
+						break;
+					case RIGID_BODY:
 
-					break;
-				case LOGIC:
+						break;
+					case LOGIC:
 
-					break;
-				case TRANSFORM:
-					/*
-					Give component transform information adding xyz from transform elements
-					*/
+						break;
+					case TRANSFORM:
+						/*
+						Give component transform information adding xyz from transform elements
+						*/
 					
-					auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
-					for (int transformElement = 0; transformElement < 3; transformElement++)
-					{
-						switch (transformElement)
-						{
-						case 0:
-						{
-							tinyxml2::XMLElement* componentInnerElement = doc->NewElement("position");
-							componentElement->InsertEndChild(componentInnerElement);
-							if (!componentInnerElement)
-								break;
-							for (int vector3 = 0; vector3 < 3; vector3++)
-							{
-								//xyz
-								switch (vector3)
-								{
-								case 0:
-								{
-									std::ostringstream ss;
-									ss << model->getTransform()->position[vector3];
-									tinyxml2::XMLElement* componentVecElement = doc->NewElement("x");
-									componentInnerElement->InsertEndChild(componentVecElement);
-									componentVecElement->SetText(string(ss.str()).c_str());
-									break;
-								}
-								case 1:
-								{
-									std::ostringstream ss;
-									ss << model->getTransform()->position[vector3];
-									tinyxml2::XMLElement* componentVecElement = doc->NewElement("y");
-									componentInnerElement->InsertEndChild(componentVecElement);
-									componentVecElement->SetText(string(ss.str()).c_str());
-									break;
-								}
-
-								case 2:
-								{
-									std::ostringstream ss;
-									ss << model->getTransform()->position[vector3];
-									tinyxml2::XMLElement* componentVecElement = doc->NewElement("z");
-									componentInnerElement->InsertEndChild(componentVecElement);
-									componentVecElement->SetText(string(ss.str()).c_str());
-									break;
-								}
-								}
-
-							}
-							break;
-						}
-						case 1:
-						{
-							tinyxml2::XMLElement* componentInnerElement = doc->NewElement("scale");
-							componentElement->InsertEndChild(componentInnerElement);
-							if (!componentInnerElement)
-								break;
-							for (int vector3 = 0; vector3 < 3; vector3++)
-							{
-								//xyz
-								switch (vector3)
-								{
-								case 0:
-								{
-									std::ostringstream ss;
-									ss << model->getTransform()->scale[vector3];
-									tinyxml2::XMLElement* componentVecElement = doc->NewElement("x");
-									componentInnerElement->InsertEndChild(componentVecElement);
-									componentVecElement->SetText(string(ss.str()).c_str());
-									break;
-								}
-								case 1:
-								{
-									std::ostringstream ss;
-									ss << model->getTransform()->scale[vector3];
-									tinyxml2::XMLElement* componentVecElement = doc->NewElement("y");
-									componentInnerElement->InsertEndChild(componentVecElement);
-									componentVecElement->SetText(string(ss.str()).c_str());
-									break;
-								}
-
-								case 2:
-								{
-									std::ostringstream ss;
-									ss << model->getTransform()->scale[vector3];
-									tinyxml2::XMLElement* componentVecElement = doc->NewElement("z");
-									componentInnerElement->InsertEndChild(componentVecElement);
-									componentVecElement->SetText(string(ss.str()).c_str());
-									break;
-								}
-								}
-
-							}
-							break;
-						}
-						case 2:
-						{
-							tinyxml2::XMLElement* componentInnerElement = doc->NewElement("orientation");
-							componentElement->InsertEndChild(componentInnerElement);
-							if (!componentInnerElement)
-								break;
-							for (int vector3 = 0; vector3 < 3; vector3++)
-							{
-								//xyz
-								switch (vector3)
-								{
-								case 0:
-								{
-									std::ostringstream ss;
-									ss << model->getTransform()->orientation[vector3];
-									tinyxml2::XMLElement* componentVecElement = doc->NewElement("x");
-									componentInnerElement->InsertEndChild(componentVecElement);
-									componentVecElement->SetText(string(ss.str()).c_str());
-									break;
-								}
-								case 1:
-								{
-									std::ostringstream ss;
-									ss << model->getTransform()->orientation[vector3];
-									tinyxml2::XMLElement* componentVecElement = doc->NewElement("y");
-									componentInnerElement->InsertEndChild(componentVecElement);
-									componentVecElement->SetText(string(ss.str()).c_str());
-									break;
-								}
-
-								case 2:
-								{
-									std::ostringstream ss;
-									ss << model->getTransform()->orientation[vector3];
-									tinyxml2::XMLElement* componentVecElement = doc->NewElement("z");
-									componentInnerElement->InsertEndChild(componentVecElement);
-									componentVecElement->SetText(string(ss.str()).c_str());
-									break;
-								}
-								}
-							}
-							break;
-						}
-						default:
-							break;
-						}
+						auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
+						AddTransformToFile(doc, componentElement, model->getTransform());
 					
-				}
-				break;
+						break;
 				}
 			}
 		}
@@ -510,6 +375,40 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 	
 	return true;
 }
+bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<UIElement> uiE, shared_ptr<GameScreen> gameScreen)
+{
+	if (doc)
+	{
+		tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");
+
+		tinyxml2::XMLElement* XMLUIElements = screenElement->FirstChildElement("uiElements");
+		tinyxml2::XMLElement* XMLUIElement = doc->NewElement("uiElement");
+		//ID
+		tinyxml2::XMLElement* XMLUIElementID = doc->NewElement("ID");
+		XMLUIElementID->SetText(uiE->getID().c_str());
+		XMLUIElement->InsertEndChild(XMLUIElementID);
+		//If Texture
+		if (uiE->getType() == UIType::TEXTURE)
+		{
+			tinyxml2::XMLElement* XMLUIElementID = doc->NewElement("Texture");
+
+			XMLUIElementID->SetText(dynamic_pointer_cast<UITextureElement>(uiE)->getTextureName().c_str());
+			XMLUIElement->InsertEndChild(XMLUIElementID);
+		}
+
+		AddTransformToFile(doc, XMLUIElement, uiE->getTransform().get());
+
+		if (!XMLUIElements)
+		{
+			XMLUIElements = doc->NewElement("uiElements");
+			screenElement->InsertEndChild(XMLUIElements);
+		}
+		XMLUIElements->InsertEndChild(XMLUIElement);
+		
+	}
+	return true;
+}
+
 
 bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* transformElement, shared_ptr<Transform> transform)
 {
@@ -663,6 +562,151 @@ bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement
 		}
 		default:
 			break;
+		}
+	}
+	return true;
+}
+
+bool FileSaver::AddTransformToFile(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement * XMLUIElement, Transform* transform)
+{
+	//Transform
+	for (int transformElement = 0; transformElement < 3; transformElement++)
+	{
+		switch (transformElement)
+		{
+		case 0:
+		{
+			tinyxml2::XMLElement* innerElement = doc->NewElement("position");
+			XMLUIElement->InsertEndChild(innerElement);
+			if (!innerElement)
+				break;
+			for (int vector3 = 0; vector3 < 3; vector3++)
+			{
+				//xyz
+				switch (vector3)
+				{
+				case 0:
+				{
+					std::ostringstream ss;
+					ss << transform->position[vector3];
+					tinyxml2::XMLElement* vecElement = doc->NewElement("x");
+					innerElement->InsertEndChild(vecElement);
+					vecElement->SetText(string(ss.str()).c_str());
+					break;
+				}
+				case 1:
+				{
+					std::ostringstream ss;
+					ss << transform->position[vector3];
+					tinyxml2::XMLElement* vecElement = doc->NewElement("y");
+					innerElement->InsertEndChild(vecElement);
+					vecElement->SetText(string(ss.str()).c_str());
+					break;
+				}
+
+				case 2:
+				{
+					std::ostringstream ss;
+					ss << transform->position[vector3];
+					tinyxml2::XMLElement* vecElement = doc->NewElement("z");
+					innerElement->InsertEndChild(vecElement);
+					vecElement->SetText(string(ss.str()).c_str());
+					break;
+				}
+				}
+
+			}
+			break;
+		}
+		case 1:
+		{
+			tinyxml2::XMLElement* innerElement = doc->NewElement("scale");
+			XMLUIElement->InsertEndChild(innerElement);
+			if (!innerElement)
+				break;
+			for (int vector3 = 0; vector3 < 3; vector3++)
+			{
+				//xyz
+				switch (vector3)
+				{
+				case 0:
+				{
+					std::ostringstream ss;
+					ss << transform->scale[vector3];
+					tinyxml2::XMLElement* vecElement = doc->NewElement("x");
+					innerElement->InsertEndChild(vecElement);
+					vecElement->SetText(string(ss.str()).c_str());
+					break;
+				}
+				case 1:
+				{
+					std::ostringstream ss;
+					ss << transform->scale[vector3];
+					tinyxml2::XMLElement* vecElement = doc->NewElement("y");
+					innerElement->InsertEndChild(vecElement);
+					vecElement->SetText(string(ss.str()).c_str());
+					break;
+				}
+
+				case 2:
+				{
+					std::ostringstream ss;
+					ss << transform->scale[vector3];
+					tinyxml2::XMLElement* vecElement = doc->NewElement("z");
+					innerElement->InsertEndChild(vecElement);
+					vecElement->SetText(string(ss.str()).c_str());
+					break;
+				}
+				}
+
+			}
+			break;
+		}
+		case 2:
+		{
+			tinyxml2::XMLElement* innerElement = doc->NewElement("orientation");
+			XMLUIElement->InsertEndChild(innerElement);
+			if (!innerElement)
+				break;
+			for (int vector3 = 0; vector3 < 3; vector3++)
+			{
+				//xyz
+				switch (vector3)
+				{
+				case 0:
+				{
+					std::ostringstream ss;
+					ss << transform->orientation[vector3];
+					tinyxml2::XMLElement* vecElement = doc->NewElement("x");
+					innerElement->InsertEndChild(vecElement);
+					vecElement->SetText(string(ss.str()).c_str());
+					break;
+				}
+				case 1:
+				{
+					std::ostringstream ss;
+					ss << transform->orientation[vector3];
+					tinyxml2::XMLElement* vecElement = doc->NewElement("y");
+					innerElement->InsertEndChild(vecElement);
+					vecElement->SetText(string(ss.str()).c_str());
+					break;
+				}
+
+				case 2:
+				{
+					std::ostringstream ss;
+					ss << transform->orientation[vector3];
+					tinyxml2::XMLElement* vecElement = doc->NewElement("z");
+					innerElement->InsertEndChild(vecElement);
+					vecElement->SetText(string(ss.str()).c_str());
+					break;
+				}
+				}
+
+			}
+			break;
+		}
+
 		}
 	}
 	return true;

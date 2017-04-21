@@ -321,19 +321,20 @@ bool DebugMenu::saveCurrentLevel(string fileName)
 			}
 		}
 	}
+
 	/*
 		Every UI object
 	*/
+	numberOfObjectsInFile = XMLReader::GetNumberOfUIElementsInFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument());
 	for (int x = 0; x < gameScreen->getUIElements().size(); x++)
 	{
 		FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, gameScreen->getUIElements()[x], gameScreen);
 		//If there is a new object not saved on file
 		if (x >= numberOfObjectsInFile)
 		{
-			//TODO: addtofile.
-			/*if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getGameObjects()[x], gameScreen))
+			if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getUIElements()[x], gameScreen))
 			{
-			}*/
+			}
 		}
 	}
 	return FileSaver::SaveFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(),fileName);

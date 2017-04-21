@@ -16,12 +16,12 @@ class UITextureElement : public UIElement
 {
 private:
 	shared_ptr<Texture> texture;
-
+	string textureName;
 public:
 	UITextureElement(shared_ptr<Graphics>& graphics, shared_ptr<Transform>& transform, const char* id, const char* textureName);
 	void init();
 	void render();
 	shared_ptr<Texture> getTexture();
-
+	string getTextureName();
 };
 #endif

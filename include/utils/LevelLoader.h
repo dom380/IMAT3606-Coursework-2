@@ -257,15 +257,15 @@ private:
 
 		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
 		tinyxml2::XMLElement* UIDocElement = screenElement->FirstChildElement("uiElements");
-		shared_ptr<Transform> transform = std::make_shared<Transform>();
+		
 		if (UIDocElement)
 		{
 			UIDocElement = UIDocElement->FirstChildElement();
-			
-			loadTransform(transform, UIDocElement);
 		}
 		
 		while (UIDocElement != NULL) {
+			shared_ptr<Transform> transform = std::make_shared<Transform>();
+			loadTransform(transform, UIDocElement);
 			//get ID
 			tinyxml2::XMLElement* UIID = UIDocElement->FirstChildElement("ID");
 			//load UI using texture

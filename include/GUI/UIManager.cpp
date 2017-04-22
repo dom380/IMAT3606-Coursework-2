@@ -24,7 +24,6 @@ void UIManager::debugMenuItemUpdate()
 		vector<shared_ptr<UIElement>> uiElements = Engine::g_pEngine->getActiveScreen()->getUIElements();
 		for (int x = 0; x < uiElements.size(); x++)
 		{
-			ImGui::PushID(x);
 			char uiName[50];
 			snprintf(uiName, sizeof(uiName), "UI_%s_%d", uiElements[x]->getID().c_str(), x);
 			//Tree node creates a tree from the ui object name
@@ -35,7 +34,7 @@ void UIManager::debugMenuItemUpdate()
 				uiElements[x]->updateModelUsingTransform();
 				ImGui::TreePop();
 			}
-			ImGui::PopID();
+			
 		}
 		ImGui::EndMenu();
 	}

@@ -37,6 +37,7 @@ vec3 calcLight(in Light light, in Material material, in vec3 norm, in vec3 fragm
 
 void main() 
 {
+	//FIXES INTEL/NVIDIA SHADER ERROR
 	vec4 texel = texture(tex,texCoord);
 	if(texel.a < 0.3) //Discard any low alpha value fragments as a quick fix for transparency with depth testing 
 		discard;

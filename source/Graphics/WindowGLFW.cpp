@@ -107,9 +107,8 @@ GLFWwindow * WindowGLFW::getWindow()
 {
 	return window;
 }
-#ifndef NDEBUG
+
 shared_ptr<ImguiGLFWHandler> WindowGLFW::getImGuiHandler()
 {
 	return ImGuiGLFWHandler;
 }
-#endif

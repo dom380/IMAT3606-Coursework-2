@@ -7,8 +7,8 @@ UITextureElement::UITextureElement(shared_ptr<Graphics>& engineGraphics, shared_
 	transform = passedTransform;
 	updateModelUsingTransform();
 	type = UIType::TEXTURE;
-	uiID = id;
-	textureName = passedTextureName;
+	id != NULL ? uiID = id : "";
+	passedTextureName != NULL ? textureName = passedTextureName : "";
 	// Load the texture
 	if (textureName == "")
 	{

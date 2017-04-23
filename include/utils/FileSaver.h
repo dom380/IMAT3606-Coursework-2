@@ -17,7 +17,7 @@ class FileSaver
 {
 private:
 	//update existing transform comp of element in xmlfile
-	static bool UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* ele, shared_ptr<Transform> transform);
+	static bool UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* ele, Transform* transform);
 	//add transform comp to element in file.
 	static bool AddTransformToFile(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* ele, Transform* transform);
 public:

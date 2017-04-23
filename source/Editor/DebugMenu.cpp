@@ -639,9 +639,10 @@ void DebugMenu::gameObjectsMenuLogic()
 void DebugMenu::gameObjectsMenuTransform(int i, Transform* transform)
 {
 	ImGui::PushID(i);
-	float dragSpeed = 0.25f;
+	static float dragSpeed = 0.25f;
+	static float quatDragSpeed = 0.0025f;
 	ImGui::DragFloat3("Position", &transform->position[0], dragSpeed);
-	ImGui::DragFloat3("Orientation", &transform->orientation[0], dragSpeed);
+	ImGui::DragFloat4("Orientation", &transform->orientation[0], quatDragSpeed);
 	ImGui::DragFloat3("Scale", &transform->scale[0], dragSpeed);
 	ImGui::PopID();
 }

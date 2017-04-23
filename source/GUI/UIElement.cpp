@@ -100,7 +100,8 @@ void UIElement::updateModelUsingTransform(shared_ptr<Transform> passedTransform)
 		model[3][1] = transform->position[1];
 		model[0][0] = transform->scale[0];
 		model[1][1] = transform->scale[1];
-		model = glm::rotate(model, glm::radians(transform->orientation[2]), glm::vec3(0.0f, 0.0f, 1.0f));
+		float angle = glm::angle(transform->orientation);
+		model = glm::rotate(model, angle, glm::vec3(0.0f, 0.0f, 1.0f));
 	}
 	
 }

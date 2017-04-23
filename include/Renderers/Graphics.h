@@ -11,6 +11,7 @@ using std::shared_ptr;
 using std::vector;
 class Font;
 class ModelComponent;
+class UIElement;
 /*
 	Interface for the Graphics system.
 */
@@ -84,6 +85,10 @@ public:
 		unsigned int& vboHandle, Implementations must set this to the created VertexArrayObject's handle;
 	*/
 	virtual unsigned int createTextVertexArrayObject(unsigned int& vboHandle) = 0;
+	/*
+		Creates a VAO for a UI object.
+	*/
+	virtual unsigned int createUIVertextArrayObject(unsigned int& vboHandle, unsigned int& eboHandle, vector<GLfloat> vertices, vector<GLuint> indices) = 0;
 	/*	
 		Render text.
 		string& text, The string to render.

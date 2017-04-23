@@ -5,12 +5,14 @@
 
 #include <algorithm>
 #include <memory>
+#include <vector>
+#include <string>
 #include <Editor/imgui/imgui.h>
-#include <Graphics\ModelComponent.h>
+//#include <Graphics\ModelComponent.h>
 #include <Editor\DebugMenuItem.h>
+#include <GUI\UIType.h>
 
-using std::shared_ptr;
-
+using namespace std;
 /*
 DEBUG MENU
 SINGLETON
@@ -18,7 +20,8 @@ SINGLETON
 Uses imgui to organise a menu bar full of options for debug.
 
 */
-
+class ModelComponent;
+class Transform;
 class DebugMenu
 {
 private:
@@ -42,9 +45,16 @@ private:
 	vector<DebugMenuItem*> mainMenuBarItems;
 	vector<std::string> objList;
 	vector<std::string> textureList;
+	std::vector<const char *> textureCStyleArray;
 	vector<std::string> levelList;
+	/*
+		Vectors test if the window is active.
+	*/
 	vector<bool> objCreateActive;
+	bool uiCreateActive[UIType::UI_TYPE_COUNT];
 
+	//The current selected item in a listbox
+	int listbox_item_current;
 	/*
 		MainMenu bar update.
 	*/
@@ -83,16 +93,12 @@ private:
 	*/
 	void createCubeMenu();
 	void createObjectWindow(std::string objName, int iterator);
-
+	void createUIWindow(UIType type, int iterator);
 	/*
-		debugGameObjectsMenu Component Functions
+		Creates a list box of textures that are loaded from texture dir.
+		discards textures with size < 4
 	*/
-
-	void gameObjectsMenuModel(int i, ModelComponent* model);
-	void gameObjectsMenuAnimation();
-	void gameObjectsMenuRigidBody();
-	void gameObjectsMenuLogic();
-	void gameObjectsMenuTransform(int i, ModelComponent* model);
+	void createTextureListBox();
 
 public:
 	static shared_ptr<DebugMenu> getInstance();
@@ -106,6 +112,18 @@ public:
 	void render();
 
 	void addMenuItem(DebugMenuItem* dmi);
+	void refreshMenuItems();
+	vector<DebugMenuItem*> getMenuItems();
+
+	/*
+	debugGameObjectsMenu Component Functions
+	*/
+
+	void gameObjectsMenuModel(int i, ModelComponent* model);
+	void gameObjectsMenuAnimation();
+	void gameObjectsMenuRigidBody();
+	void gameObjectsMenuLogic();
+	void gameObjectsMenuTransform(int i, Transform* transform);
 };
 #endif
 

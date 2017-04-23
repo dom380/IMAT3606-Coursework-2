@@ -35,7 +35,8 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 	this->input->registerMouseListener(engineCam);
 
 	activeCamera = 0;
-	
+
+	UIManager::getInstance()->update();
 }
 
 void GameScreen::show()
@@ -74,6 +75,7 @@ void GameScreen::update(double dt)
 
 void GameScreen::render()
 {
+	
 	shared_ptr<Camera> camera = cameras.at(activeCamera);
 	robot->DrawRobot(camera->getView(), camera->getProjection());
 	Message* renderMsg = new RenderMessage(camera, lightingBufferId, lightingBlockId);
@@ -85,16 +87,28 @@ void GameScreen::render()
 			it->second.RecieveMessage(renderMsg);
 	}
 	delete renderMsg;
+
+	for (auto ui : uiElements) {
+		ui->render();
+	}
 	for (shared_ptr<TextBox> textBox : textBoxes)
 	{
 		textBox->render();
 	}
+	for (auto button : buttons) {
+		button->render();
+	}
+	for (auto text : textBoxes) {
+		text->render();
+	}
+	
 #ifndef NDEBUG
 	double elapsedTime = timer.getElapsedTimeMilliSec();
 	string frameText = "Frame Time: " + std::to_string( elapsedTime ) + "ms";
 	frameTime->updateText(frameText);
 	timer.stop();
 #endif
+	
 }
 
 void GameScreen::resize(int width, int height)
@@ -119,6 +133,7 @@ void GameScreen::dispose()
 	robot.reset();
 	cameras.clear();
 	componentStore.reset();
+	disposeButtons();
 }
 
 void GameScreen::addLight(Light light)

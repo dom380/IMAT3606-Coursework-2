@@ -16,16 +16,27 @@
 class FileSaver
 {
 private:
-	
+	//update existing transform comp of element in xmlfile
+	static bool UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* ele, shared_ptr<Transform> transform);
+	//add transform comp to element in file.
+	static bool AddTransformToFile(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* ele, Transform* transform);
 public:
 	/*
 		Update existing game objects inside of the current screen doc
 	*/
 	static bool UpdateFile(tinyxml2::XMLDocument* doc, string levelID, int iObjectCount, shared_ptr<GameObject> go, shared_ptr<GameScreen> gameScreen);
 	/*
+	Update existing UI elements inside of the current screen doc
+	*/
+	static bool UpdateFile(tinyxml2::XMLDocument* doc, string levelID, int iObjectCount, shared_ptr<UIElement> uiE, shared_ptr<GameScreen> gameScreen);
+	/*
 		Add a new game object to the current screen doc
 	*/
 	static bool AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<GameObject> go, shared_ptr<GameScreen> gameScreen);
+	/*
+		Add a new ui object to the current screen doc
+	*/
+	static bool AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<UIElement> uiE, shared_ptr<GameScreen> gameScreen);
 	/*
 		Save the current screen doc to the xml file specified
 	*/

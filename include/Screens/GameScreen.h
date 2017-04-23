@@ -13,6 +13,7 @@ using std::shared_ptr;
 using std::vector;
 #include <ComponentStore.h>
 #include <Robot.h>
+#include <GUI\UIManager.h>
 #include <GUI\TextBox.h>
 #include <GameObject.h>
 #include <Components\Message.h>
@@ -20,10 +21,11 @@ using std::vector;
 #include <Components\RenderMessage.h>
 #include <AssetManager.h>
 #include <Physics\Physics.h>
+
 #ifndef NDEBUG
 #include <utils\Timer.h>
 #endif
-
+class Screen;
 class GameObject;
 class ComponentStore;
 class LogicComponent; //Forward declare a number of classes.
@@ -114,7 +116,6 @@ public:
 private:
 	shared_ptr<ComponentStore> componentStore;
 	vector<shared_ptr<GameObject>> gameObjects;
-	vector<shared_ptr<TextBox>> textBoxes;
 	shared_ptr<Input> input;
 	shared_ptr<Graphics> renderer;
 	shared_ptr<Physics> physics;

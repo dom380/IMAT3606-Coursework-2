@@ -10,8 +10,10 @@
 #include "tinyxml2.h"
 #include <Scripting\ScriptEngine.h>
 #include <Utils/Utilities.h>
+#include <GUI\UITextureElement.h>
 #include <gl/glm/glm/gtc/quaternion.hpp>
 #include <gl/glm/glm/gtx/quaternion.hpp>
+
 #ifndef NDEBUG
 #include "Timer.h"
 #include "utils\DebugUtils.h"
@@ -54,6 +56,7 @@ public:
 #endif
 				return false;
 			}
+			engine->getDebugMenu()->refreshMenuItems();
 			const char* type = screenElement->Attribute("type");
 			if (string(type) == string("menu")) {
 				return loadMenu(engine, renderer, input, doc, filePath);
@@ -66,6 +69,7 @@ public:
 				std::cerr << "Unrecognised screen type: " << type << std::endl;
 				return false;
 			}
+
 		}
 		catch (const std::runtime_error& re)
 		{
@@ -168,7 +172,7 @@ private:
 	static bool loadMenu(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, tinyxml2::XMLDocument* screenDocument, string filepath)
 	{
 		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
-		shared_ptr<MenuScreen> menuScreen = std::make_shared<MenuScreen>(renderer, engine);
+		shared_ptr<MenuScreen> menuScreen = std::make_shared<MenuScreen>(renderer);
 		menuScreen->setID(screenElement->Attribute("name"));
 		menuScreen->setXMLDocument(screenDocument);
 		menuScreen->setXMLFilePath(filepath);
@@ -183,6 +187,8 @@ private:
 			loadButtonElement(engine, renderer, input, menuScreen, buttonElement);
 			buttonElement = buttonElement->NextSiblingElement();
 		}
+
+		loadUIElements(renderer, menuScreen, screenDocument, filepath);
 		engine->registerScreen(menuScreen);
 		return true;
 	}
@@ -207,7 +213,7 @@ private:
 	/*
 	Utility method to load Button elements
 	*/
-	static void loadButtonElement(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input> input, shared_ptr<MenuScreen> menuScreen, tinyxml2::XMLElement* buttonElement)
+	static void loadButtonElement(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input> input, shared_ptr<Screen> screen, tinyxml2::XMLElement* buttonElement)
 	{
 		Font font = *AssetManager::getInstance()->getFont("arial.ttf", renderer);
 		const char* text = buttonElement->FirstChildElement("value") != NULL ? buttonElement->FirstChildElement("value")->GetText() : "MISSING_STRING";
@@ -218,7 +224,7 @@ private:
 		string id;
 		buttonElement->Attribute("id") != NULL ? id = buttonElement->Attribute("id") : id = "";
 		shared_ptr<Button> button = std::make_shared<Button>(text, font, transform, renderer, colour, id);
-		menuScreen->addButton(button);
+		screen->addButton(button);
 		input->registerMouseListener(button);
 		//string funcName = string(buttonElement->FirstChildElement("function")->Attribute("type"));
 		loadButtonFunc(buttonElement, button, engine);
@@ -251,6 +257,43 @@ private:
 		button->addOnClickFn(std::bind(callback, engine, paramTable));
 	}
 
+	/*
+		Load UI elements
+
+	*/
+	static bool loadUIElements(shared_ptr<Graphics>& renderer, shared_ptr<Screen> screen, tinyxml2::XMLDocument* screenDocument, string filepath)
+	{
+		bool loadSuccess = true;
+
+		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
+		tinyxml2::XMLElement* UIDocElement = screenElement->FirstChildElement("uiElements");
+		
+		if (UIDocElement)
+		{
+			UIDocElement = UIDocElement->FirstChildElement();
+		}
+		
+		while (UIDocElement != NULL) {
+			shared_ptr<Transform> transform = std::make_shared<Transform>();
+			loadTransform(transform, UIDocElement);
+			//get ID
+			tinyxml2::XMLElement* UIID = UIDocElement->FirstChildElement("ID");
+			//load UI using texture
+			tinyxml2::XMLElement* UITexture = UIDocElement->FirstChildElement("Texture");
+			if (UITexture)
+			{
+				screen->addUIElement(std::make_shared<UITextureElement>(renderer, transform, UIID->GetText(), UITexture->GetText()));
+			}
+			else
+			{
+				//text?
+			}
+			
+			UIDocElement = UIDocElement->NextSiblingElement();
+		}
+
+		return loadSuccess;
+	}
 	/*
 		Utility method to load GameScreens
 		Returns true on sucess.
@@ -286,6 +329,17 @@ private:
 			loadStringElement(renderer, gameScreen, stringElement);
 			stringElement = stringElement->NextSiblingElement();
 		}
+
+		tinyxml2::XMLElement* buttonElement = screenElement->FirstChildElement("buttons");
+		if (buttonElement)
+			buttonElement = buttonElement->FirstChildElement();
+		while (buttonElement != NULL) {
+			loadButtonElement(engine, renderer, input, gameScreen, buttonElement);
+			buttonElement = buttonElement->NextSiblingElement();
+		}
+
+		loadUIElements(renderer, gameScreen, screenDocument, filepath);
+
 		gameScreen->updateLighting();
 		engine->registerScreen(gameScreen);
 		input->registerKeyListener(gameScreen);

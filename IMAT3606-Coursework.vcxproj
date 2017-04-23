@@ -153,6 +153,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\GUI\UIManager.cpp" />
+    <ClCompile Include="include\GUI\UITextureElement.cpp" />
     <ClCompile Include="source\AssetManager.cpp" />
     <ClCompile Include="source\Camera\EngineCamera.cpp" />
     <ClCompile Include="source\Camera\FollowCamera.cpp" />
@@ -178,6 +180,7 @@
     <ClCompile Include="source\Graphics\WindowGLFW.cpp" />
     <ClCompile Include="source\GUI\Font.cpp" />
     <ClCompile Include="source\GUI\TextBox.cpp" />
+    <ClCompile Include="source\GUI\UIElement.cpp" />
     <ClCompile Include="source\Input.cpp" />
     <ClCompile Include="source\InputGLFW.cpp" />
     <ClCompile Include="source\Main.cpp" />
@@ -254,6 +257,10 @@
     <ClInclude Include="include\GUI\MouseEventType.h" />
     <ClInclude Include="include\GUI\Font.h" />
     <ClInclude Include="include\GUI\TextBox.h" />
+    <ClInclude Include="include\GUI\UIElement.h" />
+    <ClInclude Include="include\GUI\UIManager.h" />
+    <ClInclude Include="include\GUI\UITextureElement.h" />
+    <ClInclude Include="include\GUI\UIType.h" />
     <ClInclude Include="include\Input.h" />
     <ClInclude Include="include\InputGLFW.h" />
     <ClInclude Include="include\Physics\BulletPhysics.h" />

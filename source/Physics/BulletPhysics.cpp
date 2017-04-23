@@ -155,7 +155,7 @@ void BulletPhysics::handle(MouseEvent event)
 
 void BulletPhysics::handle(KeyEvent event)
 {
-	if (event.type == KeyEventType::KEY_RELEASED && event.key == 80) //p
+	if (event.type == KeyEventType::KEY_RELEASED && event.key == KeyCodes::P) 
 	{
 		paused = !paused;
 	}

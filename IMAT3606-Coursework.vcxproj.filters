@@ -152,7 +152,8 @@
     </ClCompile>
     <ClCompile Include="source\Components\Component.cpp">
       <Filter>Source Files\Components</Filter>
-    </ClCompile>    <ClCompile Include="source\Renderers\RenderGL.cpp">
+    </ClCompile>
+    <ClCompile Include="source\Renderers\RenderGL.cpp">
       <Filter>Source Files\Renderers</Filter>
     </ClCompile>
     <ClCompile Include="source\Screens\GameScreen.cpp">
@@ -165,14 +166,15 @@
       <Filter>Source Files\Input</Filter>
     </ClCompile>
     <ClCompile Include="source\InputGLFW.cpp">
-       <Filter>Source Files\Input</Filter>
+      <Filter>Source Files\Input</Filter>
     </ClCompile>
     <ClCompile Include="source\utils\Handle.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
     <ClCompile Include="source\ComponentStore.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>    <ClCompile Include="source\Components\LogicComponent.cpp">
+    </ClCompile>
+    <ClCompile Include="source\Components\LogicComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="source\Editor\imgui\imgui.cpp">
@@ -192,7 +194,8 @@
     </ClCompile>
     <ClCompile Include="source\Editor\imgui\ImguiGLFWHandler.cpp">
       <Filter>Source Files\Editor\imgui</Filter>
-    </ClCompile>    <ClCompile Include="source\utils\DirectoryReader.cpp">
+    </ClCompile>
+    <ClCompile Include="source\utils\DirectoryReader.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
     <ClCompile Include="source\Editor\imgui\ImguiHandler.cpp">
@@ -202,7 +205,8 @@
       <Filter>Source Files\utils</Filter>
     </ClCompile>
     <ClCompile Include="source\utils\XMLReader.cpp">
-      <Filter>Source Files\utils</Filter>    </ClCompile>
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
     <ClCompile Include="source\Scripting\ScriptEngine.cpp">
       <Filter>Source Files\Scripting</Filter>
     </ClCompile>
@@ -359,7 +363,7 @@
       <Filter>Header Files\Screens</Filter>
     </ClInclude>
     <ClInclude Include="include\Screens\LoadingScreen.h">
-       <Filter>Header Files\Screens</Filter>
+      <Filter>Header Files\Screens</Filter>
     </ClInclude>
     <ClInclude Include="include\Screens\MenuScreen.h">
       <Filter>Header Files\Screens</Filter>
@@ -367,19 +371,13 @@
     <ClInclude Include="include\Screens\Screen.h">
       <Filter>Header Files\Screens</Filter>
     </ClInclude>
-    <ClInclude Include="include\Input.h">
-      <Filter>Header Files\Input</Filter>
-     </ClInclude>
-    <ClInclude Include="include\InputGLFW.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
     <ClInclude Include="include\utils\FbxReader.h">
       <Filter>Header Files\utils\FileParsers</Filter>
     </ClInclude>
     <ClInclude Include="include\utils\ObjReader.h">
       <Filter>Header Files\utils\FileParsers</Filter>
     </ClInclude>
-     <ClInclude Include="include\utils\ModelFileReader.h">
+    <ClInclude Include="include\utils\ModelFileReader.h">
       <Filter>Header Files\utils\FileParsers</Filter>
     </ClInclude>
     <ClInclude Include="include\utils\DaeReader.h">
@@ -389,7 +387,7 @@
       <Filter>Header Files\Camera</Filter>
     </ClInclude>
     <ClInclude Include="include\utils\Handle.h">
-       <Filter>Header Files\utils</Filter>
+      <Filter>Header Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="include\utils\HandleManager.h">
       <Filter>Header Files\utils</Filter>
@@ -399,7 +397,7 @@
     </ClInclude>
     <ClInclude Include="include\Editor\imgui\imconfig.h">
       <Filter>Header Files\Editor\imgui</Filter>
-     </ClInclude>
+    </ClInclude>
     <ClInclude Include="include\Editor\imgui\imgui.h">
       <Filter>Header Files\Editor\imgui</Filter>
     </ClInclude>
@@ -409,7 +407,7 @@
     <ClInclude Include="include\Editor\imgui\stb_rect_pack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-     <ClInclude Include="include\Editor\imgui\stb_textedit.h">
+    <ClInclude Include="include\Editor\imgui\stb_textedit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Editor\imgui\stb_truetype.h">
@@ -419,7 +417,7 @@
       <Filter>Header Files\Editor</Filter>
     </ClInclude>
     <ClInclude Include="include\Editor\imgui\ImguiGLFWHandler.h">
-       <Filter>Header Files\Editor\imgui</Filter>
+      <Filter>Header Files\Editor\imgui</Filter>
     </ClInclude>
     <ClInclude Include="include\utils\DirectoryReader.h">
       <Filter>Header Files\utils\FileParsers</Filter>
@@ -510,6 +508,15 @@
     </ClInclude>
     <ClInclude Include="include\Physics\ConvexHull.h">
       <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Input\KeyCodes.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Input\Input.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Input\InputGLFW.h">
+      <Filter>Header Files\Input</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

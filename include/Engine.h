@@ -4,7 +4,7 @@
 #include "utils\Timer.h"
 #include "AssetManager.h"
 #include "Renderers\Graphics.h"
-#include "Input.h"
+#include "Input\Input.h"
 #include "Screens\Screen.h"
 #include "Screens\MenuScreen.h"
 #include "Graphics\Window.h"

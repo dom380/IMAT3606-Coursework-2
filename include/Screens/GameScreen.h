@@ -8,7 +8,7 @@ using std::shared_ptr;
 #include <Camera\PerspectiveCamera.h>
 #include <Camera\FollowCamera.h>
 #include <Camera\EngineCamera.h>
-#include <Input.h>
+#include <Input\Input.h>
 #include <vector>
 using std::vector;
 #include <ComponentStore.h>

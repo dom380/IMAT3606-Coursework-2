@@ -261,8 +261,9 @@
     <ClInclude Include="include\GUI\UIManager.h" />
     <ClInclude Include="include\GUI\UITextureElement.h" />
     <ClInclude Include="include\GUI\UIType.h" />
-    <ClInclude Include="include\Input.h" />
-    <ClInclude Include="include\InputGLFW.h" />
+    <ClInclude Include="include\Input\Input.h" />
+    <ClInclude Include="include\Input\InputGLFW.h" />
+    <ClInclude Include="include\Input\KeyCodes.h" />
     <ClInclude Include="include\Physics\BulletPhysics.h" />
     <ClInclude Include="include\Physics\ConvexHull.h" />
     <ClInclude Include="include\Physics\Physics.h" />

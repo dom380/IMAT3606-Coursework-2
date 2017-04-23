@@ -2,7 +2,7 @@
 #ifndef WINDOWGLFW_H
 #define WINDOWGLFW_H
 #include "Window.h"
-#include <InputGLFW.h>
+#include <Input\InputGLFW.h>
 
 #include <Editor\imgui\ImguiGLFWHandler.h>
 

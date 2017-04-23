@@ -1,4 +1,4 @@
-#include "..\include\InputGLFW.h"
+#include "..\include\Input\InputGLFW.h"
 #include "Graphics\WindowGLFW.h"
 
 #include <Editor\imgui\ImguiGLFWHandler.h>
@@ -12,8 +12,16 @@ InputGLFW::InputGLFW()
 void InputGLFW::mouseMovementCallback(GLFWwindow * window, double xpos, double ypos)
 {
 	MouseEvent e(MouseEventType::MOUSE_MOVE, xpos, ypos);
-	for (shared_ptr<EventListener> listener : mouseSubs) {
-		listener->handle(e);
+	if (mouseFocus)
+	{
+		mouseFocus->handle(e);
+	}
+	else
+	{
+		for (shared_ptr<EventListener> listener : mouseSubs)
+		{
+			listener->handle(e);
+		}
 	}
 }
 
@@ -27,15 +35,29 @@ void InputGLFW::mouseButtonCallback(GLFWwindow * window, int button, int action,
 
 	double cursorPosX, cursorPosY;
 	glfwGetCursorPos(window, &cursorPosX, &cursorPosY);
-
-
-	if (button == GLFW_MOUSE_BUTTON_LEFT) {
-		MouseEvent e(MouseEventType::LEFT_CLICK, (MouseActionType) action, cursorPosX, cursorPosY);
-		for (shared_ptr<EventListener> listener : mouseSubs) {
+	//Create Mouse Event
+	MouseEvent e(MouseEventType::LEFT_CLICK, (MouseActionType)action, cursorPosX, cursorPosY);
+	if (button == GLFW_MOUSE_BUTTON_LEFT) 
+	{
+		e = MouseEvent(MouseEventType::LEFT_CLICK, (MouseActionType) action, cursorPosX, cursorPosY);
+		
+	} 
+	else if (button == GLFW_MOUSE_BUTTON_LEFT)
+	{
+		e = MouseEvent(MouseEventType::RIGHT_CLICK, (MouseActionType)action, cursorPosX, cursorPosY);
+	}
+	//Notify listeners
+	if (mouseFocus)
+	{
+		mouseFocus->handle(e);
+	} 
+	else
+	{
+		for (shared_ptr<EventListener> listener : mouseSubs)
+		{
 			listener->handle(e);
 		}
 	}
-	
 }
 
 void InputGLFW::keyboardCallback(GLFWwindow * window, int key, int scancode, int action, int mods)
@@ -62,9 +84,16 @@ void InputGLFW::keyboardCallback(GLFWwindow * window, int key, int scancode, int
 		type = KeyEventType::KEY_PRESSED;
 		break;
 	}
-	KeyEvent e(type, key, mods);
-	for (shared_ptr<EventListener> listener : keySubs) {
-		listener->handle(e);
+	KeyEvent e(type, (KeyCodes)key, mods);
+	if (keyFocus)
+	{
+		keyFocus->handle(e);
+	}
+	else
+	{
+		for (shared_ptr<EventListener> listener : keySubs) {
+			listener->handle(e);
+		}
 	}
 }
 
@@ -74,4 +103,14 @@ void InputGLFW::charCallback(GLFWwindow * window, unsigned int c)
 	gw->getImGuiHandler()->imGuiCharCallback(Engine::g_pEngine->GetWindow(), c);
 	if (gw->getImGuiHandler()->imGuiHasInputFocus())
 		return;
+}
+
+KeyEventType InputGLFW::getKeyState(KeyCodes key)
+{
+	WindowGLFW* gw = (WindowGLFW*)Engine::g_pEngine->GetWindow().get();
+	auto state = glfwGetKey(gw->getWindow(), key);
+	if 
+		(state == GLFW_PRESS) return KeyEventType::KEY_PRESSED; 
+	else 
+		return KeyEventType::KEY_RELEASED;
 }

@@ -5,7 +5,7 @@
 #include <utils\tinyxml2.h>
 #include <utils\LevelLoader.h>
 #include <Screens\LoadingScreen.h>
-#include <InputGLFW.h>
+#include <Input\InputGLFW.h>
 #include <Scripting\ScriptEngine.h>
 
 

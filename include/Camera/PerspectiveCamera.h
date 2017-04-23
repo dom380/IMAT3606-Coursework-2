@@ -14,6 +14,7 @@
 class PerspectiveCamera : public Camera
 {
 public:
+	PerspectiveCamera() {};
 	/*
 		Constructor
 		int width, The viewport width in screen pixels.
@@ -53,23 +54,24 @@ public:
 		The 'A' and 'D' keys pan the camera left and right, relative to it's current direction, respectively.
 	*/
 	void handle(KeyEvent event);
+
 protected:
 	//protected members
 	glm::vec3 worldY = glm::vec3(0.0f, 1.0f, 0.0f);
 	glm::vec3 worldX = glm::vec3(1.0f, 0.0f, 0.0f);
 	glm::vec3 worldZ = glm::vec3(0.0f, 0.0f, 1.0f);
 	glm::quat orientation;
-
-private:
-	//private methods
 	/*
-		Build a quaternion rotation.
-		glm::vec3 axis, The arbitrary axis to rotate around.
-		float angle, The amount to rotate by in radians.
+	Build a quaternion rotation.
+	glm::vec3 axis, The arbitrary axis to rotate around.
+	float angle, The amount to rotate by in radians.
 	*/
 	glm::quat getRotation(glm::vec3 axis, float angle);
 	//private members
 	int previousX, previousY;
+private:
+	//private methods
+	
 
 };
 

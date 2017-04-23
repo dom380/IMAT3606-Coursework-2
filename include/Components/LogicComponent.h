@@ -3,6 +3,7 @@
 #define LogicComponent_H
 #include "Component.h"
 #include "LocationMessage.h"
+#include "CollisionMessage.h"
 #include <memory>
 #include <Screens\GameScreen.h>
 extern "C" 

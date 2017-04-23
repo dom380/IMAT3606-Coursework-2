@@ -75,6 +75,10 @@ public:
 	*/
 	unsigned int createTextVertexArrayObject(unsigned int& vboHandle);
 	/*
+	
+	*/
+	unsigned int createUIVertextArrayObject(unsigned int& vboHandle, unsigned int& eboHandle, vector<GLfloat> vertices, vector<GLuint> indices);
+	/*
 		Renders the requested model. See interface for details.
 	*/
 	void renderModel(ModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera);
@@ -91,6 +95,8 @@ private:
 	//private members
 	int width;
 	int height;
+	int numOfLights;
+	const int MAX_NUM_LIGHTS = 10;
 	unsigned int currBindingPoint = 0;
 	glm::mat4 modelMat = glm::mat4();
 };

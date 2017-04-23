@@ -5,7 +5,7 @@
 *.sln.docstates
 */temp*
 *temp*
-*Debug*
+*/Debug*
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs

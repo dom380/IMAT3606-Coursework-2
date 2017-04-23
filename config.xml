@@ -10,4 +10,5 @@
 	<initScreen>MainMenu</initScreen>
 	<renderer>OPEN_GL</renderer>
 	<input>GLFW</input>
+	<physics>BULLET</physics>
 </game>

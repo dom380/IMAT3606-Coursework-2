@@ -6,7 +6,10 @@ using std::string;
 #include <memory>
 using std::shared_ptr;
 
+
+#include <GUI\Button.h>
 #include <GUI\TextBox.h>
+#include <GUI\UIElement.h>
 #include <utils\XMLReader.h>
 
 /*
@@ -16,7 +19,14 @@ using std::shared_ptr;
 class Screen {
 public:
 	/*
-		Pure Virtual method. Implementations can use this to update an time based operations.
+		Pure Virtual method. 
+		This function is called when the screen is first displayed. Implmentations
+		may use this for any logic that should run once the screen becomes active.
+	*/
+	virtual void show() = 0;
+
+	/*
+		Pure Virtual method. Implementations can use this to update any time based operations.
 		This is called at least once (If current active screen) every frame before rendering.
 		double dt, The time passed since last update call.
 	*/
@@ -36,7 +46,6 @@ public:
 		Pure Virtual method. Implementations should free any resources here.
 	*/
 	virtual void dispose() = 0;
-	virtual void addTextBox(shared_ptr<TextBox> textbox) = 0;
 	/*
 		Sets the screen's Id.
 		string id, The Id.
@@ -77,11 +86,48 @@ public:
 	{
 		return screenXmlDocument;
 	}
+
+	vector<shared_ptr<UIElement>> getUIElements()
+	{
+		return uiElements;
+	}
+	/*
+	Clean up button resources.
+	*/
+	void disposeButtons()
+	{
+		for (auto button : buttons) {
+			button.reset();
+		}
+	}
+	/*
+	Adds a new Button to the screen.
+	shared_ptr<Button> button, Button to add.
+	*/
+	virtual void addButton(shared_ptr<Button> button)
+	{
+		buttons.push_back(button);
+	}
+	/*
+	Adds a new TextBox to the screen.
+	shared_ptr<TextBox> textbox, TextBox to add.
+	*/
+	virtual void addTextBox(shared_ptr<TextBox> textbox)
+	{
+		textBoxes.push_back(textbox);
+	}
+
+	virtual void addUIElement(shared_ptr<UIElement> uiElement)
+	{
+		uiElements.push_back(uiElement);
+	}
 protected:
 	string screenId;
 	string xmlFilePath;
 	tinyxml2::XMLDocument* screenXmlDocument;
-
+	vector<shared_ptr<Button>> buttons;
+	vector<shared_ptr<TextBox>> textBoxes;
+	vector<shared_ptr<UIElement>> uiElements;
 };
 
 #endif // !SCREEN_H

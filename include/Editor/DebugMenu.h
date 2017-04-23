@@ -1,8 +1,6 @@
 #ifndef DEBUGMENU_H
 #define DEBUGMENU_H
 
-#ifndef NDEBUG
-
 #include <algorithm>
 #include <memory>
 #include <vector>
@@ -125,6 +123,5 @@ public:
 	void gameObjectsMenuLogic();
 	void gameObjectsMenuTransform(int i, Transform* transform);
 };
-#endif
 
 #endif // !DEBUGMENU_h

@@ -1,5 +1,3 @@
-#ifndef NDEBUG
-
 #include "Editor/DebugMenu.h"
 #include "utils\DebugUtils.h"
 #include "utils/levelloader.h"
@@ -647,5 +645,3 @@ void DebugMenu::gameObjectsMenuTransform(int i, Transform* transform)
 	ImGui::DragFloat3("Scale", &transform->scale[0], dragSpeed);
 	ImGui::PopID();
 }
-
-#endif

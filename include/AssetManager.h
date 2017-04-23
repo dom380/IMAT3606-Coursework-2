@@ -11,6 +11,7 @@ using std::string;
 #include <GUI\Font.h>
 #include <Graphics\Shader.h>
 #include <Graphics\ModelData.h>
+#include <Physics\ConvexHull.h>
 #include <utils\ModelFileReader.h>
 #include <utils\ObjReader.h>
 #include <utils\DaeReader.h>
@@ -46,6 +47,11 @@ public:
 		shared_ptr<Graphics>& graphics, Pointer to the graphics system.
 	*/
 	shared_ptr<ModelData> getModelData(const char* fileName, shared_ptr<Graphics> graphics);
+	/*
+		Load and/or Return a Pointer to a vector of ConvexHull.
+		const char* fileName, The name of the collision mesh to retrieve.
+	*/
+	shared_ptr<std::vector<ConvexHull>> getCollisionData(const char* fileName);
 
 	/*
 		Returns the full file path of the given script name.
@@ -101,13 +107,19 @@ private:
 		Utility method to read a model file.
 		Checks the file extension and uses the relevant ModelFileReader implementation.
 	*/
-	void readModelFile(string fullPath, vector<glm::vec4>& vertices, vector<glm::vec3>& normals, vector<glm::vec2>& textures, vector<unsigned short>& indices, shared_ptr<ModelData>& data);
+	void readModelFile(string fullPath, vector<glm::vec4>& vertices, vector<glm::vec3>& normals, vector<glm::vec2>& textures, vector<unsigned short>& indices, shared_ptr<ModelData>& data, vector<glm::vec4>& points);
+	/*
+		Utility method to read a collision mesh file.
+		Checks the file extension and uses the relevent file reader implementation.
+	*/
+	void readCollisionFile(string fullPath, shared_ptr<vector<ConvexHull>>& convexHulls);
 	static bool initialised;
 	static shared_ptr<AssetManager> instance;
 	map<string, shared_ptr<Font>> fonts;
 	map<string, shared_ptr<Texture>> textures;
 	map<std::pair<string, string>, shared_ptr<Shader>> shaders;
 	map<string, shared_ptr<ModelData>> modelData;
+	map<string, shared_ptr<std::vector<ConvexHull>>> collisionData;
 	map<string, string> scripts;
 	string fontFolder;
 	string levelFolder;

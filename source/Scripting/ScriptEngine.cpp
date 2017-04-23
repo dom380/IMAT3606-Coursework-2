@@ -1,6 +1,9 @@
 #include <Scripting\ScriptEngine.h>
 #include <Components\LogicComponent.h>
+#include <Components\CollisionMessage.h>
 #include <Engine.h>
+#include <Graphics\Material.h>
+#include <utils\UUID\guid.h>
 
 bool ScriptEngine::initialised = false;
 shared_ptr<ScriptEngine> ScriptEngine::instance;
@@ -28,6 +31,7 @@ bool ScriptEngine::loadScript(string filePath, string scriptName)
 		std::string errorMsg = "Failed to load script file ";
 		errorMsg += filePath;
 		errorMsg += " - " + errorString;
+		std::cout << errorMsg << std::endl;
 		return false;
 	}
 	if (luaL_dofile(luaState, filePath.c_str()) != LUA_OK) 
@@ -37,6 +41,7 @@ bool ScriptEngine::loadScript(string filePath, string scriptName)
 		std::string errorMsg = "Failed to read script file ";
 		errorMsg += filePath;
 		errorMsg += " - " + errorString;
+		std::cout << errorMsg << std::endl;
 		return false;
 	}
 	else 
@@ -102,25 +107,59 @@ ScriptEngine::ScriptEngine()
 				.addData("y", &glm::quat::y)
 				.addData("z", &glm::quat::z)
 			.endClass()
-			.beginClass<LogicComponent>("LogicComponent")
+			.beginClass<Guid>("Guid")
+				.addFunction("__eq", &Guid::operator==)
+			.endClass()
+			.beginClass<Material>("Material")
+				.addConstructor<void(*) (void)>()
+				.addData("Kd", &Material::Kd)
+				.addData("Ka", &Material::Ka)
+			.endClass()
+			.beginClass<Component>("Component")
+				.addFunction("recieveMessage", &Component::RecieveMessage)
+			.endClass()
+			.deriveClass<LogicComponent, Component>("LogicComponent")
 				.addFunction("applyTransform", &LogicComponent::applyTransform)
 				.addFunction("getPosition", &LogicComponent::getPosition)
 				.addFunction("toggleRender", &LogicComponent::toggleRender)
 				.addFunction("isRendering", &LogicComponent::isRendering)
 				.addFunction("updateScore", &LogicComponent::updateScore)
 			.endClass()
+			.deriveClass<ModelComponent, Component>("ModelComponent")
+				.addFunction("getId", &ModelComponent::getId)
+			.endClass()
+			.deriveClass<PhysicsComponent, Component>("PhysicsComponent")
+			.endClass()
 			.beginClass<MsgType>("MsgType")
 			.endClass()
 			.beginClass<Message>("Message")
+				.addConstructor<void(*) (void)>()
 				.addData("id", &Message::id)
 			.endClass()
 			.deriveClass<LocationMessage, Message>("LocationMessage")
 				.addData("location", &LocationMessage::location)
 			.endClass()
+			.deriveClass<MaterialMessage, Message>("MaterialMessage")
+				.addConstructor<void(*) (Material)>()
+				.addData("material", &MaterialMessage::material)
+			.endClass()
+			.deriveClass<CollisionMessage, Message>("CollisionMessage")
+				.addData("other", &CollisionMessage::other)
+				.addData("dt", &CollisionMessage::dt)
+			.endClass()
 			.beginClass<Engine>("engineObj")
 				.addFunction("switchScreen", &Engine::switchScreen)
 				.addFunction("replaceScreen", &Engine::replaceScreen)
 				.addFunction("exit", &Engine::exit)
+			.endClass()
+			.beginClass<GameObject>("GameObject")
+				.addFunction("getModel", &GameObject::getModel)
+				.addFunction("getTransform", &GameObject::getTransform)
+				.addFunction("getLogic", &GameObject::getLogic)
+				.addFunction("getPhysics", &GameObject::getPhysics)
+				.addFunction("getTrigger", &GameObject::getTrigger)
+				.addFunction("getId", &GameObject::getId)
+				.addFunction("getTag", &GameObject::getTagString)
 			.endClass()
 		.endNamespace();
 }

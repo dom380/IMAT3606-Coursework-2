@@ -1,5 +1,7 @@
+#ifndef NDEBUG
 #include "..\..\include\Editor\DebugMenuItem.h"
 #include <Engine.h>
+
 DebugMenuItem::DebugMenuItem()
 {
 	id = Engine::g_pEngine->getDebugMenu()->getMenuItems().size();
@@ -11,3 +13,5 @@ bool DebugMenuItem::canClear()
 {
 	return clearable;
 }
+
+#endif

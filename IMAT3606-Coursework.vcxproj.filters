@@ -82,6 +82,21 @@
     <Filter Include="Source Files\Scripting">
       <UniqueIdentifier>{cba1652d-db09-49fb-8bdf-0d34ab0d4d3f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{c87d5c0f-c939-4d0e-9292-c2635b45542c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{cc926aa1-1fcc-4348-af83-4b8bb7df69a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components\Messages">
+      <UniqueIdentifier>{08f9a3c5-20b1-4b3a-8454-88944b760835}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utils\UUID">
+      <UniqueIdentifier>{f08e8db4-4b8f-48b5-9027-760805fff6a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utils\UUID">
+      <UniqueIdentifier>{cad94e63-0f31-453f-b92a-feaf406d7126}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -137,8 +152,7 @@
     </ClCompile>
     <ClCompile Include="source\Components\Component.cpp">
       <Filter>Source Files\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Renderers\RenderGL.cpp">
+    </ClCompile>    <ClCompile Include="source\Renderers\RenderGL.cpp">
       <Filter>Source Files\Renderers</Filter>
     </ClCompile>
     <ClCompile Include="source\Screens\GameScreen.cpp">
@@ -151,15 +165,14 @@
       <Filter>Source Files\Input</Filter>
     </ClCompile>
     <ClCompile Include="source\InputGLFW.cpp">
-      <Filter>Source Files\Input</Filter>
+       <Filter>Source Files\Input</Filter>
     </ClCompile>
     <ClCompile Include="source\utils\Handle.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
     <ClCompile Include="source\ComponentStore.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Components\LogicComponent.cpp">
+    </ClCompile>    <ClCompile Include="source\Components\LogicComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
     <ClCompile Include="source\Editor\imgui\imgui.cpp">
@@ -179,8 +192,7 @@
     </ClCompile>
     <ClCompile Include="source\Editor\imgui\ImguiGLFWHandler.cpp">
       <Filter>Source Files\Editor\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="source\utils\DirectoryReader.cpp">
+    </ClCompile>    <ClCompile Include="source\utils\DirectoryReader.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
     <ClCompile Include="source\Editor\imgui\ImguiHandler.cpp">
@@ -190,8 +202,7 @@
       <Filter>Source Files\utils</Filter>
     </ClCompile>
     <ClCompile Include="source\utils\XMLReader.cpp">
-      <Filter>Source Files\utils</Filter>
-    </ClCompile>
+      <Filter>Source Files\utils</Filter>    </ClCompile>
     <ClCompile Include="source\Scripting\ScriptEngine.cpp">
       <Filter>Source Files\Scripting</Filter>
     </ClCompile>
@@ -200,6 +211,9 @@
     </ClCompile>
     <ClCompile Include="source\utils\Utilities.cpp">
       <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Camera\FollowCamera.cpp">
+      <Filter>Source Files\Camera</Filter>
     </ClCompile>
     <ClCompile Include="source\utils\DebugUtils.cpp">
       <Filter>Source Files\utils</Filter>
@@ -215,6 +229,24 @@
     </ClCompile>
     <ClCompile Include="include\GUI\UITextureElement.cpp">
       <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Camera\EngineCamera.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Physics\BulletPhysics.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\PhysicsComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Physics\Physics.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\CollisionTrigger.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="source\utils\UUID\guid.cpp">
+      <Filter>Source Files\utils\UUID</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -314,19 +346,7 @@
     <ClInclude Include="include\Components\ComponentType.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="include\Components\LocationMessage.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="include\Components\LogicComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Components\Message.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Components\MessageType.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Components\RenderMessage.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="include\Renderers\Graphics.h">
@@ -339,7 +359,7 @@
       <Filter>Header Files\Screens</Filter>
     </ClInclude>
     <ClInclude Include="include\Screens\LoadingScreen.h">
-      <Filter>Header Files\Screens</Filter>
+       <Filter>Header Files\Screens</Filter>
     </ClInclude>
     <ClInclude Include="include\Screens\MenuScreen.h">
       <Filter>Header Files\Screens</Filter>
@@ -349,7 +369,7 @@
     </ClInclude>
     <ClInclude Include="include\Input.h">
       <Filter>Header Files\Input</Filter>
-    </ClInclude>
+     </ClInclude>
     <ClInclude Include="include\InputGLFW.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
@@ -359,7 +379,7 @@
     <ClInclude Include="include\utils\ObjReader.h">
       <Filter>Header Files\utils\FileParsers</Filter>
     </ClInclude>
-    <ClInclude Include="include\utils\ModelFileReader.h">
+     <ClInclude Include="include\utils\ModelFileReader.h">
       <Filter>Header Files\utils\FileParsers</Filter>
     </ClInclude>
     <ClInclude Include="include\utils\DaeReader.h">
@@ -369,7 +389,7 @@
       <Filter>Header Files\Camera</Filter>
     </ClInclude>
     <ClInclude Include="include\utils\Handle.h">
-      <Filter>Header Files\utils</Filter>
+       <Filter>Header Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="include\utils\HandleManager.h">
       <Filter>Header Files\utils</Filter>
@@ -379,7 +399,7 @@
     </ClInclude>
     <ClInclude Include="include\Editor\imgui\imconfig.h">
       <Filter>Header Files\Editor\imgui</Filter>
-    </ClInclude>
+     </ClInclude>
     <ClInclude Include="include\Editor\imgui\imgui.h">
       <Filter>Header Files\Editor\imgui</Filter>
     </ClInclude>
@@ -389,7 +409,7 @@
     <ClInclude Include="include\Editor\imgui\stb_rect_pack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Editor\imgui\stb_textedit.h">
+     <ClInclude Include="include\Editor\imgui\stb_textedit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Editor\imgui\stb_truetype.h">
@@ -399,7 +419,7 @@
       <Filter>Header Files\Editor</Filter>
     </ClInclude>
     <ClInclude Include="include\Editor\imgui\ImguiGLFWHandler.h">
-      <Filter>Header Files\Editor\imgui</Filter>
+       <Filter>Header Files\Editor\imgui</Filter>
     </ClInclude>
     <ClInclude Include="include\utils\DirectoryReader.h">
       <Filter>Header Files\utils\FileParsers</Filter>
@@ -422,6 +442,9 @@
     <ClInclude Include="include\utils\Utilities.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
+    <ClInclude Include="include\Camera\FollowCamera.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
     <ClInclude Include="include\utils\DebugUtils.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
@@ -439,6 +462,54 @@
     </ClInclude>
     <ClInclude Include="include\GUI\UIType.h">
       <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Camera\EngineCamera.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUI\MouseActionType.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Physics\Physics.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Physics\BulletPhysics.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\PhysicsComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Physics\ShapeData.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\CollisionTrigger.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\LocationMessage.h">
+      <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\Message.h">
+      <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\MessageType.h">
+      <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\RenderMessage.h">
+      <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\MaterialMessage.h">
+      <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utils\UUID\guid.h">
+      <Filter>Header Files\utils\UUID</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\CollisionMessage.h">
+      <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameObjectTag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Physics\ConvexHull.h">
+      <Filter>Header Files\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -6,6 +6,10 @@ MenuScreen::MenuScreen(shared_ptr<Graphics>& graphics)
 	UIManager::getInstance()->update();
 }
 
+void MenuScreen::show()
+{
+}
+
 void MenuScreen::update(double dt)
 {
 }

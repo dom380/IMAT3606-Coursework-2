@@ -29,7 +29,7 @@
 			<y>1.0</y>
 			<z>1.0</z>
 		</scale>
-		<value>Start</value>
+		<value>Level 1</value>
 		
 		<onClick>
 			<script>ui_button_callbacks.lua</script>
@@ -43,6 +43,25 @@
 		<position>
 			<x>30</x>
 			<y>440</y>
+		</position>
+		<scale>
+			<x>1.0</x>
+			<y>1.0</y>
+			<z>1.0</z>
+		</scale>
+		<value>Level 2</value>
+		<onClick>
+			<script>ui_button_callbacks.lua</script>
+			<function>replaceScreen</function>
+			<params>
+				<param name="screenId">Level2</param>
+			</params>
+		</onClick>
+	</button>
+	<button>
+		<position>
+			<x>30</x>
+			<y>380</y>
 		</position>
 		<scale>
 			<x>1.0</x>

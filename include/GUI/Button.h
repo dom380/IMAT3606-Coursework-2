@@ -119,6 +119,10 @@ public:
 		if (event.eventType != MouseEventType::LEFT_CLICK) {
 			return;
 		}
+
+		if (event.actionType != MouseActionType::MOUSE_PRESS) {
+			return;
+		}
 		//if this button was clicked
 		int x = event.x, y = graphics->getHeight() - event.y;
 		if ((x >= aabb.x) && (x <= aabb.x + aabb.width) && (y >= aabb.y) && (y <= aabb.y + aabb.height))

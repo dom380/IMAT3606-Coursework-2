@@ -6,7 +6,11 @@
 #include "Graphics\ModelComponent.h"
 #include "Graphics\Transform.h"
 #include <Components\LogicComponent.h>
+#include <Components\PhysicsComponent.h>
+#include <Components\CollisionTrigger.h>
 class LogicComponent;
+class PhysicsComponent;
+class CollisionTrigger;
 
 class ComponentStore
 {
@@ -24,7 +28,7 @@ public:
 			return nullptr;
 			break;
 		case ComponentType::RIGID_BODY:
-			return nullptr;
+			return (T*)physics.get(handle);
 			break;
 		case ComponentType::LOGIC:
 			return (T*)logic.get(handle);
@@ -32,7 +36,9 @@ public:
 		case ComponentType::TRANSFORM:
 			return (T*)transforms.get(handle);
 			break;
-		case ComponentType::COMPONENT_TYPE_COUNT:
+		case TRIGGER:
+			return (T*)triggers.get(handle);
+		case COMPONENT_TYPE_COUNT:
 			//no-op
 			return nullptr;
 			break;
@@ -47,7 +53,10 @@ public:
 	Handle storeComponent(std::shared_ptr<LogicComponent> component);
 
 	Handle storeComponent(std::shared_ptr<Transform> component);
+
+	Handle storeComponent(std::shared_ptr<PhysicsComponent> component);
 	
+	Handle storeComponent(std::shared_ptr<CollisionTrigger> component);
 
 	template <typename T>
 	std::vector<std::pair<int, T>>* getAllComponents(ComponentType type)
@@ -62,7 +71,7 @@ public:
 			return nullptr;
 			break;
 		case ComponentType::RIGID_BODY:
-			return nullptr;
+			return (std::vector<std::pair<int, T>>*)physics.getAll();
 			break;
 		case ComponentType::LOGIC:
 			return (std::vector<std::pair<int, T>>*)logic.getAll();
@@ -70,7 +79,9 @@ public:
 		case ComponentType::TRANSFORM:
 			return (std::vector<std::pair<int, T>>*)transforms.getAll();
 			break;
-		case ComponentType::COMPONENT_TYPE_COUNT:
+		case TRIGGER:
+			return (std::vector<std::pair<int, T>>*)triggers.getAll();
+		case COMPONENT_TYPE_COUNT:
 			//no-op
 			return nullptr;
 			break;
@@ -83,6 +94,8 @@ private:
 	HandleManager<ModelComponent> models;
 	HandleManager<LogicComponent> logic;
 	HandleManager<Transform> transforms;
+	HandleManager<PhysicsComponent> physics;
+	HandleManager<CollisionTrigger> triggers;
 };
 
 #endif // !COMPONENTSTORE_H

@@ -195,9 +195,9 @@ void Robot::DrawFoot(float xPos, float yPos, float zPos, glm::mat4 modelMatrix)
 void Robot::updateCamera()
 {
 	if(camera != nullptr)
-		camera->move(robot_Pos.x - robot_front_Dir.x * 7, robot_Pos.y + 5, robot_Pos.z - robot_front_Dir.z * 7);
+		camera->move(glm::vec3(robot_Pos.x, robot_Pos.y, robot_Pos.z));
 }
-
+#ifndef NDEBUG
 void Robot::debugMenuItemUpdate()
 {
 	if (ImGui::BeginMenu("Robot"))
@@ -205,7 +205,7 @@ void Robot::debugMenuItemUpdate()
 		ImGui::EndMenu();
 	}
 }
-
+#endif
 void Robot::DrawRobot(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
 {
 	shader->bindShader();
@@ -336,8 +336,8 @@ glm::vec3 Robot::getPosition()
 void Robot::setCamera(shared_ptr<Camera> newCamera)
 {
 	camera = newCamera;
-	camera->move(robot_Pos.x - robot_front_Dir.x * 7, robot_Pos.y + 5, robot_Pos.z - robot_front_Dir.z * 7);
-	camera->lookAt(robot_front_Dir);
+	camera->move(glm::vec3(robot_Pos.x, robot_Pos.y , robot_Pos.z));
+	camera->lookAt(robot_front_Dir );
 }
 
 shared_ptr<Camera> Robot::getCamera()

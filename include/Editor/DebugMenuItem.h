@@ -1,7 +1,7 @@
 #pragma once
 #ifndef DEBUGMENUITEM_H
 #define DEBUGMENUITEM_H
-
+#ifndef NDEBUG
 #include <algorithm>
 #include <memory>
 #include <Editor\imgui\imgui.h>
@@ -26,4 +26,5 @@ public:
 	virtual void debugMenuItemUpdate() = 0;
 	bool canClear();
 };
+#endif
 #endif // !DEBUGMENUITEM_H

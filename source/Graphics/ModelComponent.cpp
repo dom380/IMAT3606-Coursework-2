@@ -52,22 +52,34 @@ void ModelComponent::update(double dt)
 void ModelComponent::RecieveMessage(Message * msg)
 {
 	MsgType id = msg->id;
-	if (id != MsgType::RENDER)
+	if (!drawing) //Did recieve message to render but disabled so return
 		return;
-	else if (!drawing) //Did recieve message to render but disabled so return
-		return;
-	RenderMessage* renderMsg = ((RenderMessage *)msg); 
-	if (renderMsg->lightingBlockId != -1 && renderMsg->lightingBuffer != -1) //Message does contain lightingBlockId and lightingBuffer so use them.
+	switch (id)
 	{
-		render(renderMsg->camera, renderMsg->lightingBuffer, renderMsg->lightingBlockId);
-		return;
+		case MsgType::RENDER :
+		{
+			RenderMessage* renderMsg = ((RenderMessage *)msg);
+			if (renderMsg->lightingBlockId != -1 && renderMsg->lightingBuffer != -1) //Message does contain lightingBlockId and lightingBuffer so use them.
+			{
+				render(renderMsg->camera, renderMsg->lightingBuffer, renderMsg->lightingBlockId);
+				return;
+			}
+			else if (renderMsg->lights.size() > 0) //Else if Lights have been directly passed, use those.
+			{
+				render(renderMsg->camera, renderMsg->lights);
+				return;
+			}
+			render(renderMsg->camera); //Else render with no lighting.
+		}
+		break;
+		case MsgType::MATERIAL:
+		{
+			MaterialMessage* matMsg = ((MaterialMessage *)msg);
+			material.Kd = matMsg->material.Kd;
+			material.Ka = matMsg->material.Ka;
+		}
+		break;
 	}
-	else if (renderMsg->lights.size() > 0) //Else if Lights have been directly passed, use those.
-	{
-		render(renderMsg->camera, renderMsg->lights);
-		return;
-	}
-	render(renderMsg->camera); //Else render with no lighting.
 }
 
 void ModelComponent::render(shared_ptr<Camera>& camera)

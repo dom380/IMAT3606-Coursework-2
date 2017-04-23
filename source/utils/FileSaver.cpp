@@ -125,6 +125,8 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 											 Iterate through all inner transforms and their xyz and update doc
 											*/
 											auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
+											if (!model)
+												return false;
 											for (int transformElement = 0; transformElement < 3; transformElement++)
 											{
 												switch (transformElement)
@@ -269,8 +271,18 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 	if (doc)
 	{
 		tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");
-
-		tinyxml2::XMLElement* XMLUIElement = screenElement->FirstChildElement("uiElements")->FirstChildElement();
+		if (!screenElement)
+			return false;
+		tinyxml2::XMLElement* XMLUIElement = screenElement->FirstChildElement("uiElements");
+		if (XMLUIElement)
+		{
+			XMLUIElement = XMLUIElement->FirstChildElement();
+		}
+		else
+		{
+			//No ui exists.
+			return false;
+		}
 		/*
 		Iterate over all ui in XML doc
 		*/

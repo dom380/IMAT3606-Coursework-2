@@ -196,6 +196,19 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 					{
 						XMLUITextElement->SetText(tb->getText().c_str());
 					}
+					//colour
+					tinyxml2::XMLElement* XMLUIElementColour = XMLUIElement->FirstChildElement("colour");
+					string colourName[3] = { "r", "g", "b" };
+					if (!XMLUIElementColour)
+					{
+						XMLUIElementColour = doc->NewElement("colour");
+						
+						AddVec3ToElement(doc, XMLUIElementColour, tb->getColour(), colourName);
+					}
+					else
+					{
+						UpdateVec3Element(doc, XMLUIElementColour, tb->getColour(), colourName);
+					}
 					break;
 				}
 				case UIType::TEXTURE:
@@ -318,13 +331,42 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 		tinyxml2::XMLElement* XMLUIElementID = doc->NewElement("ID");
 		XMLUIElementID->SetText(uiE->getID().c_str());
 		XMLUIElement->InsertEndChild(XMLUIElementID);
-		//If Texture
-		if (uiE->getType() == UIType::TEXTURE)
+		//Type
+		tinyxml2::XMLElement* XMLUIElementType = doc->NewElement("Type");
+		UIType type = uiE->getType();
+		XMLUIElementType->SetText(EnumParser<UIType>().getString(type).c_str());
+		XMLUIElement->InsertEndChild(XMLUIElementType);
+
+		switch (uiE->getType())
+		{
+		case UIType::TEXT:
+		{
+			shared_ptr<TextBox> tb = dynamic_pointer_cast<TextBox>(uiE);
+			//text value
+			tinyxml2::XMLElement* XMLUIElementValue = doc->NewElement("value");
+
+			XMLUIElementValue->SetText(tb->getText().c_str());
+			XMLUIElement->InsertEndChild(XMLUIElementValue);
+
+			//colour
+			tinyxml2::XMLElement* XMLUIElementColour = doc->NewElement("colour");
+			XMLUIElement->InsertEndChild(XMLUIElementColour);
+			string colourNames[3] = { "r", "g", "b" };
+			AddVec3ToElement(doc, XMLUIElementColour, tb->getColour(), colourNames);
+			break;
+		}
+		case UIType::TEXTURE:
 		{
 			tinyxml2::XMLElement* XMLUIElementID = doc->NewElement("Texture");
 
 			XMLUIElementID->SetText(dynamic_pointer_cast<UITextureElement>(uiE)->getTextureName().c_str());
 			XMLUIElement->InsertEndChild(XMLUIElementID);
+			break;
+		}
+		case UIType::BUTTON:
+			break;
+		default:
+			break;
 		}
 
 		//UI does not use a quat, but an angle in the z axis.
@@ -351,110 +393,30 @@ bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement
 		case 0:
 		{
 			tinyxml2::XMLElement* transformInnerElement = transformElement->FirstChildElement("position");
+			string xyzName[3] = { "x", "y", "z" };
 			if (!transformInnerElement)
 			{
-				tinyxml2::XMLElement* xyzElement;
-				//Create a position element.
-				transformInnerElement = doc->NewElement("position");
-				xyzElement = doc->NewElement("x");
-				transformInnerElement->InsertEndChild(xyzElement);
-				xyzElement = doc->NewElement("y");
-				transformInnerElement->InsertEndChild(xyzElement);
-				xyzElement = doc->NewElement("z");
-				transformInnerElement->InsertEndChild(xyzElement);
-				transformElement->InsertEndChild(transformInnerElement);
+				AddVec3ToElement(doc, transformInnerElement, transform->position, xyzName);
 			}
-
-			for (int vector3 = 0; vector3 < 3; vector3++)
+			else
 			{
-				//xyz
-				switch (vector3)
-				{
-				case 0:
-				{
-					std::ostringstream ss;
-					ss << transform->position[vector3];
-					transformInnerElement->FirstChildElement("x")->SetText(string(ss.str()).c_str());
-					break;
-				}
-				case 1:
-				{
-					std::ostringstream ss;
-					ss << transform->position[vector3];
-					transformInnerElement->FirstChildElement("y")->SetText(string(ss.str()).c_str());
-					break;
-				}
-
-				case 2:
-				{
-					std::ostringstream ss;
-					ss << transform->position[vector3];
-					if (!transformInnerElement->FirstChildElement("z"))
-					{
-						tinyxml2::XMLElement* xyzElement;
-						xyzElement = doc->NewElement("z");
-						transformInnerElement->InsertEndChild(xyzElement);
-					}
-					
-					transformInnerElement->FirstChildElement("z")->SetText(string(ss.str()).c_str());
-					break;
-				}
-				}
-
+				UpdateVec3Element(doc, transformInnerElement, transform->position, xyzName);
 			}
+			
+			
 			break;
 		}
 		case 1:
 		{
 			tinyxml2::XMLElement* transformInnerElement = transformElement->FirstChildElement("scale");
+			string xyzName[3] = { "x", "y", "z" };
 			if (!transformInnerElement)
 			{
-				tinyxml2::XMLElement* xyzElement;
-				//Create a scale element.
-				transformInnerElement = doc->NewElement("scale");
-				xyzElement = doc->NewElement("x");
-				transformInnerElement->InsertEndChild(xyzElement);
-				xyzElement = doc->NewElement("y");
-				transformInnerElement->InsertEndChild(xyzElement);
-				xyzElement = doc->NewElement("z");
-				transformInnerElement->InsertEndChild(xyzElement);
-				transformElement->InsertEndChild(transformInnerElement);
+				AddVec3ToElement(doc, transformInnerElement, transform->scale, xyzName);
 			}
-			for (int vector3 = 0; vector3 < 3; vector3++)
+			else
 			{
-				//xyz
-				switch (vector3)
-				{
-				case 0:
-				{
-					std::ostringstream ss;
-					ss << transform->scale[vector3];
-					transformInnerElement->FirstChildElement("x")->SetText(string(ss.str()).c_str());
-					break;
-				}
-				case 1:
-				{
-					std::ostringstream ss;
-					ss << transform->scale[vector3];
-					transformInnerElement->FirstChildElement("y")->SetText(string(ss.str()).c_str());
-					break;
-				}
-
-				case 2:
-				{
-					std::ostringstream ss;
-					ss << transform->scale[vector3];
-					if (!transformInnerElement->FirstChildElement("z"))
-					{
-						tinyxml2::XMLElement* xyzElement;
-						xyzElement = doc->NewElement("z");
-						transformInnerElement->InsertEndChild(xyzElement);
-					}
-					transformInnerElement->FirstChildElement("z")->SetText(string(ss.str()).c_str());
-					break;
-				}
-				}
-
+				UpdateVec3Element(doc, transformInnerElement, transform->scale, xyzName);
 			}
 			break;
 		}
@@ -540,6 +502,42 @@ bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement
 	return true;
 }
 
+bool FileSaver::UpdateVec3Element(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement * ele, glm::vec3 passedVector, string vecNames[3])
+{
+	for (int vector3 = 0; vector3 < 3; vector3++)
+	{
+		//xyz
+		switch (vector3)
+		{
+		case 0:
+		{
+			std::ostringstream ss;
+			ss << passedVector[vector3];
+			ele->FirstChildElement(vecNames[0].c_str())->SetText(string(ss.str()).c_str());
+
+			break;
+		}
+		case 1:
+		{
+			std::ostringstream ss;
+			ss << passedVector[vector3];
+			ele->FirstChildElement(vecNames[1].c_str())->SetText(string(ss.str()).c_str());
+			break;
+		}
+
+		case 2:
+		{
+			std::ostringstream ss;
+			ss << passedVector[vector3];
+			ele->FirstChildElement(vecNames[2].c_str())->SetText(string(ss.str()).c_str());
+			break;
+		}
+		}
+
+	}
+	return true;
+}
+
 bool FileSaver::AddTransformToFile(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement * XMLTransElement, Transform* transform)
 {
 	//Transform
@@ -553,42 +551,9 @@ bool FileSaver::AddTransformToFile(tinyxml2::XMLDocument * doc, tinyxml2::XMLEle
 			XMLTransElement->InsertEndChild(innerElement);
 			if (!innerElement)
 				break;
-			for (int vector3 = 0; vector3 < 3; vector3++)
-			{
-				//xyz
-				switch (vector3)
-				{
-				case 0:
-				{
-					std::ostringstream ss;
-					ss << transform->position[vector3];
-					tinyxml2::XMLElement* vecElement = doc->NewElement("x");
-					innerElement->InsertEndChild(vecElement);
-					vecElement->SetText(string(ss.str()).c_str());
-					break;
-				}
-				case 1:
-				{
-					std::ostringstream ss;
-					ss << transform->position[vector3];
-					tinyxml2::XMLElement* vecElement = doc->NewElement("y");
-					innerElement->InsertEndChild(vecElement);
-					vecElement->SetText(string(ss.str()).c_str());
-					break;
-				}
-
-				case 2:
-				{
-					std::ostringstream ss;
-					ss << transform->position[vector3];
-					tinyxml2::XMLElement* vecElement = doc->NewElement("z");
-					innerElement->InsertEndChild(vecElement);
-					vecElement->SetText(string(ss.str()).c_str());
-					break;
-				}
-				}
-
-			}
+			string xyzName[3] = { "x", "y", "z" };
+			AddVec3ToElement(doc, innerElement, transform->position, xyzName);
+			
 			break;
 		}
 		case 1:
@@ -597,42 +562,8 @@ bool FileSaver::AddTransformToFile(tinyxml2::XMLDocument * doc, tinyxml2::XMLEle
 			XMLTransElement->InsertEndChild(innerElement);
 			if (!innerElement)
 				break;
-			for (int vector3 = 0; vector3 < 3; vector3++)
-			{
-				//xyz
-				switch (vector3)
-				{
-				case 0:
-				{
-					std::ostringstream ss;
-					ss << transform->scale[vector3];
-					tinyxml2::XMLElement* vecElement = doc->NewElement("x");
-					innerElement->InsertEndChild(vecElement);
-					vecElement->SetText(string(ss.str()).c_str());
-					break;
-				}
-				case 1:
-				{
-					std::ostringstream ss;
-					ss << transform->scale[vector3];
-					tinyxml2::XMLElement* vecElement = doc->NewElement("y");
-					innerElement->InsertEndChild(vecElement);
-					vecElement->SetText(string(ss.str()).c_str());
-					break;
-				}
-
-				case 2:
-				{
-					std::ostringstream ss;
-					ss << transform->scale[vector3];
-					tinyxml2::XMLElement* vecElement = doc->NewElement("z");
-					innerElement->InsertEndChild(vecElement);
-					vecElement->SetText(string(ss.str()).c_str());
-					break;
-				}
-				}
-
-			}
+			string xyzName[3] = { "x", "y", "z" };
+			AddVec3ToElement(doc, innerElement, transform->scale, xyzName);
 			break;
 		}
 		case 2:
@@ -703,6 +634,47 @@ bool FileSaver::AddTransformToFile(tinyxml2::XMLDocument * doc, tinyxml2::XMLEle
 		}
 	}
 	return true;
+}
+
+bool FileSaver::AddVec3ToElement(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement * ele, glm::vec3 passedVector, string vecNames[3])
+{
+	for (int vector3 = 0; vector3 < 3; vector3++)
+	{
+		//xyz
+		switch (vector3)
+		{
+		case 0:
+		{
+			std::ostringstream ss;
+			ss << passedVector[vector3];
+			tinyxml2::XMLElement* vecElement = doc->NewElement(vecNames[0].c_str());
+			ele->InsertEndChild(vecElement);
+			vecElement->SetText(string(ss.str()).c_str());
+			break;
+		}
+		case 1:
+		{
+			std::ostringstream ss;
+			ss << passedVector[vector3];
+			tinyxml2::XMLElement* vecElement = doc->NewElement(vecNames[1].c_str());
+			ele->InsertEndChild(vecElement);
+			vecElement->SetText(string(ss.str()).c_str());
+			break;
+		}
+
+		case 2:
+		{
+			std::ostringstream ss;
+			ss << passedVector[vector3];
+			tinyxml2::XMLElement* vecElement = doc->NewElement(vecNames[2].c_str());
+			ele->InsertEndChild(vecElement);
+			vecElement->SetText(string(ss.str()).c_str());
+			break;
+		}
+		}
+
+	}
+	return false;
 }
 
 bool FileSaver::SaveFile(tinyxml2::XMLDocument* doc, std::string fileName)

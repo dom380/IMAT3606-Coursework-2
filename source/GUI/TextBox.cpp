@@ -60,9 +60,19 @@ string TextBox::getText()
 	return text;
 }
 
-void TextBox::setText(string textToSet)
+void TextBox::setFont(Font passedFont)
 {
-	text = textToSet;
+	font = passedFont;
+}
+
+glm::vec3 TextBox::getColour()
+{
+	return textColour;
+}
+
+void TextBox::setColour(glm::vec3 colour)
+{
+	textColour = colour;
 }
 
 void TextBox::init()

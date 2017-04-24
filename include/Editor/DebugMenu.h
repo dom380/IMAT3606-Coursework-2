@@ -43,7 +43,9 @@ private:
 	vector<DebugMenuItem*> mainMenuBarItems;
 	vector<std::string> objList;
 	vector<std::string> textureList;
+	vector<std::string> fontList;
 	std::vector<const char *> textureCStyleArray;
+	std::vector<const char *> fontCStyleArray;
 	vector<std::string> levelList;
 	/*
 		Vectors test if the window is active.
@@ -114,7 +116,12 @@ public:
 	discards textures with size < 4
 	*/
 	void createTextureListBox();
-	string textureItemSelected();
+	/*
+	Creates a list box of fonts that are loaded from fonts dir.
+	discards fonts with size < 4
+	*/
+	void createFontsListBox();
+	string listBoxItemSelected(UIType type);
 
 	/*
 	debugGameObjectsMenu Component Functions

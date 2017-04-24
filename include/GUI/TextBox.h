@@ -40,23 +40,29 @@ public:
 		Copy Constructor.
 	*/
 	TextBox& operator=(TextBox& other);
+
+	/*
+	Initialisation method. Calls to the graphics system to build a Text shader.
+	*/
+	void init();
 	/*
 		Changes the current text to the new string.
 		string newText, Replacement text.
 	*/
 	void updateText(string newText);
+	string getText();
 	/*
 		Call to the graphics system to render this text.
 	*/
 	void render();
-	string getText();
-	void setText(string textToSet);
+
+	void setFont(Font passedFont);
+
+	glm::vec3 getColour();
+	void setColour(glm::vec3 colour);
 private:
 	//private methods
-	/*
-		Initialisation method. Calls to the graphics system to build a Text shader.
-	*/
-	void init();
+	
 	//private memebers
 	string text;
 	Font font;

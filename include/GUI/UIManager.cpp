@@ -64,7 +64,23 @@ void UIManager::debugMenuItemUpdate()
 					}
 
 					ImGui::InputText("Value", uiValue, sizeof(uiValue));
-					uiText->setText(uiValue);
+					uiText->updateText(uiValue);
+
+					//colour
+					static float dragSpeed = 0.0025f;
+					static glm::vec3 colour = uiText->getColour();
+					ImGui::DragFloat3("Colour", &colour[0], dragSpeed);
+					uiText->setColour(colour);
+					//font
+					DebugMenu::getInstance()->createFontsListBox();
+					Font font = *AssetManager::getInstance()->getFont(const_cast<char*>(DebugMenu::getInstance()->listBoxItemSelected(uiText->getType()).c_str()), Engine::g_pEngine->getRenderer());
+					uiText->setFont(font);
+					
+					//AttemptRebuild
+					if (ImGui::Button("Update"))
+					{
+						uiText->init();
+					}
 					break;
 				}
 				case UIType::TEXTURE:
@@ -73,7 +89,7 @@ void UIManager::debugMenuItemUpdate()
 					shared_ptr<UITextureElement> uiT = dynamic_pointer_cast<UITextureElement>(uiElements.at(x));
 					if (ImGui::Button("ApplyTexture"))
 					{
-						uiT->setTexture(DebugMenu::getInstance()->textureItemSelected());
+						uiT->setTexture(DebugMenu::getInstance()->listBoxItemSelected(uiElements.at(x)->getType()));
 					}
 
 					break;

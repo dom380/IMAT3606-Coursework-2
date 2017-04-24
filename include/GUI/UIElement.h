@@ -20,7 +20,6 @@ protected:
 	vector<GLfloat> vertices;
 	vector<GLuint> indices;
 	string uiID;
-	//shared_ptr<Texture> texture;
 	GLuint vaoHandle;
 	GLuint vboHandle;
 	GLuint eboHandle;
@@ -36,6 +35,7 @@ public:
 	virtual void render() = 0;
 
 	string getID();
+	void setID(string ID);
 	shared_ptr<Transform> getTransform();
 	GLuint getVertArray();
 	UIType getType();

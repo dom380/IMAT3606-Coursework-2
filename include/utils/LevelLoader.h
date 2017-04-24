@@ -12,6 +12,7 @@
 #include <Utils/Utilities.h>
 #include "utils\DebugUtils.h"
 #include <GUI\UITextureElement.h>
+#include <GUI\UIType.h>
 #include <gl/glm/glm/gtc/quaternion.hpp>
 #include <gl/glm/glm/gtx/quaternion.hpp>
 
@@ -180,7 +181,7 @@ private:
 		tinyxml2::XMLElement* stringElement = screenElement->FirstChildElement("strings");
 		if (stringElement != NULL) stringElement = stringElement->FirstChildElement();
 		while (stringElement != NULL) {
-			loadStringElement(renderer, menuScreen, stringElement);
+			loadStringElement(renderer, menuScreen, NULL, "", stringElement);
 			stringElement = stringElement->NextSiblingElement();
 		}
 		tinyxml2::XMLElement* buttonElement = screenElement->FirstChildElement("buttons")->FirstChildElement();
@@ -197,18 +198,18 @@ private:
 	/*
 	Utility method to load Text elements
 	*/
-	static void loadStringElement(shared_ptr<Graphics>& renderer, shared_ptr<Screen> screen, tinyxml2::XMLElement* stringElement)
+	static void loadStringElement(shared_ptr<Graphics>& renderer, shared_ptr<Screen> screen, shared_ptr<Transform> transform, string id, tinyxml2::XMLElement* stringElement)
 	{
 		Font font = *AssetManager::getInstance()->getFont("arial.ttf", renderer);
 		const char* text = stringElement->FirstChildElement("value") != NULL ? stringElement->FirstChildElement("value")->GetText() : "MISSING_STRING";
-		shared_ptr<Transform> transform = std::make_shared<Transform>();
-		loadTransform(transform, stringElement);
+		if (!transform)
+		{
+			loadTransform(transform, stringElement);
+		}
 		glm::vec3 colour;
 		stringElement->FirstChildElement("colour") != NULL ? loadColour(colour, stringElement->FirstChildElement("colour"), glm::vec3(1.0, 1.0, 1.0)) : colour = glm::vec3(1.0, 1.0, 1.0);
-		string id;
-		stringElement->Attribute("id") != NULL ? id = stringElement->Attribute("id") : id = "";
 		shared_ptr<TextBox> textBox = std::make_shared<TextBox>(text, font, transform, renderer, colour, id);
-		screen->addTextBox(textBox);
+		screen->addUIElement(textBox);
 	}
 
 	/*
@@ -278,16 +279,33 @@ private:
 			shared_ptr<Transform> transform = std::make_shared<Transform>();
 			loadTransform(transform, UIDocElement);
 			//get ID
+			string ID = "";
 			tinyxml2::XMLElement* UIID = UIDocElement->FirstChildElement("ID");
-			//load UI using texture
-			tinyxml2::XMLElement* UITexture = UIDocElement->FirstChildElement("Texture");
-			if (UITexture)
+			if (UIID)
+				ID = string(UIID->GetText());
+			tinyxml2::XMLElement* UITexture;
+			//get type
+			tinyxml2::XMLElement* UITypeElement = UIDocElement->FirstChildElement("Type");
+			EnumParser<UIType> uiTypeParser;
+			UIType type = uiTypeParser.parse(string(UITypeElement->GetText()));
+
+			switch (type)
 			{
-				screen->addUIElement(std::make_shared<UITextureElement>(renderer, transform, UIID->GetText(), UITexture->GetText()));
-			}
-			else
-			{
-				//text?
+			case TEXT:
+				loadStringElement(renderer, screen, transform, ID, UIDocElement);
+				break;
+			case TEXTURE:
+				//load UI using texture
+				UITexture = UIDocElement->FirstChildElement("Texture");
+				if (UITexture)
+				{
+					screen->addUIElement(std::make_shared<UITextureElement>(renderer, transform, UIID->GetText(), UITexture->GetText()));
+				}
+				break;
+			case BUTTON:
+				break;
+			default:
+				break;
 			}
 			
 			UIDocElement = UIDocElement->NextSiblingElement();
@@ -328,7 +346,7 @@ private:
 		tinyxml2::XMLElement* stringElement = screenElement->FirstChildElement("strings");
 		if (stringElement != NULL) stringElement = stringElement->FirstChildElement();
 		while (stringElement != NULL) {
-			loadStringElement(renderer, gameScreen, stringElement);
+			loadStringElement(renderer, gameScreen, NULL, "", stringElement);
 			stringElement = stringElement->NextSiblingElement();
 		}
 

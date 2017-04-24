@@ -190,7 +190,7 @@ void GameScreen::updateScore(int amountToAdd)
 	currentScore += amountToAdd;
 	for (shared_ptr<TextBox> textbox : textBoxes)
 	{
-		if (textbox->getId() == string("score_string"))
+		if (textbox->getID() == string("score_string"))
 		{
 			textbox->updateText("Gold Collected: " + std::to_string(currentScore));
 		}

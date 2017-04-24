@@ -178,6 +178,42 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 			}
 			else
 			{
+				//ID
+				tinyxml2::XMLElement* XMLUIIDElement = XMLUIElement->FirstChildElement("ID");
+				if (XMLUIIDElement)
+				{
+					XMLUIIDElement->SetText(uiElement->getID().c_str());
+				}
+				//Type Specific Updates
+				switch (uiElement->getType())
+				{
+				case UIType::TEXT:
+				{
+					shared_ptr<TextBox> tb = dynamic_pointer_cast<TextBox>(uiElement);
+					//Update its text value
+					tinyxml2::XMLElement* XMLUITextElement = XMLUIElement->FirstChildElement("value");
+					if (XMLUITextElement)
+					{
+						XMLUITextElement->SetText(tb->getText().c_str());
+					}
+					break;
+				}
+				case UIType::TEXTURE:
+				{
+					shared_ptr<UITextureElement> textureUI = dynamic_pointer_cast<UITextureElement>(uiElement);
+					//update texture value
+					tinyxml2::XMLElement* XMLUITextureElement = XMLUIElement->FirstChildElement("Texture");
+					if (XMLUITextureElement)
+					{
+						XMLUITextureElement->SetText(textureUI->getTextureName().c_str());
+					}
+					break;
+				}
+				case UIType::BUTTON:
+					break;
+				}
+				
+				//Update its transform
 				UpdateTransform(doc, XMLUIElement, uiElement->getTransform().get());
 			}
 			XMLObjectCount++;
@@ -353,6 +389,13 @@ bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement
 				{
 					std::ostringstream ss;
 					ss << transform->position[vector3];
+					if (!transformInnerElement->FirstChildElement("z"))
+					{
+						tinyxml2::XMLElement* xyzElement;
+						xyzElement = doc->NewElement("z");
+						transformInnerElement->InsertEndChild(xyzElement);
+					}
+					
 					transformInnerElement->FirstChildElement("z")->SetText(string(ss.str()).c_str());
 					break;
 				}
@@ -401,6 +444,12 @@ bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement
 				{
 					std::ostringstream ss;
 					ss << transform->scale[vector3];
+					if (!transformInnerElement->FirstChildElement("z"))
+					{
+						tinyxml2::XMLElement* xyzElement;
+						xyzElement = doc->NewElement("z");
+						transformInnerElement->InsertEndChild(xyzElement);
+					}
 					transformInnerElement->FirstChildElement("z")->SetText(string(ss.str()).c_str());
 					break;
 				}

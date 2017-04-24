@@ -67,6 +67,10 @@ EnumParser<ComponentType>::EnumParser()
 
 EnumParser<UIType>::EnumParser()
 {
+	map["text"] = UIType::TEXT;
+	map["texture"] = UIType::TEXTURE;
+	map["button"] = UIType::BUTTON;
+
 	strmap[UIType::TEXT] = "text";
 	strmap[UIType::TEXTURE] = "texture";
 	strmap[UIType::BUTTON] = "button";

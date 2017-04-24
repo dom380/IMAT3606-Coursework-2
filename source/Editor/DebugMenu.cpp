@@ -571,6 +571,11 @@ void DebugMenu::createTextureListBox()
 
 }
 
+string DebugMenu::textureItemSelected()
+{
+	return  textureCStyleArray[listbox_item_current];
+}
+
 void DebugMenu::render()
 {
 	ImGui::Render();

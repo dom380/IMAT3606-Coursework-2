@@ -92,11 +92,7 @@ private:
 	void createCubeMenu();
 	void createObjectWindow(std::string objName, int iterator);
 	void createUIWindow(UIType type, int iterator);
-	/*
-		Creates a list box of textures that are loaded from texture dir.
-		discards textures with size < 4
-	*/
-	void createTextureListBox();
+	
 
 public:
 	static shared_ptr<DebugMenu> getInstance();
@@ -112,6 +108,13 @@ public:
 	void addMenuItem(DebugMenuItem* dmi);
 	void refreshMenuItems();
 	vector<DebugMenuItem*> getMenuItems();
+
+	/*
+	Creates a list box of textures that are loaded from texture dir.
+	discards textures with size < 4
+	*/
+	void createTextureListBox();
+	string textureItemSelected();
 
 	/*
 	debugGameObjectsMenu Component Functions

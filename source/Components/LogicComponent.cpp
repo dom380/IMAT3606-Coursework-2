@@ -157,6 +157,7 @@ bool LogicComponent::isRendering()
 			ModelComponent* model = sp_Screen->getComponentStore()->getComponent<ModelComponent>(modelComp, ComponentType::MODEL);
 			return model->isDrawing();
 		}
+		return false;
 	}
 	else
 	{
@@ -176,6 +177,7 @@ glm::vec3 LogicComponent::getPosition()
 			auto transform = sp_Screen->getComponentStore()->getComponent<Transform>(comp, ComponentType::TRANSFORM);
 			return transform->position;
 		}
+		return vec3();
 	} 
 	else
 	{

@@ -16,6 +16,7 @@ class Transform;
 class PhysicsComponent;
 class LogicComponent;
 class CollisionTrigger;
+class ControllerComponent;
 /*
 	Generic GameObject class.
 */

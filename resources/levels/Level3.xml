@@ -1,0 +1,300 @@
+<screen type="level" name="Level3">
+    <gameObjects>
+		<!-- ground -->
+		<gameObject>
+			<tag>PHY_OBJ</tag>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>0.25</y>
+						<z>5.0</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>0.0</mass>
+					<!-- <collision_mesh>cube.obj</collision_mesh> -->
+					<restitution>0.4</restitution>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>5.0</x>
+							<y>0.25</y>
+							<z>5.0</z>
+						</half_extents>
+					</bounding_shape>
+				</component>
+			</components>
+		</gameObject>
+		<!-- Left wall -->
+		<gameObject>
+			<tag>PHY_OBJ</tag>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>-5.25</x>
+						<y>5.0</y>
+						<z>0.0</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>0.25</y>
+						<z>5.0</z>
+					</scale>
+					<orientation>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+						<w>90</w>
+					</orientation>
+				</component>
+				<component type = "rigid_body">
+					<mass>0.0</mass>
+					<!-- <collision_mesh>cube.obj</collision_mesh> -->
+					<restitution>0.4</restitution>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>5.0</x>
+							<y>0.25</y>
+							<z>5.0</z>
+						</half_extents>
+					</bounding_shape>
+				</component>
+			</components>
+		</gameObject>
+		<!-- Right wall -->
+		<gameObject>
+			<tag>PHY_OBJ</tag>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>5.25</x>
+						<y>5.0</y>
+						<z>0.0</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>0.25</y>
+						<z>5.0</z>
+					</scale>
+					<orientation>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>1.0</z>
+						<w>90</w>
+					</orientation>
+				</component>
+				<component type = "rigid_body">
+					<mass>0.0</mass>
+					<restitution>0.4</restitution>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>5.0</x>
+							<y>0.25</y>
+							<z>5.0</z>
+						</half_extents>
+					</bounding_shape>
+				</component>
+			</components>
+		</gameObject>
+		<!-- Front wall -->
+		<gameObject>
+			<tag>PHY_OBJ</tag>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>0.0</x>
+						<y>5.0</y>
+						<z>-5.25</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>0.25</y>
+						<z>5.0</z>
+					</scale>
+					<orientation>
+						<x>1.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+						<w>90</w>
+					</orientation>
+				</component>
+				<component type = "rigid_body">
+					<mass>0.0</mass>
+					<restitution>0.4</restitution>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>5.0</x>
+							<y>0.25</y>
+							<z>5.0</z>
+						</half_extents>
+					</bounding_shape>
+				</component>
+			</components>
+		</gameObject>
+		<!-- player -->
+		<gameObject>
+			<tag>PHY_OBJ</tag>
+			<components>
+				<component type ="model">
+					<file>capsule.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>0.0</x>
+						<y>10.0</y>
+						<z>0.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type = "controller">
+					<bounding_shape type="CAPSULE">
+						<radius>0.5</radius>
+						<height>1.0</height>
+					</bounding_shape>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<tag>PHY_OBJ</tag>
+			<components>
+				<component type ="model">
+					<file>sphere.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>3.0</x>
+						<y>10.0</y>
+						<z>0.0</z>
+					</position>
+					<scale>
+						<x>0.25</x>
+						<y>0.25</y>
+						<z>0.25</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>1.0</mass>
+					<bounding_shape type="SPHERE">
+						<radius>0.25</radius>
+					</bounding_shape>
+					<restitution>0.9</restitution>
+					<friction>0.5</friction>
+					<rotational_friction>0.5</rotational_friction>
+					<velocity>
+						<x>0.0</x>
+						<y>0.0</y>
+						<z>0.0</z>
+					</velocity>
+					<constant_velocity>false</constant_velocity>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<tag>PHY_OBJ</tag>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>-4.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+					</position>
+					<scale>
+						<x>0.5</x>
+						<y>0.5</y>
+						<z>0.5</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>0.0</mass>
+					<restitution>0.4</restitution>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>0.5</x>
+							<y>0.5</y>
+							<z>0.5</z>
+						</half_extents>
+					</bounding_shape>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<tag>PHY_OBJ</tag>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>-2.0</x>
+						<y>0.25</y>
+						<z>2.0</z>
+					</position>
+					<scale>
+						<x>0.5</x>
+						<y>0.25</y>
+						<z>0.5</z>
+					</scale>
+				</component>
+				<component type = "rigid_body">
+					<mass>0.0</mass>
+					<restitution>0.4</restitution>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>0.5</x>
+							<y>0.5</y>
+							<z>0.5</z>
+						</half_extents>
+					</bounding_shape>
+				</component>
+			</components>
+		</gameObject>
+	</gameObjects>
+	<lights>
+		<light>
+			<position>
+				<x>0.0</x>
+				<y>15.0</y>
+				<z>0.0</z>
+			</position>
+			<ambient>
+				<r>0.1</r>
+				<g>0.1</g>
+				<b>0.1</b>
+			</ambient>
+			<diffuse>
+				<r>0.5</r>
+				<g>0.5</g>
+				<b>0.5</b>
+			</diffuse>
+			<specular>
+				<r>0.5</r>
+				<g>0.5</g>
+				<b>0.5</b>
+			</specular>
+		</light>
+	</lights>
+</screen>

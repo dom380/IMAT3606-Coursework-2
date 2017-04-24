@@ -49,6 +49,9 @@ PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics>& physics, std::weak_
 		case ShapeData::BoundingShape::CYLINDER:
 			shape = new btCylinderShape(btVector3(boundingShape.halfExtents.x, boundingShape.halfExtents.y, boundingShape.halfExtents.z));
 			break;
+		case ShapeData::BoundingShape::CAPSULE:
+			shape = new btCapsuleShape(boundingShape.radius, boundingShape.height);
+			break;
 	}
 	init(physics, owner, mass);
 }

@@ -17,7 +17,7 @@ void BulletPhysics::init()
 	broadphase = new btDbvtBroadphase();
 	solver = new btSequentialImpulseConstraintSolver();
 	world = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-	world->setGravity(btVector3(0.0f, -20.0f, 0.0f));
+	world->setGravity(btVector3(0.0f, -10.0f, 0.0f));
 	broadphase->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
 	world->setInternalTickCallback(BulletPhysics::tickCallback, this, true);
 }
@@ -54,6 +54,17 @@ void BulletPhysics::addTrigger(std::shared_ptr<CollisionTrigger> trigger)
 std::vector<std::shared_ptr<CollisionTrigger>> BulletPhysics::getCollisionTriggers()
 {
 	return collisionTriggers;
+}
+
+void BulletPhysics::addController(BulletActerController* controller)
+{
+	world->addCollisionObject(controller->getGhostObject(),btBroadphaseProxy::CharacterFilter, btBroadphaseProxy::AllFilter);
+	world->addAction(controller);
+}
+
+void BulletPhysics::addController(std::shared_ptr<BulletActerController> controller)
+{
+	addController(controller.get());
 }
 
 void BulletPhysics::tickCallback(btDynamicsWorld * world, btScalar timeStep)
@@ -127,7 +138,7 @@ void BulletPhysics::tickCallback(btDynamicsWorld * world, btScalar timeStep)
 				
 				auto gameObjA = static_cast<GameObject*>(objA->getUserPointer());
 				auto gameObjB = static_cast<GameObject*>(objB->getUserPointer());
-
+				if (gameObjA == nullptr || gameObjB == nullptr) continue;
 				Message* collisionMessageA = new CollisionMessage(gameObjB, timeStep);
 				Message* collisionMessageB = new CollisionMessage(gameObjA, timeStep);
 				auto logicComp = gameObjA->getLogic(); //Send collision message to ObjectA 

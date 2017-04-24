@@ -5,6 +5,7 @@
 #include "Physics.h"
 #include <Components\PhysicsComponent.h>
 #include <Components\CollisionTrigger.h>
+#include "BulletActerController.h"
 #include "btBulletDynamicsCommon.h"
 #include <GUI\EventListener.h>
 #include <map>
@@ -54,6 +55,9 @@ public:
 	void addTrigger(std::shared_ptr<CollisionTrigger> trigger);
 
 	std::vector<std::shared_ptr<CollisionTrigger>> getCollisionTriggers();
+
+	void addController(BulletActerController* controller);
+	void addController(std::shared_ptr<BulletActerController> controller);
 
 	/*
 		Per step callback function for the simulation.

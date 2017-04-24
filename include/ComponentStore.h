@@ -8,9 +8,11 @@
 #include <Components\LogicComponent.h>
 #include <Components\PhysicsComponent.h>
 #include <Components\CollisionTrigger.h>
+#include <Components\ControllerComponent.h>
 class LogicComponent;
 class PhysicsComponent;
 class CollisionTrigger;
+class ControllerComponent;
 
 class ComponentStore
 {
@@ -38,6 +40,8 @@ public:
 			break;
 		case TRIGGER:
 			return (T*)triggers.get(handle);
+		case CONTROLLER:
+			return (T*)controllers.get(handle);
 		case COMPONENT_TYPE_COUNT:
 			//no-op
 			return nullptr;
@@ -57,6 +61,8 @@ public:
 	Handle storeComponent(std::shared_ptr<PhysicsComponent> component);
 	
 	Handle storeComponent(std::shared_ptr<CollisionTrigger> component);
+
+	Handle storeComponent(std::shared_ptr<ControllerComponent> component);
 
 	template <typename T>
 	std::vector<std::pair<int, T>>* getAllComponents(ComponentType type)
@@ -81,6 +87,8 @@ public:
 			break;
 		case TRIGGER:
 			return (std::vector<std::pair<int, T>>*)triggers.getAll();
+		case CONTROLLER:
+			return (std::vector<std::pair<int, T>>*)controllers.getAll();
 		case COMPONENT_TYPE_COUNT:
 			//no-op
 			return nullptr;
@@ -96,6 +104,7 @@ private:
 	HandleManager<Transform> transforms;
 	HandleManager<PhysicsComponent> physics;
 	HandleManager<CollisionTrigger> triggers;
+	HandleManager<ControllerComponent> controllers;
 };
 
 #endif // !COMPONENTSTORE_H

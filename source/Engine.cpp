@@ -5,7 +5,7 @@
 #include <utils\tinyxml2.h>
 #include <utils\LevelLoader.h>
 #include <Screens\LoadingScreen.h>
-#include <InputGLFW.h>
+#include <Input\InputGLFW.h>
 #include <Scripting\ScriptEngine.h>
 
 
@@ -53,9 +53,7 @@ void Engine::init()
 
 	loadFirstLevel();
 
-#ifndef NDEBUG
 	DebugMenu::getInstance()->init();
-#endif
 }
 
 void Engine::mainLoop()
@@ -72,9 +70,8 @@ void Engine::mainLoop()
 		currentTime = newTime; //set current time
 		window->update();
 		window->pollEvents();
-#ifndef NDEBUG
+
 		DebugMenu::getInstance()->update();
-#endif
 	
 		
 
@@ -92,9 +89,8 @@ void Engine::mainLoop()
 		renderer->prepare();
 		activeScreen.second->render();
 
-#ifndef NDEBUG
 		DebugMenu::getInstance()->render();
-#endif
+
 		window->display();
 		
 	}
@@ -224,12 +220,12 @@ shared_ptr<Input> Engine::getInput()
 {
 	return inputHandler;
 }
-#ifndef NDEBUG
+
 shared_ptr<DebugMenu> Engine::getDebugMenu()
 {
 	return DebugMenu::getInstance();
 }
-#endif
+
 int Engine::getWindowWidth()
 {
 	return width;

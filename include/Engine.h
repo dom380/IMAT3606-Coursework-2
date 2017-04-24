@@ -4,7 +4,7 @@
 #include "utils\Timer.h"
 #include "AssetManager.h"
 #include "Renderers\Graphics.h"
-#include "Input.h"
+#include "Input\Input.h"
 #include "Screens\Screen.h"
 #include "Screens\MenuScreen.h"
 #include "Graphics\Window.h"
@@ -13,11 +13,11 @@
 #include <map>
 using std::map;
 
-#ifndef NDEBUG
+
 #include <Editor\imgui\imgui.h>
 #include <Editor\DebugMenu.h>
 class DebugMenu;
-#endif
+
 
 /*
 	Core engine class.
@@ -124,9 +124,9 @@ public:
 	*/
 	shared_ptr<Input> getInput();
 
-#ifndef NDEBUG
+
 	shared_ptr<DebugMenu> getDebugMenu();
-#endif
+
 	/*
 		Global accesor to the game engine.
 	*/

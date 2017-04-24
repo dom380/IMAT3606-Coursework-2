@@ -1,4 +1,3 @@
-#ifndef NDEBUG
 #include "..\..\include\Editor\DebugMenuItem.h"
 #include <Engine.h>
 
@@ -13,5 +12,3 @@ bool DebugMenuItem::canClear()
 {
 	return clearable;
 }
-
-#endif

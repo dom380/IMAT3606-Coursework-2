@@ -166,12 +166,23 @@ void GameScreen::handle(KeyEvent event)
 {
 	if (event.type == KeyEventType::KEY_PRESSED)
 	{
-		if (event.key == 67)//c
+		if (event.key == KeyCodes::C)//c
 		{
 			activeCamera++;
 			if (activeCamera >= cameras.size()) activeCamera = 0;
+			return;
 		}
 	}
+	if (activeCamera == 0)
+	{
+		cameras.at(0)->handle(event);
+	}
+	else if (activeCamera == 1)
+	{
+		robot->handle(event);
+	}
+	auto phyPtr = std::dynamic_pointer_cast<BulletPhysics>(physics);
+	if(phyPtr != nullptr) phyPtr->handle(event);
 }
 
 void GameScreen::updateScore(int amountToAdd)

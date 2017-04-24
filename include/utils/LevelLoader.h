@@ -10,13 +10,14 @@
 #include "tinyxml2.h"
 #include <Scripting\ScriptEngine.h>
 #include <Utils/Utilities.h>
+#include "utils\DebugUtils.h"
 #include <GUI\UITextureElement.h>
 #include <gl/glm/glm/gtc/quaternion.hpp>
 #include <gl/glm/glm/gtx/quaternion.hpp>
 
 #ifndef NDEBUG
 #include "Timer.h"
-#include "utils\DebugUtils.h"
+
 #endif
 /*
 Factory class to parse level XML descriptors and create the relevant objects.
@@ -51,9 +52,9 @@ public:
 			if (strcmp(fileName.c_str(), screenElement->Attribute("name")) != 0)
 			{
 				std::cerr << "Failed to load file, filename != to levelname" << filePath << std::endl;
-#ifndef NDEBUG
+
 				DebugUtils::getInstance()->popup("FAIL","Failed to load file, filename != to levelname");
-#endif
+
 				return false;
 			}
 			engine->getDebugMenu()->refreshMenuItems();
@@ -307,6 +308,7 @@ private:
 		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
 		shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>(engine->getWindowWidth(), engine->getWindowHeight(), 45.f);
 		shared_ptr<GameScreen> gameScreen = std::make_shared<GameScreen>(renderer, input, engine->getPhysics(), camera);
+		input->setKeyFocus(gameScreen);
 		gameScreen->setID(screenElement->Attribute("name"));
 		gameScreen->setXMLDocument(screenDocument);
 		gameScreen->setXMLFilePath(filepath);

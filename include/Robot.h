@@ -16,8 +16,8 @@ const char BACKWARD_STATE = 0;
 const char FORWARD_STATE = 1;
 
 // index constants for accessing arm and leg array data
-const char LEFT = 0;
-const char RIGHT = 1;
+const char LEFT_DIR = 0;
+const char RIGHT_DIR = 1;
 
 /*
 	Player Character

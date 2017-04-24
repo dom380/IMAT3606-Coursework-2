@@ -66,23 +66,23 @@ void EngineCamera::handle(MouseEvent event)
 void EngineCamera::handle(KeyEvent event)
 {
 	if (event.type == KeyEventType::KEY_REPEATED || event.type == KeyEventType::KEY_PRESSED) {
-		if (event.key == 340) //shift
+		if (event.key == KeyCodes::LEFT_SHIFT)
 		{
 			cameraSpeed = normalCameraSpeed * 2;
 		}
-		if (event.key == 87) //W
+		if (event.key == KeyCodes::W) //W
 		{
 			position -= cameraSpeed * frontDir;
 		}
-		else if (event.key == 83) //S
+		else if (event.key == KeyCodes::S) //S
 		{
 			position += cameraSpeed * frontDir;
 		}
-		else if (event.key == 65) //A
+		else if (event.key == KeyCodes::A) //A
 		{
 			position -= rightDir * cameraSpeed;
 		}
-		else if (event.key == 68) //D
+		else if (event.key == KeyCodes::D) //D
 		{
 			position += rightDir * cameraSpeed;
 		}
@@ -91,7 +91,7 @@ void EngineCamera::handle(KeyEvent event)
 	}
 	if (event.type == KeyEventType::KEY_RELEASED)
 	{
-		if (event.key == 340) //shift
+		if (event.key == KeyCodes::LEFT_SHIFT) //shift
 		{
 			cameraSpeed = normalCameraSpeed;
 		}

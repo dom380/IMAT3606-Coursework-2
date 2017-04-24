@@ -125,125 +125,10 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 											 Iterate through all inner transforms and their xyz and update doc
 											*/
 											auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
-											for (int transformElement = 0; transformElement < 3; transformElement++)
-											{
-												switch (transformElement)
-												{
-												case 0:
-												{
-													tinyxml2::XMLElement* componentInnerElement = componentElement->FirstChildElement("position");
-													if (!componentInnerElement)
-														break;
-													for (int vector3 = 0; vector3 < 3; vector3++)
-													{
-														//xyz
-														switch (vector3)
-														{
-														case 0:
-														{
-															std::ostringstream ss;
-															ss << model->getTransform()->position[vector3];
-															componentInnerElement->FirstChildElement("x")->SetText(string(ss.str()).c_str());
-															break;
-														}
-														case 1:
-														{
-															std::ostringstream ss;
-															ss << model->getTransform()->position[vector3];
-															componentInnerElement->FirstChildElement("y")->SetText(string(ss.str()).c_str());
-															break;
-														}
-
-														case 2:
-														{
-															std::ostringstream ss;
-															ss << model->getTransform()->position[vector3];
-															componentInnerElement->FirstChildElement("z")->SetText(string(ss.str()).c_str());
-															break;
-														}
-														}
-
-													}
-													break;
-												}
-												case 1:
-												{
-													tinyxml2::XMLElement* componentInnerElement = componentElement->FirstChildElement("scale");
-													if (!componentInnerElement)
-														break;
-													for (int vector3 = 0; vector3 < 3; vector3++)
-													{
-														//xyz
-														switch (vector3)
-														{
-														case 0:
-														{
-															std::ostringstream ss;
-															ss << model->getTransform()->scale[vector3];
-															componentInnerElement->FirstChildElement("x")->SetText(string(ss.str()).c_str());
-															break;
-														}
-														case 1:
-														{
-															std::ostringstream ss;
-															ss << model->getTransform()->scale[vector3];
-															componentInnerElement->FirstChildElement("y")->SetText(string(ss.str()).c_str());
-															break;
-														}
-
-														case 2:
-														{
-															std::ostringstream ss;
-															ss << model->getTransform()->scale[vector3];
-															componentInnerElement->FirstChildElement("z")->SetText(string(ss.str()).c_str());
-															break;
-														}
-														}
-
-													}
-													break;
-												}
-												case 2:
-												{
-													tinyxml2::XMLElement* componentInnerElement = componentElement->FirstChildElement("orientation");
-													if (!componentInnerElement)
-														break;
-													for (int vector3 = 0; vector3 < 3; vector3++)
-													{
-														//xyz
-														switch (vector3)
-														{
-														case 0:
-														{
-															std::ostringstream ss;
-															ss << model->getTransform()->orientation[vector3];
-															componentInnerElement->FirstChildElement("x")->SetText(string(ss.str()).c_str());
-															break;
-														}
-														case 1:
-														{
-															std::ostringstream ss;
-															ss << model->getTransform()->orientation[vector3];
-															componentInnerElement->FirstChildElement("y")->SetText(string(ss.str()).c_str());
-															break;
-														}
-
-														case 2:
-														{
-															std::ostringstream ss;
-															ss << model->getTransform()->orientation[vector3];
-															componentInnerElement->FirstChildElement("z")->SetText(string(ss.str()).c_str());
-															break;
-														}
-														}
-													}
-													break;
-												}
-												default:
-													break;
-												}
-										}
-										break;
+											if (!model)
+												return false;
+											UpdateTransform(doc, componentElement, model->getTransform());
+											break;
 										}
 									}
 								}
@@ -269,8 +154,18 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 	if (doc)
 	{
 		tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");
-
-		tinyxml2::XMLElement* XMLUIElement = screenElement->FirstChildElement("uiElements")->FirstChildElement();
+		if (!screenElement)
+			return false;
+		tinyxml2::XMLElement* XMLUIElement = screenElement->FirstChildElement("uiElements");
+		if (XMLUIElement)
+		{
+			XMLUIElement = XMLUIElement->FirstChildElement();
+		}
+		else
+		{
+			//No ui exists.
+			return false;
+		}
 		/*
 		Iterate over all ui in XML doc
 		*/
@@ -283,7 +178,7 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 			}
 			else
 			{
-				UpdateTransform(doc, XMLUIElement, uiElement->getTransform());
+				UpdateTransform(doc, XMLUIElement, uiElement->getTransform().get());
 			}
 			XMLObjectCount++;
 			SkipObject = false;
@@ -396,6 +291,7 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 			XMLUIElement->InsertEndChild(XMLUIElementID);
 		}
 
+		//UI does not use a quat, but an angle in the z axis.
 		AddTransformToFile(doc, XMLUIElement, uiE->getTransform().get());
 
 		if (!XMLUIElements)
@@ -410,7 +306,7 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 }
 
 
-bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* transformElement, shared_ptr<Transform> transform)
+bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* transformElement, Transform* transform)
 {
 	for (int transformElementIt = 0; transformElementIt < 3; transformElementIt++)
 	{
@@ -516,35 +412,55 @@ bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement
 		case 2:
 		{
 			tinyxml2::XMLElement* transformInnerElement = transformElement->FirstChildElement("orientation");
-			if (!transformInnerElement)
+			/*
+			When we load an orientation in, we convert it to a quarternion
+			When saving, we must undo this process.
+			*/
+			glm::vec3 axis = glm::vec3(transform->orientation[0], transform->orientation[1], transform->orientation[2]);
+			float transformAngle = transform->orientation[3];
+			axis = glm::axis(transform->orientation);
+			transformAngle = glm::degrees(glm::angle(transform->orientation));
+			
+			//If there is a rotation applied.
+			if ((int)transformAngle == 0)
 			{
-				tinyxml2::XMLElement* xyzElement;
-				//Create a orientation element.
-				transformInnerElement = doc->NewElement("orientation");
-				xyzElement = doc->NewElement("x");
-				transformInnerElement->InsertEndChild(xyzElement);
-				xyzElement = doc->NewElement("y");
-				transformInnerElement->InsertEndChild(xyzElement);
-				xyzElement = doc->NewElement("z");
-				transformInnerElement->InsertEndChild(xyzElement);
-				transformElement->InsertEndChild(transformInnerElement);
+				break;
 			}
-			for (int vector3 = 0; vector3 < 3; vector3++)
+			else
+			{
+				if (!transformInnerElement)
+				{
+					tinyxml2::XMLElement* xyzElement;
+					//Create a orientation element.
+					transformInnerElement = doc->NewElement("orientation");
+					xyzElement = doc->NewElement("x");
+					transformInnerElement->InsertEndChild(xyzElement);
+					xyzElement = doc->NewElement("y");
+					transformInnerElement->InsertEndChild(xyzElement);
+					xyzElement = doc->NewElement("z");
+					transformInnerElement->InsertEndChild(xyzElement);
+					xyzElement = doc->NewElement("w");
+					transformInnerElement->InsertEndChild(xyzElement);
+					transformElement->InsertEndChild(transformInnerElement);
+				}
+			}
+		
+			for (int quat = 0; quat < 4; quat++)
 			{
 				//xyz
-				switch (vector3)
+				switch (quat)
 				{
 				case 0:
 				{
 					std::ostringstream ss;
-					ss << transform->orientation[vector3];
+					ss << axis[quat];
 					transformInnerElement->FirstChildElement("x")->SetText(string(ss.str()).c_str());
 					break;
 				}
 				case 1:
 				{
 					std::ostringstream ss;
-					ss << transform->orientation[vector3];
+					ss << axis[quat];
 					transformInnerElement->FirstChildElement("y")->SetText(string(ss.str()).c_str());
 					break;
 				}
@@ -552,8 +468,16 @@ bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement
 				case 2:
 				{
 					std::ostringstream ss;
-					ss << transform->orientation[vector3];
+					ss << axis[quat];
 					transformInnerElement->FirstChildElement("z")->SetText(string(ss.str()).c_str());
+					break;
+				}
+
+				case 3:
+				{
+					std::ostringstream ss;
+					ss << transformAngle;
+					transformInnerElement->FirstChildElement("w")->SetText(string(ss.str()).c_str());
 					break;
 				}
 				}
@@ -567,7 +491,7 @@ bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement
 	return true;
 }
 
-bool FileSaver::AddTransformToFile(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement * XMLUIElement, Transform* transform)
+bool FileSaver::AddTransformToFile(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement * XMLTransElement, Transform* transform)
 {
 	//Transform
 	for (int transformElement = 0; transformElement < 3; transformElement++)
@@ -577,7 +501,7 @@ bool FileSaver::AddTransformToFile(tinyxml2::XMLDocument * doc, tinyxml2::XMLEle
 		case 0:
 		{
 			tinyxml2::XMLElement* innerElement = doc->NewElement("position");
-			XMLUIElement->InsertEndChild(innerElement);
+			XMLTransElement->InsertEndChild(innerElement);
 			if (!innerElement)
 				break;
 			for (int vector3 = 0; vector3 < 3; vector3++)
@@ -621,7 +545,7 @@ bool FileSaver::AddTransformToFile(tinyxml2::XMLDocument * doc, tinyxml2::XMLEle
 		case 1:
 		{
 			tinyxml2::XMLElement* innerElement = doc->NewElement("scale");
-			XMLUIElement->InsertEndChild(innerElement);
+			XMLTransElement->InsertEndChild(innerElement);
 			if (!innerElement)
 				break;
 			for (int vector3 = 0; vector3 < 3; vector3++)
@@ -664,43 +588,63 @@ bool FileSaver::AddTransformToFile(tinyxml2::XMLDocument * doc, tinyxml2::XMLEle
 		}
 		case 2:
 		{
+			//check orientation is required.
+			glm::vec3 axis = glm::axis(transform->orientation);
+			float transformAngle = glm::degrees(glm::angle(transform->orientation));
+			//If there is a rotation applied.
+			if ((int)transformAngle == 0)
+			{
+				break;
+			}
+			
+			
 			tinyxml2::XMLElement* innerElement = doc->NewElement("orientation");
-			XMLUIElement->InsertEndChild(innerElement);
+			XMLTransElement->InsertEndChild(innerElement);
 			if (!innerElement)
 				break;
-			for (int vector3 = 0; vector3 < 3; vector3++)
+			for (int vector4 = 0; vector4 < 4; vector4++)
 			{
 				//xyz
-				switch (vector3)
+				switch (vector4)
 				{
-				case 0:
-				{
-					std::ostringstream ss;
-					ss << transform->orientation[vector3];
-					tinyxml2::XMLElement* vecElement = doc->NewElement("x");
-					innerElement->InsertEndChild(vecElement);
-					vecElement->SetText(string(ss.str()).c_str());
-					break;
-				}
-				case 1:
-				{
-					std::ostringstream ss;
-					ss << transform->orientation[vector3];
-					tinyxml2::XMLElement* vecElement = doc->NewElement("y");
-					innerElement->InsertEndChild(vecElement);
-					vecElement->SetText(string(ss.str()).c_str());
-					break;
-				}
+					case 0:
+					{
+						std::ostringstream ss;
+						ss << axis[vector4];
+						tinyxml2::XMLElement* vecElement = doc->NewElement("x");
+						innerElement->InsertEndChild(vecElement);
+						vecElement->SetText(string(ss.str()).c_str());
+						break;
+					}
+					case 1:
+					{
+						std::ostringstream ss;
+						ss << axis[vector4];
+						tinyxml2::XMLElement* vecElement = doc->NewElement("y");
+						innerElement->InsertEndChild(vecElement);
+						vecElement->SetText(string(ss.str()).c_str());
+						break;
+					}
 
-				case 2:
-				{
-					std::ostringstream ss;
-					ss << transform->orientation[vector3];
-					tinyxml2::XMLElement* vecElement = doc->NewElement("z");
-					innerElement->InsertEndChild(vecElement);
-					vecElement->SetText(string(ss.str()).c_str());
-					break;
-				}
+					case 2:
+					{
+						std::ostringstream ss;
+						ss << axis[vector4];
+						tinyxml2::XMLElement* vecElement = doc->NewElement("z");
+						innerElement->InsertEndChild(vecElement);
+						vecElement->SetText(string(ss.str()).c_str());
+						break;
+					}
+					
+					case 3:
+					{
+						std::ostringstream ss;
+						ss << transformAngle;
+						tinyxml2::XMLElement* vecElement = doc->NewElement("w");
+						innerElement->InsertEndChild(vecElement);
+						vecElement->SetText(string(ss.str()).c_str());
+						break;
+					}
 				}
 
 			}

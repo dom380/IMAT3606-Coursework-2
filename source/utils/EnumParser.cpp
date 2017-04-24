@@ -3,7 +3,7 @@
 #include <Camera\Camera.h>
 #include <Components\ComponentType.h>
 #include <GUI\UIType.h>
-#include <Input.h>
+#include <Input\Input.h>
 #include <Physics\Physics.h>
 #include <Physics\ShapeData.h>
 #include <GameObjectTag.h>

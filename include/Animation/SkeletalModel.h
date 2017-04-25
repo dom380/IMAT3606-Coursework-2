@@ -214,4 +214,6 @@ private:
 	bool m_isTextured;
 
 	std::vector<Matrix4f> Transforms;
+
+	bool init = false;
 };

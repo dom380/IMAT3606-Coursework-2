@@ -102,6 +102,11 @@ private:
 	int height;
 	unsigned int currBindingPoint = 0;
 	glm::mat4 modelMat = glm::mat4();
+
+	GLuint shadowFBO, pass1Index, pass2Index;
+	int shadowMapWidth, shadowMapHeight;
+	glm::mat4 lightPV;
+	glm::mat4 shadowBias;
 };
 
 #endif // !RENDERGL_H

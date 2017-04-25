@@ -86,7 +86,7 @@ public:
 				loadModel(renderer, gameObject, componentElement);
 				break;
 			case ComponentType::ANIMATION:
-				//todo
+				loadAnimation(renderer, gameObject, componentElement);
 				break;
 			case ComponentType::RIGID_BODY:
 				//todo
@@ -305,14 +305,16 @@ private:
 	{
 		shared_ptr<AnimatedModelComponent> animation = std::make_shared<AnimatedModelComponent>(renderer, gameObject);
 		tinyxml2::XMLElement* fileElement = animElement->FirstChildElement("files");
-		std::vector<const char*> files;
+		std::vector<std::pair<const char*, const char*>> files;
 		if (fileElement != NULL) fileElement = fileElement->FirstChildElement();
 		while (fileElement != NULL) {
-			files.push_back(fileElement->GetText());
+			files.push_back(std::make_pair(fileElement->FirstChildElement("id")->GetText(),fileElement->FirstChildElement("filePath")->GetText()));
+
 			//loadStringElement(renderer, gameScreen, stringElement);
 			fileElement = fileElement->NextSiblingElement();
 		}
-		animation->init(files, "");
+		animation->init(animElement->FirstChildElement("default")->GetText(),files, "");
+		gameObject->AddComponent(animation, ComponentType::ANIMATION);
 	}
 
 	/*

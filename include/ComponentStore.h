@@ -6,6 +6,7 @@
 #include "Graphics\ModelComponent.h"
 #include "Graphics\Transform.h"
 #include <Components\LogicComponent.h>
+#include <Components\AnimatedModelComponent.h>
 class LogicComponent;
 
 class ComponentStore

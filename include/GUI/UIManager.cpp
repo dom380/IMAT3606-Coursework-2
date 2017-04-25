@@ -52,17 +52,30 @@ void UIManager::debugMenuItemUpdate()
 				uiElements[x]->updateModelUsingTransform();
 
 				//HasButton?
-				static bool hasButton = uiElements[x]->getButton()->isActive();
+				static bool hasButton = uiElements[x]->getButton() ? uiElements[x]->getButton()->isActive() : false;
 				if (ImGui::Checkbox("HasButton", &hasButton))
 				{
-					uiElements[x]->getButton()->setActive(hasButton);
+					
 					if (hasButton)
 					{
-						Engine::g_pEngine->getInput()->registerMouseListener(uiElements[x]->getButton());
+						if (uiElements[x]->getButton())
+						{
+							uiElements[x]->getButton()->setActive(hasButton);
+							Engine::g_pEngine->getInput()->registerMouseListener(uiElements[x]->getButton());
+						}
+						else
+						{
+							//Add a button
+							LevelLoader::loadButtonElement(uiElements[x]);
+						}
+						
 					}
 					else
 					{
-						Engine::g_pEngine->getInput()->removeMouseListener(uiElements[x]->getButton());
+						if (uiElements[x]->getButton())
+						{
+							Engine::g_pEngine->getInput()->removeMouseListener(uiElements[x]->getButton());
+						}
 					}
 				}
 				if (hasButton)
@@ -82,12 +95,18 @@ void UIManager::debugMenuItemUpdate()
 						static char buttonParamID[64] = "";
 						if (strlen(buttonParamID) == 0)
 						{
-							strncpy_s(buttonParamID, uiElements.at(x)->getButton()->getParams()[0].first.c_str(), uiElements.at(x)->getButton()->getParams()[0].first.size());
+							if (uiElements.at(x)->getButton()->getParams().size() > 0)
+							{
+								strncpy_s(buttonParamID, uiElements.at(x)->getButton()->getParams()[0].first.c_str(), uiElements.at(x)->getButton()->getParams()[0].first.size());
+							}
 						}
 						static char buttonParamText[64] = "";
 						if (strlen(buttonParamText) == 0)
 						{
-							strncpy_s(buttonParamText, uiElements.at(x)->getButton()->getParams()[0].second.c_str(), uiElements.at(x)->getButton()->getParams()[0].second.size());
+							if (uiElements.at(x)->getButton()->getParams().size() > 0)
+							{
+								strncpy_s(buttonParamText, uiElements.at(x)->getButton()->getParams()[0].second.c_str(), uiElements.at(x)->getButton()->getParams()[0].second.size());
+							}
 						}
 						//inputs
 						ImGui::InputText("ScriptName", buttonScriptName, sizeof(buttonScriptName));

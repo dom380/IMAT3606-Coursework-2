@@ -189,6 +189,62 @@ public:
 		//Bind the lua callback function, engine and parameter table as a c++ function for the button.
 		button->addOnClickFn(std::bind(callback, Engine::g_pEngine.get(), paramTable));
 	}
+	/*
+	Utility method to load Button elements
+	*/
+	static void loadButtonElement(shared_ptr<UIElement> uiE, tinyxml2::XMLElement* buttonElement)
+	{
+		shared_ptr<Button> button;
+		switch (uiE->getType())
+		{
+		case UIType::TEXT:
+		{
+			shared_ptr<TextBox> tb = dynamic_pointer_cast<TextBox>(uiE);
+			button = std::make_shared<Button>(Engine::g_pEngine->getRenderer(), tb->getTransform(), tb->getFont(), tb->getText());
+			break;
+		}
+		case UIType::TEXTURE:
+		{
+			shared_ptr<UITextureElement> tb = dynamic_pointer_cast<UITextureElement>(uiE);
+			button = std::make_shared<Button>(Engine::g_pEngine->getRenderer(), tb->getTransform());
+			break;
+		}
+		default:
+			break;
+		}
+		Engine::g_pEngine->getInput()->registerMouseListener(button);
+
+		loadButtonFunc(buttonElement, button);
+		uiE->setButton(button);
+	}
+	/*
+	Utility method to load Button elements
+	*/
+	static void loadButtonElement(shared_ptr<UIElement> uiE)
+	{
+		shared_ptr<Button> button;
+		switch (uiE->getType())
+		{
+		case UIType::TEXT:
+		{
+			shared_ptr<TextBox> tb = dynamic_pointer_cast<TextBox>(uiE);
+			button = std::make_shared<Button>(Engine::g_pEngine->getRenderer(), tb->getTransform(), tb->getFont(), tb->getText());
+			break;
+		}
+		case UIType::TEXTURE:
+		{
+			shared_ptr<UITextureElement> tb = dynamic_pointer_cast<UITextureElement>(uiE);
+			button = std::make_shared<Button>(Engine::g_pEngine->getRenderer(), tb->getTransform());
+			break;
+		}
+		default:
+			break;
+		}
+		Engine::g_pEngine->getInput()->registerMouseListener(button);
+
+		loadButtonFunc(button);
+		uiE->setButton(button);
+	}
 private:
 	/*
 	Utility method to load MenuScreens
@@ -241,36 +297,7 @@ private:
 		screen->addUIElement(textBox);
 	}
 
-	/*
-	Utility method to load Button elements
-	*/
-	static void loadButtonElement( shared_ptr<UIElement> uiE, tinyxml2::XMLElement* buttonElement)
-	{
-		shared_ptr<Button> button;
-		switch (uiE->getType())
-		{
-		case UIType::TEXT:
-		{
-			shared_ptr<TextBox> tb = dynamic_pointer_cast<TextBox>(uiE);
-			button = std::make_shared<Button>(Engine::g_pEngine->getRenderer(), tb->getTransform(), tb->getFont(), tb->getText());
-			break;
-		}
-		case UIType::TEXTURE:
-		{
-			shared_ptr<UITextureElement> tb = dynamic_pointer_cast<UITextureElement>(uiE);
-			button = std::make_shared<Button>(Engine::g_pEngine->getRenderer(), tb->getTransform());
-			break;
-		}
-		default:
-			break;
-		}
-	//	screen->addButton(button);
-		Engine::g_pEngine->getInput()->registerMouseListener(button);
-		
-		//string funcName = string(buttonElement->FirstChildElement("function")->Attribute("type"));
-		loadButtonFunc(buttonElement, button);
-		uiE->setButton(button);
-	}
+	
 
 	/*
 		Utility method to bind the supplied parameters to the requested callback function.

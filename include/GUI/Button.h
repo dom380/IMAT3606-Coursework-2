@@ -58,10 +58,6 @@ private:
 		aabb.height = (transform->position.y - aabb.y) + maxHeight; //Height of AABB is the maximum character height add the maximum underline bearing
 	};
 	
-protected:
-//	string text;
-	//Font font;
-//	shared_ptr<Transform> transform;
 public:
 	//Constructors
 	Button() { active = false;  };

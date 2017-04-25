@@ -25,6 +25,9 @@ bool RenderGL::init()
 		return false;
 
 	}
+
+	AssetManager::getInstance()->getShader(std::make_pair("animation.vert", "animation.frag"))->initialiseBoneUniforms();
+	
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -347,18 +350,28 @@ void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& sh
 
 	Transform* transform = model.getTransform();
 	glm::quat orientation = transform->orientation;
-	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::rotate(glm::radians(orientation.w), glm::vec3(orientation.x, orientation.y, orientation.z)) * glm::scale(transform->scale);
-	shaderProgram->setUniform("mView", camera->getView());
-	shaderProgram->setUniform("mProjection", camera->getProjection());
-	shaderProgram->setUniform("mModel", mMat);
-	shaderProgram->setUniform("viewPos", camera->getPosition());
+	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::mat4_cast(orientation) * glm::scale(transform->scale);
 
+	glm::mat4 mv = camera->getView() * mMat;
+	shaderProgram->setUniform("ViewMatrix", camera->getView());
+	shaderProgram->setUniform("ModelMatrix", mMat);
+	shaderProgram->setUniform("ModelViewMatrix", mv);
+	shaderProgram->setUniform("NormalMatrix", glm::mat3(glm::vec3(mv[0]), glm::vec3(mv[1]), glm::vec3(mv[2])));
+	shaderProgram->setUniform("MVP", camera->getProjection() * mv);
+
+	
+	//glBindBufferBase(GL_UNIFORM_BUFFER, lightingBlockId, lightingBuffer); //Bind lighting data
 	//set shader uniform
-
-	glBindBufferBase(GL_UNIFORM_BUFFER, lightingBlockId, lightingBuffer); //Bind lighting data
-
-	for (auto it : model.models)
-	{
-		it->render();
-	}
+	
+	shaderProgram->setUniform("animatedCharacter", true);
+	//Set the Teapot material properties in the shader and render
+	shaderProgram->setUniform("Material.Ka", glm::vec3(0.225f, 0.125f, 0.0f));
+	shaderProgram->setUniform("Material.Kd", glm::vec3(1.0f, 0.6f, 0.0f));
+	shaderProgram->setUniform("Material.Ks", glm::vec3(1.0f, 1.0f, 1.0f));
+	shaderProgram->setUniform("Material.Shininess", 1.0f);
+	model.getCurrentModel()->render();
+	shaderProgram->setUniform("animatedCharacter", false);
+#ifndef NDEBUG
+	auto check = OpenGLSupport().GetError();
+#endif
 }

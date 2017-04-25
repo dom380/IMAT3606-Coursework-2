@@ -1,4 +1,7 @@
 #include "Animation/SkeletalModel.h"
+#ifndef NDEBUG
+#include <utils\GLSupport.h>
+#endif
 
 SkeletalModel::SkeletalModel(std::shared_ptr<Shader> shaderProgIn)
 {
@@ -103,12 +106,12 @@ void SkeletalModel::InitFromScene(const aiScene* pScene, const std::string& File
 	for (unsigned int i = 0; i < m_Entries.size(); i++) {
 		const aiMesh* paiMesh = pScene->mMeshes[i];
 		InitMesh(i, paiMesh, vertices, Indices, bones);
-		//m_Entries[i].texture = texture;
 	}
 
 	// Generate and populate the buffers with vertex attributes and the indices
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(VertexStruct), &vertices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(VertexStruct), &vertices[0],
+		GL_STATIC_DRAW);
 
 	// Vertex positions 
 	glEnableVertexAttribArray(0);
@@ -117,16 +120,16 @@ void SkeletalModel::InitFromScene(const aiScene* pScene, const std::string& File
 	// Vertex Normals
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexStruct), (GLvoid*)offsetof(VertexStruct, normal));
-
+	
 	glEnableVertexAttribArray(4);
 	glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE, sizeof(VertexStruct), (GLvoid*)offsetof(VertexStruct, uvs));
-
+	
 	glEnableVertexAttribArray(5);
 	glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(VertexStruct), (GLvoid*)offsetof(VertexStruct, colour));
 
 	//// Vertex Texture Coords
-	//gl::EnableVertexAttribArray(2);
-	//gl::VertexAttribPointer(2, 2, gl::FLOAT, FALSE, sizeof(VertexStruct), (GLvoid*)offsetof(VertexStruct, uvs));
+	//GL_EnableVertexAttribArray(2);
+	//GL_VertexAttribPointer(2, 2, GL_FLOAT, FALSE, sizeof(VertexStruct), (GLvoid*)offsetof(VertexStruct, uvs));
 
 	// Bind the bone data buffer object
 	glBindBuffer(GL_ARRAY_BUFFER, boneBo);
@@ -137,9 +140,10 @@ void SkeletalModel::InitFromScene(const aiScene* pScene, const std::string& File
 
 	glEnableVertexAttribArray(3);
 	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData), (const GLvoid*)16);
-
+	
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices[0]) * Indices.size(), &Indices[0], GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices[0]) * Indices.size(), &Indices[0],
+		GL_STATIC_DRAW);
 
 	vertices.clear();
 	Indices.clear();
@@ -413,7 +417,7 @@ void SkeletalModel::SetBoneTransform(unsigned int Index, const Matrix4f& Transfo
 void SkeletalModel::render()
 {
 	BoneTransform(interval, Transforms);
-	
+
 	for (unsigned int i = 0; i < Transforms.size(); i++)
 	{
 		SetBoneTransform(i, Transforms[i]);
@@ -423,8 +427,8 @@ void SkeletalModel::render()
 
 	// Render all the model's meshes.
 	for (unsigned int i = 0; i < m_Entries.size(); i++) {
-		//glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_2D, m_Entries.at(i).texture.id);
+		//gl::ActiveTexture(gl::TEXTURE0);
+		//gl::BindTexture(gl::TEXTURE_2D, m_Entries.at(i).texture.id);
 		//m_pShaderProg->setUniform("material.texture_diffuse", 0);
 
 		glDrawElementsBaseVertex(GL_TRIANGLES,

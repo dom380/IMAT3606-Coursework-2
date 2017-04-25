@@ -32,6 +32,21 @@ void GameScreen::update(double dt)
 #ifndef NDEBUG
 	timer.start();
 #endif
+	if (!test)
+	{
+		shared_ptr<Transform> tran = std::make_shared<Transform>();
+		tran->scale = glm::vec3(0.5);
+		shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(componentStore);
+		shared_ptr<AnimatedModelComponent> anim = std::make_shared<AnimatedModelComponent>(renderer, gameObject);
+		std::vector<std::pair<const char*, const char*>> files;
+		files.push_back(std::make_pair("LegoRun", "resources/models/Animations/legoman@run.fbx"));
+		anim->init("LegoRun", files, "");
+
+		gameObject->AddComponent(anim, ComponentType::ANIMATION);
+		gameObject->AddComponent(tran, ComponentType::TRANSFORM);
+		gameObjects.push_back(gameObject);
+		test = true;
+	}
 	robot->Prepare(dt);
 	Message* robotLocMsg = new LocationMessage(robot->getPosition());
 	std::vector<std::pair<int, LogicComponent>>* logicComponents = componentStore->getAllComponents<LogicComponent>(ComponentType::LOGIC);
@@ -45,6 +60,11 @@ void GameScreen::update(double dt)
 		}
 	}
 	delete robotLocMsg;
+	auto animComponents = componentStore->getAllComponents<AnimatedModelComponent>(ComponentType::ANIMATION);
+	for (auto it = animComponents->begin(); it != animComponents->end(); ++it)
+	{
+		it->second.update(dt);
+	}
 }
 
 void GameScreen::render()

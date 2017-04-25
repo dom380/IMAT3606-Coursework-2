@@ -9,8 +9,6 @@ layout (location=3) in vec4 Weights; // Stream of vertex weights
 layout(location = 4) in vec2 uvs;
 layout(location = 5) in vec3 colour;
 
-uniform vec4 LightPosition;
-
 out vec3 Normal;
 out vec3 Position;
 out vec2 texCoords;
@@ -23,7 +21,7 @@ uniform mat4 ModelMatrix;
 uniform mat4 ModelViewMatrix;
 uniform mat3 NormalMatrix;
 uniform mat4 MVP;
-uniform mat4 ShadowMatrix;
+//uniform mat4 ShadowMatrix;
 
 const int MAX_BONES = 70; // Max number of bones
 uniform mat4 gBones[MAX_BONES]; // Bone transformations  ???
@@ -61,6 +59,6 @@ void main()
 		outCol = colour;
 	}	
 
-	LightPos = vec3(ViewMatrix * LightPosition);
-	ShadowCoord = ShadowMatrix * vec4(VertexPosition,1.0);
+	LightPos = vec3(ViewMatrix * vec4(0,200,100,1));
+	//ShadowCoord = ShadowMatrix * vec4(VertexPosition,1.0);
 }

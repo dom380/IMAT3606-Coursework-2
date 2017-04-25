@@ -23,16 +23,40 @@
 						<w>90</w>
 					</orientation>
 				</component>
-
-        <component type="animation">
-          <!-- fbx files-->
-          <files>
-            <file>Animation/legoman@run.fbx</file>
-          </files>
-          
-        </component>
 			</components>
 		</gameObject>
+    <!--<gameObject>
+      <components>
+        <component type="animation">
+          --><!-- fbx files--><!--
+          <default>LegoRun</default>
+          <files>
+            <file>
+              <id>LegoRun</id>
+              <filePath>resources/models/Animations/legoman@run.fbx</filePath>
+            </file>
+          </files>
+        </component>
+        <component type="transform">
+          <position>
+            <x>0.0</x>
+            <y>0.0</y>
+            <z>-0.0</z>
+          </position>
+          <scale>
+            <x>1.0</x>
+            <y>1.0</y>
+            <z>1.0</z>
+          </scale>
+          <orientation>
+            <x>0.0</x>
+            <y>1.0</y>
+            <z>0.0</z>
+            <w>90</w>
+          </orientation>
+        </component>
+      </components>
+    </gameObject>-->
 		<gameObject>
 			<components>
 				<component type ="model">

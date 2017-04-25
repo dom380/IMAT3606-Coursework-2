@@ -1,5 +1,69 @@
 <screen type="level" name="Level1">
     <gameObjects>
+		 <gameObject>
+      		<components>
+        		<component type="animation">
+          			<!-- fbx files-->
+          			<default>LegoRun</default>
+          			<files>
+            			<file>
+              				<id>LegoRun</id>
+              				<filePath>resources/models/Animations/legoman@run.fbx</filePath>
+           				</file>
+          			</files>
+        		</component>
+        		<component type="transform">
+          			<position>
+            			<x>0.0</x>
+            			<y>0.0</y>
+            			<z>0.0</z>
+          			</position>
+          			<scale>
+            			<x>0.5</x>
+	        	    	<y>0.5</y>
+    		        	<z>0.5</z>
+		        	</scale>
+          			<orientation>
+		            	<x>0.0</x>
+		            	<y>1.0</y>
+		            	<z>0.0</z>
+		            	<w>90</w>
+          			</orientation>
+        		</component>
+      	</components>
+    </gameObject>
+    <gameObject>
+      <components>
+        	<component type="animation">
+          		<!-- fbx files-->
+          		<default>EnemyAttack</default>
+          		<files>
+            		<file>
+              			<id>EnemyAttack</id>
+              			<filePath>resources/models/Animations/enemy@attack.fbx</filePath>
+            		</file>
+          		</files>
+        	</component>
+        	<component type="transform">
+          			<position>
+            			<x>10.0</x>
+            			<y>0.0</y>
+            			<z>0.0</z>
+          			</position>
+          			<scale>
+            			<x>5</x>
+            			<y>5</y>
+            			<z>5</z>
+          			</scale>
+          			<orientation>
+            			<x>0.0</x>
+            			<y>1.0</y>
+            			<z>0.0</z>
+            			<w>90</w>
+          			</orientation>
+        		</component>
+      		</components>
+    	</gameObject>
         <gameObject>
             <components>
                 <component type="model" id="wall.obj">

@@ -57,6 +57,7 @@ void GameObject::AddComponent(std::shared_ptr<Component> comp, ComponentType typ
 			componentHandles[type] = storePtr->storeComponent(std::dynamic_pointer_cast<ModelComponent>(comp));
 			break;
 		case ANIMATION:
+			componentHandles[type] = storePtr->storeComponent(std::dynamic_pointer_cast<AnimatedModelComponent>(comp));
 			break;
 		case RIGID_BODY:
 			componentHandles[type] = storePtr->storeComponent(std::dynamic_pointer_cast<PhysicsComponent>(comp));

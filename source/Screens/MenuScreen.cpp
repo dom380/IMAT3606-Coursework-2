@@ -10,7 +10,7 @@ void MenuScreen::show()
 {
 }
 
-void MenuScreen::update(double dt)
+void MenuScreen::update(double dt, double currentTime)
 {
 }
 

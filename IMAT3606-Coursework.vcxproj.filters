@@ -252,6 +252,15 @@
     <ClCompile Include="source\utils\UUID\guid.cpp">
       <Filter>Source Files\utils\UUID</Filter>
     </ClCompile>
+    <ClCompile Include="source\Animation\Math3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Animation\SkeletalModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\AnimatedModelComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\utils\GLSupport.h">
@@ -518,6 +527,15 @@
     <ClInclude Include="include\Input\InputGLFW.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
+    <ClInclude Include="include\Animation\Math3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Animation\SkeletalModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\AnimatedModelComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\text.frag">
@@ -550,5 +568,7 @@
     <None Include="shaders\colour.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="shaders\animation.frag" />
+    <None Include="shaders\animation.vert" />
   </ItemGroup>
 </Project>

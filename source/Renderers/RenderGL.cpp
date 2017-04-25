@@ -25,6 +25,9 @@ bool RenderGL::init()
 		return false;
 
 	}
+
+	AssetManager::getInstance()->getShader(std::make_pair("animation.vert", "animation.frag"))->initialiseBoneUniforms();
+	
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -377,3 +380,45 @@ void RenderGL::renderModel(ModelComponent & model, shared_ptr<Shader>& shaderPro
 	glBindVertexArray(0);
 }
 
+//TO DO
+void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera)
+{
+
+}
+//TO DO
+void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, vector<Light>& lights)
+{
+
+}
+//TO DO - change animation shader to use light uniform blocks for multiple lights - address vertex array objects not existing across threads
+//ability to change animation being played and user input to move the character - texture support?
+void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, unsigned int lightingBuffer, unsigned int lightingBlockId)
+{
+	shaderProgram->bindShader();
+
+	Transform* transform = model.getTransform();
+	glm::quat orientation = transform->orientation;
+	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::mat4_cast(orientation) * glm::scale(transform->scale);
+
+	glm::mat4 mv = camera->getView() * mMat;
+	shaderProgram->setUniform("ViewMatrix", camera->getView());
+	shaderProgram->setUniform("ModelMatrix", mMat);
+	shaderProgram->setUniform("ModelViewMatrix", mv);
+	shaderProgram->setUniform("NormalMatrix", glm::mat3(glm::vec3(mv[0]), glm::vec3(mv[1]), glm::vec3(mv[2])));
+	shaderProgram->setUniform("MVP", camera->getProjection() * mv);
+
+	//glBindBufferBase(GL_UNIFORM_BUFFER, lightingBlockId, lightingBuffer); //Bind lighting data
+	//set shader uniform
+	
+	shaderProgram->setUniform("animatedCharacter", true);
+	//Set the Teapot material properties in the shader and render
+	shaderProgram->setUniform("Material.Ka", glm::vec3(0.225f, 0.125f, 0.0f));
+	shaderProgram->setUniform("Material.Kd", glm::vec3(1.0f, 0.6f, 0.0f));
+	shaderProgram->setUniform("Material.Ks", glm::vec3(1.0f, 1.0f, 1.0f));
+	shaderProgram->setUniform("Material.Shininess", 1.0f);
+	model.getCurrentModel()->render();
+	shaderProgram->setUniform("animatedCharacter", false);
+#ifndef NDEBUG
+	auto check = OpenGLSupport().GetError();
+#endif
+}

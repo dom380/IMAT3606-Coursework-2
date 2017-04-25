@@ -24,3 +24,8 @@ Handle ComponentStore::storeComponent(std::shared_ptr<CollisionTrigger> componen
 {
 	return triggers.add(*component);
 }
+
+Handle ComponentStore::storeComponent(std::shared_ptr<AnimatedModelComponent> component)
+{
+	return animatedModels.add(*component);
+}

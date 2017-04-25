@@ -1,6 +1,8 @@
 #pragma once
 #ifndef LEVELLOADER_H
 #define LEVELLOADER_H
+#include <gl/glm/glm/gtc/quaternion.hpp>
+#include <gl/glm/glm/gtx/quaternion.hpp>
 #include <Engine.h>
 #include <Renderers\Graphics.h>
 #include <Screens\MenuScreen.h>
@@ -387,6 +389,8 @@ private:
 				quatElement->FirstChildElement("y") != NULL ? quatElement->FirstChildElement("y")->FloatText(1.0f) : 1.0f, //default to be orientated around y axis
 				quatElement->FirstChildElement("z") != NULL ? quatElement->FirstChildElement("z")->FloatText() : 0.0f
 			);
+
+			quat = glm::angleAxis(glm::radians(quat.w), glm::vec3(quat.x, quat.y, quat.z));
 		}
 	}
 

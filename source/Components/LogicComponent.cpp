@@ -87,7 +87,7 @@ void LogicComponent::applyTransform(glm::vec3 position, float scale, float orien
 			auto transformPtr = sp_Screen->getComponentStore()->getComponent<Transform>(comp, ComponentType::TRANSFORM);
 			transformPtr->position += position;
 			transformPtr->scale *= scale;
-			transformPtr->orientation.w += orientation;
+			transformPtr->orientation = glm::angleAxis(glm::radians(orientation), glm::vec3(0,1,0));
 		}
 	}
 }

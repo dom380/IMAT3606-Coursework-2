@@ -27,12 +27,12 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 	activeCamera = 0;
 }
 
-void GameScreen::update(double dt)
+void GameScreen::update(double dt, double currentTime)
 {
 #ifndef NDEBUG
 	timer.start();
 #endif
-	if (!test)
+	/*if (!test)
 	{
 		shared_ptr<Transform> tran = std::make_shared<Transform>();
 		tran->scale = glm::vec3(0.5);
@@ -45,8 +45,22 @@ void GameScreen::update(double dt)
 		gameObject->AddComponent(anim, ComponentType::ANIMATION);
 		gameObject->AddComponent(tran, ComponentType::TRANSFORM);
 		gameObjects.push_back(gameObject);
+
+		shared_ptr<Transform> tran2 = std::make_shared<Transform>();
+		tran2->scale = glm::vec3(5);
+		tran2->position = glm::vec3(10, 0, 0);
+		shared_ptr<GameObject> gameObject2 = std::make_shared<GameObject>(componentStore);
+		shared_ptr<AnimatedModelComponent> anim2 = std::make_shared<AnimatedModelComponent>(renderer, gameObject2);
+		std::vector<std::pair<const char*, const char*>> files2;
+		files2.push_back(std::make_pair("LegoRun", "resources/models/Animations/enemy@attack.fbx"));
+		anim2->init("LegoRun", files2, "");
+
+		gameObject2->AddComponent(anim2, ComponentType::ANIMATION);
+		gameObject2->AddComponent(tran2, ComponentType::TRANSFORM);
+		gameObjects.push_back(gameObject2);		
+
 		test = true;
-	}
+	}*/
 	robot->Prepare(dt);
 	Message* robotLocMsg = new LocationMessage(robot->getPosition());
 	std::vector<std::pair<int, LogicComponent>>* logicComponents = componentStore->getAllComponents<LogicComponent>(ComponentType::LOGIC);
@@ -63,7 +77,7 @@ void GameScreen::update(double dt)
 	auto animComponents = componentStore->getAllComponents<AnimatedModelComponent>(ComponentType::ANIMATION);
 	for (auto it = animComponents->begin(); it != animComponents->end(); ++it)
 	{
-		it->second.update(dt);
+		it->second.update(currentTime);
 	}
 }
 
@@ -85,6 +99,7 @@ void GameScreen::render()
 	for (animIt = animations->begin(); animIt != animations->end(); ++animIt)
 	{
 		if (animIt->first != -1)
+			//animIt->second.update(0.07f);
 			animIt->second.RecieveMessage(renderMsg);
 	}
 

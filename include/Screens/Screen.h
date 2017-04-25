@@ -17,7 +17,7 @@ public:
 		This is called at least once (If current active screen) every frame before rendering.
 		double dt, The time passed since last update call.
 	*/
-	virtual void update(double dt) = 0;
+	virtual void update(double dt, double currentTime) = 0;
 	/*
 		Pure Virtual method. Implementations should call any rendering code here.
 		This is called once (If current active screen) every frame.

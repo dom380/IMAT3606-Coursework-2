@@ -1,7 +1,6 @@
 #pragma once
 
 #include <stdio.h>
-#include "defines.h"
 #include <string.h>
 
 #ifdef WIN32
@@ -17,6 +16,11 @@
 
 #define ToRadian(x) (float)(((x) * PI / 180.0f))
 #define ToDegree(x) (float)(((x) * 180.0f / PI))
+#define PI 3.141592653589793
+#define TWOPI 6.2831853071795862
+#define TWOPI_F 6.2831853f
+#define TO_RADIANS(x) (x * 0.017453292519943295)
+#define TO_DEGREES(x) (x * 57.29577951308232)
 
 struct Vector2i
 {

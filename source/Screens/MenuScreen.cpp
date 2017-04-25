@@ -6,7 +6,7 @@ MenuScreen::MenuScreen(shared_ptr<Graphics>& graphics, Engine* engine)
 	this->graphics = graphics;
 }
 
-void MenuScreen::update(double dt)
+void MenuScreen::update(double dt, double currentTime)
 {
 }
 

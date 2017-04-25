@@ -45,7 +45,7 @@ public:
 		Update this screen's objects.
 		double dt, Current time step.
 	*/
-	void update(double dt);
+	void update(double dt, double currentTime);
 	/*
 		Render this screen.
 	*/

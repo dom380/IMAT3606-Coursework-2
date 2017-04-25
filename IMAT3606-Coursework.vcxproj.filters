@@ -392,9 +392,6 @@
     <ClInclude Include="include\utils\Utilities.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
-    <ClInclude Include="include\Animation\defines.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\Animation\Math3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>

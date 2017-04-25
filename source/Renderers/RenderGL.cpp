@@ -316,7 +316,7 @@ void RenderGL::renderModel(ModelComponent & model, shared_ptr<Shader>& shaderPro
 	}
 	Transform* transform = model.getTransform();
 	glm::quat orientation = transform->orientation;
-	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::rotate(glm::radians(orientation.w), glm::vec3(orientation.x, orientation.y, orientation.z)) * glm::scale(transform->scale);
+	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::mat4_cast(orientation) * glm::scale(transform->scale);
 	shaderProgram->setUniform("mView", camera->getView());
 	shaderProgram->setUniform("mProjection", camera->getProjection());
 	shaderProgram->setUniform("mModel", mMat);
@@ -343,7 +343,8 @@ void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& sh
 {
 
 }
-//TO DO - put opengl code into renderer and not within animation class
+//TO DO - change animation shader to use light uniform blocks for multiple lights - address vertex array objects not existing across threads
+//ability to change animation being played and user input to move the character - texture support?
 void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, unsigned int lightingBuffer, unsigned int lightingBlockId)
 {
 	shaderProgram->bindShader();
@@ -359,7 +360,6 @@ void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& sh
 	shaderProgram->setUniform("NormalMatrix", glm::mat3(glm::vec3(mv[0]), glm::vec3(mv[1]), glm::vec3(mv[2])));
 	shaderProgram->setUniform("MVP", camera->getProjection() * mv);
 
-	
 	//glBindBufferBase(GL_UNIFORM_BUFFER, lightingBlockId, lightingBuffer); //Bind lighting data
 	//set shader uniform
 	

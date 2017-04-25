@@ -186,7 +186,6 @@
     <ClCompile Include="source\utils\Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Animation\defines.h" />
     <ClInclude Include="include\Animation\Math3D.h" />
     <ClInclude Include="include\Animation\SkeletalModel.h" />
     <ClInclude Include="include\AssetManager.h" />

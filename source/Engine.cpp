@@ -62,7 +62,7 @@ void Engine::mainLoop()
 	double t = 0.0;
 	double dt = 1 / 60.0;
 	timer.start();
-	auto currentTime = timer.getElapsedTime();
+	auto currentTime = timer.getElapsedTime(); //want this
 	bool show_another_window = true;
 	//variable timestep
 	while (!window->shouldExit()) {
@@ -78,7 +78,7 @@ void Engine::mainLoop()
 		while (frameTime > 0.0) //While there is still time to update the simulation
 		{
 			double deltaTime = std::min(frameTime, dt);
-			activeScreen.second->update(deltaTime);
+			activeScreen.second->update(deltaTime, currentTime);
 
 			frameTime -= deltaTime;
 			t += deltaTime;

@@ -32,7 +32,7 @@ public:
 	/*
 		Empty implementation of update.
 	*/
-	void update(double dt);
+	void update(double dt, double currentTime);
 	/*
 		Calls to the graphics system to render the Text and Buttons.
 	*/

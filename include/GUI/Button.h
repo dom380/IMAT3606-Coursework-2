@@ -3,11 +3,11 @@
 #define BUTTON_H
 #include <string>
 using std::string;
+using std::pair;
 #include "EventListener.h"
 #include "Font.h"
 #include "Graphics\Shader.h"
 #include <Graphics\Transform.h>
-#include <GUI\TextBox.h>
 #include <Renderers\Graphics.h>
 #include <gl\glm\glm\gtc\matrix_transform.hpp>
 #include <algorithm> 
@@ -26,26 +26,25 @@ private:
 	};
 	AABB aabb;
 	shared_ptr<Graphics> graphics;
-	shared_ptr<TextBox> textbox;
 
 	std::function<void()> onClickCallback;
-
-	std::string id;
-
-	/*
-		Inititalise the Button, creating a Textbox for rendering and building an AABB around the text.
-	*/
-	void init(Font textfont, shared_ptr<Transform> pos, glm::vec3& colour = glm::vec3(1.0, 1.0, 1.0)) {
-		textbox = std::make_shared<TextBox>(text, textfont, pos, graphics);
-		font = textfont;
-		transform = pos;
-		buildAABB();
-	};
+	bool active;
+	
+	string scriptName;
+	string funcName;
+	vector<pair<string,string>> params;
 
 	/*
 		Calculates a bounding box around the button text.
 	*/
-	void buildAABB() {
+	void buildAABB(shared_ptr<Transform> transform) {
+		float maxHeight = 0;
+		aabb.x = transform->position.x;
+		aabb.y = transform->position.y;
+		aabb.width = transform->scale.x;
+		aabb.height = transform->scale.y;
+	};
+	void buildAABB(Font font, string text, shared_ptr<Transform> transform) {
 		float maxHeight = 0;
 		aabb.x = transform->position.x;
 		aabb.y = transform->position.y;
@@ -60,12 +59,12 @@ private:
 	};
 	
 protected:
-	string text;
-	Font font;
-	shared_ptr<Transform> transform;
+//	string text;
+	//Font font;
+//	shared_ptr<Transform> transform;
 public:
 	//Constructors
-	Button() {};
+	Button() { active = false;  };
 	/*
 		Constructor
 		string text, The text to display for the button.
@@ -75,40 +74,43 @@ public:
 		glm::vec3& colour, The colour of the text, normalised to 0..1. Defaulted to white (1.0,1.0,1.0), 
 		string id, The button#s Id.
 	*/
-	Button(string text, Font textfont, shared_ptr<Transform>& pos, shared_ptr<Graphics>& graphics, glm::vec3& colour = glm::vec3(1.0,1.0,1.0), string id ="") {
-		this->text = text;
-		this->graphics = graphics;
-		this->id = id;
-		init(textfont, pos, colour);
+	Button( shared_ptr<Graphics>& passedGraphics, shared_ptr<Transform>& pos, Font font, string text) {
+		this->graphics = passedGraphics;
+		init(font, text, pos);
 	};
-	/*
-		Constructor
-		const char* text, The text to display for the button.
-		Font textfont, The font to use for the text.
-		shared_ptr<Transform>& pos, The position, scale and orientation of the button.
-		shared_ptr<Graphics>& graphics, Pointer to the graphics system.
-		glm::vec3& colour, The colour of the text, normalised to 0..1. Defaulted to white (1.0,1.0,1.0),
-		string id, The button#s Id.
-	*/
-	Button(const char* text, Font textfont, shared_ptr<Transform>& pos, shared_ptr<Graphics>& graphics, glm::vec3& colour = glm::vec3(1.0, 1.0, 1.0), string id = "") {
-		this->text = string(text);
-		this->graphics = graphics;
-		this->id = id;
-		init(textfont, pos, colour);
+	Button(shared_ptr<Graphics>& passedGraphics, shared_ptr<Transform>& pos) {
+		this->graphics = passedGraphics;
+		init(pos);
 	};
+
 	~Button(){};
 	/*
 		Copy constructor.
 	*/
 	Button& operator=(Button& other) {
-		this->text = other.text;
-		this->transform = other.transform;
-		this->font = other.font;
+	//	this->text = other.text;
+		//this->transform = other.transform;
+	//	this->font = other.font;
 		this->graphics = other.graphics;
-		this->textbox = other.textbox;
+	//	this->textbox = other.textbox;
 		return *this;
 	};
+	/*
+	Inititalise the Button, creating a Textbox for rendering and building an AABB around the text.
+	*/
+	void init(Font font, string text, shared_ptr<Transform> transform) {
 
+		buildAABB(font, text, transform);
+		active = true;
+	};
+	/*
+	Inititalise the Button, creating a Textbox for rendering and building an AABB around the text.
+	*/
+	void init(shared_ptr<Transform> transform) {
+
+		buildAABB(transform);
+		active = true;
+	};
 	/*
 		Method to notify Button of Mouse Events it has subscribed to. 
 		If the event was a click within the button's bounding box the  
@@ -147,15 +149,35 @@ public:
 		onClickCallback = c;
 	};
 
-	/*
-		Call to the graphics system to render this button.
-	*/
-	void render() {
-		textbox->render();
+	bool isActive() {
+		return active;
 	}
 
-	std::string getId() {
-		return id;
+	void setActive(bool passedActive) {
+		active = passedActive;	
+	}
+	
+	void setScript(string setter) {
+		scriptName = setter;
+	}
+	string getScript() {
+		return scriptName;
+	}
+	void setFunc(string setter) {
+		funcName = setter;
+	}
+	string getFunc() {
+		return funcName;
+	}
+	void setParam(pair<string, string> setter) {
+		params.push_back(setter);
+	}
+	vector<pair<string, string>> getParams() {
+		return params;
+	}
+
+	void clearParams() {
+		params.clear();
 	}
 };
 

@@ -57,6 +57,7 @@ public:
 	void render();
 
 	void setFont(Font passedFont);
+	Font getFont();
 
 	glm::vec3 getColour();
 	void setColour(glm::vec3 colour);
@@ -64,6 +65,7 @@ private:
 	//private methods
 	
 	//private memebers
+	
 	string text;
 	Font font;
 	float charX, charY; //Current position of next character to render

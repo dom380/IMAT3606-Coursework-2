@@ -2214,11 +2214,13 @@
 			</specular>
 		</light>
 	</lights>
-	<strings>
-		<string id="score_string">
+	<uiElements>
+		<uiElement>
+			<ID>score_string</ID>
+			<Type>text</Type>
 			<position>
-				<x>30</x>
-				<y>650</y>
+			<x>30</x>
+			<y>650</y>
 			</position>
 			<scale>
 				<x>1.0</x>
@@ -2226,6 +2228,6 @@
 				<z>1.0</z>
 			</scale>
 			<value>Gold Collected: 0</value>
-		</string>
-	</strings>
+		</uiElement>
+	</uiElements>
 </screen>

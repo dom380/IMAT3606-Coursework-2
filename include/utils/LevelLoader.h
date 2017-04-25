@@ -166,6 +166,29 @@ public:
 		}
 		gameScreen->addGameObject(gameObject);
 	}
+	static void loadButtonFunc(shared_ptr<Button> button)
+	{
+		string scriptName = button->getScript();
+		string scriptFile = AssetManager::getInstance()->getScript(scriptName.c_str());
+		string function = button->getFunc();
+		//Remove file extension then load the script into lua
+		string rawname = Utilities::removeExtension(scriptName);
+		ScriptEngine::getInstance()->loadScript(scriptFile, rawname);
+		//Retrieve a reference to the onClick function
+		auto callback = ScriptEngine::getInstance()->getFunction(rawname, function);
+		//Build up a table of the provided parameters for the lua script
+		luabridge::LuaRef paramTable = luabridge::newTable(LuaStateHolder::getLuaState());
+		//tinyxml2::XMLElement* paramElement = onClickElement->FirstChildElement("params") != NULL ? onClickElement->FirstChildElement("params")->FirstChildElement() : NULL;
+
+		for (int x = 0; x < button->getParams().size(); x++)
+		{
+			string paramName = button->getParams().at(x).first;
+			std::transform(paramName.begin(), paramName.end(), paramName.begin(), std::tolower);
+			paramTable[paramName] = button->getParams().at(x).second;
+		}
+		//Bind the lua callback function, engine and parameter table as a c++ function for the button.
+		button->addOnClickFn(std::bind(callback, Engine::g_pEngine.get(), paramTable));
+	}
 private:
 	/*
 	Utility method to load MenuScreens
@@ -184,11 +207,11 @@ private:
 			loadStringElement(renderer, menuScreen, NULL, "", stringElement);
 			stringElement = stringElement->NextSiblingElement();
 		}
-		tinyxml2::XMLElement* buttonElement = screenElement->FirstChildElement("buttons")->FirstChildElement();
-		while (buttonElement != NULL) {
-			loadButtonElement(engine, renderer, input, menuScreen, buttonElement);
-			buttonElement = buttonElement->NextSiblingElement();
-		}
+	//	tinyxml2::XMLElement* buttonElement = screenElement->FirstChildElement("buttons")->FirstChildElement();
+	//	while (buttonElement != NULL) {
+			//loadButtonElement(engine, renderer, input, menuScreen, buttonElement);
+			//buttonElement = buttonElement->NextSiblingElement();
+	//	}
 
 		loadUIElements(renderer, menuScreen, screenDocument, filepath);
 		engine->registerScreen(menuScreen);
@@ -209,38 +232,56 @@ private:
 		glm::vec3 colour;
 		stringElement->FirstChildElement("colour") != NULL ? loadColour(colour, stringElement->FirstChildElement("colour"), glm::vec3(1.0, 1.0, 1.0)) : colour = glm::vec3(1.0, 1.0, 1.0);
 		shared_ptr<TextBox> textBox = std::make_shared<TextBox>(text, font, transform, renderer, colour, id);
+		//HasButton?
+		tinyxml2::XMLElement* UIButtonElement = stringElement->FirstChildElement("onClick");
+		if (UIButtonElement)
+		{
+			loadButtonElement(textBox, UIButtonElement);
+		}
 		screen->addUIElement(textBox);
 	}
 
 	/*
 	Utility method to load Button elements
 	*/
-	static void loadButtonElement(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input> input, shared_ptr<Screen> screen, tinyxml2::XMLElement* buttonElement)
+	static void loadButtonElement( shared_ptr<UIElement> uiE, tinyxml2::XMLElement* buttonElement)
 	{
-		Font font = *AssetManager::getInstance()->getFont("arial.ttf", renderer);
-		const char* text = buttonElement->FirstChildElement("value") != NULL ? buttonElement->FirstChildElement("value")->GetText() : "MISSING_STRING";
-		shared_ptr<Transform> transform = std::make_shared<Transform>();
-		loadTransform(transform, buttonElement);
-		glm::vec3 colour;
-		buttonElement->FirstChildElement("colour") != NULL ? loadColour(colour, buttonElement->FirstChildElement("colour"), glm::vec3(1.0, 1.0, 1.0)) : colour = glm::vec3(1.0, 1.0, 1.0);
-		string id;
-		buttonElement->Attribute("id") != NULL ? id = buttonElement->Attribute("id") : id = "";
-		shared_ptr<Button> button = std::make_shared<Button>(text, font, transform, renderer, colour, id);
-		screen->addButton(button);
-		input->registerMouseListener(button);
+		shared_ptr<Button> button;
+		switch (uiE->getType())
+		{
+		case UIType::TEXT:
+		{
+			shared_ptr<TextBox> tb = dynamic_pointer_cast<TextBox>(uiE);
+			button = std::make_shared<Button>(Engine::g_pEngine->getRenderer(), tb->getTransform(), tb->getFont(), tb->getText());
+			break;
+		}
+		case UIType::TEXTURE:
+		{
+			shared_ptr<UITextureElement> tb = dynamic_pointer_cast<UITextureElement>(uiE);
+			button = std::make_shared<Button>(Engine::g_pEngine->getRenderer(), tb->getTransform());
+			break;
+		}
+		default:
+			break;
+		}
+	//	screen->addButton(button);
+		Engine::g_pEngine->getInput()->registerMouseListener(button);
+		
 		//string funcName = string(buttonElement->FirstChildElement("function")->Attribute("type"));
-		loadButtonFunc(buttonElement, button, engine);
+		loadButtonFunc(buttonElement, button);
+		uiE->setButton(button);
 	}
 
 	/*
 		Utility method to bind the supplied parameters to the requested callback function.
 	*/
-	static void loadButtonFunc(tinyxml2::XMLElement* buttonElement, shared_ptr<Button> button, Engine* engine)
+	static void loadButtonFunc(tinyxml2::XMLElement* onClickElement, shared_ptr<Button> button)
 	{
-		tinyxml2::XMLElement* onClickElement = buttonElement->FirstChildElement("onClick");
 		string scriptName = onClickElement->FirstChildElement("script") != NULL ? onClickElement->FirstChildElement("script")->GetText() : "default.lua"; 
+		button->setScript(scriptName);
 		string scriptFile = AssetManager::getInstance()->getScript(scriptName.c_str());
 		string function = onClickElement->FirstChildElement("function") != NULL ? onClickElement->FirstChildElement("function")->GetText() : "doNothing";
+		button->setFunc(function);
 		//Remove file extension then load the script into lua
 		string rawname = Utilities::removeExtension(scriptName);
 		ScriptEngine::getInstance()->loadScript(scriptFile, rawname);
@@ -253,10 +294,11 @@ private:
 			string paramName = paramElement->Attribute("name");
 			std::transform(paramName.begin(), paramName.end(), paramName.begin(), std::tolower);
 			paramTable[paramName] = paramElement->GetText();
+			button->setParam(pair<string, string>(paramName, paramElement->GetText()));
 			paramElement = paramElement->NextSiblingElement();
 		}
 		//Bind the lua callback function, engine and parameter table as a c++ function for the button.
-		button->addOnClickFn(std::bind(callback, engine, paramTable));
+		button->addOnClickFn(std::bind(callback, Engine::g_pEngine.get(), paramTable));
 	}
 
 	/*
@@ -284,6 +326,8 @@ private:
 			if (UIID)
 				ID = string(UIID->GetText());
 			tinyxml2::XMLElement* UITexture;
+
+			
 			//get type
 			tinyxml2::XMLElement* UITypeElement = UIDocElement->FirstChildElement("Type");
 			EnumParser<UIType> uiTypeParser;
@@ -292,14 +336,24 @@ private:
 			switch (type)
 			{
 			case TEXT:
+			{
 				loadStringElement(renderer, screen, transform, ID, UIDocElement);
+				
 				break;
+			}
 			case TEXTURE:
 				//load UI using texture
 				UITexture = UIDocElement->FirstChildElement("Texture");
 				if (UITexture)
 				{
-					screen->addUIElement(std::make_shared<UITextureElement>(renderer, transform, UIID->GetText(), UITexture->GetText()));
+					shared_ptr<UITextureElement> uiT = std::make_shared<UITextureElement>(renderer, transform, UIID->GetText(), UITexture->GetText());
+					//HasButton?
+					tinyxml2::XMLElement* UIButtonElement = UIDocElement->FirstChildElement("onClick");
+					if (UIButtonElement)
+					{
+						loadButtonElement(uiT, UIButtonElement);
+					}
+					screen->addUIElement(uiT);
 				}
 				break;
 			case BUTTON:
@@ -354,7 +408,7 @@ private:
 		if (buttonElement)
 			buttonElement = buttonElement->FirstChildElement();
 		while (buttonElement != NULL) {
-			loadButtonElement(engine, renderer, input, gameScreen, buttonElement);
+			//loadButtonElement(engine, renderer, input, gameScreen, buttonElement);
 			buttonElement = buttonElement->NextSiblingElement();
 		}
 

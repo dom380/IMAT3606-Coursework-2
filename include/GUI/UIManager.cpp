@@ -1,5 +1,7 @@
 #include "UIManager.h"
+#include <Engine.h>
 #include "UITextureElement.h"
+#include <utils\LevelLoader.h>
 
 bool UIManager::initialised = false;
 shared_ptr<UIManager> UIManager::instance;
@@ -49,6 +51,65 @@ void UIManager::debugMenuItemUpdate()
 				uiElements[x]->setModel(glm::mat4(1.0f));
 				uiElements[x]->updateModelUsingTransform();
 
+				//HasButton?
+				static bool hasButton = uiElements[x]->getButton()->isActive();
+				if (ImGui::Checkbox("HasButton", &hasButton))
+				{
+					uiElements[x]->getButton()->setActive(hasButton);
+					if (hasButton)
+					{
+						Engine::g_pEngine->getInput()->registerMouseListener(uiElements[x]->getButton());
+					}
+					else
+					{
+						Engine::g_pEngine->getInput()->removeMouseListener(uiElements[x]->getButton());
+					}
+				}
+				if (hasButton)
+				{
+					if (ImGui::TreeNode("Button"))
+					{
+						static char buttonScriptName[64] = "";
+						if (strlen(buttonScriptName) == 0)
+						{
+							strncpy_s(buttonScriptName, uiElements.at(x)->getButton()->getScript().c_str(), uiElements.at(x)->getButton()->getScript().size());
+						}
+						static char buttonFuncName[64] = "";
+						if (strlen(buttonFuncName) == 0)
+						{
+							strncpy_s(buttonFuncName, uiElements.at(x)->getButton()->getFunc().c_str(), uiElements.at(x)->getButton()->getFunc().size());
+						}
+						static char buttonParamID[64] = "";
+						if (strlen(buttonParamID) == 0)
+						{
+							strncpy_s(buttonParamID, uiElements.at(x)->getButton()->getParams()[0].first.c_str(), uiElements.at(x)->getButton()->getParams()[0].first.size());
+						}
+						static char buttonParamText[64] = "";
+						if (strlen(buttonParamText) == 0)
+						{
+							strncpy_s(buttonParamText, uiElements.at(x)->getButton()->getParams()[0].second.c_str(), uiElements.at(x)->getButton()->getParams()[0].second.size());
+						}
+						//inputs
+						ImGui::InputText("ScriptName", buttonScriptName, sizeof(buttonScriptName));
+						ImGui::InputText("FuncName", buttonFuncName, sizeof(buttonFuncName));
+						ImGui::InputText("ParamID", buttonParamID, sizeof(buttonParamID));
+						ImGui::InputText("ParamText", buttonParamText, sizeof(buttonParamText));
+
+						if (ImGui::Button("UpdateButton"))
+						{
+							uiElements[x]->getButton()->setScript(buttonScriptName);
+							uiElements[x]->getButton()->setFunc(buttonFuncName);
+							uiElements[x]->getButton()->setParam(pair<string, string>(buttonParamID, buttonParamText));
+							LevelLoader::loadButtonFunc(uiElements[x]->getButton());
+						}
+						if (ImGui::Button("ClearButtonParams"))
+						{
+							uiElements[x]->getButton()->clearParams();
+						}
+						ImGui::TreePop();
+					}
+				}
+				
 				//Specific ui
 				switch (uiElements.at(x)->getType())
 				{

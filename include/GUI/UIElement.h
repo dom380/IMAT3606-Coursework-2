@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <GUI\UIType.h>
+#include <GUI\Button.h>
 #include <Graphics\Shader.h>
 #include "GL\glm\glm\gtc\matrix_transform.hpp"
 #include "GL\glm\glm\gtx\transform.hpp"
@@ -16,6 +17,7 @@ using namespace std;
 class UIElement
 {
 protected:
+	shared_ptr<Button> button;
 	bool haveVAO;
 	vector<GLfloat> vertices;
 	vector<GLuint> indices;
@@ -33,7 +35,14 @@ public:
 	UIElement(shared_ptr<Graphics>& graphics, shared_ptr<Transform>& transform,const char* id, const char* textureName);
 	virtual void init() = 0;
 	virtual void render() = 0;
-
+	/*
+	Returns a button
+	*/
+	shared_ptr<Button> getButton();
+	/*
+	Set button
+	*/
+	void setButton(shared_ptr<Button> passedButton);
 	string getID();
 	void setID(string ID);
 	shared_ptr<Transform> getTransform();

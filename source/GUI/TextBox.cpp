@@ -65,6 +65,11 @@ void TextBox::setFont(Font passedFont)
 	font = passedFont;
 }
 
+Font TextBox::getFont()
+{
+	return font;
+}
+
 glm::vec3 TextBox::getColour()
 {
 	return textColour;

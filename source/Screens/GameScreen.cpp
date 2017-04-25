@@ -95,9 +95,9 @@ void GameScreen::render()
 	{
 		textBox->render();
 	}
-	for (auto button : buttons) {
-		button->render();
-	}
+	//for (auto button : buttons) {
+	//	button->render();
+	//}
 	for (auto text : textBoxes) {
 		text->render();
 	}

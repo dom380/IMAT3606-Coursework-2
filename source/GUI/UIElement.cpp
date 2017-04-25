@@ -13,6 +13,16 @@ UIElement::UIElement(shared_ptr<Graphics>& engineGraphics, shared_ptr<Transform>
 	shader->setUniform("projection", projection);
 }
 
+shared_ptr<Button> UIElement::getButton()
+{
+	return button;
+}
+
+void UIElement::setButton(shared_ptr<Button> passedButton)
+{
+	button = passedButton;
+}
+
 string UIElement::getID()
 {
 	return uiID;

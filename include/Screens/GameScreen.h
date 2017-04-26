@@ -127,10 +127,10 @@ private:
 	//shared_ptr<Robot> robot;
 	int currentScore = 0;
 	glm::vec3 cameraDistanceToPlayer;
-#ifndef NDEBUG //If debugging display how long the frame took in ms.
+//#ifndef NDEBUG //If debugging display how long the frame took in ms.
 	Timer timer;
 	shared_ptr<TextBox> frameTime;
-#endif
+//#endif
 };
 
 #endif // !GAMESCREEN_H

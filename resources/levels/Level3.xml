@@ -153,7 +153,8 @@
 			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
-					<file>capsule.obj</file>
+					<file>chest.obj</file>
+					<texture>chest_diffuse.png</texture>
 				</component>
 				<component type="transform">
 					<position>
@@ -162,9 +163,9 @@
 						<z>0.0</z>
 					</position>
 					<scale>
-						<x>1.0</x>
-						<y>1.0</y>
-						<z>1.0</z>
+						<x>0.5</x>
+						<y>0.5</y>
+						<z>0.5</z>
 					</scale>
 				</component>
 				<component type = "controller">

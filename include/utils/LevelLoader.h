@@ -136,10 +136,12 @@ public:
 			{
 				loadCollisionTrigger(physics, gameObject, componentElement);
 			}
+			break;
 			case ComponentType::CONTROLLER:
 			{
 				loadController(physics, gameObject, componentElement);
 			}
+			break;
 			default:
 				break;
 			}

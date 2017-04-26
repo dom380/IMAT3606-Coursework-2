@@ -52,6 +52,9 @@ void Engine::init()
 	physics = buildPhysics(physicsImplementation);
 	physics->init();
 
+	//Example of sound playing (need to change to read XML)
+
+
 	loadFirstLevel();
 
 	DebugMenu::getInstance()->init();

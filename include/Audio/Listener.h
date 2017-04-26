@@ -4,8 +4,6 @@
 	Author: Natalie Downes - p12194892
 */
 
-#include <string>
-#include <vector>
 #include <SFML\Audio.hpp>
 
 /*
@@ -20,6 +18,12 @@ class Listener
 			Default constructor.
 		*/
 		Listener();
+
+		/*
+		Singleton
+		*/
+		static Listener* Instance();
+
 
 		/*
 			Sets the position
@@ -40,5 +44,5 @@ class Listener
 
 	private:
 		sf::Listener* listener; 
-		
+		static Listener* m_Instance; //!< Instance pointer of a Listener
 };

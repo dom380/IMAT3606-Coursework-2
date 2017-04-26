@@ -1,6 +1,7 @@
 #pragma once
 #ifndef LEVELLOADER_H
 #define LEVELLOADER_H
+
 #include <gl/glm/glm/gtc/quaternion.hpp>
 #include <gl/glm/glm/gtx/quaternion.hpp>
 #include <Engine.h>
@@ -20,6 +21,7 @@
 
 #ifndef NDEBUG
 #include "Timer.h"
+
 
 #endif
 /*
@@ -254,7 +256,7 @@ private:
 		tinyxml2::XMLElement* paramElement = onClickElement->FirstChildElement("params") != NULL ? onClickElement->FirstChildElement("params")->FirstChildElement():NULL;
 		while (paramElement != NULL) {
 			string paramName = paramElement->Attribute("name");
-			std::transform(paramName.begin(), paramName.end(), paramName.begin(), std::tolower);
+			transform(paramName.begin(), paramName.end(), paramName.begin(), tolower);
 			paramTable[paramName] = paramElement->GetText();
 			paramElement = paramElement->NextSiblingElement();
 		}

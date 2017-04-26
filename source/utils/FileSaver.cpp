@@ -187,43 +187,121 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 				//Type Specific Updates
 				switch (uiElement->getType())
 				{
-				case UIType::TEXT:
-				{
-					shared_ptr<TextBox> tb = dynamic_pointer_cast<TextBox>(uiElement);
-					//Update its text value
-					tinyxml2::XMLElement* XMLUITextElement = XMLUIElement->FirstChildElement("value");
-					if (XMLUITextElement)
+					case UIType::TEXT:
 					{
-						XMLUITextElement->SetText(tb->getText().c_str());
-					}
-					//colour
-					tinyxml2::XMLElement* XMLUIElementColour = XMLUIElement->FirstChildElement("colour");
-					string colourName[3] = { "r", "g", "b" };
-					if (!XMLUIElementColour)
-					{
-						XMLUIElementColour = doc->NewElement("colour");
+						shared_ptr<TextBox> tb = dynamic_pointer_cast<TextBox>(uiElement);
+						//Update its text value
+						tinyxml2::XMLElement* XMLUITextElement = XMLUIElement->FirstChildElement("value");
+						if (XMLUITextElement)
+						{
+							XMLUITextElement->SetText(tb->getText().c_str());
+						}
+						//colour
+						tinyxml2::XMLElement* XMLUIElementColour = XMLUIElement->FirstChildElement("colour");
+						string colourName[3] = { "r", "g", "b" };
+						if (!XMLUIElementColour)
+						{
+							XMLUIElementColour = doc->NewElement("colour");
 						
-						AddVec3ToElement(doc, XMLUIElementColour, tb->getColour(), colourName);
+							AddVec3ToElement(doc, XMLUIElementColour, tb->getColour(), colourName);
+						}
+						else
+						{
+							UpdateVec3Element(doc, XMLUIElementColour, tb->getColour(), colourName);
+						}
+						break;
+					}
+					case UIType::TEXTURE:
+					{
+						shared_ptr<UITextureElement> textureUI = dynamic_pointer_cast<UITextureElement>(uiElement);
+						//update texture value
+						tinyxml2::XMLElement* XMLUITextureElement = XMLUIElement->FirstChildElement("Texture");
+						if (XMLUITextureElement)
+						{
+							XMLUITextureElement->SetText(textureUI->getTextureName().c_str());
+						}
+						break;
+					}
+				}
+
+				//UpdateButton?
+				if (uiElement->getButton())
+				{
+					tinyxml2::XMLElement* XMLUIButtonElement = XMLUIElement->FirstChildElement("onClick");
+					if (uiElement->getButton()->isActive())
+					{
+						//UpdateButton
+						if (XMLUIButtonElement)
+						{
+							tinyxml2::XMLElement* XMLUIButtonScriptElement = XMLUIButtonElement->FirstChildElement("script");
+							XMLUIButtonScriptElement->SetText(uiElement->getButton()->getScript().c_str());
+							tinyxml2::XMLElement* XMLUIButtonFunctionElement = XMLUIButtonElement->FirstChildElement("function");
+							XMLUIButtonFunctionElement->SetText(uiElement->getButton()->getFunc().c_str());
+							tinyxml2::XMLElement* XMLUIButtonParamsElement = doc->NewElement("params");
+							//Do params exist in file?
+							if (XMLUIButtonParamsElement)
+							{
+								tinyxml2::XMLElement* XMLUIButtonParamElement = XMLUIButtonParamsElement->FirstChildElement("param");
+								for (int x = 0; x < uiElement->getButton()->getParams().size(); x++)
+								{
+									//Does the specific param exist
+									if (XMLUIButtonParamElement)
+									{
+									}
+									else
+									{
+										XMLUIButtonParamElement = doc->NewElement("param");
+										XMLUIButtonParamsElement->InsertEndChild(XMLUIButtonParamElement);
+									}
+									XMLUIButtonParamElement->SetAttribute("name", uiElement->getButton()->getParams()[x].first.c_str());
+									XMLUIButtonParamElement->SetText(uiElement->getButton()->getParams()[x].second.c_str());
+									XMLUIButtonParamElement = XMLUIButtonParamElement->NextSiblingElement();
+								}
+							}
+							else
+							{
+								//Create new params for file
+								XMLUIButtonParamsElement = doc->NewElement("params");
+								for (int x = 0; x < uiElement->getButton()->getParams().size(); x++)
+								{
+									tinyxml2::XMLElement* XMLUIButtonParamElement = doc->NewElement("param");
+									XMLUIButtonParamElement->SetAttribute("name", uiElement->getButton()->getParams()[x].first.c_str());
+									XMLUIButtonParamElement->SetText(uiElement->getButton()->getParams()[x].second.c_str());
+									XMLUIButtonParamsElement->InsertEndChild(XMLUIButtonParamElement);
+								}
+								XMLUIButtonElement->InsertEndChild(XMLUIButtonParamsElement);
+							}
+						}
+						else
+						{
+							//add new button
+							XMLUIButtonElement = doc->NewElement("onClick");
+							tinyxml2::XMLElement* XMLUIButtonScriptElement = doc->NewElement("script");
+							XMLUIButtonScriptElement->SetText(uiElement->getButton()->getScript().c_str());
+							XMLUIButtonElement->InsertEndChild(XMLUIButtonScriptElement);
+							tinyxml2::XMLElement* XMLUIButtonFunctionElement = doc->NewElement("function");
+							XMLUIButtonFunctionElement->SetText(uiElement->getButton()->getFunc().c_str());
+							XMLUIButtonElement->InsertEndChild(XMLUIButtonFunctionElement);
+							tinyxml2::XMLElement* XMLUIButtonParamsElement = doc->NewElement("params");
+							for (int x = 0; x < uiElement->getButton()->getParams().size(); x++)
+							{
+								tinyxml2::XMLElement* XMLUIButtonParamElement = doc->NewElement("param");
+								XMLUIButtonParamElement->SetAttribute("name", uiElement->getButton()->getParams()[x].first.c_str());
+								XMLUIButtonParamElement->SetText(uiElement->getButton()->getParams()[x].second.c_str());
+								XMLUIButtonParamsElement->InsertEndChild(XMLUIButtonParamElement);
+							}
+							XMLUIButtonElement->InsertEndChild(XMLUIButtonParamsElement);
+							XMLUIElement->InsertEndChild(XMLUIButtonElement);
+						}
 					}
 					else
 					{
-						UpdateVec3Element(doc, XMLUIElementColour, tb->getColour(), colourName);
+						//delete button
+						if (XMLUIButtonElement)
+						{
+							XMLUIElement->DeleteChild(XMLUIButtonElement);
+						}
 					}
-					break;
-				}
-				case UIType::TEXTURE:
-				{
-					shared_ptr<UITextureElement> textureUI = dynamic_pointer_cast<UITextureElement>(uiElement);
-					//update texture value
-					tinyxml2::XMLElement* XMLUITextureElement = XMLUIElement->FirstChildElement("Texture");
-					if (XMLUITextureElement)
-					{
-						XMLUITextureElement->SetText(textureUI->getTextureName().c_str());
-					}
-					break;
-				}
-				case UIType::BUTTON:
-					break;
 				}
 				
 				//Update its transform
@@ -509,29 +587,40 @@ bool FileSaver::UpdateVec3Element(tinyxml2::XMLDocument * doc, tinyxml2::XMLElem
 		//xyz
 		switch (vector3)
 		{
-		case 0:
-		{
-			std::ostringstream ss;
-			ss << passedVector[vector3];
-			ele->FirstChildElement(vecNames[0].c_str())->SetText(string(ss.str()).c_str());
+			case 0:
+			{
+				std::ostringstream ss;
+				ss << passedVector[vector3];
+				ele->FirstChildElement(vecNames[0].c_str())->SetText(string(ss.str()).c_str());
 
-			break;
-		}
-		case 1:
-		{
-			std::ostringstream ss;
-			ss << passedVector[vector3];
-			ele->FirstChildElement(vecNames[1].c_str())->SetText(string(ss.str()).c_str());
-			break;
-		}
+				break;
+			}
+			case 1:
+			{
+				std::ostringstream ss;
+				ss << passedVector[vector3];
+				ele->FirstChildElement(vecNames[1].c_str())->SetText(string(ss.str()).c_str());
+				break;
+			}
 
-		case 2:
-		{
-			std::ostringstream ss;
-			ss << passedVector[vector3];
-			ele->FirstChildElement(vecNames[2].c_str())->SetText(string(ss.str()).c_str());
-			break;
-		}
+			case 2:
+			{
+				std::ostringstream ss;
+				ss << passedVector[vector3];
+				if (ele->FirstChildElement(vecNames[2].c_str()))
+				{
+					ele->FirstChildElement(vecNames[2].c_str())->SetText(string(ss.str()).c_str());
+				}
+				else
+				{
+					//vec[2] does not exist yet
+					tinyxml2::XMLElement* vec2Element = doc->NewElement(vecNames[2].c_str());
+					vec2Element->SetText(string(ss.str()).c_str());
+					ele->InsertEndChild(vec2Element);
+				}
+			
+				break;
+			}
 		}
 
 	}

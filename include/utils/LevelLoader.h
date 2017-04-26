@@ -1,6 +1,8 @@
 #pragma once
 #ifndef LEVELLOADER_H
 #define LEVELLOADER_H
+#include <gl/glm/glm/gtc/quaternion.hpp>
+#include <gl/glm/glm/gtx/quaternion.hpp>
 #include <Engine.h>
 #include <Renderers\Graphics.h>
 #include <Screens\MenuScreen.h>
@@ -9,10 +11,16 @@
 #include <Components\LogicComponent.h>
 #include "tinyxml2.h"
 #include <Scripting\ScriptEngine.h>
+#include <Components\AnimatedModelComponent.h>
 #include <Utils/Utilities.h>
+#include "utils\DebugUtils.h"
+#include <GUI\UITextureElement.h>
+#include <gl/glm/glm/gtc/quaternion.hpp>
+#include <gl/glm/glm/gtx/quaternion.hpp>
+
 #ifndef NDEBUG
 #include "Timer.h"
-#include "utils\DebugUtils.h"
+
 #endif
 /*
 Factory class to parse level XML descriptors and create the relevant objects.
@@ -47,11 +55,12 @@ public:
 			if (strcmp(fileName.c_str(), screenElement->Attribute("name")) != 0)
 			{
 				std::cerr << "Failed to load file, filename != to levelname" << filePath << std::endl;
-#ifndef NDEBUG
+
 				DebugUtils::getInstance()->popup("FAIL","Failed to load file, filename != to levelname");
-#endif
+
 				return false;
 			}
+			engine->getDebugMenu()->refreshMenuItems();
 			const char* type = screenElement->Attribute("type");
 			if (string(type) == string("menu")) {
 				return loadMenu(engine, renderer, input, doc, filePath);
@@ -64,6 +73,7 @@ public:
 				std::cerr << "Unrecognised screen type: " << type << std::endl;
 				return false;
 			}
+
 		}
 		catch (const std::runtime_error& re)
 		{
@@ -81,11 +91,14 @@ public:
 			return false;
 		}
 	}
-	static void loadGameObject(shared_ptr<Graphics>& renderer, shared_ptr<GameScreen> gameSceen, tinyxml2::XMLElement* gameObjElement, shared_ptr<ComponentStore> componentStore)
+	static void loadGameObject(shared_ptr<Graphics>& renderer, shared_ptr<Physics>& physics, shared_ptr<GameScreen> gameSceen, tinyxml2::XMLElement* gameObjElement, shared_ptr<ComponentStore> componentStore)
 	{
 		if (gameObjElement->FirstChildElement("components") == NULL)
 			return;
-		shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(componentStore);
+		EnumParser<GameObjectTag> tagParser;
+		std::string tagText = gameObjElement->FirstChildElement("tag") != NULL ? gameObjElement->FirstChildElement("tag")->GetText() : "UNKNOWN";
+		GameObjectTag tag = tagParser.parse(tagText);
+		shared_ptr<GameObject> gameObject = std::make_shared<GameObject>(componentStore, tag);
 		tinyxml2::XMLElement* componentElement = gameObjElement->FirstChildElement("components")->FirstChildElement();
 		while (componentElement != NULL)
 		{
@@ -101,10 +114,10 @@ public:
 				loadModel(renderer, gameObject, componentElement);
 				break;
 			case ComponentType::ANIMATION:
-				//todo
+				loadAnimation(renderer, gameObject, componentElement);
 				break;
 			case ComponentType::RIGID_BODY:
-				//todo
+				loadPhysics(renderer, physics, gameObject, componentElement);
 				break;
 			case ComponentType::LOGIC:
 			{
@@ -119,6 +132,11 @@ public:
 				shared_ptr<Transform> transform = std::make_shared<Transform>();
 				loadTransform(transform, componentElement);
 				gameObject->AddComponent(transform, ComponentType::TRANSFORM);
+			}
+			break;
+			case ComponentType::TRIGGER:
+			{
+				loadCollisionTrigger(physics, gameObject, componentElement);
 			}
 			break;
 			default:
@@ -159,7 +177,7 @@ private:
 	static bool loadMenu(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, tinyxml2::XMLDocument* screenDocument, string filepath)
 	{
 		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
-		shared_ptr<MenuScreen> menuScreen = std::make_shared<MenuScreen>(renderer, engine);
+		shared_ptr<MenuScreen> menuScreen = std::make_shared<MenuScreen>(renderer);
 		menuScreen->setID(screenElement->Attribute("name"));
 		menuScreen->setXMLDocument(screenDocument);
 		menuScreen->setXMLFilePath(filepath);
@@ -174,6 +192,8 @@ private:
 			loadButtonElement(engine, renderer, input, menuScreen, buttonElement);
 			buttonElement = buttonElement->NextSiblingElement();
 		}
+
+		loadUIElements(renderer, menuScreen, screenDocument, filepath);
 		engine->registerScreen(menuScreen);
 		return true;
 	}
@@ -198,7 +218,7 @@ private:
 	/*
 	Utility method to load Button elements
 	*/
-	static void loadButtonElement(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input> input, shared_ptr<MenuScreen> menuScreen, tinyxml2::XMLElement* buttonElement)
+	static void loadButtonElement(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input> input, shared_ptr<Screen> screen, tinyxml2::XMLElement* buttonElement)
 	{
 		Font font = *AssetManager::getInstance()->getFont("arial.ttf", renderer);
 		const char* text = buttonElement->FirstChildElement("value") != NULL ? buttonElement->FirstChildElement("value")->GetText() : "MISSING_STRING";
@@ -209,7 +229,7 @@ private:
 		string id;
 		buttonElement->Attribute("id") != NULL ? id = buttonElement->Attribute("id") : id = "";
 		shared_ptr<Button> button = std::make_shared<Button>(text, font, transform, renderer, colour, id);
-		menuScreen->addButton(button);
+		screen->addButton(button);
 		input->registerMouseListener(button);
 		//string funcName = string(buttonElement->FirstChildElement("function")->Attribute("type"));
 		loadButtonFunc(buttonElement, button, engine);
@@ -243,6 +263,43 @@ private:
 	}
 
 	/*
+		Load UI elements
+
+	*/
+	static bool loadUIElements(shared_ptr<Graphics>& renderer, shared_ptr<Screen> screen, tinyxml2::XMLDocument* screenDocument, string filepath)
+	{
+		bool loadSuccess = true;
+
+		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
+		tinyxml2::XMLElement* UIDocElement = screenElement->FirstChildElement("uiElements");
+		
+		if (UIDocElement)
+		{
+			UIDocElement = UIDocElement->FirstChildElement();
+		}
+		
+		while (UIDocElement != NULL) {
+			shared_ptr<Transform> transform = std::make_shared<Transform>();
+			loadTransform(transform, UIDocElement);
+			//get ID
+			tinyxml2::XMLElement* UIID = UIDocElement->FirstChildElement("ID");
+			//load UI using texture
+			tinyxml2::XMLElement* UITexture = UIDocElement->FirstChildElement("Texture");
+			if (UITexture)
+			{
+				screen->addUIElement(std::make_shared<UITextureElement>(renderer, transform, UIID->GetText(), UITexture->GetText()));
+			}
+			else
+			{
+				//text?
+			}
+			
+			UIDocElement = UIDocElement->NextSiblingElement();
+		}
+
+		return loadSuccess;
+	}
+	/*
 		Utility method to load GameScreens
 		Returns true on sucess.
 	*/
@@ -254,13 +311,14 @@ private:
 #endif
 		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
 		shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>(engine->getWindowWidth(), engine->getWindowHeight(), 45.f);
-		shared_ptr<GameScreen> gameScreen = std::make_shared<GameScreen>(renderer, input, camera);
+		shared_ptr<GameScreen> gameScreen = std::make_shared<GameScreen>(renderer, input, engine->getPhysics(), camera);
+		input->setKeyFocus(gameScreen);
 		gameScreen->setID(screenElement->Attribute("name"));
 		gameScreen->setXMLDocument(screenDocument);
 		gameScreen->setXMLFilePath(filepath);
 		tinyxml2::XMLElement* gameObjElement = screenElement->FirstChildElement("gameObjects")->FirstChildElement();
 		while (gameObjElement != NULL) {
-			loadGameObject(renderer, gameScreen, gameObjElement, gameScreen->getComponentStore());
+			loadGameObject(renderer, engine->getPhysics(), gameScreen, gameObjElement, gameScreen->getComponentStore());
 			gameObjElement = gameObjElement->NextSiblingElement();
 		}
 		tinyxml2::XMLElement* lightElement = screenElement->FirstChildElement("lights")->FirstChildElement();
@@ -277,6 +335,17 @@ private:
 			loadStringElement(renderer, gameScreen, stringElement);
 			stringElement = stringElement->NextSiblingElement();
 		}
+
+		tinyxml2::XMLElement* buttonElement = screenElement->FirstChildElement("buttons");
+		if (buttonElement)
+			buttonElement = buttonElement->FirstChildElement();
+		while (buttonElement != NULL) {
+			loadButtonElement(engine, renderer, input, gameScreen, buttonElement);
+			buttonElement = buttonElement->NextSiblingElement();
+		}
+
+		loadUIElements(renderer, gameScreen, screenDocument, filepath);
+
 		gameScreen->updateLighting();
 		engine->registerScreen(gameScreen);
 		input->registerKeyListener(gameScreen);
@@ -331,6 +400,151 @@ private:
 		gameObject->AddComponent(mesh, ComponentType::MODEL);
 	}
 
+	static void loadAnimation(shared_ptr<Graphics>& renderer, shared_ptr<GameObject> gameObject, tinyxml2::XMLElement* animElement)
+	{
+		shared_ptr<AnimatedModelComponent> animation = std::make_shared<AnimatedModelComponent>(renderer, gameObject);
+		tinyxml2::XMLElement* fileElement = animElement->FirstChildElement("files");
+		std::vector<std::pair<const char*, const char*>> files;
+		if (fileElement != NULL) fileElement = fileElement->FirstChildElement();
+		while (fileElement != NULL) {
+			files.push_back(std::make_pair(fileElement->FirstChildElement("id")->GetText(),fileElement->FirstChildElement("filePath")->GetText()));
+
+			//loadStringElement(renderer, gameScreen, stringElement);
+			fileElement = fileElement->NextSiblingElement();
+		}
+		animation->init(animElement->FirstChildElement("default")->GetText(),files, "");
+		gameObject->AddComponent(animation, ComponentType::ANIMATION);
+	}
+
+	/*
+		Utility method to load physics component.
+	*/
+	static void loadPhysics(shared_ptr<Graphics>& graphics, shared_ptr<Physics>& physics, shared_ptr<GameObject> gameObject, tinyxml2::XMLElement* physicsElement)
+	{
+		float mass = 0.f;
+		shared_ptr<PhysicsComponent> physComp;
+		//Get mass
+		mass = physicsElement->FirstChildElement("mass") != NULL ? physicsElement->FirstChildElement("mass")->FloatText() : 0.f;
+		//Check if convex
+		bool convex = physicsElement->FirstChildElement("convex") != NULL ? physicsElement->FirstChildElement("convex")->BoolText() : true;
+		//Load collision shape
+		if (physicsElement->FirstChildElement("collision_mesh") != NULL)
+		{
+			const char* meshFile = physicsElement->FirstChildElement("collision_mesh")->GetText();
+			if (convex)
+			{
+				auto mesh = AssetManager::getInstance()->getModelData(meshFile, graphics);
+				physComp = std::make_shared<PhysicsComponent>(physics, std::weak_ptr<GameObject>(gameObject), mesh, mass, convex);
+			}
+			else
+			{
+				auto mesh = AssetManager::getInstance()->getCollisionData(meshFile);
+				physComp = std::make_shared<PhysicsComponent>(physics, std::weak_ptr<GameObject>(gameObject), mesh, mass, convex);
+			}
+		}
+		else
+		{
+			ShapeData shapeData;
+			readShapeData(physicsElement, shapeData);
+			physComp = std::make_shared<PhysicsComponent>(physics, std::weak_ptr<GameObject>(gameObject), shapeData, mass);
+		}
+		//Get restitution
+		double restitution = physicsElement->FirstChildElement("restitution") != NULL ? physicsElement->FirstChildElement("restitution")->DoubleText() : 0.0f;
+		physComp->setRestitution(restitution);
+		//Get friction
+		double friction = physicsElement->FirstChildElement("friction") != NULL ? physicsElement->FirstChildElement("friction")->DoubleText() : 0.5;
+		physComp->setFriction(friction);
+		//Get rotational friction. 
+		friction = physicsElement->FirstChildElement("rotational_friction") != NULL ? physicsElement->FirstChildElement("rotational_friction")->DoubleText() : 0.0;
+		physComp->setRotationalFriction(friction);
+		//Get constant velocity
+		bool constVel = physicsElement->FirstChildElement("constant_velocity") != NULL ? physicsElement->FirstChildElement("constant_velocity")->BoolText() : false;
+		physComp->setConstVelocity(constVel);
+		//Get Velocity
+		tinyxml2::XMLElement* velElement = physicsElement->FirstChildElement("velocity");
+		glm::vec3 velocity;
+		if (velElement != NULL) 
+		{
+			velocity = glm::vec3
+				(
+					velElement->FirstChildElement("x") != NULL ? velElement->FirstChildElement("x")->FloatText() : 0.0f,
+					velElement->FirstChildElement("y") != NULL ? velElement->FirstChildElement("y")->FloatText() : 0.0f,
+					velElement->FirstChildElement("z") != NULL ? velElement->FirstChildElement("z")->FloatText() : 0.0f
+				);
+		}
+		physComp->setVelocity(velocity.x, velocity.y, velocity.z);
+		gameObject->AddComponent(physComp, ComponentType::RIGID_BODY);
+	}
+
+	/*
+		Utility method to pare bounding shape data from XML
+	*/
+	static void readShapeData(tinyxml2::XMLElement* physicsElement, ShapeData& shapeData)
+	{
+		EnumParser<ShapeData::BoundingShape> boundingParser;
+		tinyxml2::XMLElement* shapeElement = physicsElement->FirstChildElement("bounding_shape");
+		const char* shapeStr = shapeElement != NULL ? shapeElement->Attribute("type") : NULL;
+		if (shapeStr == NULL)
+		{
+			throw std::runtime_error("No collision mesh or bounding shape specified for physics component");
+		}
+		
+		ShapeData::BoundingShape shapeType = boundingParser.parse(string(shapeStr));
+		shapeData.boundingShape = shapeType;
+		switch (shapeType)
+		{
+			case ShapeData::BoundingShape::BOX:
+			{
+				tinyxml2::XMLElement* extentsElemenet = shapeElement->FirstChildElement("half_extents");
+				shapeData.halfExtents = glm::vec3
+					(
+						extentsElemenet->FirstChildElement("x") != NULL ? extentsElemenet->FirstChildElement("x")->FloatText() : 1.0f,
+						extentsElemenet->FirstChildElement("y") != NULL ? extentsElemenet->FirstChildElement("y")->FloatText() : 1.0f,
+						extentsElemenet->FirstChildElement("z") != NULL ? extentsElemenet->FirstChildElement("z")->FloatText() : 1.0f
+						);
+				break;
+			}
+			case ShapeData::BoundingShape::SPHERE:
+				shapeData.radius = shapeElement->FirstChildElement("radius") != NULL ? shapeElement->FirstChildElement("radius")->FloatText() : 1.0f;
+				break;
+			case ShapeData::BoundingShape::CONE:
+				shapeData.radius = shapeElement->FirstChildElement("radius") != NULL ? shapeElement->FirstChildElement("radius")->FloatText() : 1.0f;
+				shapeData.height = shapeElement->FirstChildElement("height") != NULL ? shapeElement->FirstChildElement("height")->FloatText() : 1.0f;
+				break;
+			case ShapeData::BoundingShape::CYLINDER:
+			{
+				tinyxml2::XMLElement* extentsElemenet = shapeElement->FirstChildElement("half_extents");
+				shapeData.halfExtents = glm::vec3
+					(
+						extentsElemenet->FirstChildElement("x") != NULL ? extentsElemenet->FirstChildElement("x")->FloatText() : 1.0f,
+						extentsElemenet->FirstChildElement("y") != NULL ? extentsElemenet->FirstChildElement("y")->FloatText() : 1.0f,
+						extentsElemenet->FirstChildElement("z") != NULL ? extentsElemenet->FirstChildElement("z")->FloatText() : 1.0f
+						);
+				break;
+			}
+		}
+	}
+
+	/*
+		Utility method to load collision triggers.
+	*/
+	static void loadCollisionTrigger(shared_ptr<Physics>& physics, shared_ptr<GameObject> gameObject, tinyxml2::XMLElement* triggerElement)
+	{
+		shared_ptr<CollisionTrigger> collisionTrigger;
+		ShapeData shapeData;
+		readShapeData(triggerElement, shapeData);
+		const char* scriptName = triggerElement->FirstChildElement("script") != NULL ? triggerElement->FirstChildElement("script")->GetText() : "default.lua";
+		auto scriptPath = AssetManager::getInstance()->getScript(scriptName);
+		bool triggerOnce = triggerElement->FirstChildElement("trigger_once") != NULL ? triggerElement->FirstChildElement("trigger_once")->BoolText() : true;
+		collisionTrigger = std::make_shared<CollisionTrigger>(physics, std::weak_ptr<GameObject>(gameObject), shapeData, scriptPath, triggerOnce);
+		gameObject->AddComponent(collisionTrigger, ComponentType::TRIGGER);
+		std::shared_ptr<BulletPhysics> physicsPtr = std::dynamic_pointer_cast<BulletPhysics>(physics);
+		if (physicsPtr != nullptr)
+		{
+			physicsPtr->addTrigger(collisionTrigger);
+		}
+	}
+
 	/*
 	Utility method to load Transform objects
 	*/
@@ -365,7 +579,7 @@ private:
 	{
 		glm::vec3 pos;
 		glm::vec3 scale = glm::vec3(1.0, 1.0, 1.0);
-		glm::quat quat; quat.y = 1.0f; quat.w = 0.0f;
+		glm::quat quat;
 		readTransformData(pos, scale, quat, element);
 		transform->orientation = quat;
 		transform->position = pos;
@@ -398,9 +612,11 @@ private:
 			(
 				quatElement->FirstChildElement("w") != NULL ? quatElement->FirstChildElement("w")->FloatText() : 0.0f,
 				quatElement->FirstChildElement("x") != NULL ? quatElement->FirstChildElement("x")->FloatText() : 0.0f,
-				quatElement->FirstChildElement("y") != NULL ? quatElement->FirstChildElement("y")->FloatText(1.0f) : 1.0f, //default to be orientated around y axis
-				quatElement->FirstChildElement("z") != NULL ? quatElement->FirstChildElement("z")->FloatText() : 0.0f
+				quatElement->FirstChildElement("y") != NULL ? quatElement->FirstChildElement("y")->FloatText() : 0.0f,
+				quatElement->FirstChildElement("z") != NULL ? quatElement->FirstChildElement("z")->FloatText() : 1.0f
 			);
+
+			quat = glm::angleAxis(glm::radians(quat.w), glm::vec3(quat.x, quat.y, quat.z));
 		}
 	}
 

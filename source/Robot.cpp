@@ -63,16 +63,16 @@ vector<GLfloat> yellow = {
 Robot::Robot(shared_ptr<Shader> shaderPtr)
 {
 	shader = shaderPtr;
-	armAngles[LEFT] = 0.0;
-	armAngles[RIGHT] = 0.0;
-	legAngles[LEFT] = 0.0;
-	legAngles[RIGHT] = 0.0;
+	armAngles[LEFT_DIR] = 0.0;
+	armAngles[RIGHT_DIR] = 0.0;
+	legAngles[LEFT_DIR] = 0.0;
+	legAngles[RIGHT_DIR] = 0.0;
 
-	armStates[LEFT] = FORWARD_STATE;
-	armStates[RIGHT] = BACKWARD_STATE;
+	armStates[LEFT_DIR] = FORWARD_STATE;
+	armStates[RIGHT_DIR] = BACKWARD_STATE;
 
-	legStates[LEFT] = FORWARD_STATE;
-	legStates[RIGHT] = BACKWARD_STATE;
+	legStates[LEFT_DIR] = FORWARD_STATE;
+	legStates[RIGHT_DIR] = BACKWARD_STATE;
 
 	vector<GLfloat> vertices = {
 		-1.0f, -1.0f, 0.0f,
@@ -197,7 +197,7 @@ void Robot::updateCamera()
 	if(camera != nullptr)
 		camera->move(glm::vec3(robot_Pos.x, robot_Pos.y, robot_Pos.z));
 }
-
+#ifndef NDEBUG
 void Robot::debugMenuItemUpdate()
 {
 	if (ImGui::BeginMenu("Robot"))
@@ -205,7 +205,7 @@ void Robot::debugMenuItemUpdate()
 		ImGui::EndMenu();
 	}
 }
-
+#endif
 void Robot::DrawRobot(glm::mat4 viewMatrix, glm::mat4 projectionMatrix)
 {
 	shader->bindShader();
@@ -288,25 +288,25 @@ void Robot::handle(KeyEvent event)
 	{
 		switch (event.key)
 		{
-		case 87: //W
+		case KeyCodes::W: //W
 			robot_Pos.x += robot_front_Dir.x*movementSpeed;
 			robot_Pos.z += robot_front_Dir.z*movementSpeed;
 			updateCamera();
 			setAnimate(true);
 			break;
-		case 83: //S
+		case KeyCodes::S: //S
 			robot_Pos.x -= robot_front_Dir.x*movementSpeed;
 			robot_Pos.z -= robot_front_Dir.z*movementSpeed;
 			updateCamera();
 			setAnimate(true);
 			break;
-		case 65: //A
+		case KeyCodes::A: //A
 			rotationAngle += rotationSpeed;
 			robot_front_Dir = glm::rotateY(robot_front_Dir, glm::radians(rotationSpeed));
 			updateCamera();
 			setAnimate(true);
 			break;
-		case 68: //D
+		case KeyCodes::D: //D
 			rotationAngle -= rotationSpeed;
 			robot_front_Dir = glm::rotateY(robot_front_Dir, glm::radians(-rotationSpeed));
 			updateCamera();

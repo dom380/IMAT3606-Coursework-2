@@ -24,6 +24,7 @@ void DebugMenu::init()
 	showGameObjects = false;
 	showCube = false;
 	showSaveAsMenu = false;
+	listbox_item_current = 1;
 }
 
 void DebugMenu::update()
@@ -89,30 +90,59 @@ void DebugMenu::updateMainMenu()
 		}
 		if (ImGui::BeginMenu("Create"))
 		{
-			if (objList.empty())
+			if (ImGui::TreeNode("GameObject"))
 			{
-				std::string path = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::MODEL) + "*.obj";
-				objList = DirectoryReader::getFilesInDirectory(path.c_str());
-
+				//Load objects from dir
+				if (objList.empty())
+				{
+					std::string path = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::MODEL) + "*.obj";
+					objList = DirectoryReader::getFilesInDirectory(path.c_str());
+				}
+				//Iterate through object list
+				for (int x = 0; x < objList.size(); x++)
+				{
+					ImGui::PushID(x);
+					/*
+						each object needs its own window
+						another vector for checking if window is active.
+					*/
+					if (objCreateActive.size() != objList.size())
+					{
+						objCreateActive.push_back(false);
+					}
+					//If the object button pressed
+					if (ImGui::Button(objList[x].c_str()))
+					{
+						objCreateActive[x] = true;
+					}
+					//open the window for it
+					if (objCreateActive[x])
+					{
+						createObjectWindow(objList[x], x);
+					}
+					ImGui::PopID();
+				}
+				ImGui::TreePop();
 			}
-			for (int x = 0; x < objList.size(); x++)
+			//Create a UI element.
+			if (ImGui::TreeNode("UI"))
 			{
-				ImGui::PushID(x);
-				if (objCreateActive.size() != objList.size())
+				//For every element.
+				for (int i = UIType::TEXT; i < UIType::UI_TYPE_COUNT; i++)
 				{
-					objCreateActive.push_back(false);
+					ImGui::PushID(i);
+					UIType uiType = static_cast<UIType>(i);
+					
+					//A button for each UIElement
+					if (ImGui::Button(EnumParser<UIType>().getString(uiType).c_str()))
+					{
+						uiCreateActive[i]= true;
+					}
+					ImGui::PopID();
 				}
-				if (ImGui::Button(objList[x].c_str()))
-				{
-					objCreateActive[x] = true;
-					//showCube = true;
-				}
-				if (objCreateActive[x])
-				{
-					createObjectWindow(objList[x], x);
-				}
-				ImGui::PopID();
+				ImGui::TreePop();
 			}
+			
 
 			ImGui::EndMenu();
 		}
@@ -158,6 +188,17 @@ void DebugMenu::updateLogic()
 			createObjectWindow(objList[x], x);
 			allCreateWindowsClosed = false;
 		}
+	}
+	
+	for (int i = UIType::TEXT; i < IM_ARRAYSIZE(uiCreateActive); i++)
+	{
+		UIType uiType = static_cast<UIType>(i);
+		if (uiCreateActive[i])
+		{
+			createUIWindow(uiType, i);
+			allCreateWindowsClosed = false;
+		}
+
 	}
 	if (allCreateWindowsClosed)
 	{
@@ -246,7 +287,7 @@ void DebugMenu::debugGameObjectsMenu()
 							gameObjectsMenuLogic();
 							break;
 						case ComponentType::TRANSFORM:
-							gameObjectsMenuTransform(i, model);
+							gameObjectsMenuTransform(i, model->getTransform());
 							break;
 						}
 						ImGui::TreePop();
@@ -280,6 +321,22 @@ bool DebugMenu::saveCurrentLevel(string fileName)
 			}
 		}
 	}
+
+	/*
+		Every UI object
+	*/
+	numberOfObjectsInFile = XMLReader::GetNumberOfUIElementsInFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument());
+	for (int x = 0; x < gameScreen->getUIElements().size(); x++)
+	{
+		FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, gameScreen->getUIElements()[x], gameScreen);
+		//If there is a new object not saved on file
+		if (x >= numberOfObjectsInFile)
+		{
+			if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getUIElements()[x], gameScreen))
+			{
+			}
+		}
+	}
 	return FileSaver::SaveFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(),fileName);
 }
 
@@ -306,9 +363,8 @@ void DebugMenu::saveAsMenu()
 
 bool DebugMenu::loadLevel(string fileName)
 {
-	//When we load a scene, the runtime menu items need to be reset
-	mainMenuBarItems.clear();
-	return LevelLoader::loadLevel(Engine::g_pEngine.get(), Engine::g_pEngine->getRenderer(), Engine::g_pEngine->getInput(), fileName.c_str());
+	bool loadResult = LevelLoader::loadLevel(Engine::g_pEngine.get(), Engine::g_pEngine->getRenderer(), Engine::g_pEngine->getInput(), fileName.c_str());
+	return loadResult;
 }
 
 void DebugMenu::loadSpecificLevel()
@@ -403,21 +459,84 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 	objCreateActive.at(iterator) = bWindowActive;
 
 	ImGui::PushID(iterator);
-	static float createPosition[3] = { 0.0f, 0.0f, 0.0f };
-	static float createScale[3] = { 1.0f, 1.0f, 1.0f };
-	static float createOrientation[3] = { 0.0f, 1.0f, 0.0f };
-	ImGui::DragFloat3("Position", createPosition, 0.5f);
-	ImGui::DragFloat3("Scale", createScale, 0.5f);
-	ImGui::DragFloat3("Orientation", createOrientation, 0.5f);
+	static shared_ptr<Transform> transform = std::make_shared<Transform>();
+	gameObjectsMenuTransform(iterator, transform.get());
 
-	static std::vector<const char *> textureCStyleArray;
+	createTextureListBox();
+	if (ImGui::Button("Create"))
+	{
+		//Load object, overide
+		shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
+		std::pair<string, string> objInfo(objName, textureCStyleArray[listbox_item_current]) ;
+		LevelLoader::loadGameObject(Engine::g_pEngine->getRenderer(), gameScreen, objInfo, transform);
+	}
+	ImGui::PopID();
+	ImGui::End();
+}
+
+void DebugMenu::createUIWindow(UIType type, int iterator)
+{
+	bool uiWindowActive = uiCreateActive[iterator];
+	string uiWindowName = EnumParser<UIType>().getString(type).c_str() + std::to_string(iterator);
+	ImGui::Begin(uiWindowName.c_str(), &uiWindowActive);
+	uiCreateActive[iterator] = uiWindowActive;
+	
+	/*
+		Name of uielement
+	*/
+	static char objNameBuf[64] = "";
+	ImGui::InputText("UIName", objNameBuf, sizeof(objNameBuf));
+	/*
+		Specfic type tools
+	*/
+	switch (type)
+	{
+	case UIType::TEXT:
+		break;
+	case UIType::TEXTURE:
+		//
+		createTextureListBox();
+		break;
+	case UIType::BUTTON:
+		break;
+	}
+	
+	/*
+		transform editor
+	*/
+	static shared_ptr<Transform> transform = std::make_shared<Transform>();
+	gameObjectsMenuTransform(iterator, transform.get());
+	if (ImGui::Button("Create"))
+	{
+		//Load object, overide
+		shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
+		//No texture init
+		std::pair<string, string> objInfo(string(objNameBuf), "");
+		switch (type)
+		{
+		case UIType::TEXT:
+			break;
+		case UIType::TEXTURE:
+			objInfo.second = textureCStyleArray[listbox_item_current];
+			Engine::g_pEngine->getActiveScreen()->addUIElement(std::make_shared<UITextureElement>(Engine::g_pEngine->getRenderer(), transform, objInfo.first.c_str(), objInfo.second.c_str()));
+			break;
+		case UIType::BUTTON:
+			break;
+		}
+		
+	}
+	ImGui::End();
+}
+
+void DebugMenu::createTextureListBox()
+{
+	//static std::vector<const char *> textureCStyleArray;
 	if (textureList.empty())
 	{
 		//Gets all textures in tex dir
 		//vector<std::string> tempTextureList;
 		std::string path = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::TEXTURE) + "*";
 		textureList = DirectoryReader::getFilesInDirectory(path.c_str());
-
 		//For specific file types
 
 		/*path = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::TEXTURE) + "*.jpg";
@@ -433,28 +552,23 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 		textureCStyleArray.reserve(textureList.size());
 		for (int index = 0; index < textureList.size(); ++index)
 		{
-			textureCStyleArray.push_back(textureList[index].c_str());
+			//Safety check, name must be longer than 4 to be valid (.png) etc.
+			if (strlen(textureList.at(index).c_str()) > 4)
+			{
+				textureCStyleArray.push_back(textureList[index].c_str());
+			}
+			else
+			{
+				textureList.at(index).erase();
+			}
+				
 		}
 	}
 	/*
-		Create a selectable list for textures
+	Create a selectable list for textures
 	*/
-	static int listbox_item_current = 1;
 	ImGui::ListBox("Textures Available", &listbox_item_current, &textureCStyleArray[0], textureCStyleArray.size(), 4);
-	
-	if (ImGui::Button("Create"))
-	{
-		//Load object, overide
-		shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
-		shared_ptr<Transform> transform = std::make_shared<Transform>();
-		transform->position = glm::vec3(createPosition[0], createPosition[1], createPosition[2]);
-		transform->orientation = glm::vec3(createOrientation[0], createOrientation[1], createOrientation[2]);
-		transform->scale = glm::vec3(createScale[0], createScale[1], createScale[2]);
-		std::pair<string, string> objInfo(objName, textureCStyleArray[listbox_item_current]) ;
-		LevelLoader::loadGameObject(Engine::g_pEngine->getRenderer(), gameScreen, objInfo, transform);
-	}
-	ImGui::PopID();
-	ImGui::End();
+
 }
 
 void DebugMenu::render()
@@ -465,6 +579,23 @@ void DebugMenu::render()
 void DebugMenu::addMenuItem(DebugMenuItem* dmi)
 {
 	mainMenuBarItems.push_back(dmi);
+}
+
+void DebugMenu::refreshMenuItems()
+{
+	//When we load a scene, the runtime menu items need to be reset
+	for (int x = 0; x < mainMenuBarItems.size(); x++)
+	{
+		if (mainMenuBarItems[x]->canClear())
+		{
+			mainMenuBarItems.erase(mainMenuBarItems.begin()+x);
+		}
+	}
+}
+
+vector<DebugMenuItem*> DebugMenu::getMenuItems()
+{
+	return mainMenuBarItems;
 }
 
 
@@ -505,12 +636,13 @@ void DebugMenu::gameObjectsMenuLogic()
 {
 }
 
-void DebugMenu::gameObjectsMenuTransform(int i, ModelComponent* model)
+void DebugMenu::gameObjectsMenuTransform(int i, Transform* transform)
 {
 	ImGui::PushID(i);
-	float dragSpeed = 0.25f;
-	ImGui::DragFloat3("Position", &model->getTransform()->position[0], dragSpeed);
-	ImGui::DragFloat3("Orientation", &model->getTransform()->orientation[0], dragSpeed);
-	ImGui::DragFloat3("Scale", &model->getTransform()->scale[0], dragSpeed);
+	static float dragSpeed = 0.25f;
+	static float quatDragSpeed = 0.0025f;
+	ImGui::DragFloat3("Position", &transform->position[0], dragSpeed);
+	ImGui::DragFloat4("Orientation", &transform->orientation[0], quatDragSpeed);
+	ImGui::DragFloat3("Scale", &transform->scale[0], dragSpeed);
 	ImGui::PopID();
 }

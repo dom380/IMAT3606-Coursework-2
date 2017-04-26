@@ -2,7 +2,7 @@
 #ifndef KEYEVENT_H
 #define KEYEVENT_H
 #include "KeyEventType.h"
-
+#include <Input\KeyCodes.h>
 /*
 	Class representing a Keyboard event.
 	This event is passed to all KeyEvent subscribers.
@@ -13,17 +13,17 @@ public:
 	/*
 		Constructor
 		KeyEventType eventType, Enum specifying the event type.
-		int keyCode, The ASCII code of the key,
+		KeyCodes keyCode, An enum specifying the code of the key,
 		int modifierCode, Shift, Alt and Ctrl modifier code
 	*/
-	KeyEvent(KeyEventType eventType, int keyCode, int modifierCode)
+	KeyEvent(KeyEventType eventType, KeyCodes keyCode, int modifierCode)
 	{
 		type = eventType;
 		key = keyCode;
 		modifier = modifierCode;
 	};
 	KeyEventType type;
-	int key;
+	KeyCodes key;
 	int modifier;
 
 };

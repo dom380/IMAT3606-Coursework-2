@@ -8,21 +8,25 @@ using std::shared_ptr;
 #include <Camera\PerspectiveCamera.h>
 #include <Camera\FollowCamera.h>
 #include <Camera\EngineCamera.h>
-#include <Input.h>
+#include <Input\Input.h>
 #include <vector>
 using std::vector;
 #include <ComponentStore.h>
 #include <Robot.h>
+#include <GUI\UIManager.h>
 #include <GUI\TextBox.h>
 #include <GameObject.h>
 #include <Components\Message.h>
 #include <Components\LocationMessage.h>
 #include <Components\RenderMessage.h>
 #include <AssetManager.h>
+#include <Physics\Physics.h>
+#include "Components/AnimatedModelComponent.h"
+
 #ifndef NDEBUG
 #include <utils\Timer.h>
 #endif
-
+class Screen;
 class GameObject;
 class ComponentStore;
 class LogicComponent; //Forward declare a number of classes.
@@ -40,13 +44,18 @@ public:
 		shared_ptr<Input>& input, Pointer to the input system.
 		shared_ptr<Camera> camera, Pointer to a Camera. Defaulted to PerspectiveCamera.
 	*/
-	GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>());
+	GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, shared_ptr<Physics>& physics, shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>());
 	~GameScreen() {};
+
+	/*
+		Unpauses the physics simulation.
+	*/
+	void show();
 	/*
 		Update this screen's objects.
 		double dt, Current time step.
 	*/
-	void update(double dt);
+	void update(double dt, double currentTime);
 	/*
 		Render this screen.
 	*/
@@ -108,9 +117,9 @@ public:
 private:
 	shared_ptr<ComponentStore> componentStore;
 	vector<shared_ptr<GameObject>> gameObjects;
-	vector<shared_ptr<TextBox>> textBoxes;
 	shared_ptr<Input> input;
 	shared_ptr<Graphics> renderer;
+	shared_ptr<Physics> physics;
 	int activeCamera = 0;
 	vector<shared_ptr<Camera>> cameras;
 	vector<Light> lights;

@@ -8,19 +8,25 @@ using std::shared_ptr;
 using std::vector;
 #include <GUI\EventListener.h>
 #include <Camera\Camera.h>
+#ifndef NDEBUG
 #include <Editor\DebugMenuItem.h>
+#endif
 // constants for arm and leg movement states
 const char BACKWARD_STATE = 0;
 const char FORWARD_STATE = 1;
 
 // index constants for accessing arm and leg array data
-const char LEFT = 0;
-const char RIGHT = 1;
+const char LEFT_DIR = 0;
+const char RIGHT_DIR = 1;
 
 /*
 	Player Character
 */
+#ifndef NDEBUG
 class Robot : public EventListener, DebugMenuItem
+#else
+class Robot : public EventListener
+#endif
 {
 private:
 	char legStates[2];
@@ -63,9 +69,9 @@ private:
 	void DrawFoot(float xPos, float yPos, float zPos, glm::mat4 modelMatrix);
 
 	void updateCamera();
-
+#ifndef NDEBUG
 	void debugMenuItemUpdate();
-	
+#endif
 
 public:
 

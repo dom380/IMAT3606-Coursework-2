@@ -1,9 +1,10 @@
 #include "Screens\GameScreen.h"
 
-GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, shared_ptr<Camera> camera) :
+GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, shared_ptr<Physics>& physics, shared_ptr<Camera> camera) :
 	robot(std::make_shared<Robot>(AssetManager::getInstance()->getShader(std::pair<string, string>("colour.vert", "colour.frag"))))
 {
 	this->renderer = renderer;
+	this->physics = physics;
 	componentStore = std::make_shared<ComponentStore>();
 	/*camera->move(58.0, 41.0f, 68.0f);
 	camera->lookAt(glm::vec3(-1.0,-0.6,-1.0));
@@ -34,13 +35,28 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 	this->input->registerMouseListener(engineCam);
 
 	activeCamera = 0;
+
+	UIManager::getInstance()->update();
 }
 
-void GameScreen::update(double dt)
+void GameScreen::show()
+{
+	physics->setPaused(false);
+}
+
+void GameScreen::update(double dt, double currentTime)
 {
 #ifndef NDEBUG
 	timer.start();
 #endif
+	auto physicsComponents = componentStore->getAllComponents<PhysicsComponent>(ComponentType::RIGID_BODY);
+	for (auto it = physicsComponents->begin(); it != physicsComponents->end(); ++it)
+	{
+		if (it->first != -1) //Check if handle is still used.
+		{
+			it->second.update(dt);
+		}
+	}
 	robot->Prepare(dt);
 	Message* robotLocMsg = new LocationMessage(robot->getPosition());
 	std::vector<std::pair<int, LogicComponent>>* logicComponents = componentStore->getAllComponents<LogicComponent>(ComponentType::LOGIC);
@@ -54,10 +70,16 @@ void GameScreen::update(double dt)
 		}
 	}
 	delete robotLocMsg;
+	auto animComponents = componentStore->getAllComponents<AnimatedModelComponent>(ComponentType::ANIMATION);
+	for (auto it = animComponents->begin(); it != animComponents->end(); ++it)
+	{
+		it->second.update(currentTime);
+	}
 }
 
 void GameScreen::render()
 {
+	
 	shared_ptr<Camera> camera = cameras.at(activeCamera);
 	robot->DrawRobot(camera->getView(), camera->getProjection());
 	Message* renderMsg = new RenderMessage(camera, lightingBufferId, lightingBlockId);
@@ -68,17 +90,39 @@ void GameScreen::render()
 		if(it->first != -1)
 			it->second.RecieveMessage(renderMsg);
 	}
+
+	std::vector<std::pair<int, AnimatedModelComponent>>* animations = componentStore->getAllComponents<AnimatedModelComponent>(ComponentType::ANIMATION);
+	std::vector<std::pair<int, AnimatedModelComponent>>::iterator animIt;
+	for (animIt = animations->begin(); animIt != animations->end(); ++animIt)
+	{
+		if (animIt->first != -1)
+			//animIt->second.update(0.07f);
+			animIt->second.RecieveMessage(renderMsg);
+	}
+
 	delete renderMsg;
+
+	for (auto ui : uiElements) {
+		ui->render();
+	}
 	for (shared_ptr<TextBox> textBox : textBoxes)
 	{
 		textBox->render();
 	}
+	for (auto button : buttons) {
+		button->render();
+	}
+	for (auto text : textBoxes) {
+		text->render();
+	}
+	
 #ifndef NDEBUG
 	double elapsedTime = timer.getElapsedTimeMilliSec();
 	string frameText = "Frame Time: " + std::to_string( elapsedTime ) + "ms";
 	frameTime->updateText(frameText);
 	timer.stop();
 #endif
+	
 }
 
 void GameScreen::resize(int width, int height)
@@ -92,6 +136,7 @@ shared_ptr<ComponentStore> GameScreen::getComponentStore()
 
 void GameScreen::dispose()
 {
+	physics->setPaused(true);
 	for (shared_ptr<Camera> camera : cameras) {
 		input->removeMouseListener(camera);
 		input->removeKeyListener(camera);
@@ -102,6 +147,7 @@ void GameScreen::dispose()
 	robot.reset();
 	cameras.clear();
 	componentStore.reset();
+	disposeButtons();
 }
 
 void GameScreen::addLight(Light light)
@@ -134,12 +180,23 @@ void GameScreen::handle(KeyEvent event)
 {
 	if (event.type == KeyEventType::KEY_PRESSED)
 	{
-		if (event.key == 67)//c
+		if (event.key == KeyCodes::C)//c
 		{
 			activeCamera++;
 			if (activeCamera >= cameras.size()) activeCamera = 0;
+			return;
 		}
 	}
+	if (activeCamera == 0)
+	{
+		cameras.at(0)->handle(event);
+	}
+	else if (activeCamera == 1)
+	{
+		robot->handle(event);
+	}
+	auto phyPtr = std::dynamic_pointer_cast<BulletPhysics>(physics);
+	if(phyPtr != nullptr) phyPtr->handle(event);
 }
 
 void GameScreen::updateScore(int amountToAdd)

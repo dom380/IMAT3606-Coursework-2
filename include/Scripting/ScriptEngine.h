@@ -12,6 +12,7 @@ using std::string;
 
 #include <Components\Component.h>
 #include <Components\LocationMessage.h>
+#include <Components\MaterialMessage.h>
 extern "C"
 {
 #include <lua\lua.hpp>

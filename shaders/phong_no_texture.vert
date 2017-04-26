@@ -3,6 +3,8 @@
 layout (location=0) in vec4 vertPosition;
 layout (location=2) in vec3 normal;
 
+//FIXES INTEL/NVIDIA SHADER ERROR
+out vec2 texCoord;
 out vec3 Normal;
 out vec3 fragmentPos;
 

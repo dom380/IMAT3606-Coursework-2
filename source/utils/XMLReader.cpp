@@ -22,12 +22,45 @@ int XMLReader::GetNumberOfGameObjectsInFile(tinyxml2::XMLDocument * doc)
 		tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");
 		const char* type = screenElement->Attribute("type");
 		if (string(type) == string("level")) {
-			tinyxml2::XMLElement* gameObjElement = screenElement->FirstChildElement("gameObjects")->FirstChildElement();
+			tinyxml2::XMLElement* gameObjElement = screenElement->FirstChildElement("gameObjects");
+			if (gameObjElement)
+			{
+				gameObjElement = gameObjElement->FirstChildElement();
+			}
+			else
+			{
+				//NO elements found
+				return 0;
+			}
 			while (gameObjElement != NULL) {
 				objectCount++;
 				gameObjElement = gameObjElement->NextSiblingElement();
 			}
 
+		}
+	}
+	return objectCount;
+}
+int XMLReader::GetNumberOfUIElementsInFile(tinyxml2::XMLDocument * doc)
+{
+	int objectCount = 0;
+	if (doc)
+	{
+		tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");
+		
+		tinyxml2::XMLElement* uiElements = screenElement->FirstChildElement("uiElements");
+		if (uiElements)
+		{
+			uiElements = uiElements->FirstChildElement();
+		}
+		else
+		{
+			//no ui elements
+			return 0;
+		}
+		while (uiElements != NULL) {
+			objectCount++;
+			uiElements = uiElements->NextSiblingElement();
 		}
 	}
 	return objectCount;

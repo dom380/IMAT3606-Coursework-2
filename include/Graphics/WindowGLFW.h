@@ -2,11 +2,9 @@
 #ifndef WINDOWGLFW_H
 #define WINDOWGLFW_H
 #include "Window.h"
-#include <InputGLFW.h>
+#include <Input\InputGLFW.h>
 
-#ifndef NDEBUG
 #include <Editor\imgui\ImguiGLFWHandler.h>
-#endif
 
 /*
 	GLFW implementation of the Window class.
@@ -59,16 +57,16 @@ public:
 	Get GLFW window
 	*/
 	GLFWwindow* getWindow();
-#ifndef NDEBUG
+
 	shared_ptr<ImguiGLFWHandler> getImGuiHandler();
-#endif
+
 private:
 	GLFWwindow* window;
 	GLFWwindow* offscreen_context;
 	shared_ptr<InputGLFW> input;
-#ifndef NDEBUG
+
 	shared_ptr<ImguiGLFWHandler> ImGuiGLFWHandler;
-#endif
+
 };
 
 #endif // !WINDOWGLFW_H

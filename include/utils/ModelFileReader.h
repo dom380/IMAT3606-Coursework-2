@@ -6,6 +6,9 @@
 #include <vector>
 using std::vector;
 #include <Graphics\Material.h>
+#include <Physics\ConvexHull.h>
+#include <memory>
+using std::shared_ptr;
 
 class ModelFileReader
 {
@@ -18,8 +21,11 @@ public:
 		vector<glm::vec2>& textures, std::vector to be loaded with texture coordinates.
 		vector<unsigned short>&indices, std::vector to be loaded with indices.
 		Material& material, Material to be loaded with the model's material properties if specified.
+		vector<glm::vec4>& points, std::vector to be loaded with the raw, vertex data.
 	*/
-	virtual void readFile(const char * filePath, vector<glm::vec4>& vertices, vector<glm::vec3>& normals, vector<glm::vec2>& textures, vector<unsigned short>&indices, Material& material) = 0;
+	virtual void readFile(const char * filePath, vector<glm::vec4>& vertices, vector<glm::vec3>& normals, vector<glm::vec2>& textures, vector<unsigned short>&indices, Material& material, vector<glm::vec4>& points) = 0;
+
+	virtual void readFile(const char * filePath, shared_ptr<vector<ConvexHull>>& convexHulls) = 0;
 };
 
 #endif // !MODELFILEREADER_H

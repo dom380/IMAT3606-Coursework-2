@@ -5,15 +5,12 @@
 #include <utils\tinyxml2.h>
 #include <utils\LevelLoader.h>
 #include <Screens\LoadingScreen.h>
-#include <InputGLFW.h>
+#include <Input\InputGLFW.h>
 #include <Scripting\ScriptEngine.h>
 
-#ifndef NDEBUG
-#include <Editor\imgui\imgui.h>
-#include <Editor\DebugMenu.h>
-#endif
 
 
+#define FRAMERATE  0.0166666667 //60 FPS (1/60)
 
 Engine::Engine()
 {
@@ -50,19 +47,22 @@ void Engine::init()
 
 	renderer = buildRenderer(graphicsContext);
 	renderer->init();
+	renderer->setVSync(vsync);
+
+	physics = buildPhysics(physicsImplementation);
+	physics->init();
+
 	loadFirstLevel();
 
-#ifndef NDEBUG
 	DebugMenu::getInstance()->init();
-#endif
 }
 
 void Engine::mainLoop()
 {
 	double t = 0.0;
-	double dt = 1 / 60.0;
+	double dt = FRAMERATE;
 	timer.start();
-	auto currentTime = timer.getElapsedTime();
+	auto currentTime = timer.getElapsedTime(); //want this
 	bool show_another_window = true;
 	//variable timestep
 	while (!window->shouldExit()) {
@@ -71,30 +71,28 @@ void Engine::mainLoop()
 		currentTime = newTime; //set current time
 		window->update();
 		window->pollEvents();
-#ifndef NDEBUG
+
 		DebugMenu::getInstance()->update();
-#endif
 	
 		
 
 		while (frameTime > 0.0) //While there is still time to update the simulation
 		{
 			double deltaTime = std::min(frameTime, dt);
-			activeScreen.second->update(deltaTime);
+			activeScreen.second->update(deltaTime, currentTime);
 
 			frameTime -= deltaTime;
 			t += deltaTime;
-			//todo pass t and delta time to physics sim here
+			
+			physics->update(deltaTime);
 		}
 
 		renderer->prepare();
 		activeScreen.second->render();
 
-#ifndef NDEBUG
 		DebugMenu::getInstance()->render();
-#endif
+
 		window->display();
-		
 	}
 }
 
@@ -108,6 +106,7 @@ void Engine::exit()
 	AssetManager::getInstance()->exit();	
 	activeScreen.second.reset();
 	gameScreens.clear();
+	physics.reset();
 	ScriptEngine::getInstance()->close();
 	if(window != nullptr)
 		window->close();
@@ -136,6 +135,7 @@ void Engine::switchScreen(string screenId)
 	else {
 		activeScreen = *it;
 	}
+	activeScreen.second->show();
 }
 
 void Engine::replaceScreen(string screenId)
@@ -150,6 +150,7 @@ void Engine::replaceScreen(string screenId)
 		activeScreen = *it;
 		gameScreens.erase(idToRemove);
 	}
+	activeScreen.second->show();
 }
 
 void Engine::loadConfig()
@@ -167,6 +168,7 @@ void Engine::loadConfig()
 	initialScreenId = element->FirstChildElement("initScreen") != NULL ? element->FirstChildElement("initScreen")->GetText() : "MainMenu";
 	string renderer = element->FirstChildElement("renderer")!= NULL ? element->FirstChildElement("renderer")->GetText() : "OPEN_GL";
 	graphicsContext = enumParser.parse(renderer);
+	vsync = element->FirstChildElement("v-sync") != NULL ? element->FirstChildElement("v-sync")->BoolText() : false;
 	auto assetMng = AssetManager::getInstance();
 	string resourceLocation = element->FirstChildElement("fontLocation") != NULL ? element->FirstChildElement("fontLocation")->GetText() : "./resources/fonts/";
 	assetMng->setAssetFolder(resourceLocation, AssetManager::ResourceType::FONT);
@@ -189,6 +191,10 @@ void Engine::loadConfig()
 	auto inputEnumParser = EnumParser<Input::InputImpl>();
 	string input = element->FirstChildElement("input") != NULL ? element->FirstChildElement("input")->GetText() : "GLFW";
 	inputImplementation = inputEnumParser.parse(input);
+
+	auto physicsEnumParser = EnumParser<Physics::PhysicsImpl>();
+	string physics = element->FirstChildElement("physics") != NULL ? element->FirstChildElement("physics")->GetText() : "BULLET";
+	physicsImplementation = physicsEnumParser.parse(physics);
 }
 
 void Engine::loadFirstLevel()
@@ -199,6 +205,11 @@ void Engine::loadFirstLevel()
 		std::exit(1);
 	}
 	this->switchScreen(initialScreenId);
+}
+
+shared_ptr<Physics> Engine::getPhysics()
+{
+	return physics;
 }
 
 shared_ptr<Graphics> Engine::getRenderer()
@@ -272,5 +283,26 @@ shared_ptr<Input> Engine::buildInput(Input::InputImpl impl)
 		return nullptr; //TODO... maybe
 	default: //Default to GLFW
 		return std::make_shared<InputGLFW>();
+	}
+}
+
+shared_ptr<Physics> Engine::buildPhysics(Physics::PhysicsImpl impl)
+{
+	switch (impl)
+	{
+	case  Physics::PhysicsImpl::BULLET: 
+		{
+			auto bulletPhysics = std::make_shared<BulletPhysics>();
+			std::shared_ptr<EventListener> physicsEventPtr = bulletPhysics;
+			inputHandler->registerKeyListener(physicsEventPtr);
+			return bulletPhysics;
+		}
+	default: //Default to bullet
+		{
+			auto bulletPhysics = std::make_shared<BulletPhysics>();
+			std::shared_ptr<EventListener> physicsEventPtr = bulletPhysics;
+			inputHandler->registerKeyListener(physicsEventPtr);
+			return bulletPhysics;
+		}
 	}
 }

@@ -13,6 +13,10 @@ class EnumParser
 {
 public:
 	EnumParser();
+	/*
+		Returns the corresponding enum for the given string.
+		Throws a runtime execption if parse fails.
+	*/
 	T parse(string& value)
 	{
 		auto it = map.find(value);

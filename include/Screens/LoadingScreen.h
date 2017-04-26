@@ -51,12 +51,18 @@ public:
 			this->loading = false;
 		});
 	}
+
+	/*
+		Interface stub.
+	*/
+	void show() {};
+
 	/*
 		Switches to the new Screen if background thread has finished.
 		If not, update the Loading text every second.
 		double dt, Time passed since last update.
 	*/
-	void update(double dt)
+	void update(double dt, double currentTime)
 	{
 		if (!loading)
 		{

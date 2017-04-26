@@ -93,7 +93,6 @@ public:
 			///need to transform normal into worldspace
 			hitNormalWorld = convexResult.m_hitCollisionObject->getWorldTransform().getBasis()*convexResult.m_hitNormalLocal;
 		}
-
 		btScalar dotUp = m_up.dot(hitNormalWorld);
 		if (dotUp < m_minSlopeDot) {
 			return btScalar(1.0);
@@ -214,6 +213,7 @@ bool BulletActerController::recoverFromPenetration(btCollisionWorld* collisionWo
 		btCollisionObject* obj0 = static_cast<btCollisionObject*>(collisionPair->m_pProxy0->m_clientObject);
 		btCollisionObject* obj1 = static_cast<btCollisionObject*>(collisionPair->m_pProxy1->m_clientObject);
 
+
 		if ((obj0 && !obj0->hasContactResponse()) || (obj1 && !obj1->hasContactResponse()))
 			continue;
 
@@ -228,11 +228,32 @@ bool BulletActerController::recoverFromPenetration(btCollisionWorld* collisionWo
 		{
 			btPersistentManifold* manifold = m_manifoldArray[j];
 			btScalar directionSign = manifold->getBody0() == m_ghostObject ? btScalar(-1.0) : btScalar(1.0);
+
 			for (int p = 0; p<manifold->getNumContacts(); p++)
 			{
 				const btManifoldPoint&pt = manifold->getContactPoint(p);
 
 				btScalar dist = pt.getDistance();
+				//Really basic collision response to dynamic objects. 
+				//Just apply a small impule in opposite direction to contact normal;
+				auto normal = pt.m_normalWorldOnB;
+				normal = normal.normalize();
+				if (obj0 == m_ghostObject)
+				{
+					auto test = dynamic_cast<btRigidBody*>(obj1);
+					if (test && !obj1->isStaticOrKinematicObject())
+					{
+						test->applyCentralImpulse(normal * directionSign * 2);
+					}
+				}
+				else
+				{
+					auto test = dynamic_cast<btRigidBody*>(obj0);
+					if (test && !obj0->isStaticOrKinematicObject())
+					{
+						test->applyCentralImpulse(normal * directionSign * 2);
+					}
+				}
 
 				if (dist < -m_maxPenetrationDepth)
 				{
@@ -299,6 +320,12 @@ void BulletActerController::stepUp(btCollisionWorld* world)
 
 	if (callback.hasHit() && m_ghostObject->hasContactResponse() && needsCollision(m_ghostObject, callback.m_hitCollisionObject))
 	{
+		//if (!callback.m_hitCollisionObject->isStaticObject())//If it's a dynamic object
+		//{
+			//auto test = dynamic_cast<btRigidBody*>(callback.m_hitCollisionObject);
+			//auto test = static_cast<btCollisionObject*>(callback.m_hitCollisionObject);
+		//}
+;
 		// Only modify the position if the hit was a slope and not a wall or ceiling.
 		if (callback.m_hitNormalWorld.dot(m_up) > 0.0)
 		{
@@ -723,6 +750,7 @@ void BulletActerController::preStep(btCollisionWorld* collisionWorld)
 
 	m_currentOrientation = m_ghostObject->getWorldTransform().getRotation();
 	m_targetOrientation = m_currentOrientation;
+	m_collisionWorld = collisionWorld;
 	//	printf("m_targetPosition=%f,%f,%f\n",m_targetPosition[0],m_targetPosition[1],m_targetPosition[2]);
 }
 
@@ -942,6 +970,18 @@ btScalar BulletActerController::getMaxPenetrationDepth() const
 
 bool BulletActerController::onGround() const
 {
+	if (m_collisionWorld)
+	{
+		btKinematicClosestNotMeRayResultCallback cb(m_ghostObject);
+		auto transform = m_ghostObject->getWorldTransform();
+		auto endPoint = transform;
+		endPoint.setOrigin(transform.getOrigin() + btVector3(0.0, -10.0, 0.0));
+		m_collisionWorld->rayTest(transform.getOrigin(), endPoint.getOrigin(), cb);
+		if (cb.hasHit())
+		{
+			return (cb.m_closestHitFraction < 0.1);
+		}
+	}
 	return (fabs(m_verticalVelocity) < SIMD_EPSILON) && (fabs(m_verticalOffset) < SIMD_EPSILON);
 }
 

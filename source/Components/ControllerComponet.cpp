@@ -55,6 +55,21 @@ void ControllerComponent::setCamera(std::shared_ptr<Camera> camera)
 	this->camera = camera;
 }
 
+void ControllerComponent::setMovementSpeed(float speed)
+{
+	movementSpeed = speed;
+}
+
+void ControllerComponent::setGravity(float value)
+{
+	controller->setGravity(btVector3(0.0, value, 0.0));
+}
+
+void ControllerComponent::setGravity(float x, float y, float z)
+{
+	controller->setGravity(btVector3(x, y, z));
+}
+
 void ControllerComponent::pollInput()
 {
 	KeyEventType left, right, up, down, space;
@@ -64,10 +79,11 @@ void ControllerComponent::pollInput()
 	down = input->getKeyState(KeyCodes::DOWN);
 	space = input->getKeyState(KeyCodes::SPACE);
 	btVector3 walkDir(0.0, 0.0, 0.0);
-	if (left == KeyEventType::KEY_PRESSED) walkDir.setX(btScalar(-0.1));
-	else if (right == KeyEventType::KEY_PRESSED) walkDir.setX(btScalar(0.1));
-	if (up == KeyEventType::KEY_PRESSED) walkDir.setZ(btScalar(-0.1));
-	else if (down == KeyEventType::KEY_PRESSED) walkDir.setZ(btScalar(0.1));
+	btScalar vel = btScalar(movementSpeed);
+	if (left == KeyEventType::KEY_PRESSED) walkDir.setX(-vel);
+	else if (right == KeyEventType::KEY_PRESSED) walkDir.setX(vel);
+	if (up == KeyEventType::KEY_PRESSED) walkDir.setZ(-vel);
+	else if (down == KeyEventType::KEY_PRESSED) walkDir.setZ(vel);
 	controller->setWalkDirection(walkDir);
 	if (!walkDir.fuzzyZero())
 	{
@@ -127,10 +143,10 @@ void ControllerComponent::calcDirection(const btVector3& walkDir)
 	}
 	else if (walkDir.getX() > 0) //E
 	{
-		frontDir.setRotation(upDir, btRadians(90));
+		frontDir.setRotation(upDir, btRadians(-90));
 	}
 	else if (walkDir.getX() < 0) //W
 	{
-		frontDir.setRotation(upDir, btRadians(-90));
+		frontDir.setRotation(upDir, btRadians(90));
 	}
 }

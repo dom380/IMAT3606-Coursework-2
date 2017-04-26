@@ -36,6 +36,7 @@ subject to the following restrictions:
 class BulletActerController : public btCharacterControllerInterface
 {
 protected:
+	btCollisionWorld* m_collisionWorld;
 
 	btScalar m_halfHeight;
 

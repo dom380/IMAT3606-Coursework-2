@@ -15,6 +15,9 @@ public:
 	void update(double dt);
 	void RecieveMessage(Message* msg);
 	void setCamera(std::shared_ptr<Camera> camera);
+	void setMovementSpeed(float speed);
+	void setGravity(float value);
+	void setGravity(float x, float y, float z);
 private:
 	std::weak_ptr<GameObject> owner;
 	std::shared_ptr<Physics> physics;
@@ -23,6 +26,7 @@ private:
 	std::shared_ptr<Camera> camera;
 	btVector3 upDir;
 	btQuaternion frontDir = btQuaternion::getIdentity();
+	float movementSpeed = 0.1f;
 	void pollInput();
 	void updateTransform(Transform* transformPtr);
 	void calcDirection(const btVector3& walkDir);

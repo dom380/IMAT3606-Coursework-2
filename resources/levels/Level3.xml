@@ -153,7 +153,8 @@
 			<tag>PHY_OBJ</tag>
 			<components>
 				<component type ="model">
-					<file>chest.obj</file>
+					<!--<file>capsule.obj</file> -->
+          <file>chest.obj</file>
 					<texture>chest_diffuse.png</texture>
 				</component>
 				<component type="transform">
@@ -211,6 +212,7 @@
 				</component>
 			</components>
 		</gameObject>
+      <!--block-->
 		<gameObject>
 			<tag>PHY_OBJ</tag>
 			<components>
@@ -242,6 +244,7 @@
 				</component>
 			</components>
 		</gameObject>
+     <!-- blocks -->
 		<gameObject>
 			<tag>PHY_OBJ</tag>
 			<components>
@@ -273,6 +276,32 @@
 				</component>
 			</components>
 		</gameObject>
+      <!-- slope-->
+      <gameObject>
+        <tag>PHY_OBJ</tag>
+        <components>
+          <component type ="model">
+            <file>slope.obj</file>
+          </component>
+          <component type="transform">
+            <position>
+              <x>0.0</x>
+              <y>0.0</y>
+              <z>0.0</z>
+            </position>
+            <scale>
+              <x>3.0</x>
+              <y>3.0</y>
+              <z>3.0</z>
+            </scale>
+          </component>
+          <component type = "rigid_body">
+            <mass>0.0</mass>
+            <collision_mesh>slope.obj</collision_mesh>
+            <restitution>0.4</restitution>
+          </component>
+        </components>
+      </gameObject>
 	</gameObjects>
 	<lights>
 		<light>

@@ -80,10 +80,6 @@ public:
 	*/
 	void addLight(Light light);
 	/*
-		Add a TextBox to the screen.
-	*/
-	void addTextBox(shared_ptr<TextBox> textbox);
-	/*
 		Add a GameObject
 	*/
 	void addGameObject(shared_ptr<GameObject> gameObj);

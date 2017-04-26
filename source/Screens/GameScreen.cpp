@@ -91,16 +91,6 @@ void GameScreen::render()
 	for (auto ui : uiElements) {
 		ui->render();
 	}
-	for (shared_ptr<TextBox> textBox : textBoxes)
-	{
-		textBox->render();
-	}
-	//for (auto button : buttons) {
-	//	button->render();
-	//}
-	for (auto text : textBoxes) {
-		text->render();
-	}
 	
 #ifndef NDEBUG
 	double elapsedTime = timer.getElapsedTimeMilliSec();
@@ -133,17 +123,11 @@ void GameScreen::dispose()
 	robot.reset();
 	cameras.clear();
 	componentStore.reset();
-	disposeButtons();
 }
 
 void GameScreen::addLight(Light light)
 {
 	lights.push_back(light);
-}
-
-void GameScreen::addTextBox(shared_ptr<TextBox> textbox)
-{
-	textBoxes.push_back(textbox);
 }
 
 void GameScreen::addGameObject(shared_ptr<GameObject> gameObj)
@@ -188,8 +172,9 @@ void GameScreen::handle(KeyEvent event)
 void GameScreen::updateScore(int amountToAdd)
 {
 	currentScore += amountToAdd;
-	for (shared_ptr<TextBox> textbox : textBoxes)
+	for (shared_ptr<UIElement> uiE : uiElements)
 	{
+		shared_ptr<TextBox> textbox = dynamic_pointer_cast<TextBox>(uiE);
 		if (textbox->getID() == string("score_string"))
 		{
 			textbox->updateText("Gold Collected: " + std::to_string(currentScore));

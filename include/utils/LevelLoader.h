@@ -257,18 +257,6 @@ private:
 		menuScreen->setID(screenElement->Attribute("name"));
 		menuScreen->setXMLDocument(screenDocument);
 		menuScreen->setXMLFilePath(filepath);
-		tinyxml2::XMLElement* stringElement = screenElement->FirstChildElement("strings");
-		if (stringElement != NULL) stringElement = stringElement->FirstChildElement();
-		while (stringElement != NULL) {
-			loadStringElement(renderer, menuScreen, NULL, "", stringElement);
-			stringElement = stringElement->NextSiblingElement();
-		}
-	//	tinyxml2::XMLElement* buttonElement = screenElement->FirstChildElement("buttons")->FirstChildElement();
-	//	while (buttonElement != NULL) {
-			//loadButtonElement(engine, renderer, input, menuScreen, buttonElement);
-			//buttonElement = buttonElement->NextSiblingElement();
-	//	}
-
 		loadUIElements(renderer, menuScreen, screenDocument, filepath);
 		engine->registerScreen(menuScreen);
 		return true;
@@ -383,8 +371,6 @@ private:
 					screen->addUIElement(uiT);
 				}
 				break;
-			case BUTTON:
-				break;
 			default:
 				break;
 			}
@@ -423,20 +409,6 @@ private:
 			loadLight(gameScreen, lightElement);
 			lightElement = lightElement->NextSiblingElement();
 			lightCount++;
-		}
-		tinyxml2::XMLElement* stringElement = screenElement->FirstChildElement("strings");
-		if (stringElement != NULL) stringElement = stringElement->FirstChildElement();
-		while (stringElement != NULL) {
-			loadStringElement(renderer, gameScreen, NULL, "", stringElement);
-			stringElement = stringElement->NextSiblingElement();
-		}
-
-		tinyxml2::XMLElement* buttonElement = screenElement->FirstChildElement("buttons");
-		if (buttonElement)
-			buttonElement = buttonElement->FirstChildElement();
-		while (buttonElement != NULL) {
-			//loadButtonElement(engine, renderer, input, gameScreen, buttonElement);
-			buttonElement = buttonElement->NextSiblingElement();
 		}
 
 		loadUIElements(renderer, gameScreen, screenDocument, filepath);

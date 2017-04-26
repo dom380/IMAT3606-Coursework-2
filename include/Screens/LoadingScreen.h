@@ -111,10 +111,6 @@ public:
 		Clean up any resources.
 	*/
 	void dispose() {};
-	/*
-		Empty implementation.
-	*/
-	void addTextBox(shared_ptr<TextBox> textbox) {};
 
 };
 

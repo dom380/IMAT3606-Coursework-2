@@ -715,8 +715,6 @@ string DebugMenu::listBoxItemSelected(UIType type)
 			returnedString = textureCStyleArray[listbox_item_current];
 		}
 		break;
-	case BUTTON:
-		break;
 	default:
 		break;
 	}

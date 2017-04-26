@@ -91,32 +91,7 @@ public:
 	{
 		return uiElements;
 	}
-	/*
-	Clean up button resources.
-	*/
-	void disposeButtons()
-	{
-		for (auto button : buttons) {
-			button.reset();
-		}
-	}
-	/*
-	Adds a new Button to the screen.
-	shared_ptr<Button> button, Button to add.
-	*/
-	virtual void addButton(shared_ptr<Button> button)
-	{
-		buttons.push_back(button);
-	}
-	/*
-	Adds a new TextBox to the screen.
-	shared_ptr<TextBox> textbox, TextBox to add.
-	*/
-	virtual void addTextBox(shared_ptr<TextBox> textbox)
-	{
-		textBoxes.push_back(textbox);
-	}
-
+	
 	virtual void addUIElement(shared_ptr<UIElement> uiElement)
 	{
 		uiElements.push_back(uiElement);
@@ -125,8 +100,6 @@ protected:
 	string screenId;
 	string xmlFilePath;
 	tinyxml2::XMLDocument* screenXmlDocument;
-	vector<shared_ptr<Button>> buttons;
-	vector<shared_ptr<TextBox>> textBoxes;
 	vector<shared_ptr<UIElement>> uiElements;
 };
 

@@ -194,8 +194,6 @@ void UIManager::debugMenuItemUpdate()
 					}
 					break;
 				}
-				case UIType::BUTTON:
-					break;
 				default:
 					break;
 				}

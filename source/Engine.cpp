@@ -47,6 +47,7 @@ void Engine::init()
 
 	renderer = buildRenderer(graphicsContext);
 	renderer->init();
+	renderer->setVSync(vsync);
 
 	physics = buildPhysics(physicsImplementation);
 	physics->init();
@@ -92,7 +93,6 @@ void Engine::mainLoop()
 		DebugMenu::getInstance()->render();
 
 		window->display();
-		
 	}
 }
 
@@ -168,6 +168,7 @@ void Engine::loadConfig()
 	initialScreenId = element->FirstChildElement("initScreen") != NULL ? element->FirstChildElement("initScreen")->GetText() : "MainMenu";
 	string renderer = element->FirstChildElement("renderer")!= NULL ? element->FirstChildElement("renderer")->GetText() : "OPEN_GL";
 	graphicsContext = enumParser.parse(renderer);
+	vsync = element->FirstChildElement("v-sync") != NULL ? element->FirstChildElement("v-sync")->BoolText() : false;
 	auto assetMng = AssetManager::getInstance();
 	string resourceLocation = element->FirstChildElement("fontLocation") != NULL ? element->FirstChildElement("fontLocation")->GetText() : "./resources/fonts/";
 	assetMng->setAssetFolder(resourceLocation, AssetManager::ResourceType::FONT);

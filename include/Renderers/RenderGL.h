@@ -91,6 +91,11 @@ public:
 		Renders the requested model. See interface for details.
 	*/
 	void renderModel(ModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, unsigned int lightingBuffer, unsigned int lightingBlockId);
+	
+	/*
+		Enable or disable v-sync
+	*/
+	void setVSync(bool flag);
 
 
 	//TO DO

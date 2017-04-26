@@ -138,6 +138,7 @@ public:
 			{
 				loadCollisionTrigger(physics, gameObject, componentElement);
 			}
+			break;
 			default:
 				break;
 			}

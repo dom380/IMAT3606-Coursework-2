@@ -2,6 +2,11 @@
 #ifndef NDEBUG
 #include <utils\GLSupport.h>
 #endif
+#if defined(_WIN32) || defined(_WIN64)
+#include <gl\wglew.h>
+#else
+#include <gl\glxew.h>
+#endif
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 RenderGL::RenderGL(int width, int height)
@@ -422,3 +427,19 @@ void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& sh
 	auto check = OpenGLSupport().GetError();
 #endif
 }
+
+void RenderGL::setVSync(bool flag)
+{
+	int val = flag ? 1 : 0;
+#if defined(_WIN32) || defined(_WIN64)
+	if (WGL_EXT_swap_control)
+	{
+		wglSwapIntervalEXT(val);
+	}
+#else
+	if (GLX_EXT_swap_control)
+	{
+		glXSwapIntervalEXT(val);
+#endif
+}
+

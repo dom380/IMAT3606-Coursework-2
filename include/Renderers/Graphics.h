@@ -135,6 +135,11 @@ public:
 	virtual void renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, unsigned int lightingBuffer, unsigned int lightingBlockId) = 0;
 
 	/*
+		Enable or disable v-sync
+	*/
+	virtual void setVSync(bool flag) = 0;
+
+	/*
 		Method called on engine shutdown. 
 		Perform any further clean up of resources here.
 	*/

@@ -141,6 +141,7 @@ private:
 	map<string, shared_ptr<Screen>> gameScreens;
 	std::pair<string,shared_ptr<Screen>> activeScreen;
 	bool closed;
+	bool vsync = false;
 	int width;
 	int height;
 	Timer timer;

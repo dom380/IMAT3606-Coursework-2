@@ -34,29 +34,7 @@ private:
 	string funcName;
 	vector<pair<string,string>> params;
 
-	/*
-		Calculates a bounding box around the button text.
-	*/
-	void buildAABB(shared_ptr<Transform> transform) {
-		float maxHeight = 0;
-		aabb.x = transform->position.x;
-		aabb.y = transform->position.y;
-		aabb.width = transform->scale.x;
-		aabb.height = transform->scale.y;
-	};
-	void buildAABB(Font font, string text, shared_ptr<Transform> transform) {
-		float maxHeight = 0;
-		aabb.x = transform->position.x;
-		aabb.y = transform->position.y;
-		aabb.width = 0;
-		for (char c : text) { //For each character in text
-			Font::Character character = font.getChar(c);
-			aabb.y = std::min((transform->position.y - (character.size.y - character.bearing.y) * transform->scale.y), aabb.y); //Set button position of AABB to the current lowest (From top left) character bearing.
-			maxHeight = std::max(character.size.y * transform->scale.y, maxHeight); //Get current tallest character
-			aabb.width += (character.offset >> 6) *  transform->scale.x; //increment width for each character
-		}
-		aabb.height = (transform->position.y - aabb.y) + maxHeight; //Height of AABB is the maximum character height add the maximum underline bearing
-	};
+	
 	
 public:
 	//Constructors
@@ -71,12 +49,10 @@ public:
 		string id, The button#s Id.
 	*/
 	Button( shared_ptr<Graphics>& passedGraphics, shared_ptr<Transform>& pos, Font font, string text) {
-		this->graphics = passedGraphics;
-		init(font, text, pos);
+		init(passedGraphics, font, text, pos);
 	};
 	Button(shared_ptr<Graphics>& passedGraphics, shared_ptr<Transform>& pos) {
-		this->graphics = passedGraphics;
-		init(pos);
+		init(passedGraphics, pos);
 	};
 
 	~Button(){};
@@ -94,21 +70,45 @@ public:
 	/*
 	Inititalise the Button, creating a Textbox for rendering and building an AABB around the text.
 	*/
-	void init(Font font, string text, shared_ptr<Transform> transform) {
-
+	void init(shared_ptr<Graphics>& passedGraphics,Font font, string text, shared_ptr<Transform> transform) {
+		this->graphics = passedGraphics;
 		buildAABB(font, text, transform);
 		active = true;
 	};
 	/*
 	Inititalise the Button, creating a Textbox for rendering and building an AABB around the text.
 	*/
-	void init(shared_ptr<Transform> transform) {
-
+	void init(shared_ptr<Graphics>& passedGraphics, shared_ptr<Transform> transform) {
+		this->graphics = passedGraphics;
 		buildAABB(transform);
 		active = true;
 	};
 	/*
-		Method to notify Button of Mouse Events it has subscribed to. 
+	/*
+	Calculates a bounding box around the button text.
+	*/
+	void buildAABB(shared_ptr<Transform> transform) {
+		float maxHeight = 0;
+		//transform from center
+		aabb.x = transform->position.x - (transform->scale.x / 2);
+		aabb.y = transform->position.y - (transform->scale.y / 2);
+		aabb.width = transform->scale.x;
+		aabb.height = transform->scale.y;
+	};
+	void buildAABB(Font font, string text, shared_ptr<Transform> transform) {
+		float maxHeight = 0;
+		aabb.x = transform->position.x;
+		aabb.y = transform->position.y;
+		aabb.width = 0;
+		for (char c : text) { //For each character in text
+			Font::Character character = font.getChar(c);
+			aabb.y = std::min((transform->position.y - (character.size.y - character.bearing.y) * transform->scale.y), aabb.y); //Set button position of AABB to the current lowest (From top left) character bearing.
+			maxHeight = std::max(character.size.y * transform->scale.y, maxHeight); //Get current tallest character
+			aabb.width += (character.offset >> 6) *  transform->scale.x; //increment width for each character
+		}
+		aabb.height = (transform->position.y - aabb.y) + maxHeight; //Height of AABB is the maximum character height add the maximum underline bearing
+	};
+	/*		Method to notify Button of Mouse Events it has subscribed to. 
 		If the event was a click within the button's bounding box the  
 		OnClick callback method will be called.
 	*/
@@ -125,7 +125,7 @@ public:
 		int x = event.x, y = graphics->getHeight() - event.y;
 		if ((x >= aabb.x) && (x <= aabb.x + aabb.width) && (y >= aabb.y) && (y <= aabb.y + aabb.height))
 		{
-			onClickCallback();
+			if (onClickCallback) { onClickCallback();  }
 		}
 	};
 	/*

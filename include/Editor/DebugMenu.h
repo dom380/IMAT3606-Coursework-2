@@ -9,6 +9,7 @@
 //#include <Graphics\ModelComponent.h>
 #include <Editor\DebugMenuItem.h>
 #include <GUI\UIType.h>
+#include <GUI\Button.h>
 
 using namespace std;
 /*
@@ -94,7 +95,7 @@ private:
 	void createCubeMenu();
 	void createObjectWindow(std::string objName, int iterator);
 	void createUIWindow(UIType type, int iterator);
-	
+	shared_ptr<Button> createButton();
 
 public:
 	static shared_ptr<DebugMenu> getInstance();

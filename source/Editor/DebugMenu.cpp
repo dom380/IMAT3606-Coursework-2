@@ -408,7 +408,7 @@ void DebugMenu::loadSpecificLevel()
 			//remove .xml from string
 			string levelID = levelCStyleArray[listbox_item_current];
 			levelID = levelID.substr(0, levelID.size()-4);
-			Engine::g_pEngine->replaceScreen(levelID);
+			Engine::g_pEngine->switchScreen(levelID);
 			popupText = "Load successfully";
 		}
 		else
@@ -510,9 +510,24 @@ void DebugMenu::createUIWindow(UIType type, int iterator)
 
 		createTextureListBox();
 		break;
-	case UIType::BUTTON:
-		break;
 	}
+
+	//Button
+	static bool hasButton = false;
+	shared_ptr<Button> createdButton;
+	//HasButton?
+	if (ImGui::Checkbox("HasButton", &hasButton))
+	{
+	}
+	if (hasButton)
+	{
+		createdButton = createButton();
+	}
+	else
+	{
+		createdButton.reset();
+	}
+	
 	
 	/*
 		transform editor
@@ -531,19 +546,64 @@ void DebugMenu::createUIWindow(UIType type, int iterator)
 		{
 			Font font = *AssetManager::getInstance()->getFont(const_cast<char*>(listBoxItemSelected(type).c_str()), Engine::g_pEngine->getRenderer());
 			shared_ptr<TextBox> textBox = std::make_shared<TextBox>(uiStringValueBuf, font, transform, Engine::g_pEngine->getRenderer(), colour, objNameBuf);
+			if (hasButton)
+			{
+				Engine::g_pEngine->getInput()->registerMouseListener(createdButton);
+				createdButton->init(Engine::g_pEngine->getRenderer(), font, uiStringValueBuf, transform);
+				textBox->setButton(createdButton);
+			}
 			Engine::g_pEngine->getActiveScreen()->addUIElement(textBox);
 			break;
 		}
 		case UIType::TEXTURE:
 			objInfo.second = textureCStyleArray[listbox_item_current];
-			Engine::g_pEngine->getActiveScreen()->addUIElement(std::make_shared<UITextureElement>(Engine::g_pEngine->getRenderer(), transform, objInfo.first.c_str(), objInfo.second.c_str()));
-			break;
-		case UIType::BUTTON:
+			shared_ptr<UITextureElement> uiTexture = std::make_shared<UITextureElement>(Engine::g_pEngine->getRenderer(), transform, objInfo.first.c_str(), objInfo.second.c_str());
+			if (hasButton)
+			{
+				Engine::g_pEngine->getInput()->registerMouseListener(createdButton);
+				createdButton->init(Engine::g_pEngine->getRenderer(), transform);
+				uiTexture->setButton(createdButton);
+			}
+			Engine::g_pEngine->getActiveScreen()->addUIElement(uiTexture);
 			break;
 		}
 		
 	}
 	ImGui::End();
+}
+
+shared_ptr<Button> DebugMenu::createButton()
+{
+	static shared_ptr<Button> button = std::make_shared<Button>();
+
+	if (ImGui::TreeNode("Button"))
+	{
+
+		static char buttonScriptName[64] = "";
+		static char buttonFuncName[64] = "";
+		static char buttonParamID[64] = "";
+		static char buttonParamText[64] = "";
+
+		//inputs
+		ImGui::InputText("ScriptName", buttonScriptName, sizeof(buttonScriptName));
+		ImGui::InputText("FuncName", buttonFuncName, sizeof(buttonFuncName));
+		ImGui::InputText("ParamID", buttonParamID, sizeof(buttonParamID));
+		ImGui::InputText("ParamText", buttonParamText, sizeof(buttonParamText));
+		button->setScript(buttonScriptName);
+		button->setFunc(buttonFuncName);
+		if (ImGui::Button("AddParam"))
+		{
+			button->setParam(pair<string, string>(buttonParamID, buttonParamText));
+			LevelLoader::loadButtonFunc(button);
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("ClearButtonParams"))
+		{
+			button->clearParams();
+		}
+		ImGui::TreePop();
+	}
+	return button;
 }
 
 void DebugMenu::createTextureListBox()

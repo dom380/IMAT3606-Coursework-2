@@ -441,12 +441,41 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 			XMLUIElement->InsertEndChild(XMLUIElementID);
 			break;
 		}
-		case UIType::BUTTON:
-			break;
 		default:
 			break;
 		}
 
+		//HasButton?
+		if (uiE->getButton())
+		{
+			tinyxml2::XMLElement* XMLUIButtonElement = XMLUIElement->FirstChildElement("onClick");
+			if (uiE->getButton()->isActive())
+			{
+				//add new button
+				tinyxml2::XMLElement* XMLUIButtonElement = doc->NewElement("onClick");
+				tinyxml2::XMLElement* XMLUIButtonScriptElement = doc->NewElement("script");
+				XMLUIButtonScriptElement->SetText(uiE->getButton()->getScript().c_str());
+				XMLUIButtonElement->InsertEndChild(XMLUIButtonScriptElement);
+				tinyxml2::XMLElement* XMLUIButtonFunctionElement = doc->NewElement("function");
+				XMLUIButtonFunctionElement->SetText(uiE->getButton()->getFunc().c_str());
+				XMLUIButtonElement->InsertEndChild(XMLUIButtonFunctionElement);
+				tinyxml2::XMLElement* XMLUIButtonParamsElement = doc->NewElement("params");
+				for (int x = 0; x < uiE->getButton()->getParams().size(); x++)
+				{
+					tinyxml2::XMLElement* XMLUIButtonParamElement = doc->NewElement("param");
+					XMLUIButtonParamElement->SetAttribute("name", uiE->getButton()->getParams()[x].first.c_str());
+					XMLUIButtonParamElement->SetText(uiE->getButton()->getParams()[x].second.c_str());
+					XMLUIButtonParamsElement->InsertEndChild(XMLUIButtonParamElement);
+				}
+				if (uiE->getButton()->getParams().size() > 0)
+				{
+					XMLUIButtonElement->InsertEndChild(XMLUIButtonParamsElement);
+				}
+				XMLUIElement->InsertEndChild(XMLUIButtonElement);
+			}
+
+		}
+		
 		//UI does not use a quat, but an angle in the z axis.
 		AddTransformToFile(doc, XMLUIElement, uiE->getTransform().get());
 

@@ -89,6 +89,7 @@ void UIManager::debugMenuItemUpdate()
 				}
 				if (hasButton)
 				{
+
 					if (ImGui::TreeNode("Button"))
 					{
 						
@@ -164,6 +165,12 @@ void UIManager::debugMenuItemUpdate()
 					Font font = *AssetManager::getInstance()->getFont(const_cast<char*>(DebugMenu::getInstance()->listBoxItemSelected(uiText->getType()).c_str()), Engine::g_pEngine->getRenderer());
 					uiText->setFont(font);
 					
+					//button
+					if (hasButton)
+					{
+						//reinit bounding box
+						uiElements[x]->getButton()->buildAABB(font, uiText->getText(), uiElements[x]->getTransform());
+					}
 					//AttemptRebuild
 					if (ImGui::Button("Update"))
 					{
@@ -179,7 +186,12 @@ void UIManager::debugMenuItemUpdate()
 					{
 						uiT->setTexture(DebugMenu::getInstance()->listBoxItemSelected(uiElements.at(x)->getType()));
 					}
-
+					//button
+					if (hasButton)
+					{
+						//reinit bounding box
+						uiElements[x]->getButton()->buildAABB(uiElements[x]->getTransform());
+					}
 					break;
 				}
 				case UIType::BUTTON:

@@ -41,6 +41,7 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 
 	//Sound stuff may move later only ever need one of these
 	//XML??
+	//lol
 	listener = listener->Instance();
 	sounds = sounds->Instance();
 	listener->setPosition(0.0, 0.0, 0.0);

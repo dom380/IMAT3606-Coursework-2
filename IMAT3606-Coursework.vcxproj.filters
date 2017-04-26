@@ -225,6 +225,15 @@
     <ClCompile Include="source\Editor\DebugMenuItem.cpp">
       <Filter>Source Files\Editor</Filter>
     </ClCompile>
+    <ClCompile Include="source\GUI\UIElement.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="include\GUI\UIManager.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="include\GUI\UITextureElement.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
     <ClCompile Include="source\Camera\EngineCamera.cpp">
       <Filter>Source Files\Camera</Filter>
     </ClCompile>
@@ -242,6 +251,15 @@
     </ClCompile>
     <ClCompile Include="source\utils\UUID\guid.cpp">
       <Filter>Source Files\utils\UUID</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Animation\Math3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Animation\SkeletalModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\AnimatedModelComponent.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -362,12 +380,6 @@
     <ClInclude Include="include\Screens\Screen.h">
       <Filter>Header Files\Screens</Filter>
     </ClInclude>
-    <ClInclude Include="include\Input.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="include\InputGLFW.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
     <ClInclude Include="include\utils\FbxReader.h">
       <Filter>Header Files\utils\FileParsers</Filter>
     </ClInclude>
@@ -446,6 +458,18 @@
     <ClInclude Include="include\Editor\DebugMenuItem.h">
       <Filter>Header Files\Editor</Filter>
     </ClInclude>
+    <ClInclude Include="include\GUI\UIElement.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUI\UIManager.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUI\UITextureElement.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUI\UIType.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
     <ClInclude Include="include\Camera\EngineCamera.h">
       <Filter>Header Files\Camera</Filter>
     </ClInclude>
@@ -494,6 +518,24 @@
     <ClInclude Include="include\Physics\ConvexHull.h">
       <Filter>Header Files\Physics</Filter>
     </ClInclude>
+    <ClInclude Include="include\Input\KeyCodes.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Input\Input.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Input\InputGLFW.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Animation\Math3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Animation\SkeletalModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\AnimatedModelComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\text.frag">
@@ -526,5 +568,7 @@
     <None Include="shaders\colour.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="shaders\animation.frag" />
+    <None Include="shaders\animation.vert" />
   </ItemGroup>
 </Project>

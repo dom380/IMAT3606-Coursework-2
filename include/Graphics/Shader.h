@@ -11,6 +11,10 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <map>
+
+#include <Animation\Math3D.h>
+
 using glm::vec2; using glm::vec3; using glm::vec4; using glm::mat3; using glm::mat4;
 using std::fstream; using std::ifstream; using std::string; using std::vector;
 
@@ -122,10 +126,33 @@ public:
 	*/
 	void   bindUniformBlock(const char* blockName, unsigned int& bindingPoint);
 
+
+	void bindAttribLocation(GLuint location, const char* name);
+	void bindFragDataLocation(GLuint location, const char* name);
+	void setUniformIndex(unsigned int Index, const Matrix4f& matIn);
+	void initialiseBoneUniforms();
+
 private:
 	GLint programHandle = 0;
 	bool linked;
 
+
+	std::map<std::string, int> uniformLocations;
+	static const unsigned int ui_BoneArraySize = 70;
+	GLint m_boneLocation[ui_BoneArraySize]; //!< Bone uniform locations 
+
+	GLint getUniformLocation(const char* name)
+	{
+		std::map<std::string, int>::iterator pos;
+		pos = uniformLocations.find(name);
+
+		if (pos == uniformLocations.end())
+		{
+			uniformLocations[name] = glGetUniformLocation(programHandle, name);
+		}
+
+		return uniformLocations[name];
+	}
 };
 
 #endif // !SHADER_H

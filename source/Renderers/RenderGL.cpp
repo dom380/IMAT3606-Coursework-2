@@ -2,6 +2,11 @@
 #ifndef NDEBUG
 #include <utils\GLSupport.h>
 #endif
+#if defined(_WIN32) || defined(_WIN64)
+#include <gl\wglew.h>
+#else
+#include <gl\glxew.h>
+#endif
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 RenderGL::RenderGL(int width, int height)
@@ -25,6 +30,9 @@ bool RenderGL::init()
 		return false;
 
 	}
+
+	AssetManager::getInstance()->getShader(std::make_pair("animation.vert", "animation.frag"))->initialiseBoneUniforms();
+	
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
@@ -255,6 +263,33 @@ unsigned int RenderGL::createTextVertexArrayObject(unsigned int & vboHandle)
 	return vertArrayObj;
 }
 
+unsigned int RenderGL::createUIVertextArrayObject(unsigned int & vboHandle, unsigned int& eboHandle, vector<GLfloat> vertices, vector<GLuint> indices)
+{
+	unsigned int vertArrayObj;
+	glGenVertexArrays(1, &vertArrayObj);
+	glGenBuffers(1, &vboHandle);
+	glGenBuffers(1, &eboHandle);
+
+	glBindVertexArray(vertArrayObj);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vboHandle);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, eboHandle);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * indices.size(), &indices[0], GL_STATIC_DRAW);
+
+	// Position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+	// Color attribute
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+	// TexCoord attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(2);
+	return vertArrayObj;
+}
+
 void RenderGL::renderModel(ModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera)
 {
 	vector<Light> defaultLights;
@@ -272,8 +307,15 @@ void RenderGL::renderModel(ModelComponent& model, shared_ptr<Shader>& shaderProg
 	check = OpenGLSupport().GetError();
 #endif
 	glBindVertexArray(model.getVertArray());
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, model.getTexture()->object());
+	if (model.getTexture() != nullptr) {
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, model.getTexture()->object());
+		shaderProgram->setUniform("tex", 0);
+	}
+	else {
+		shaderProgram = AssetManager::getInstance()->getShader(std::pair<std::string, std::string>("phong_no_texture.vert", "phong_no_texture.frag"));
+		shaderProgram->bindShader();
+	}
 	Transform* transform = model.getTransform();
 	glm::quat orientation = transform->orientation;
 	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::rotate(orientation.w, glm::vec3(orientation.x, orientation.y, orientation.z)) * glm::scale(transform->scale);
@@ -342,3 +384,62 @@ void RenderGL::renderModel(ModelComponent & model, shared_ptr<Shader>& shaderPro
 #endif
 	glBindVertexArray(0);
 }
+
+//TO DO
+void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera)
+{
+
+}
+//TO DO
+void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, vector<Light>& lights)
+{
+
+}
+//TO DO - change animation shader to use light uniform blocks for multiple lights - address vertex array objects not existing across threads
+//ability to change animation being played and user input to move the character - texture support?
+void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, unsigned int lightingBuffer, unsigned int lightingBlockId)
+{
+	shaderProgram->bindShader();
+
+	Transform* transform = model.getTransform();
+	glm::quat orientation = transform->orientation;
+	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::mat4_cast(orientation) * glm::scale(transform->scale);
+
+	glm::mat4 mv = camera->getView() * mMat;
+	shaderProgram->setUniform("ViewMatrix", camera->getView());
+	shaderProgram->setUniform("ModelMatrix", mMat);
+	shaderProgram->setUniform("ModelViewMatrix", mv);
+	shaderProgram->setUniform("NormalMatrix", glm::mat3(glm::vec3(mv[0]), glm::vec3(mv[1]), glm::vec3(mv[2])));
+	shaderProgram->setUniform("MVP", camera->getProjection() * mv);
+
+	//glBindBufferBase(GL_UNIFORM_BUFFER, lightingBlockId, lightingBuffer); //Bind lighting data
+	//set shader uniform
+	
+	shaderProgram->setUniform("animatedCharacter", true);
+	//Set the Teapot material properties in the shader and render
+	shaderProgram->setUniform("Material.Ka", glm::vec3(0.225f, 0.125f, 0.0f));
+	shaderProgram->setUniform("Material.Kd", glm::vec3(1.0f, 0.6f, 0.0f));
+	shaderProgram->setUniform("Material.Ks", glm::vec3(1.0f, 1.0f, 1.0f));
+	shaderProgram->setUniform("Material.Shininess", 1.0f);
+	model.getCurrentModel()->render();
+	shaderProgram->setUniform("animatedCharacter", false);
+#ifndef NDEBUG
+	auto check = OpenGLSupport().GetError();
+#endif
+}
+
+void RenderGL::setVSync(bool flag)
+{
+	int val = flag ? 1 : 0;
+#if defined(_WIN32) || defined(_WIN64)
+	if (WGL_EXT_swap_control)
+	{
+		wglSwapIntervalEXT(val);
+	}
+#else
+	if (GLX_EXT_swap_control)
+	{
+		glXSwapIntervalEXT(val);
+#endif
+}
+

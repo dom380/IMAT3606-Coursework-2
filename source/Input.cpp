@@ -1,4 +1,4 @@
-#include "Input.h"
+#include "Input/Input.h"
 
 void Input::registerKeyListener(shared_ptr<EventListener> listener)
 {
@@ -28,10 +28,22 @@ void Input::removeMouseListener(shared_ptr<EventListener> listener)
 	}
 }
 
+void Input::setMouseFocus(shared_ptr<EventListener> listener)
+{
+	mouseFocus = listener;
+}
+
+void Input::setKeyFocus(shared_ptr<EventListener> listener)
+{
+	keyFocus = listener;
+}
+
 void Input::exit()
 {
 	if (!closed)
 	{
+		keyFocus.reset();
+		mouseFocus.reset();
 		keySubs.clear();
 		mouseSubs.clear();
 		closed = true;

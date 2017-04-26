@@ -5,7 +5,7 @@
 #include <utils\tinyxml2.h>
 #include <utils\LevelLoader.h>
 #include <Screens\LoadingScreen.h>
-#include <InputGLFW.h>
+#include <Input\InputGLFW.h>
 #include <Scripting\ScriptEngine.h>
 
 
@@ -47,15 +47,14 @@ void Engine::init()
 
 	renderer = buildRenderer(graphicsContext);
 	renderer->init();
+	renderer->setVSync(vsync);
 
 	physics = buildPhysics(physicsImplementation);
 	physics->init();
 
 	loadFirstLevel();
 
-#ifndef NDEBUG
 	DebugMenu::getInstance()->init();
-#endif
 }
 
 void Engine::mainLoop()
@@ -63,7 +62,7 @@ void Engine::mainLoop()
 	double t = 0.0;
 	double dt = FRAMERATE;
 	timer.start();
-	auto currentTime = timer.getElapsedTime();
+	auto currentTime = timer.getElapsedTime(); //want this
 	bool show_another_window = true;
 	//variable timestep
 	while (!window->shouldExit()) {
@@ -72,16 +71,15 @@ void Engine::mainLoop()
 		currentTime = newTime; //set current time
 		window->update();
 		window->pollEvents();
-#ifndef NDEBUG
+
 		DebugMenu::getInstance()->update();
-#endif
 	
 		
 
 		while (frameTime > 0.0) //While there is still time to update the simulation
 		{
 			double deltaTime = std::min(frameTime, dt);
-			activeScreen.second->update(deltaTime);
+			activeScreen.second->update(deltaTime, currentTime);
 
 			frameTime -= deltaTime;
 			t += deltaTime;
@@ -92,11 +90,9 @@ void Engine::mainLoop()
 		renderer->prepare();
 		activeScreen.second->render();
 
-#ifndef NDEBUG
 		DebugMenu::getInstance()->render();
-#endif
+
 		window->display();
-		
 	}
 }
 
@@ -172,6 +168,7 @@ void Engine::loadConfig()
 	initialScreenId = element->FirstChildElement("initScreen") != NULL ? element->FirstChildElement("initScreen")->GetText() : "MainMenu";
 	string renderer = element->FirstChildElement("renderer")!= NULL ? element->FirstChildElement("renderer")->GetText() : "OPEN_GL";
 	graphicsContext = enumParser.parse(renderer);
+	vsync = element->FirstChildElement("v-sync") != NULL ? element->FirstChildElement("v-sync")->BoolText() : false;
 	auto assetMng = AssetManager::getInstance();
 	string resourceLocation = element->FirstChildElement("fontLocation") != NULL ? element->FirstChildElement("fontLocation")->GetText() : "./resources/fonts/";
 	assetMng->setAssetFolder(resourceLocation, AssetManager::ResourceType::FONT);
@@ -224,12 +221,12 @@ shared_ptr<Input> Engine::getInput()
 {
 	return inputHandler;
 }
-#ifndef NDEBUG
+
 shared_ptr<DebugMenu> Engine::getDebugMenu()
 {
 	return DebugMenu::getInstance();
 }
-#endif
+
 int Engine::getWindowWidth()
 {
 	return width;

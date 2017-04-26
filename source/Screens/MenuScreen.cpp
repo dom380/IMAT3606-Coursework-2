@@ -1,21 +1,24 @@
 #include <Screens\MenuScreen.h>
 
-MenuScreen::MenuScreen(shared_ptr<Graphics>& graphics, Engine* engine)
+MenuScreen::MenuScreen(shared_ptr<Graphics>& graphics)
 {
-	this->engine = engine;
 	this->graphics = graphics;
+	UIManager::getInstance()->update();
 }
 
 void MenuScreen::show()
 {
 }
 
-void MenuScreen::update(double dt)
+void MenuScreen::update(double dt, double currentTime)
 {
 }
 
 void MenuScreen::render()
 {
+	for (auto ui : uiElements) {
+		ui->render();
+	}
 	for (auto button : buttons) {
 		button->render();
 	}
@@ -30,17 +33,6 @@ void MenuScreen::resize(int width, int height)
 
 void MenuScreen::dispose()
 {
-	for (auto button : buttons) {
-		button.reset();
-	}
-}
-
-void MenuScreen::addButton(shared_ptr<Button> button)
-{
-	buttons.push_back(button);
-}
-
-void MenuScreen::addTextBox(shared_ptr<TextBox> textbox)
-{
-	textBoxes.push_back(textbox);
+	disposeButtons();
+	uiElements.clear();
 }

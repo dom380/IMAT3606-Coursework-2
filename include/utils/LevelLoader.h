@@ -1,6 +1,8 @@
 #pragma once
 #ifndef LEVELLOADER_H
 #define LEVELLOADER_H
+#include <gl/glm/glm/gtc/quaternion.hpp>
+#include <gl/glm/glm/gtx/quaternion.hpp>
 #include <Engine.h>
 #include <Renderers\Graphics.h>
 #include <Screens\MenuScreen.h>
@@ -9,12 +11,16 @@
 #include <Components\LogicComponent.h>
 #include "tinyxml2.h"
 #include <Scripting\ScriptEngine.h>
+#include <Components\AnimatedModelComponent.h>
 #include <Utils/Utilities.h>
+#include "utils\DebugUtils.h"
+#include <GUI\UITextureElement.h>
 #include <gl/glm/glm/gtc/quaternion.hpp>
 #include <gl/glm/glm/gtx/quaternion.hpp>
+
 #ifndef NDEBUG
 #include "Timer.h"
-#include "utils\DebugUtils.h"
+
 #endif
 /*
 Factory class to parse level XML descriptors and create the relevant objects.
@@ -49,11 +55,12 @@ public:
 			if (strcmp(fileName.c_str(), screenElement->Attribute("name")) != 0)
 			{
 				std::cerr << "Failed to load file, filename != to levelname" << filePath << std::endl;
-#ifndef NDEBUG
+
 				DebugUtils::getInstance()->popup("FAIL","Failed to load file, filename != to levelname");
-#endif
+
 				return false;
 			}
+			engine->getDebugMenu()->refreshMenuItems();
 			const char* type = screenElement->Attribute("type");
 			if (string(type) == string("menu")) {
 				return loadMenu(engine, renderer, input, doc, filePath);
@@ -66,6 +73,7 @@ public:
 				std::cerr << "Unrecognised screen type: " << type << std::endl;
 				return false;
 			}
+
 		}
 		catch (const std::runtime_error& re)
 		{
@@ -106,7 +114,7 @@ public:
 				loadModel(renderer, gameObject, componentElement);
 				break;
 			case ComponentType::ANIMATION:
-				//todo
+				loadAnimation(renderer, gameObject, componentElement);
 				break;
 			case ComponentType::RIGID_BODY:
 				loadPhysics(renderer, physics, gameObject, componentElement);
@@ -130,6 +138,7 @@ public:
 			{
 				loadCollisionTrigger(physics, gameObject, componentElement);
 			}
+			break;
 			default:
 				break;
 			}
@@ -168,7 +177,7 @@ private:
 	static bool loadMenu(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, tinyxml2::XMLDocument* screenDocument, string filepath)
 	{
 		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
-		shared_ptr<MenuScreen> menuScreen = std::make_shared<MenuScreen>(renderer, engine);
+		shared_ptr<MenuScreen> menuScreen = std::make_shared<MenuScreen>(renderer);
 		menuScreen->setID(screenElement->Attribute("name"));
 		menuScreen->setXMLDocument(screenDocument);
 		menuScreen->setXMLFilePath(filepath);
@@ -183,6 +192,8 @@ private:
 			loadButtonElement(engine, renderer, input, menuScreen, buttonElement);
 			buttonElement = buttonElement->NextSiblingElement();
 		}
+
+		loadUIElements(renderer, menuScreen, screenDocument, filepath);
 		engine->registerScreen(menuScreen);
 		return true;
 	}
@@ -207,7 +218,7 @@ private:
 	/*
 	Utility method to load Button elements
 	*/
-	static void loadButtonElement(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input> input, shared_ptr<MenuScreen> menuScreen, tinyxml2::XMLElement* buttonElement)
+	static void loadButtonElement(Engine* engine, shared_ptr<Graphics>& renderer, shared_ptr<Input> input, shared_ptr<Screen> screen, tinyxml2::XMLElement* buttonElement)
 	{
 		Font font = *AssetManager::getInstance()->getFont("arial.ttf", renderer);
 		const char* text = buttonElement->FirstChildElement("value") != NULL ? buttonElement->FirstChildElement("value")->GetText() : "MISSING_STRING";
@@ -218,7 +229,7 @@ private:
 		string id;
 		buttonElement->Attribute("id") != NULL ? id = buttonElement->Attribute("id") : id = "";
 		shared_ptr<Button> button = std::make_shared<Button>(text, font, transform, renderer, colour, id);
-		menuScreen->addButton(button);
+		screen->addButton(button);
 		input->registerMouseListener(button);
 		//string funcName = string(buttonElement->FirstChildElement("function")->Attribute("type"));
 		loadButtonFunc(buttonElement, button, engine);
@@ -252,6 +263,43 @@ private:
 	}
 
 	/*
+		Load UI elements
+
+	*/
+	static bool loadUIElements(shared_ptr<Graphics>& renderer, shared_ptr<Screen> screen, tinyxml2::XMLDocument* screenDocument, string filepath)
+	{
+		bool loadSuccess = true;
+
+		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
+		tinyxml2::XMLElement* UIDocElement = screenElement->FirstChildElement("uiElements");
+		
+		if (UIDocElement)
+		{
+			UIDocElement = UIDocElement->FirstChildElement();
+		}
+		
+		while (UIDocElement != NULL) {
+			shared_ptr<Transform> transform = std::make_shared<Transform>();
+			loadTransform(transform, UIDocElement);
+			//get ID
+			tinyxml2::XMLElement* UIID = UIDocElement->FirstChildElement("ID");
+			//load UI using texture
+			tinyxml2::XMLElement* UITexture = UIDocElement->FirstChildElement("Texture");
+			if (UITexture)
+			{
+				screen->addUIElement(std::make_shared<UITextureElement>(renderer, transform, UIID->GetText(), UITexture->GetText()));
+			}
+			else
+			{
+				//text?
+			}
+			
+			UIDocElement = UIDocElement->NextSiblingElement();
+		}
+
+		return loadSuccess;
+	}
+	/*
 		Utility method to load GameScreens
 		Returns true on sucess.
 	*/
@@ -264,6 +312,7 @@ private:
 		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
 		shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>(engine->getWindowWidth(), engine->getWindowHeight(), 45.f);
 		shared_ptr<GameScreen> gameScreen = std::make_shared<GameScreen>(renderer, input, engine->getPhysics(), camera);
+		input->setKeyFocus(gameScreen);
 		gameScreen->setID(screenElement->Attribute("name"));
 		gameScreen->setXMLDocument(screenDocument);
 		gameScreen->setXMLFilePath(filepath);
@@ -286,6 +335,17 @@ private:
 			loadStringElement(renderer, gameScreen, stringElement);
 			stringElement = stringElement->NextSiblingElement();
 		}
+
+		tinyxml2::XMLElement* buttonElement = screenElement->FirstChildElement("buttons");
+		if (buttonElement)
+			buttonElement = buttonElement->FirstChildElement();
+		while (buttonElement != NULL) {
+			loadButtonElement(engine, renderer, input, gameScreen, buttonElement);
+			buttonElement = buttonElement->NextSiblingElement();
+		}
+
+		loadUIElements(renderer, gameScreen, screenDocument, filepath);
+
 		gameScreen->updateLighting();
 		engine->registerScreen(gameScreen);
 		input->registerKeyListener(gameScreen);
@@ -338,6 +398,22 @@ private:
 		mesh->init(modelPath, texturePath, id);
 		//loadTransform(mesh->transform, modelElement);
 		gameObject->AddComponent(mesh, ComponentType::MODEL);
+	}
+
+	static void loadAnimation(shared_ptr<Graphics>& renderer, shared_ptr<GameObject> gameObject, tinyxml2::XMLElement* animElement)
+	{
+		shared_ptr<AnimatedModelComponent> animation = std::make_shared<AnimatedModelComponent>(renderer, gameObject);
+		tinyxml2::XMLElement* fileElement = animElement->FirstChildElement("files");
+		std::vector<std::pair<const char*, const char*>> files;
+		if (fileElement != NULL) fileElement = fileElement->FirstChildElement();
+		while (fileElement != NULL) {
+			files.push_back(std::make_pair(fileElement->FirstChildElement("id")->GetText(),fileElement->FirstChildElement("filePath")->GetText()));
+
+			//loadStringElement(renderer, gameScreen, stringElement);
+			fileElement = fileElement->NextSiblingElement();
+		}
+		animation->init(animElement->FirstChildElement("default")->GetText(),files, "");
+		gameObject->AddComponent(animation, ComponentType::ANIMATION);
 	}
 
 	/*
@@ -539,6 +615,7 @@ private:
 				quatElement->FirstChildElement("y") != NULL ? quatElement->FirstChildElement("y")->FloatText() : 0.0f,
 				quatElement->FirstChildElement("z") != NULL ? quatElement->FirstChildElement("z")->FloatText() : 1.0f
 			);
+
 			quat = glm::angleAxis(glm::radians(quat.w), glm::vec3(quat.x, quat.y, quat.z));
 		}
 	}

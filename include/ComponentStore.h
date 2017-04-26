@@ -6,7 +6,12 @@
 #include "Graphics\ModelComponent.h"
 #include "Graphics\Transform.h"
 #include <Components\LogicComponent.h>
+#include <Components\PhysicsComponent.h>
+#include <Components\CollisionTrigger.h>
+#include <Components\AnimatedModelComponent.h>
 class LogicComponent;
+class PhysicsComponent;
+class CollisionTrigger;
 
 class ComponentStore
 {
@@ -17,21 +22,23 @@ public:
 		static_assert(std::is_base_of<Component, T>::value, "T must derive from component");
 		switch (type)
 		{
-		case MODEL:
+		case ComponentType::MODEL:
 			return (T*)models.get(handle);
 			break;
-		case ANIMATION:
-			return nullptr;
+		case ComponentType::ANIMATION:
+			return (T*)animatedModels.get(handle);
 			break;
-		case RIGID_BODY:
-			return nullptr;
+		case ComponentType::RIGID_BODY:
+			return (T*)physics.get(handle);
 			break;
-		case LOGIC:
+		case ComponentType::LOGIC:
 			return (T*)logic.get(handle);
 			break;
-		case TRANSFORM:
+		case ComponentType::TRANSFORM:
 			return (T*)transforms.get(handle);
 			break;
+		case TRIGGER:
+			return (T*)triggers.get(handle);
 		case COMPONENT_TYPE_COUNT:
 			//no-op
 			return nullptr;
@@ -47,7 +54,12 @@ public:
 	Handle storeComponent(std::shared_ptr<LogicComponent> component);
 
 	Handle storeComponent(std::shared_ptr<Transform> component);
-	
+
+	Handle storeComponent(std::shared_ptr<PhysicsComponent> component);
+		
+	Handle storeComponent(std::shared_ptr<CollisionTrigger> component);
+
+	Handle storeComponent(std::shared_ptr<AnimatedModelComponent> component);
 
 	template <typename T>
 	std::vector<std::pair<int, T>>* getAllComponents(ComponentType type)
@@ -55,21 +67,23 @@ public:
 		static_assert(std::is_base_of<Component, T>::value, "T must derive from component");
 		switch (type)
 		{
-		case MODEL:
+		case ComponentType::MODEL:
 			return (std::vector<std::pair<int, T>>*)models.getAll();
 			break;
-		case ANIMATION:
-			return nullptr;
+		case ComponentType::ANIMATION:
+			return (std::vector<std::pair<int, T>>*)animatedModels.getAll();
 			break;
-		case RIGID_BODY:
-			return nullptr;
+		case ComponentType::RIGID_BODY:
+			return (std::vector<std::pair<int, T>>*)physics.getAll();
 			break;
-		case LOGIC:
+		case ComponentType::LOGIC:
 			return (std::vector<std::pair<int, T>>*)logic.getAll();
 			break;
-		case TRANSFORM:
+		case ComponentType::TRANSFORM:
 			return (std::vector<std::pair<int, T>>*)transforms.getAll();
 			break;
+		case TRIGGER:
+			return (std::vector<std::pair<int, T>>*)triggers.getAll();
 		case COMPONENT_TYPE_COUNT:
 			//no-op
 			return nullptr;
@@ -81,8 +95,11 @@ public:
 	}
 private:
 	HandleManager<ModelComponent> models;
+	HandleManager<AnimatedModelComponent> animatedModels;
 	HandleManager<LogicComponent> logic;
 	HandleManager<Transform> transforms;
+	HandleManager<PhysicsComponent> physics;
+	HandleManager<CollisionTrigger> triggers;
 };
 
 #endif // !COMPONENTSTORE_H

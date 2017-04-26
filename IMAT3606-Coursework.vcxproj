@@ -99,6 +99,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ShowIncludes>false</ShowIncludes>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);GUID_WINDOWS</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -107,10 +108,14 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ShowIncludes>false</ShowIncludes>
+      <AdditionalOptions>-DNOMINMAX %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>./lib/bullet3-2.86.1/src;</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);GUID_WINDOWS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>freetype27.lib;glew32.lib;opengl32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LinearMath_Debug.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;assimp.lib;lua53.lib;freetype27.lib;glew32.lib;opengl32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>./lib/bullet3-2.86.1/build3/vs2015/lib/Debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -121,6 +126,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ShowIncludes>false</ShowIncludes>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);GUID_WINDOWS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -135,20 +141,39 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ShowIncludes>false</ShowIncludes>
-      <PreprocessorDefinitions>NDEBUG;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_MBCS;%(PreprocessorDefinitions);GUID_WINDOWS</PreprocessorDefinitions>
+      <AdditionalOptions>-DNOMINMAX %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>./lib/bullet3-2.86.1/src;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>freetype27.lib;glew32.lib;opengl32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp.lib;LinearMath_RelWithDebugInfo.lib;BulletDynamics_RelWithDebugInfo.lib;BulletCollision_RelWithDebugInfo.lib;lua53.lib;freetype27.lib;glew32.lib;opengl32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>./lib/bullet3-2.86.1/build3/vs2015/lib/RelWithDebInfo</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\GUI\UIManager.cpp" />
+    <ClCompile Include="include\GUI\UITextureElement.cpp" />
+    <ClCompile Include="source\Animation\Math3D.cpp" />
+    <ClCompile Include="source\Animation\SkeletalModel.cpp" />
     <ClCompile Include="source\AssetManager.cpp" />
+    <ClCompile Include="source\Camera\EngineCamera.cpp" />
+    <ClCompile Include="source\Camera\FollowCamera.cpp" />
     <ClCompile Include="source\Camera\PerspectiveCamera.cpp" />
     <ClCompile Include="source\ComponentStore.cpp" />
+    <ClCompile Include="source\Components\CollisionTrigger.cpp" />
+    <ClCompile Include="source\Components\AnimatedModelComponent.cpp" />
     <ClCompile Include="source\Components\Component.cpp" />
     <ClCompile Include="source\Components\LogicComponent.cpp" />
+    <ClCompile Include="source\Components\PhysicsComponent.cpp" />
+    <ClCompile Include="source\Editor\DebugMenu.cpp" />
+    <ClCompile Include="source\Editor\DebugMenuItem.cpp" />
+    <ClCompile Include="source\Editor\imgui\imgui.cpp" />
+    <ClCompile Include="source\Editor\imgui\ImguiGLFWHandler.cpp" />
+    <ClCompile Include="source\Editor\imgui\ImguiHandler.cpp" />
+    <ClCompile Include="source\Editor\imgui\imgui_demo.cpp" />
+    <ClCompile Include="source\Editor\imgui\imgui_draw.cpp" />
     <ClCompile Include="source\Engine.cpp" />
     <ClCompile Include="source\GameObject.cpp" />
     <ClCompile Include="source\Graphics\Bitmap.cpp" />
@@ -158,34 +183,66 @@
     <ClCompile Include="source\Graphics\WindowGLFW.cpp" />
     <ClCompile Include="source\GUI\Font.cpp" />
     <ClCompile Include="source\GUI\TextBox.cpp" />
+    <ClCompile Include="source\GUI\UIElement.cpp" />
     <ClCompile Include="source\Input.cpp" />
     <ClCompile Include="source\InputGLFW.cpp" />
     <ClCompile Include="source\Main.cpp" />
+    <ClCompile Include="source\Physics\BulletPhysics.cpp" />
+    <ClCompile Include="source\Physics\Physics.cpp" />
     <ClCompile Include="source\Renderers\RenderGL.cpp" />
     <ClCompile Include="source\Robot.cpp" />
     <ClCompile Include="source\Screens\GameScreen.cpp" />
     <ClCompile Include="source\Screens\MenuScreen.cpp" />
+    <ClCompile Include="source\utils\DebugUtils.cpp" />
+    <ClCompile Include="source\utils\DirectoryReader.cpp" />
+    <ClCompile Include="source\Scripting\LuaStateHolder.cpp" />
+    <ClCompile Include="source\Scripting\ScriptEngine.cpp" />
     <ClCompile Include="source\utils\EnumParser.cpp" />
+    <ClCompile Include="source\utils\FileSaver.cpp" />
     <ClCompile Include="source\utils\Handle.cpp" />
+    <ClCompile Include="source\utils\LevelLoader.cpp" />
     <ClCompile Include="source\utils\ObjReader.cpp" />
     <ClCompile Include="source\utils\Timer.cpp" />
     <ClCompile Include="source\utils\tinyxml2.cpp" />
+    <ClCompile Include="source\utils\XMLReader.cpp" />
+    <ClCompile Include="source\utils\Utilities.cpp" />
+    <ClCompile Include="source\utils\UUID\guid.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Animation\Math3D.h" />
+    <ClInclude Include="include\Animation\SkeletalModel.h" />
     <ClInclude Include="include\AssetManager.h" />
     <ClInclude Include="include\Camera\Camera.h" />
+    <ClInclude Include="include\Camera\EngineCamera.h" />
+    <ClInclude Include="include\Camera\FollowCamera.h" />
     <ClInclude Include="include\Camera\OrthographicCamera.h" />
     <ClInclude Include="include\Camera\PerspectiveCamera.h" />
     <ClInclude Include="include\ComponentStore.h" />
+    <ClInclude Include="include\Components\CollisionMessage.h" />
+    <ClInclude Include="include\Components\CollisionTrigger.h" />
+    <ClInclude Include="include\Components\AnimatedModelComponent.h" />
     <ClInclude Include="include\Components\Component.h" />
     <ClInclude Include="include\Components\ComponentType.h" />
     <ClInclude Include="include\Components\LocationMessage.h" />
     <ClInclude Include="include\Components\LogicComponent.h" />
+    <ClInclude Include="include\Components\MaterialMessage.h" />
     <ClInclude Include="include\Components\Message.h" />
     <ClInclude Include="include\Components\MessageType.h" />
+    <ClInclude Include="include\Components\PhysicsComponent.h" />
     <ClInclude Include="include\Components\RenderMessage.h" />
+    <ClInclude Include="include\Editor\DebugMenu.h" />
+    <ClInclude Include="include\Editor\DebugMenuItem.h" />
+    <ClInclude Include="include\Editor\imgui\imconfig.h" />
+    <ClInclude Include="include\Editor\imgui\imgui.h" />
+    <ClInclude Include="include\Editor\imgui\ImguiGLFWHandler.h" />
+    <ClInclude Include="include\Editor\imgui\ImguiHandler.h" />
+    <ClInclude Include="include\Editor\imgui\imgui_internal.h" />
+    <ClInclude Include="include\Editor\imgui\stb_rect_pack.h" />
+    <ClInclude Include="include\Editor\imgui\stb_textedit.h" />
+    <ClInclude Include="include\Editor\imgui\stb_truetype.h" />
     <ClInclude Include="include\Engine.h" />
     <ClInclude Include="include\GameObject.h" />
+    <ClInclude Include="include\GameObjectTag.h" />
     <ClInclude Include="include\Graphics\Bitmap.h" />
     <ClInclude Include="include\Graphics\Light.h" />
     <ClInclude Include="include\Graphics\Material.h" />
@@ -200,13 +257,23 @@
     <ClInclude Include="include\GUI\Button.h" />
     <ClInclude Include="include\GUI\KeyEvent.h" />
     <ClInclude Include="include\GUI\KeyEventType.h" />
+    <ClInclude Include="include\GUI\MouseActionType.h" />
     <ClInclude Include="include\GUI\MouseEvent.h" />
     <ClInclude Include="include\GUI\EventListener.h" />
     <ClInclude Include="include\GUI\MouseEventType.h" />
     <ClInclude Include="include\GUI\Font.h" />
     <ClInclude Include="include\GUI\TextBox.h" />
-    <ClInclude Include="include\Input.h" />
-    <ClInclude Include="include\InputGLFW.h" />
+    <ClInclude Include="include\GUI\UIElement.h" />
+    <ClInclude Include="include\GUI\UIManager.h" />
+    <ClInclude Include="include\GUI\UITextureElement.h" />
+    <ClInclude Include="include\GUI\UIType.h" />
+    <ClInclude Include="include\Input\Input.h" />
+    <ClInclude Include="include\Input\InputGLFW.h" />
+    <ClInclude Include="include\Input\KeyCodes.h" />
+    <ClInclude Include="include\Physics\BulletPhysics.h" />
+    <ClInclude Include="include\Physics\ConvexHull.h" />
+    <ClInclude Include="include\Physics\Physics.h" />
+    <ClInclude Include="include\Physics\ShapeData.h" />
     <ClInclude Include="include\Renderers\Graphics.h" />
     <ClInclude Include="include\Renderers\RenderGL.h" />
     <ClInclude Include="include\Robot.h" />
@@ -214,20 +281,29 @@
     <ClInclude Include="include\Screens\LoadingScreen.h" />
     <ClInclude Include="include\Screens\MenuScreen.h" />
     <ClInclude Include="include\Screens\Screen.h" />
+    <ClInclude Include="include\Scripting\LuaStateHolder.h" />
+    <ClInclude Include="include\Scripting\ScriptEngine.h" />
     <ClInclude Include="include\utils\DaeReader.h" />
+    <ClInclude Include="include\utils\DebugUtils.h" />
+    <ClInclude Include="include\utils\DirectoryReader.h" />
     <ClInclude Include="include\utils\EnumParser.h" />
     <ClInclude Include="include\utils\FbxReader.h" />
+    <ClInclude Include="include\utils\FileSaver.h" />
     <ClInclude Include="include\utils\GLSupport.h" />
     <ClInclude Include="include\utils\Handle.h" />
     <ClInclude Include="include\utils\HandleManager.h" />
     <ClInclude Include="include\utils\LevelLoader.h" />
     <ClInclude Include="include\utils\ModelFileReader.h" />
     <ClInclude Include="include\utils\ObjReader.h" />
-    <ClInclude Include="include\utils\OnClickFunctions.h" />
     <ClInclude Include="include\utils\Timer.h" />
     <ClInclude Include="include\utils\tinyxml2.h" />
+    <ClInclude Include="include\utils\XMLReader.h" />
+    <ClInclude Include="include\utils\Utilities.h" />
+    <ClInclude Include="include\utils\UUID\guid.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shaders\animation.frag" />
+    <None Include="shaders\animation.vert" />
     <None Include="shaders\basic.frag" />
     <None Include="shaders\basic.vert" />
     <None Include="shaders\colour.frag" />

@@ -16,9 +16,18 @@ void ModelComponent::init(const char * objFile, const char * textureFile, string
 	shared_ptr<ModelData> modelData = AssetManager::getInstance()->getModelData(objFile, graphics);
 	vboHandles = modelData->vboHandles;
 
+	
 	// Load the texture
-	if(textureFile != NULL)
+	if (textureFile == NULL)
+	{
+		textureName = "";
+	}
+	else
+	{
+		textureName = textureFile;
 		texture = AssetManager::getInstance()->getTexture(textureFile);
+	}
+		
 	indexSize = modelData->indexSize;
 	material = modelData->material;
 
@@ -30,6 +39,7 @@ void ModelComponent::init(const char * objFile, const char * textureFile, string
 	{
 		shader = AssetManager::getInstance()->getShader(std::pair<string, string>("basic.vert", "basic.frag"));
 	}
+	this->objFileName = objFile;
 	this->id = id;
 	initalised = true;
 }
@@ -42,22 +52,34 @@ void ModelComponent::update(double dt)
 void ModelComponent::RecieveMessage(Message * msg)
 {
 	MsgType id = msg->id;
-	if (id != MsgType::RENDER)
+	if (!drawing) //Did recieve message to render but disabled so return
 		return;
-	else if (!drawing) //Did recieve message to render but disabled so return
-		return;
-	RenderMessage* renderMsg = ((RenderMessage *)msg); 
-	if (renderMsg->lightingBlockId != -1 && renderMsg->lightingBuffer != -1) //Message does contain lightingBlockId and lightingBuffer so use them.
+	switch (id)
 	{
-		render(renderMsg->camera, renderMsg->lightingBuffer, renderMsg->lightingBlockId);
-		return;
+		case MsgType::RENDER :
+		{
+			RenderMessage* renderMsg = ((RenderMessage *)msg);
+			if (renderMsg->lightingBlockId != -1 && renderMsg->lightingBuffer != -1) //Message does contain lightingBlockId and lightingBuffer so use them.
+			{
+				render(renderMsg->camera, renderMsg->lightingBuffer, renderMsg->lightingBlockId);
+				return;
+			}
+			else if (renderMsg->lights.size() > 0) //Else if Lights have been directly passed, use those.
+			{
+				render(renderMsg->camera, renderMsg->lights);
+				return;
+			}
+			render(renderMsg->camera); //Else render with no lighting.
+		}
+		break;
+		case MsgType::MATERIAL:
+		{
+			MaterialMessage* matMsg = ((MaterialMessage *)msg);
+			material.Kd = matMsg->material.Kd;
+			material.Ka = matMsg->material.Ka;
+		}
+		break;
 	}
-	else if (renderMsg->lights.size() > 0) //Else if Lights have been directly passed, use those.
-	{
-		render(renderMsg->camera, renderMsg->lights);
-		return;
-	}
-	render(renderMsg->camera); //Else render with no lighting.
 }
 
 void ModelComponent::render(shared_ptr<Camera>& camera)
@@ -110,9 +132,19 @@ Transform * ModelComponent::getTransform()
 	return nullptr;
 }
 
+string ModelComponent::getObjFileName()
+{
+	return objFileName;
+}
+
 string ModelComponent::getId()
 {
 	return id;
+}
+
+void ModelComponent::setID(string passedId)
+{
+	id = passedId;
 }
 
 void ModelComponent::toggleDrawing()

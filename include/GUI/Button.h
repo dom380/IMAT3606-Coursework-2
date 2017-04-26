@@ -1,7 +1,6 @@
 #pragma once
 #ifndef BUTTON_H
 #define BUTTON_H
-#define NOMINMAX
 #include <string>
 using std::string;
 #include "EventListener.h"
@@ -15,6 +14,7 @@ using std::string;
 #include <functional>
 #include <memory>
 using std::shared_ptr;
+
 
 /*
 	Button UI element
@@ -117,6 +117,10 @@ public:
 	void handle(MouseEvent event) {
 		//if not a click event we don't care
 		if (event.eventType != MouseEventType::LEFT_CLICK) {
+			return;
+		}
+
+		if (event.actionType != MouseActionType::MOUSE_PRESS) {
 			return;
 		}
 		//if this button was clicked

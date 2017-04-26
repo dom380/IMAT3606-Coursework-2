@@ -1,17 +1,24 @@
 #pragma once
 #ifndef ENGINE_H
 #define ENGINE_H
-#define NOMINMAX
 #include "utils\Timer.h"
 #include "AssetManager.h"
 #include "Renderers\Graphics.h"
-#include "Input.h"
+#include "Input\Input.h"
 #include "Screens\Screen.h"
 #include "Screens\MenuScreen.h"
 #include "Graphics\Window.h"
+#include "Physics\Physics.h"
 #include <utils\EnumParser.h>
 #include <map>
 using std::map;
+
+
+#include <Editor\imgui\imgui.h>
+#include <Editor\DebugMenu.h>
+class DebugMenu;
+
+
 /*
 	Core engine class.
 */
@@ -96,15 +103,45 @@ public:
 		Returns the Id of the initial screen as specified in the configuration file.
 	*/
 	string getInitialScreenId();
+	
+	/*
+		Returns a pointer to the physics implementation.
+	*/
+	shared_ptr<Physics> getPhysics();
+
+	/*
+		Return engine window
+	*/
+	shared_ptr<Window> GetWindow();
+
+	/*
+		Return engine renderer
+	*/
+	shared_ptr<Graphics> Engine::getRenderer();
+
+	/*
+		Return ptr to InputHandler
+	*/
+	shared_ptr<Input> getInput();
+
+
+	shared_ptr<DebugMenu> getDebugMenu();
+
+	/*
+		Global accesor to the game engine.
+	*/
+	static shared_ptr<Engine> g_pEngine;
 
 private:
 	//Private members
 	shared_ptr<Window> window;
 	shared_ptr<Graphics> renderer;
 	shared_ptr<Input> inputHandler;
+	shared_ptr<Physics> physics;
 	map<string, shared_ptr<Screen>> gameScreens;
 	std::pair<string,shared_ptr<Screen>> activeScreen;
 	bool closed;
+	bool vsync = false;
 	int width;
 	int height;
 	Timer timer;
@@ -112,10 +149,12 @@ private:
 	EnumParser<GraphicsContext> enumParser = EnumParser<GraphicsContext>();
 	GraphicsContext graphicsContext;
 	Input::InputImpl inputImplementation;
+	Physics::PhysicsImpl physicsImplementation;
 	//Private Methods
 	shared_ptr<Graphics> buildRenderer(GraphicsContext renderType);
 	shared_ptr<Window> buildWindow(GraphicsContext context);
 	shared_ptr<Input> buildInput(Input::InputImpl impl);
+	shared_ptr<Physics> buildPhysics(Physics::PhysicsImpl impl);
 };
 
 #endif // !ENGINE_H

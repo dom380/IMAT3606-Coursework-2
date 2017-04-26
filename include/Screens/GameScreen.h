@@ -6,21 +6,27 @@
 using std::shared_ptr;
 #include <Camera\Camera.h>
 #include <Camera\PerspectiveCamera.h>
-#include <Input.h>
+#include <Camera\FollowCamera.h>
+#include <Camera\EngineCamera.h>
+#include <Input\Input.h>
 #include <vector>
 using std::vector;
 #include <ComponentStore.h>
 #include <Robot.h>
+#include <GUI\UIManager.h>
 #include <GUI\TextBox.h>
 #include <GameObject.h>
 #include <Components\Message.h>
 #include <Components\LocationMessage.h>
 #include <Components\RenderMessage.h>
 #include <AssetManager.h>
+#include <Physics\Physics.h>
+#include "Components/AnimatedModelComponent.h"
+
 #ifndef NDEBUG
 #include <utils\Timer.h>
 #endif
-
+class Screen;
 class GameObject;
 class ComponentStore;
 class LogicComponent; //Forward declare a number of classes.
@@ -38,13 +44,18 @@ public:
 		shared_ptr<Input>& input, Pointer to the input system.
 		shared_ptr<Camera> camera, Pointer to a Camera. Defaulted to PerspectiveCamera.
 	*/
-	GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>());
+	GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, shared_ptr<Physics>& physics, shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>());
 	~GameScreen() {};
+
+	/*
+		Unpauses the physics simulation.
+	*/
+	void show();
 	/*
 		Update this screen's objects.
 		double dt, Current time step.
 	*/
-	void update(double dt);
+	void update(double dt, double currentTime);
 	/*
 		Render this screen.
 	*/
@@ -78,14 +89,22 @@ public:
 	*/
 	void addGameObject(shared_ptr<GameObject> gameObj);
 	/*
+		Gets the vector of gameobjects.
+	*/
+	vector<shared_ptr<GameObject>> getGameObjects()
+	{
+		return gameObjects;
+	}
+	/*
 		Calls to the graphics system to update the lighting buffer.
 		This method must be called after any change to the lighting.
 	*/
 	void updateLighting();
 	/*
-		Increments the score and updates the score text.
+		Increments the score and updates the score text by the specified amount.
+		int amountToAdd, The number of points to add to the current score.
 	*/
-	void updateScore();
+	void updateScore(int amountToAdd);
 
 	/*
 		Empty implementation of Mouse Event handeling
@@ -98,9 +117,9 @@ public:
 private:
 	shared_ptr<ComponentStore> componentStore;
 	vector<shared_ptr<GameObject>> gameObjects;
-	vector<shared_ptr<TextBox>> textBoxes;
 	shared_ptr<Input> input;
 	shared_ptr<Graphics> renderer;
+	shared_ptr<Physics> physics;
 	int activeCamera = 0;
 	vector<shared_ptr<Camera>> cameras;
 	vector<Light> lights;
@@ -108,6 +127,7 @@ private:
 	unsigned int lightingBufferId = -1;
 	shared_ptr<Robot> robot;
 	int currentScore = 0;
+	glm::vec3 cameraDistanceToPlayer;
 #ifndef NDEBUG //If debugging display how long the frame took in ms.
 	Timer timer;
 	shared_ptr<TextBox> frameTime;

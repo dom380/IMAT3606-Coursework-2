@@ -64,6 +64,39 @@
     <Filter Include="Header Files\utils\FileParsers">
       <UniqueIdentifier>{8fbc931b-1195-416a-83e3-0c7c55763909}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Editor">
+      <UniqueIdentifier>{68144b44-e64a-4788-94e9-2c66feee7072}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Editor\imgui">
+      <UniqueIdentifier>{4835715a-1036-4d15-9a14-058b2261449a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Editor">
+      <UniqueIdentifier>{f4fe79bc-5d78-449c-892f-88bf7646517c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Editor\imgui">
+      <UniqueIdentifier>{521470e1-e946-4403-a9e4-4dd8ea4d5203}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Scripting">
+      <UniqueIdentifier>{ab4ee1ad-bb6e-4f43-962c-4b59b0c880c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Scripting">
+      <UniqueIdentifier>{cba1652d-db09-49fb-8bdf-0d34ab0d4d3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Physics">
+      <UniqueIdentifier>{c87d5c0f-c939-4d0e-9292-c2635b45542c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Physics">
+      <UniqueIdentifier>{cc926aa1-1fcc-4348-af83-4b8bb7df69a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Components\Messages">
+      <UniqueIdentifier>{08f9a3c5-20b1-4b3a-8454-88944b760835}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utils\UUID">
+      <UniqueIdentifier>{f08e8db4-4b8f-48b5-9027-760805fff6a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utils\UUID">
+      <UniqueIdentifier>{cad94e63-0f31-453f-b92a-feaf406d7126}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -144,6 +177,90 @@
     <ClCompile Include="source\Components\LogicComponent.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
+    <ClCompile Include="source\Editor\imgui\imgui.cpp">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Editor\imgui\imgui_demo.cpp">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Editor\imgui\imgui_draw.cpp">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Editor\DebugMenu.cpp">
+      <Filter>Source Files\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="source\utils\LevelLoader.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Editor\imgui\ImguiGLFWHandler.cpp">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\utils\DirectoryReader.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Editor\imgui\ImguiHandler.cpp">
+      <Filter>Source Files\Editor\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="source\utils\FileSaver.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\utils\XMLReader.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scripting\ScriptEngine.cpp">
+      <Filter>Source Files\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Scripting\LuaStateHolder.cpp">
+      <Filter>Source Files\Scripting</Filter>
+    </ClCompile>
+    <ClCompile Include="source\utils\Utilities.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Camera\FollowCamera.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="source\utils\DebugUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Editor\DebugMenuItem.cpp">
+      <Filter>Source Files\Editor</Filter>
+    </ClCompile>
+    <ClCompile Include="source\GUI\UIElement.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="include\GUI\UIManager.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="include\GUI\UITextureElement.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Camera\EngineCamera.cpp">
+      <Filter>Source Files\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Physics\BulletPhysics.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\PhysicsComponent.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Physics\Physics.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\CollisionTrigger.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="source\utils\UUID\guid.cpp">
+      <Filter>Source Files\utils\UUID</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Animation\Math3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Animation\SkeletalModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\AnimatedModelComponent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\utils\GLSupport.h">
@@ -168,9 +285,6 @@
       <Filter>Header Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="include\utils\Timer.h">
-      <Filter>Header Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="include\utils\OnClickFunctions.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="include\GUI\TextBox.h">
@@ -245,19 +359,7 @@
     <ClInclude Include="include\Components\ComponentType.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
-    <ClInclude Include="include\Components\LocationMessage.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
     <ClInclude Include="include\Components\LogicComponent.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Components\Message.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Components\MessageType.h">
-      <Filter>Header Files\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Components\RenderMessage.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
     <ClInclude Include="include\Renderers\Graphics.h">
@@ -277,12 +379,6 @@
     </ClInclude>
     <ClInclude Include="include\Screens\Screen.h">
       <Filter>Header Files\Screens</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Input.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="include\InputGLFW.h">
-      <Filter>Header Files\Input</Filter>
     </ClInclude>
     <ClInclude Include="include\utils\FbxReader.h">
       <Filter>Header Files\utils\FileParsers</Filter>
@@ -306,6 +402,138 @@
       <Filter>Header Files\utils</Filter>
     </ClInclude>
     <ClInclude Include="include\ComponentStore.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\imgui\imconfig.h">
+      <Filter>Header Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\imgui\imgui.h">
+      <Filter>Header Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\imgui\imgui_internal.h">
+      <Filter>Header Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\imgui\stb_rect_pack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\imgui\stb_textedit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\imgui\stb_truetype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\DebugMenu.h">
+      <Filter>Header Files\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\imgui\ImguiGLFWHandler.h">
+      <Filter>Header Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utils\DirectoryReader.h">
+      <Filter>Header Files\utils\FileParsers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\imgui\ImguiHandler.h">
+      <Filter>Header Files\Editor\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utils\FileSaver.h">
+      <Filter>Header Files\utils\FileParsers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utils\XMLReader.h">
+      <Filter>Header Files\utils\FileParsers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripting\ScriptEngine.h">
+      <Filter>Header Files\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Scripting\LuaStateHolder.h">
+      <Filter>Header Files\Scripting</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utils\Utilities.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Camera\FollowCamera.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utils\DebugUtils.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Editor\DebugMenuItem.h">
+      <Filter>Header Files\Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUI\UIElement.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUI\UIManager.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUI\UITextureElement.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUI\UIType.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Camera\EngineCamera.h">
+      <Filter>Header Files\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GUI\MouseActionType.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Physics\Physics.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Physics\BulletPhysics.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\PhysicsComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Physics\ShapeData.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\CollisionTrigger.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\LocationMessage.h">
+      <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\Message.h">
+      <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\MessageType.h">
+      <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\RenderMessage.h">
+      <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\MaterialMessage.h">
+      <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\utils\UUID\guid.h">
+      <Filter>Header Files\utils\UUID</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\CollisionMessage.h">
+      <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameObjectTag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Physics\ConvexHull.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Input\KeyCodes.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Input\Input.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Input\InputGLFW.h">
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Animation\Math3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Animation\SkeletalModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\AnimatedModelComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -340,5 +568,7 @@
     <None Include="shaders\colour.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="shaders\animation.frag" />
+    <None Include="shaders\animation.vert" />
   </ItemGroup>
 </Project>

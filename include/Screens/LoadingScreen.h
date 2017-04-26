@@ -51,6 +51,12 @@ public:
 			this->loading = false;
 		});
 	}
+
+	/*
+		Interface stub.
+	*/
+	void show() {};
+
 	/*
 		Switches to the new Screen if background thread has finished.
 		If not, update the Loading text every second.
@@ -61,10 +67,12 @@ public:
 		if (!loading)
 		{
 			backgroundThread.join();
-			if (succeded) {
+			if (succeded) 
+			{
 				gameEngine->replaceScreen(levelId);
 			} 
-			else {
+			else 
+			{
 				gameEngine->replaceScreen(gameEngine->getInitialScreenId());
 			}
 		}

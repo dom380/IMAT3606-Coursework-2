@@ -1,7 +1,9 @@
 #pragma once
 #ifndef INPUTGLFW_H
 #define INPUTGLFW_H
+
 #include "Input.h"
+#include <Engine.h>
 #include <gl\glfw3.h>
 
 /*
@@ -30,6 +32,7 @@ public:
 	*/
 	void keyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
+	void charCallback(GLFWwindow* window, unsigned int c);
 };
 
 #endif // !INPUTGLFW_H

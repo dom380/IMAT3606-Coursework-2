@@ -2,8 +2,11 @@
 #ifndef WINDOWGLFW_H
 #define WINDOWGLFW_H
 #include "Window.h"
-#include "GL/glfw3.h"
 #include <InputGLFW.h>
+
+#ifndef NDEBUG
+#include <Editor\imgui\ImguiGLFWHandler.h>
+#endif
 
 /*
 	GLFW implementation of the Window class.
@@ -34,6 +37,11 @@ public:
 	*/
 	void display();
 	/*
+		Start of frame operations.
+		In debug, this alerts imgui to a new frame.
+	*/
+	void update();
+	/*
 		Signa;s GLFW to poll events.
 	*/
 	void pollEvents();
@@ -46,10 +54,21 @@ public:
 		Destroys the main and background OpenGL Contexts.
 	*/
 	void close();
+
+	/*
+	Get GLFW window
+	*/
+	GLFWwindow* getWindow();
+#ifndef NDEBUG
+	shared_ptr<ImguiGLFWHandler> getImGuiHandler();
+#endif
 private:
 	GLFWwindow* window;
 	GLFWwindow* offscreen_context;
 	shared_ptr<InputGLFW> input;
+#ifndef NDEBUG
+	shared_ptr<ImguiGLFWHandler> ImGuiGLFWHandler;
+#endif
 };
 
 #endif // !WINDOWGLFW_H

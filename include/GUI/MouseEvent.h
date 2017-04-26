@@ -2,6 +2,7 @@
 #ifndef EVENT_H
 #define EVENT_H
 #include "MouseEventType.h"
+#include "MouseActionType.h"
 /*
 	Class representing a Mouse event.
 	This event is passed to all Mouse subscribers.
@@ -20,7 +21,14 @@ public:
 		y = posY;
 		eventType = type;
 	};
+	MouseEvent(MouseEventType type, MouseActionType action, int posX, int posY) {
+		x = posX;
+		y = posY;
+		eventType = type;
+		actionType = action;
+	};
 	MouseEventType eventType;
+	MouseActionType actionType;
 	int x, y;
 };
 

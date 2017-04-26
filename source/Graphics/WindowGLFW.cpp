@@ -1,5 +1,9 @@
 #include "Graphics\WindowGLFW.h"
 
+#ifndef NDEBUG
+#include <Editor\imgui\imgui.h>
+#endif
+
 WindowGLFW::WindowGLFW(int width, int height, shared_ptr<InputGLFW> input) : Window(width,height)
 {
 	this->input = input;
@@ -39,7 +43,13 @@ bool WindowGLFW::inititalise()
 	{
 		static_cast<InputGLFW*>(glfwGetWindowUserPointer(window))->mouseButtonCallback(window, button, action, mods);
 	};
+
+	auto charCallback = [](GLFWwindow * window, unsigned int c)
+	{
+		static_cast<InputGLFW*>(glfwGetWindowUserPointer(window))->charCallback(window, c);
+	};
 	glfwSetKeyCallback(window, keyCallback);
+	glfwSetCharCallback(window, charCallback);
 	glfwSetMouseButtonCallback(window, mouseCickCallback);
 	glfwSetCursorPosCallback(window, mouseMoveCallback);
 
@@ -52,6 +62,16 @@ bool WindowGLFW::inititalise()
 	glfwWindowHint(GLFW_RESIZABLE, false);
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 	offscreen_context = glfwCreateWindow(640, 480, "", NULL, window);
+
+#ifndef NDEBUG
+	ImGuiGLFWHandler = std::make_shared<ImguiGLFWHandler>();
+	if (!ImGuiGLFWHandler->init(this))
+	{
+		return false;
+	}
+#endif
+	
+
 	return true;
 }
 
@@ -63,6 +83,13 @@ bool WindowGLFW::shouldExit()
 void WindowGLFW::display()
 {
 	glfwSwapBuffers(window);
+}
+
+void WindowGLFW::update()
+{
+#ifndef NDEBUG
+	ImGuiGLFWHandler->newFrame();
+#endif
 }
 
 void WindowGLFW::pollEvents()
@@ -77,6 +104,20 @@ void WindowGLFW::switchBackgroundContext()
 
 void WindowGLFW::close()
 {
+#ifndef NDEBUG
+	ImGuiGLFWHandler->shutdown();
+#endif
 	// Close window and terminate GLFW
 	glfwTerminate();
 }
+
+GLFWwindow * WindowGLFW::getWindow()
+{
+	return window;
+}
+#ifndef NDEBUG
+shared_ptr<ImguiGLFWHandler> WindowGLFW::getImGuiHandler()
+{
+	return ImGuiGLFWHandler;
+}
+#endif

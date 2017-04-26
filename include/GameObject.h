@@ -1,12 +1,21 @@
 #pragma once
 #ifndef GAMEOBJECT_H
 #define GAMEOBJECT_H
+#include "GameObjectTag.h"
 #include <vector>
 using std::vector;
 #include <memory>
 #include "utils\Handle.h"
 #include "ComponentStore.h"
+#include <utils\EnumParser.h>
+#include <utils\UUID\guid.h>
+//Forward declares
 class ComponentStore;
+class ModelComponent;
+class Transform;
+class PhysicsComponent;
+class LogicComponent;
+class CollisionTrigger;
 /*
 	Generic GameObject class.
 */
@@ -16,6 +25,12 @@ class GameObject
 public:
 	//Constructor.
 	GameObject(std::shared_ptr<ComponentStore> componentStore);
+	/*
+		Constructor.
+		std::shared_ptr<ComponentStore> componentStore - Pointer to the component store
+		GameObjectTag tag - An enum specifying what this game object is.
+	*/
+	GameObject(std::shared_ptr<ComponentStore> componentStore, GameObjectTag tag);
 
 	/*
 		Returns the handle to the component of specified type.
@@ -47,6 +62,13 @@ public:
 		}
 	};
 
+	//TODO think of a better way of exposing this to lua
+	ModelComponent* getModel();
+	Transform* getTransform();
+	PhysicsComponent* getPhysics();
+	LogicComponent* getLogic();
+	CollisionTrigger* getTrigger();
+	
 	/*
 		Adds the specified component to the GameObject.
 		T comp, The component to add.
@@ -58,9 +80,28 @@ public:
 		Returns true if Object has a component of this type.
 	*/
 	bool HasComponent(ComponentType type);
+
+	/*
+		Returns this game object's GUID.
+	*/
+	Guid getId();
+
+	/*
+		Returns this game object's tag.
+	*/
+	GameObjectTag getTag();
+	/*
+		Returns the game object's tag as a string.
+	*/
+	string getTagString();
 private:
 	Handle componentHandles[ComponentType::COMPONENT_TYPE_COUNT];
 	std::weak_ptr<ComponentStore> componentStore;
+	EnumParser<ComponentType> typeParser;
+	EnumParser<GameObjectTag> tagParser;
+	GuidGenerator guidGen;
+	Guid id;
+	GameObjectTag tag;
 };
 
 #endif // !GAMEOBJECT_H

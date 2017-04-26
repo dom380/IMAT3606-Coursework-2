@@ -30,6 +30,11 @@ public:
 	*/
 	MenuScreen(shared_ptr<Graphics>& graphics, Engine* engine);
 	/*
+		Empty implementation of show.
+	*/
+	void show();
+
+	/*
 		Empty implementation of update.
 	*/
 	void update(double dt);

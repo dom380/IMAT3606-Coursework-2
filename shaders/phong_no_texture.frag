@@ -17,6 +17,7 @@ struct Light
 	vec3 specular;
 };
 
+uniform sampler2D tex;
 layout (std140) uniform LightingBlock
 {
 	Light lights[10];
@@ -25,6 +26,7 @@ layout (std140) uniform LightingBlock
 uniform Material material;
 uniform int NUM_LIGHTS;
 
+in vec2 texCoord;
 in vec3 Normal;
 in vec3 fragmentPos;
 uniform vec3 viewPos;
@@ -35,6 +37,9 @@ vec3 calcLight(in Light light, in Material material, in vec3 norm, in vec3 fragm
 
 void main() 
 {
+	vec4 texel = texture(tex,texCoord);
+	if(texel.a < 0.3) //Discard any low alpha value fragments as a quick fix for transparency with depth testing 
+		discard;
 	vec3 norm = normalize(Normal);
 	vec3 viewDir = normalize(viewPos - fragmentPos);
 	

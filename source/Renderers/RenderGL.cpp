@@ -31,10 +31,18 @@ bool RenderGL::init()
 
 	}
 
-	AssetManager::getInstance()->getShader(std::make_pair("animation.vert", "animation.frag"))->initialiseBoneUniforms();
-	
 	glEnable(GL_DEPTH_TEST);
+	//glEnable(GL_CULL_FACE);
 	glDepthFunc(GL_LEQUAL);
+
+	shared_ptr<Shader> shader = AssetManager::getInstance()->getShader(std::make_pair("animation.vert", "animation.frag"));// ->initialiseBoneUniforms();
+	shader->initialiseBoneUniforms();
+	shader->bindShader();
+	shader->setUniform("texture_diffuse", 0);
+	//shader->setUniform("depthMap", 1);
+
+	//this->initShadowFramebuffer(); //initialise framebuffer object for shadows to be enabled
+
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	modelMat = glm::translate(modelMat, glm::vec3(0.0f, 0.0f,0.0f));
 	return true;
@@ -401,31 +409,64 @@ void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& sh
 {
 	shaderProgram->bindShader();
 
+	//Set number of lights
+	numOfLights <= MAX_NUM_LIGHTS ? shaderProgram->setUniform("NUM_LIGHTS", numOfLights) : shaderProgram->setUniform("NUM_LIGHTS", 0);
+
 	Transform* transform = model.getTransform();
 	glm::quat orientation = transform->orientation;
 	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::mat4_cast(orientation) * glm::scale(transform->scale);
 
 	glm::mat4 mv = camera->getView() * mMat;
-	shaderProgram->setUniform("ViewMatrix", camera->getView());
-	shaderProgram->setUniform("ModelMatrix", mMat);
-	shaderProgram->setUniform("ModelViewMatrix", mv);
-	shaderProgram->setUniform("NormalMatrix", glm::mat3(glm::vec3(mv[0]), glm::vec3(mv[1]), glm::vec3(mv[2])));
-	shaderProgram->setUniform("MVP", camera->getProjection() * mv);
+	shaderProgram->setUniform("view", camera->getView());
+	shaderProgram->setUniform("projection", camera->getProjection());
+	shaderProgram->setUniform("model", mMat);
+	shaderProgram->setUniform("normal", glm::mat3(glm::vec3(mv[0]), glm::vec3(mv[1]), glm::vec3(mv[2])));
+	shaderProgram->setUniform("viewPos", camera->getPosition());
 
-	//glBindBufferBase(GL_UNIFORM_BUFFER, lightingBlockId, lightingBuffer); //Bind lighting data
-	//set shader uniform
-	
+	glBindBufferBase(GL_UNIFORM_BUFFER, lightingBlockId, lightingBuffer); //Bind lighting data
+
 	shaderProgram->setUniform("animatedCharacter", true);
 	//Set the Teapot material properties in the shader and render
-	shaderProgram->setUniform("Material.Ka", glm::vec3(0.225f, 0.125f, 0.0f));
-	shaderProgram->setUniform("Material.Kd", glm::vec3(1.0f, 0.6f, 0.0f));
-	shaderProgram->setUniform("Material.Ks", glm::vec3(1.0f, 1.0f, 1.0f));
-	shaderProgram->setUniform("Material.Shininess", 1.0f);
+	shaderProgram->setUniform("material.Ka", glm::vec3(0.225f, 0.125f, 0.0f));
+	shaderProgram->setUniform("material.Kd", glm::vec3(1.0f, 0.6f, 0.0f));
+	shaderProgram->setUniform("material.Ks", glm::vec3(1.0f, 1.0f, 1.0f));
+	shaderProgram->setUniform("material.Shininess", 1.0f);
 	model.getCurrentModel()->render();
 	shaderProgram->setUniform("animatedCharacter", false);
 #ifndef NDEBUG
 	auto check = OpenGLSupport().GetError();
 #endif
+}
+
+void RenderGL::initShadowFramebuffer()
+{
+	//generate framebuffer object
+	glGenFramebuffers(1, &shadowFBO);
+
+	// Create depth cubemap texture
+	glGenTextures(1, &depthCubemap);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, depthCubemap);
+
+	for (GLuint i = 0; i < 6; ++i) {
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT, SHADOWMAP_WIDTH, SHADOWMAP_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	}
+	
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	// Attach cubemap as depth map FBO's color buffer
+	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthCubemap, 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
+		std::cout << "Framebuffer not complete!" << std::endl;
+	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void RenderGL::setVSync(bool flag)

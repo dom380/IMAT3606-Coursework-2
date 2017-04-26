@@ -7,6 +7,7 @@
 #include <assimp/postprocess.h>     // Post processing fla
 #include <vector>
 #include <map>
+#include "Graphics/Texture.h"
 #include "Math3D.h"
 #include "Graphics/Shader.h"
 #include <memory>
@@ -18,8 +19,6 @@ struct VertexStruct
 	glm::vec3 position; //!< Vertex position 
 	glm::vec3 normal; //!< Vertex normal
 	glm::vec2 uvs; //!< Vertex uv's
-
-	glm::vec3 colour;
 };
 
 struct VertexBoneData
@@ -80,24 +79,19 @@ struct BoneInfo
 //};
 
 // A mesh entry for each mesh read in from the Assimp scene. A model is usually consisted of a collection of these. 
-#define INVALID_MATERIAL 0xFFFFFFFF
-struct MeshEntry {
-
+struct MeshEntry { //need to utilize materials here instead of colour values
 
 	unsigned int BaseVertex; //!< Total number of mesh indices. 
 	unsigned int BaseIndex; //!< The base vertex of this mesh in the vertices array for the entire model.
 	unsigned int NumIndices; //!< The base index of this mesh in the indices array for the entire model. 
-	unsigned int MaterialIndex;
-	//Texture texture; //make this a vector to hold multiple textures ->>to do
-
+	
+	Material material;
 
 	MeshEntry()
 	{
-
 		NumIndices = 0;
 		BaseVertex = 0;
 		BaseIndex = 0;
-		MaterialIndex = INVALID_MATERIAL;
 	}
 
 	~MeshEntry() {}

@@ -105,6 +105,29 @@ void SkeletalModel::InitFromScene(const aiScene* pScene, const std::string& File
 	// Initialize the meshes in the scene one by one
 	for (unsigned int i = 0; i < m_Entries.size(); i++) {
 		const aiMesh* paiMesh = pScene->mMeshes[i];
+
+		if (paiMesh->mMaterialIndex >= 0)
+		{
+			aiMaterial *material = pScene->mMaterials[paiMesh->mMaterialIndex];
+
+			//if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0)
+			//{
+			//	//load material
+			//	//texture = LoadMeshTexture(material, aiTextureType_DIFFUSE, "material.texture_diffuse");
+			//}
+			//else
+			//{
+			aiColor3D ambient = aiColor3D(0.f);
+			aiColor3D diffuse = aiColor3D(0.f);
+			aiColor3D specular = aiColor3D(0.f);
+
+			material->Get(AI_MATKEY_COLOR_AMBIENT, ambient);
+			material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse);
+			material->Get(AI_MATKEY_COLOR_SPECULAR, specular);
+
+			m_Entries.at(i).material = Material(glm::vec3(ambient.r, ambient.g, ambient.b), glm::vec3(diffuse.r, diffuse.g, diffuse.b), glm::vec3(specular.r, specular.g, specular.b), 0, 32);
+		}
+
 		InitMesh(i, paiMesh, vertices, Indices, bones);
 	}
 
@@ -112,33 +135,9 @@ void SkeletalModel::InitFromScene(const aiScene* pScene, const std::string& File
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(VertexStruct), &vertices[0],GL_STATIC_DRAW);
 
-	// Vertex positions 
-	//glEnableVertexAttribArray(0);
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexStruct), (GLvoid*)0);
-
-	// Vertex Normals
-	//glEnableVertexAttribArray(1);
-	//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexStruct), (GLvoid*)offsetof(VertexStruct, normal));
-
-	//glEnableVertexAttribArray(4);
-	//glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE, sizeof(VertexStruct), (GLvoid*)offsetof(VertexStruct, uvs));
-
-	//glEnableVertexAttribArray(5);
-	//glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(VertexStruct), (GLvoid*)offsetof(VertexStruct, colour));
-
-	//// Vertex Texture Coords
-	//glEnableVertexAttribArray(2);
-	//glVertexAttribPointer(2, 2, glFLOAT, FALSE, sizeof(VertexStruct), (GLvoid*)offsetof(VertexStruct, uvs));
-
 	// Bind the bone data buffer object
 	glBindBuffer(GL_ARRAY_BUFFER, boneBo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(bones[0]) * bones.size(), &bones[0], GL_STATIC_DRAW);
-
-	//glEnableVertexAttribArray(2);
-	//glVertexAttribIPointer(2, 4, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0);
-
-	//glEnableVertexAttribArray(3);
-	//glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData), (const GLvoid*)16);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices[0]) * Indices.size(), &Indices[0],
@@ -153,34 +152,6 @@ void SkeletalModel::InitMesh(unsigned int index, const aiMesh* paiMesh, std::vec
 {
 	const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
 	VertexStruct v;
-
-	if (paiMesh->mMaterialIndex >= 0)
-	{
-		//If it has a material?
-		//B
-		aiMaterial *material = pScene->mMaterials[paiMesh->mMaterialIndex];
-
-		//if (material->GetTextureCount(aiTextureType_DIFFUSE) > 0)
-		//{
-		//	//load material
-		//	//texture = LoadMeshTexture(material, aiTextureType_DIFFUSE, "material.texture_diffuse");
-		//}
-		//else
-		//{
-			//aiColor3D ambient = aiColor3D(0.f);
-			aiColor3D diffuse = aiColor3D(0.f);
-			//aiColor3D specular = aiColor3D(0.f);
-
-			//material->Get(AI_MATKEY_COLOR_AMBIENT, ambient);
-			material->Get(AI_MATKEY_COLOR_DIFFUSE, diffuse);
-			//material->Get(AI_MATKEY_COLOR_SPECULAR, specular);
-
-			v.colour = glm::vec3(diffuse.r, diffuse.g, diffuse.b);
-
-			//store colours in buffer and send to shader
-		//}
-		//loop through each texture in material and add item to vector of textures
-	}
 
 	// Populate the vertex attribute vectors
 	for (unsigned int i = 0; i < paiMesh->mNumVertices; i++) {
@@ -434,24 +405,17 @@ void SkeletalModel::render()
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexStruct), (GLvoid*)offsetof(VertexStruct, normal));
 
-		glEnableVertexAttribArray(4);
-		glVertexAttribPointer(4, 2, GL_FLOAT, GL_FALSE, sizeof(VertexStruct), (GLvoid*)offsetof(VertexStruct, uvs));
-
-		glEnableVertexAttribArray(5);
-		glVertexAttribPointer(5, 3, GL_FLOAT, GL_FALSE, sizeof(VertexStruct), (GLvoid*)offsetof(VertexStruct, colour));
-
-		//// Vertex Texture Coords
-		//glEnableVertexAttribArray(2);
-		//glVertexAttribPointer(2, 2, glFLOAT, FALSE, sizeof(VertexStruct), (GLvoid*)offsetof(VertexStruct, uvs));
+		glEnableVertexAttribArray(2);
+		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexStruct), (GLvoid*)offsetof(VertexStruct, uvs));
 
 		// Bind the bone data buffer object
 		glBindBuffer(GL_ARRAY_BUFFER, boneBo);
 
-		glEnableVertexAttribArray(2);
-		glVertexAttribIPointer(2, 4, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0);
-
 		glEnableVertexAttribArray(3);
-		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData), (const GLvoid*)16);
+		glVertexAttribIPointer(3, 4, GL_INT, sizeof(VertexBoneData), (const GLvoid*)0);
+
+		glEnableVertexAttribArray(4);
+		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(VertexBoneData), (const GLvoid*)16);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
 
@@ -482,10 +446,12 @@ void SkeletalModel::render()
 #endif
 
 	// Render all the model's meshes.
-	for (unsigned int i = 0; i < m_Entries.size(); i++) {
-		//glActiveTexture(glTEXTURE0);
-		//glBindTexture(glTEXTURE_2D, m_Entries.at(i).texture.id);
-		//m_pShaderProg->setUniform("material.texture_diffuse", 0);
+	for (unsigned int i = 0; i < m_Entries.size(); i++) 
+	{
+		if (m_Entries.at(i).material.used)
+		{
+			m_pShaderProg->setUniform("material", m_Entries.at(i).material);
+		}
 
 		glDrawElementsBaseVertex(GL_TRIANGLES,
 			m_Entries[i].NumIndices,

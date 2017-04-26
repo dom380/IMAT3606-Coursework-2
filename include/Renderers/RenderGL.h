@@ -16,6 +16,10 @@ using std::shared_ptr;
 /*
 	The OpenGL implementation of the Graphics system.
 */
+
+#define SHADOWMAP_WIDTH 1024
+#define SHADOWMAP_HEIGHT 1024
+
 class RenderGL : public Graphics {
 public:
 	/*
@@ -97,6 +101,7 @@ public:
 	*/
 	void setVSync(bool flag);
 
+	void initShadowFramebuffer();
 
 	//TO DO
 	void renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera);
@@ -114,10 +119,7 @@ private:
 	unsigned int currBindingPoint = 0;
 	glm::mat4 modelMat = glm::mat4();
 
-	GLuint shadowFBO, pass1Index, pass2Index;
-	int shadowMapWidth, shadowMapHeight;
-	glm::mat4 lightPV;
-	glm::mat4 shadowBias;
+	GLuint shadowFBO, depthCubemap;
 };
 
 #endif // !RENDERGL_H

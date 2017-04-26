@@ -74,8 +74,6 @@ void Engine::mainLoop()
 
 		DebugMenu::getInstance()->update();
 	
-		
-
 		while (frameTime > 0.0) //While there is still time to update the simulation
 		{
 			double deltaTime = std::min(frameTime, dt);

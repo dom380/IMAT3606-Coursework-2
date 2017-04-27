@@ -8,11 +8,10 @@
  *Audio engine for playing 3D sounds
  *Author: Natalie Downes - p12194892
  */
-#ifndef SOUNDCOMPONENT_H
-#define SOUNDCOMPONENT_H
 
-#include <SFML/Audio.hpp>
-
+#include <string>
+#include <SFML\Audio.hpp>
+#include <string>
 
 /*! \class SoundComponent
 	\brief The sound loader
@@ -25,15 +24,11 @@ private:
 	std::vector<sf::Sound*> m_Sounds; //!< Vector container of sound pointers
 	std::vector<sf::SoundBuffer*> m_SoundBuffer; //!< Vector container of SoundBuffer pointers
 	std::vector<std::string> m_sSoundFile; //!< Vector container of strings containing the names of the sound files
-	static SoundComponent* m_Instance; //!< Instance pointer of a SoundComponent
+	static SoundComponent* m_Instance; //!< Instance pointer of a GameSoundLoader
 
 public:
 
-	/*
-		Singleton 
-	*/
-	static SoundComponent* Instance();
-
+	//static SoundComponent* Instance();
 	SoundComponent(); //!< Default constructor
 	/*
 		Gets the sound
@@ -100,5 +95,3 @@ public:
 	*/
 	void destroySounds(int index);
 };
-
-#endif // !SOUNDCOMPONENT_H

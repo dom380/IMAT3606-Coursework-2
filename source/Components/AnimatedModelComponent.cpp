@@ -14,7 +14,7 @@ AnimatedModelComponent::~AnimatedModelComponent()
 //need to know what models to pass through
 void AnimatedModelComponent::init(const char* defaultAnim, std::vector<std::pair<const char*, const char*>> meshFiles, const char* textureFile, string id)
 {
-	shader = AssetManager::getInstance()->getShader(std::make_pair("animation.vert", "animation.frag"));
+	shader = AssetManager::getInstance()->getShader(std::make_tuple("shadows.vert", "shadows.frag", ""));
 
 	for (size_t i = 0; i < meshFiles.size(); i++)
 	{

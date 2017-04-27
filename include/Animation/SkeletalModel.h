@@ -16,7 +16,7 @@
 
 struct VertexStruct
 {
-	glm::vec3 position; //!< Vertex position 
+	glm::vec4 position; //!< Vertex position 
 	glm::vec3 normal; //!< Vertex normal
 	glm::vec2 uvs; //!< Vertex uv's
 };

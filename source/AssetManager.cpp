@@ -43,7 +43,7 @@ shared_ptr<Font> AssetManager::getFont(char * fontName, shared_ptr<Graphics>& gr
 	return fontPtr;
 }
 
-shared_ptr<Shader> AssetManager::getShader(std::pair<string, string> shaderName)
+shared_ptr<Shader> AssetManager::getShader(std::tuple<string, string, string> shaderName)
 {
 	auto it = shaders.find(shaderName);
 	if (it != shaders.end())
@@ -51,11 +51,17 @@ shared_ptr<Shader> AssetManager::getShader(std::pair<string, string> shaderName)
 		return it->second;
 	}
 	shared_ptr<Shader> shader = std::make_shared<Shader>();
-	shader->compileShader(buildFilePath(ResourceType::SHADER, shaderName.first.c_str()).c_str(), GL_VERTEX_SHADER);
-	shader->compileShader(buildFilePath(ResourceType::SHADER, shaderName.second.c_str()).c_str(), GL_FRAGMENT_SHADER);
+	shader->compileShader(buildFilePath(ResourceType::SHADER, std::get<0>(shaderName).c_str()).c_str(), GL_VERTEX_SHADER);
+	shader->compileShader(buildFilePath(ResourceType::SHADER, std::get<1>(shaderName).c_str()).c_str(), GL_FRAGMENT_SHADER);
+
+	if (std::get<2>(shaderName) != "")
+	{
+		shader->compileShader(buildFilePath(ResourceType::SHADER, std::get<2>(shaderName).c_str()).c_str(), GL_GEOMETRY_SHADER);
+	}
+
 	shader->link();
 	shader->bindShader();
-	shaders.emplace(std::pair<std::pair<string, string>, shared_ptr<Shader>>(shaderName, shader));
+	shaders.emplace(std::make_pair(shaderName, shader));
 	return shader;
 }
 

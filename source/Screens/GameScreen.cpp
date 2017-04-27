@@ -1,7 +1,7 @@
 #include "Screens\GameScreen.h"
 
 GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, shared_ptr<Physics>& physics, shared_ptr<Camera> camera) :
-	robot(std::make_shared<Robot>(AssetManager::getInstance()->getShader(std::pair<string, string>("colour.vert", "colour.frag"))))
+	robot(std::make_shared<Robot>(AssetManager::getInstance()->getShader(std::make_tuple("colour.vert", "colour.frag", ""))))
 {
 	this->renderer = renderer;
 	this->physics = physics;
@@ -167,7 +167,7 @@ void GameScreen::addGameObject(shared_ptr<GameObject> gameObj)
 
 void GameScreen::updateLighting()
 {
-	std::shared_ptr<Shader>shader = AssetManager::getInstance()->getShader(std::pair<string, string>("phong.vert", "phong.frag"));
+	std::shared_ptr<Shader>shader = AssetManager::getInstance()->getShader(std::make_tuple("shadows.vert", "shadows.frag", ""));
 	renderer->bufferLightingData(lights, shader, lightingBufferId, lightingBlockId);
 }
 

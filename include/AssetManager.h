@@ -40,7 +40,7 @@ public:
 		Load and/or Return a Pointer to a Font.
 		std::pair<string, string> shaderName, A std::pair of strings specifying the vertex and fragment shaders.
 	*/
-	shared_ptr<Shader> getShader(std::pair<string, string> shaderName);
+	shared_ptr<Shader> getShader(std::tuple<string, string, string> shaderName);
 	/*
 		Load and/or Return a Pointer to ModelData.
 		const char* fileName, The name of the model to retrieve.
@@ -117,7 +117,7 @@ private:
 	static shared_ptr<AssetManager> instance;
 	map<string, shared_ptr<Font>> fonts;
 	map<string, shared_ptr<Texture>> textures;
-	map<std::pair<string, string>, shared_ptr<Shader>> shaders;
+	map<std::tuple<string, string, string>, shared_ptr<Shader>> shaders;
 	map<string, shared_ptr<ModelData>> modelData;
 	map<string, shared_ptr<std::vector<ConvexHull>>> collisionData;
 	map<string, string> scripts;

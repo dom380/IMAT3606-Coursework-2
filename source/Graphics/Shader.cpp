@@ -30,6 +30,7 @@ bool Shader::compileShader(const char * filePath, GLenum shaderType)
 	if (programHandle <= 0) {
 		programHandle = glCreateProgram();
 	}
+
 	ifstream inFile(filePath);
 	if (!inFile) {
 		fprintf(stderr, "Error opening file: %s\n", filePath);

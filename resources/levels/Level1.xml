@@ -3,7 +3,7 @@
 		 <gameObject>
       		<components>
         		<component type="animation">
-          			<!-- fbx files-->
+          			 fbx files
           			<default>LegoRun</default>
           			<files>
             			<file>
@@ -35,7 +35,7 @@
     <gameObject>
       <components>
         	<component type="animation">
-          		<!-- fbx files-->
+          		 fbx files
           		<default>EnemyAttack</default>
           		<files>
             		<file>
@@ -847,7 +847,7 @@
         </gameObject>
     </gameObjects>
     <lights>
-        <light>
+        <!--<light>
             <position>
                 <x>1.0</x>
                 <y>15.0</y>
@@ -868,12 +868,12 @@
                 <g>0.5</g>
                 <b>0.5</b>
             </specular>
-        </light>
+        </light>-->
         <light>
             <position>
-                <x>1.0</x>
+                <x>0.0</x>
                 <y>15.0</y>
-                <z>50.0</z>
+                <z>0.0</z>
             </position>
             <ambient>
                 <r>0.1</r>

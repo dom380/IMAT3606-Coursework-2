@@ -35,10 +35,13 @@ bool RenderGL::init()
 	//glEnable(GL_CULL_FACE);
 	glDepthFunc(GL_LEQUAL);
 
-	shared_ptr<Shader> shader = AssetManager::getInstance()->getShader(std::make_pair("animation.vert", "animation.frag"));// ->initialiseBoneUniforms();
+	//shared_ptr<Shader> shadowDepth = AssetManager::getInstance()->getShader(std::make_tuple("shadows_depth.vert", "shadows_depth.frag", "shadows_depth.gs"));
+
+	shared_ptr<Shader> shader = AssetManager::getInstance()->getShader(std::make_tuple("shadows.vert", "shadows.frag", ""));// ->initialiseBoneUniforms();
 	shader->initialiseBoneUniforms();
 	shader->bindShader();
-	shader->setUniform("texture_diffuse", 0);
+	//shader->setUniform("tex", 0);
+	shader->setUniform("isTextured", false);
 	//shader->setUniform("depthMap", 1);
 
 	//this->initShadowFramebuffer(); //initialise framebuffer object for shadows to be enabled
@@ -79,7 +82,7 @@ void RenderGL::buildTextShader(unsigned int &vertArrayObj, unsigned int &vertBuf
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-	textShader = AssetManager::getInstance()->getShader(std::pair<string, string>("text.vert","text.frag"));
+	textShader = AssetManager::getInstance()->getShader(std::make_tuple("text.vert", "text.frag", ""));
 #ifndef NDEBUG
 	string check = OpenGLSupport().GetError();
 #endif
@@ -185,10 +188,21 @@ vector<unsigned int> RenderGL::bufferModelData(vector<glm::vec4>& vertices, vect
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	//Create VBO for textureCoords
 	GLuint texCoordBuffer = vboHandles[2];
+
 	if (textures.size() > 0) 
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, texCoordBuffer);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * textures.size(), glm::value_ptr(textures[0]), GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+	else
+	{
+		//this is a fix - DOM APPROVES
+		std::vector<glm::vec2> texs;
+		texs.push_back(glm::vec2(0, 0));
+
+		glBindBuffer(GL_ARRAY_BUFFER, texCoordBuffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * texs.size(), glm::value_ptr(texs[0]), GL_STATIC_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 	//Creat VBO for normals
@@ -321,7 +335,7 @@ void RenderGL::renderModel(ModelComponent& model, shared_ptr<Shader>& shaderProg
 		shaderProgram->setUniform("tex", 0);
 	}
 	else {
-		shaderProgram = AssetManager::getInstance()->getShader(std::pair<std::string, std::string>("phong_no_texture.vert", "phong_no_texture.frag"));
+		shaderProgram = AssetManager::getInstance()->getShader(std::make_tuple("phong_no_texture.vert", "phong_no_texture.frag", ""));
 		shaderProgram->bindShader();
 	}
 	Transform* transform = model.getTransform();
@@ -358,33 +372,42 @@ void RenderGL::renderModel(ModelComponent & model, shared_ptr<Shader>& shaderPro
 	string check = OpenGLSupport().GetError();
 #endif
 	shaderProgram->bindShader();
+	shaderProgram->setUniform("animatedCharacter", false);
 #ifndef NDEBUG
 	check = OpenGLSupport().GetError();
 #endif
 	glBindVertexArray(model.getVertArray());
 	if (model.getTexture() != nullptr) {
+		shaderProgram->setUniform("isTextured", true);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, model.getTexture()->object());
 		shaderProgram->setUniform("tex", 0);
 	}
 	else {
-		shaderProgram = AssetManager::getInstance()->getShader(std::pair<std::string, std::string>("phong_no_texture.vert", "phong_no_texture.frag"));
-		shaderProgram->bindShader();
+		shaderProgram->setUniform("isTextured", false);
+		//shaderProgram = AssetManager::getInstance()->getShader(std::make_tuple("phong_no_texture.vert", "phong_no_texture.frag", ""));
+		//shaderProgram->bindShader();
 	}
 	//Set number of lights
 	numOfLights <= MAX_NUM_LIGHTS ? shaderProgram->setUniform("NUM_LIGHTS", numOfLights) : shaderProgram->setUniform("NUM_LIGHTS", 0);
 	Transform* transform = model.getTransform();
 	glm::quat orientation = transform->orientation;
-//	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::rotate(glm::radians(orientation.w), glm::vec3(orientation.x, orientation.y, orientation.z)) * glm::scale(transform->scale);
 	glm::mat4 mMat = glm::translate(transform->position) * glm::mat4_cast(orientation) * glm::scale(transform->scale);
-	shaderProgram->setUniform("mView", camera->getView());
-	shaderProgram->setUniform("mProjection", camera->getProjection());
-	shaderProgram->setUniform("mModel", mMat);
+
+	glm::mat4 mv = camera->getView() * mMat;
+	shaderProgram->setUniform("view", camera->getView());
+	shaderProgram->setUniform("projection", camera->getProjection());
+	shaderProgram->setUniform("model", mMat);
+	shaderProgram->setUniform("normal", glm::mat3(glm::vec3(mv[0]), glm::vec3(mv[1]), glm::vec3(mv[2])));
 	shaderProgram->setUniform("viewPos", camera->getPosition());
+
 	if (model.getMaterial().used)
 	{
 		shaderProgram->setUniform("material", model.getMaterial());
 	}
+#ifndef NDEBUG
+	check = OpenGLSupport().GetError();
+#endif
 	glBindBufferBase(GL_UNIFORM_BUFFER, lightingBlockId, lightingBuffer); //Bind lighting data
 	glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(model.getIndexSize()), GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));
 #ifndef NDEBUG
@@ -403,12 +426,11 @@ void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& sh
 {
 
 }
-//TO DO - change animation shader to use light uniform blocks for multiple lights - address vertex array objects not existing across threads
-//ability to change animation being played and user input to move the character - texture support?
+
 void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, unsigned int lightingBuffer, unsigned int lightingBlockId)
 {
 	shaderProgram->bindShader();
-
+	shaderProgram->setUniform("isTextured", false);
 	//Set number of lights
 	numOfLights <= MAX_NUM_LIGHTS ? shaderProgram->setUniform("NUM_LIGHTS", numOfLights) : shaderProgram->setUniform("NUM_LIGHTS", 0);
 
@@ -426,11 +448,6 @@ void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& sh
 	glBindBufferBase(GL_UNIFORM_BUFFER, lightingBlockId, lightingBuffer); //Bind lighting data
 
 	shaderProgram->setUniform("animatedCharacter", true);
-	//Set the Teapot material properties in the shader and render
-	shaderProgram->setUniform("material.Ka", glm::vec3(0.225f, 0.125f, 0.0f));
-	shaderProgram->setUniform("material.Kd", glm::vec3(1.0f, 0.6f, 0.0f));
-	shaderProgram->setUniform("material.Ks", glm::vec3(1.0f, 1.0f, 1.0f));
-	shaderProgram->setUniform("material.Shininess", 1.0f);
 	model.getCurrentModel()->render();
 	shaderProgram->setUniform("animatedCharacter", false);
 #ifndef NDEBUG

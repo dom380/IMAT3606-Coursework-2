@@ -29,7 +29,7 @@ UITextureElement::UITextureElement(shared_ptr<Graphics>& engineGraphics, shared_
 
 void UITextureElement::init()
 {
-	shader = AssetManager::getInstance()->getShader(std::pair<string, string>("ui.vert", "ui.frag"));
+	shader = AssetManager::getInstance()->getShader(std::make_tuple("ui.vert", "ui.frag", ""));
 	shader->bindShader();
 	vertices = {
 		// Positions          // Colors           // Texture Coords

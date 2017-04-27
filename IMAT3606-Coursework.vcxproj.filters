@@ -571,7 +571,10 @@
     <None Include="shaders\colour.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="shaders\animation.frag" />
-    <None Include="shaders\animation.vert" />
+    <None Include="shaders\shadows_depth.frag" />
+    <None Include="shaders\shadows_depth.gs" />
+    <None Include="shaders\shadows_depth.vert" />
+    <None Include="shaders\shadows.frag" />
+    <None Include="shaders\shadows.vert" />
   </ItemGroup>
 </Project>

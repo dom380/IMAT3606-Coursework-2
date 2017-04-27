@@ -160,7 +160,7 @@ void SkeletalModel::InitMesh(unsigned int index, const aiMesh* paiMesh, std::vec
 		const aiVector3D* pTexCoord = paiMesh->HasTextureCoords(0) ?
 			&(paiMesh->mTextureCoords[0][i]) : &Zero3D;
 
-		glm::vec3 glmTempPos = glm::vec3(pPos->x, pPos->y, pPos->z);
+		glm::vec4 glmTempPos = glm::vec4(pPos->x, pPos->y, pPos->z, 1.0);
 		glm::vec3 glmTempNormal = glm::vec3(pNormal->x, pNormal->y, pNormal->z);
 		glm::vec2 glmTempUV = glm::vec2(pTexCoord->x, pTexCoord->y);
 
@@ -399,14 +399,14 @@ void SkeletalModel::render()
 
 		// Vertex positions 
 		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(VertexStruct), (GLvoid*)0);
+		glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(VertexStruct), (GLvoid*)0);
+
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(VertexStruct), (GLvoid*)offsetof(VertexStruct, uvs));
 
 		// Vertex Normals
-		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(VertexStruct), (GLvoid*)offsetof(VertexStruct, normal));
-
 		glEnableVertexAttribArray(2);
-		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(VertexStruct), (GLvoid*)offsetof(VertexStruct, uvs));
+		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(VertexStruct), (GLvoid*)offsetof(VertexStruct, normal));
 
 		// Bind the bone data buffer object
 		glBindBuffer(GL_ARRAY_BUFFER, boneBo);

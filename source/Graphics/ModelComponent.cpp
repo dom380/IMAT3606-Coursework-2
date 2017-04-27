@@ -33,12 +33,18 @@ void ModelComponent::init(const char * objFile, const char * textureFile, string
 
 	if (material.used)
 	{
-		shader = AssetManager::getInstance()->getShader(std::pair<string, string>("phong.vert", "phong.frag"));
+		//shader = AssetManager::getInstance()->getShader(std::make_tuple("phong.vert", "phong.frag", ""));
+		shader = AssetManager::getInstance()->getShader(std::make_tuple("shadows.vert", "shadows.frag", ""));
 	}
 	else
 	{
-		shader = AssetManager::getInstance()->getShader(std::pair<string, string>("basic.vert", "basic.frag"));
+		//shader = AssetManager::getInstance()->getShader(std::make_tuple("basic.vert", "basic.frag", ""));
+		shader = AssetManager::getInstance()->getShader(std::make_tuple("shadows.vert", "shadows.frag", ""));
 	}
+
+	shader->bindShader();
+	shader->setUniform("isTextured", false);
+
 	this->objFileName = objFile;
 	this->id = id;
 	initalised = true;

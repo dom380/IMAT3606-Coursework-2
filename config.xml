@@ -1,6 +1,7 @@
 <game>
 	<width>1080</width>
 	<height>720</height>
+	<v-sync>false</v-sync>
 	<fontLocation>./resources/fonts/</fontLocation>
 	<levelLocation>./resources/levels/</levelLocation>
 	<modelLocation>./resources/models/</modelLocation>

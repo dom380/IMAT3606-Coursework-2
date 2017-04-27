@@ -8,6 +8,7 @@
 #include <string>
 #include <Graphics\Shader.h>
 #include <Graphics\ModelComponent.h>
+#include "Components/AnimatedModelComponent.h"
 #include <vector>
 using std::string; using std::vector;
 #include <memory>
@@ -90,6 +91,19 @@ public:
 		Renders the requested model. See interface for details.
 	*/
 	void renderModel(ModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, unsigned int lightingBuffer, unsigned int lightingBlockId);
+	
+	/*
+		Enable or disable v-sync
+	*/
+	void setVSync(bool flag);
+
+
+	//TO DO
+	void renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera);
+	//TO DO
+	void renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, vector<Light>& lights);
+	//TO DO
+	void renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, unsigned int lightingBuffer, unsigned int lightingBlockId);
 
 private:
 	//private members
@@ -99,6 +113,11 @@ private:
 	const int MAX_NUM_LIGHTS = 10;
 	unsigned int currBindingPoint = 0;
 	glm::mat4 modelMat = glm::mat4();
+
+	GLuint shadowFBO, pass1Index, pass2Index;
+	int shadowMapWidth, shadowMapHeight;
+	glm::mat4 lightPV;
+	glm::mat4 shadowBias;
 };
 
 #endif // !RENDERGL_H

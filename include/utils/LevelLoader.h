@@ -1,6 +1,8 @@
 #pragma once
 #ifndef LEVELLOADER_H
 #define LEVELLOADER_H
+#include <gl/glm/glm/gtc/quaternion.hpp>
+#include <gl/glm/glm/gtx/quaternion.hpp>
 #include <Engine.h>
 #include <Renderers\Graphics.h>
 #include <Screens\MenuScreen.h>
@@ -9,6 +11,7 @@
 #include <Components\LogicComponent.h>
 #include "tinyxml2.h"
 #include <Scripting\ScriptEngine.h>
+#include <Components\AnimatedModelComponent.h>
 #include <Utils/Utilities.h>
 #include "utils\DebugUtils.h"
 #include <GUI\UITextureElement.h>
@@ -112,7 +115,7 @@ public:
 				loadModel(renderer, gameObject, componentElement);
 				break;
 			case ComponentType::ANIMATION:
-				//todo
+				loadAnimation(renderer, gameObject, componentElement);
 				break;
 			case ComponentType::RIGID_BODY:
 				loadPhysics(renderer, physics, gameObject, componentElement);
@@ -136,6 +139,7 @@ public:
 			{
 				loadCollisionTrigger(physics, gameObject, componentElement);
 			}
+			break;
 			default:
 				break;
 			}
@@ -467,6 +471,22 @@ private:
 		gameObject->AddComponent(mesh, ComponentType::MODEL);
 	}
 
+	static void loadAnimation(shared_ptr<Graphics>& renderer, shared_ptr<GameObject> gameObject, tinyxml2::XMLElement* animElement)
+	{
+		shared_ptr<AnimatedModelComponent> animation = std::make_shared<AnimatedModelComponent>(renderer, gameObject);
+		tinyxml2::XMLElement* fileElement = animElement->FirstChildElement("files");
+		std::vector<std::pair<const char*, const char*>> files;
+		if (fileElement != NULL) fileElement = fileElement->FirstChildElement();
+		while (fileElement != NULL) {
+			files.push_back(std::make_pair(fileElement->FirstChildElement("id")->GetText(),fileElement->FirstChildElement("filePath")->GetText()));
+
+			//loadStringElement(renderer, gameScreen, stringElement);
+			fileElement = fileElement->NextSiblingElement();
+		}
+		animation->init(animElement->FirstChildElement("default")->GetText(),files, "");
+		gameObject->AddComponent(animation, ComponentType::ANIMATION);
+	}
+
 	/*
 		Utility method to load physics component.
 	*/
@@ -666,6 +686,7 @@ private:
 				quatElement->FirstChildElement("y") != NULL ? quatElement->FirstChildElement("y")->FloatText() : 0.0f,
 				quatElement->FirstChildElement("z") != NULL ? quatElement->FirstChildElement("z")->FloatText() : 1.0f
 			);
+
 			quat = glm::angleAxis(glm::radians(quat.w), glm::vec3(quat.x, quat.y, quat.z));
 		}
 	}

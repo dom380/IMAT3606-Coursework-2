@@ -44,7 +44,7 @@ void GameScreen::show()
 	physics->setPaused(false);
 }
 
-void GameScreen::update(double dt)
+void GameScreen::update(double dt, double currentTime)
 {
 #ifndef NDEBUG
 	timer.start();
@@ -52,12 +52,11 @@ void GameScreen::update(double dt)
 	auto physicsComponents = componentStore->getAllComponents<PhysicsComponent>(ComponentType::RIGID_BODY);
 	for (auto it = physicsComponents->begin(); it != physicsComponents->end(); ++it)
 	{
-		if (it->first != -1)
+		if (it->first != -1) //Check if handle is still used.
 		{
 			it->second.update(dt);
 		}
 	}
-
 	robot->Prepare(dt);
 	Message* robotLocMsg = new LocationMessage(robot->getPosition());
 	std::vector<std::pair<int, LogicComponent>>* logicComponents = componentStore->getAllComponents<LogicComponent>(ComponentType::LOGIC);
@@ -71,6 +70,11 @@ void GameScreen::update(double dt)
 		}
 	}
 	delete robotLocMsg;
+	auto animComponents = componentStore->getAllComponents<AnimatedModelComponent>(ComponentType::ANIMATION);
+	for (auto it = animComponents->begin(); it != animComponents->end(); ++it)
+	{
+		it->second.update(currentTime);
+	}
 }
 
 void GameScreen::render()
@@ -86,6 +90,16 @@ void GameScreen::render()
 		if(it->first != -1)
 			it->second.RecieveMessage(renderMsg);
 	}
+
+	std::vector<std::pair<int, AnimatedModelComponent>>* animations = componentStore->getAllComponents<AnimatedModelComponent>(ComponentType::ANIMATION);
+	std::vector<std::pair<int, AnimatedModelComponent>>::iterator animIt;
+	for (animIt = animations->begin(); animIt != animations->end(); ++animIt)
+	{
+		if (animIt->first != -1)
+			//animIt->second.update(0.07f);
+			animIt->second.RecieveMessage(renderMsg);
+	}
+
 	delete renderMsg;
 
 	for (auto ui : uiElements) {

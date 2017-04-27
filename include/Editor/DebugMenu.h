@@ -9,6 +9,7 @@
 //#include <Graphics\ModelComponent.h>
 #include <Editor\DebugMenuItem.h>
 #include <GUI\UIType.h>
+#include <GUI\Button.h>
 
 using namespace std;
 /*
@@ -43,7 +44,9 @@ private:
 	vector<DebugMenuItem*> mainMenuBarItems;
 	vector<std::string> objList;
 	vector<std::string> textureList;
+	vector<std::string> fontList;
 	std::vector<const char *> textureCStyleArray;
+	std::vector<const char *> fontCStyleArray;
 	vector<std::string> levelList;
 	/*
 		Vectors test if the window is active.
@@ -92,11 +95,7 @@ private:
 	void createCubeMenu();
 	void createObjectWindow(std::string objName, int iterator);
 	void createUIWindow(UIType type, int iterator);
-	/*
-		Creates a list box of textures that are loaded from texture dir.
-		discards textures with size < 4
-	*/
-	void createTextureListBox();
+	shared_ptr<Button> createButton();
 
 public:
 	static shared_ptr<DebugMenu> getInstance();
@@ -112,6 +111,18 @@ public:
 	void addMenuItem(DebugMenuItem* dmi);
 	void refreshMenuItems();
 	vector<DebugMenuItem*> getMenuItems();
+
+	/*
+	Creates a list box of textures that are loaded from texture dir.
+	discards textures with size < 4
+	*/
+	void createTextureListBox();
+	/*
+	Creates a list box of fonts that are loaded from fonts dir.
+	discards fonts with size < 4
+	*/
+	void createFontsListBox();
+	string listBoxItemSelected(UIType type);
 
 	/*
 	debugGameObjectsMenu Component Functions

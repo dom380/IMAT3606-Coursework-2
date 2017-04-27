@@ -5,7 +5,6 @@ enum UIType
 { 
 	TEXT,
 	TEXTURE,
-	BUTTON,
 	UI_TYPE_COUNT
 };
 #endif

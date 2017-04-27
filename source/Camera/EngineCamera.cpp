@@ -29,6 +29,8 @@ void EngineCamera::handle(MouseEvent event)
 			else if (event.actionType == MouseActionType::MOUSE_RELEASE)
 			{
 				canMove = false;
+				previousX = -1;
+				previousY = -1;
 			}
 			
 			break;

@@ -23,5 +23,6 @@ public:
 	void render();
 	shared_ptr<Texture> getTexture();
 	string getTextureName();
+	void setTexture(string textureName);
 };
 #endif

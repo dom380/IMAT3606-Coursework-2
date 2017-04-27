@@ -70,6 +70,8 @@ void UITextureElement::init()
 
 void UITextureElement::render()
 {
+	if (!active)
+		return;
 	if (!haveVAO)
 	{
 		vaoHandle = graphics->createUIVertextArrayObject(vboHandle, eboHandle, vertices, indices);

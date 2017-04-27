@@ -17,6 +17,8 @@ using namespace std;
 class UIElement
 {
 protected:
+	//This determines whether it should be saved to file or not
+	bool active;
 	shared_ptr<Button> button;
 	bool haveVAO;
 	vector<GLfloat> vertices;
@@ -35,6 +37,11 @@ public:
 	UIElement(shared_ptr<Graphics>& graphics, shared_ptr<Transform>& transform,const char* id, const char* textureName);
 	virtual void init() = 0;
 	virtual void render() = 0;
+
+	//This determines whether it should be saved to file or not
+	void setActive(bool isActive);
+	bool isActive();
+
 	/*
 	Returns a button
 	*/

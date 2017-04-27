@@ -42,6 +42,14 @@ public:
 	*/
 	static bool AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<UIElement> uiE, shared_ptr<GameScreen> gameScreen);
 	/*
+		Delete a game object from a file
+	*/
+	static bool DeleteObjectFromFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<GameObject> go, shared_ptr<GameScreen> gameScreen);
+	/*
+	Delete a ui object from a file
+	*/
+	static bool DeleteObjectFromFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<UIElement> uiE, shared_ptr<GameScreen> gameScreen);
+	/*
 		Save the current screen doc to the xml file specified
 	*/
 	static bool SaveFile(tinyxml2::XMLDocument* doc, std::string fileName);

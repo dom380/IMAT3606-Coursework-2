@@ -197,7 +197,12 @@ void UIManager::debugMenuItemUpdate()
 				default:
 					break;
 				}
-				
+				bool active = uiElements[x]->isActive();
+				if (ImGui::Checkbox("Toggle", &active))
+				{
+					uiElements[x]->setActive(active);
+				}
+
 				ImGui::TreePop();
 			}
 			else

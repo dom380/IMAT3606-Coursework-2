@@ -892,8 +892,10 @@
             </specular>
         </light>
     </lights>
-    <strings>
-        <string id="score_string">
+    <uiElements>
+        <uiElement>
+            <ID>score_string</ID>
+			<Type>text</Type>
             <position>
                 <x>30</x>
                 <y>650</y>
@@ -904,27 +906,6 @@
                 <z>1.0</z>
             </scale>
             <value>Gold Collected: 0</value>
-        </string>
-    </strings>
-    <uiElements>
-        <uiElement>
-            <ID>uitest</ID>
-            <Texture>cloth.png</Texture>
-            <position>
-                <x>137.25</x>
-                <y>224</y>
-                <z>0</z>
-            </position>
-            <scale>
-                <x>45</x>
-                <y>98</y>
-                <z>1</z>
-            </scale>
-            <orientation>
-                <x>0</x>
-                <y>1</y>
-                <z>0</z>
-            </orientation>
         </uiElement>
     </uiElements>
 </screen>

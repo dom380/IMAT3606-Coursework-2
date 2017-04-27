@@ -11,7 +11,7 @@
 class ControllerComponent : public Component
 {
 public:
-	ControllerComponent(std::shared_ptr<Physics> physics, std::weak_ptr<GameObject> owner, ShapeData shape);
+	ControllerComponent(std::shared_ptr<Physics> physics, std::weak_ptr<GameObject> owner, ShapeData shape, float yOffset, bool flip = false);
 	void update(double dt);
 	void RecieveMessage(Message* msg);
 	void setCamera(std::shared_ptr<Camera> camera);
@@ -27,6 +27,8 @@ private:
 	btVector3 upDir;
 	btQuaternion frontDir = btQuaternion::getIdentity();
 	float movementSpeed = 0.1f;
+	float offset = 0.0f;
+	bool flip = true;
 	void pollInput();
 	void updateTransform(Transform* transformPtr);
 	void calcDirection(const btVector3& walkDir);

@@ -979,7 +979,8 @@ bool BulletActerController::onGround() const
 		m_collisionWorld->rayTest(transform.getOrigin(), endPoint.getOrigin(), cb);
 		if (cb.hasHit())
 		{
-			return (cb.m_closestHitFraction < 0.1);
+			//printf("%f\n", cb.m_closestHitFraction);
+			return (cb.m_closestHitFraction < 0.15);
 		}
 	}
 	return (fabs(m_verticalVelocity) < SIMD_EPSILON) && (fabs(m_verticalOffset) < SIMD_EPSILON);

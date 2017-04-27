@@ -635,7 +635,9 @@ private:
 	{
 		ShapeData shapeData;
 		readShapeData(controllerElement, shapeData);
-		shared_ptr<ControllerComponent> controller = std::make_shared<ControllerComponent>(physics, gameObject, shapeData);
+		bool flip = controllerElement->FirstChildElement("flip") != NULL ? controllerElement->FirstChildElement("flip")->BoolText() : false;
+		float offset = controllerElement->FirstChildElement("offset") != NULL ? controllerElement->FirstChildElement("offset")->FloatText() : 0.0f;
+		shared_ptr<ControllerComponent> controller = std::make_shared<ControllerComponent>(physics, gameObject, shapeData, offset, flip);
 		gameObject->AddComponent(controller, ComponentType::CONTROLLER);
 
 	}

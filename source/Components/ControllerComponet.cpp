@@ -1,18 +1,25 @@
 #include <Components\ControllerComponent.h>
 
 
-ControllerComponent::ControllerComponent(std::shared_ptr<Physics> physics, std::weak_ptr<GameObject> owner, ShapeData shape) : Component(ComponentType::CONTROLLER)
+ControllerComponent::ControllerComponent(std::shared_ptr<Physics> physics, std::weak_ptr<GameObject> owner, ShapeData shape, float yOffset, bool flip) : Component(ComponentType::CONTROLLER)
 {
 	this->owner = owner;
 	this->physics = physics;
 	this->input = Engine::g_pEngine->getInput();
+	this->flip = flip;
+	this->offset = yOffset;
 	upDir = btVector3(0.0, 1.0, 0.0);
 	btTransform transform;
 	transform.setIdentity();
-
+	
 	auto sp = owner.lock();
 	auto tp = sp != nullptr ? sp->getComponent<Transform>(ComponentType::TRANSFORM) : nullptr;
-	transform.setOrigin(btVector3(tp->position.x, tp->position.y, tp->position.z));
+	if (tp)
+	{
+		if(this->flip)	frontDir.setRotation(upDir, btRadians(180));
+		transform.setOrigin(btVector3(tp->position.x, tp->position.y, tp->position.z));
+	}
+	
 
 	btCapsuleShape* collisionShape = new btCapsuleShape(shape.radius, shape.height);
 
@@ -105,7 +112,7 @@ void ControllerComponent::updateTransform(Transform* transformPtr)
 	btTransform transform = controller->getGhostObject()->getWorldTransform();
 
 	auto pos = transform.getOrigin();
-	transformPtr->position = glm::vec3(pos.x(), pos.y(), pos.z());
+	transformPtr->position = glm::vec3(pos.x(), pos.y()-offset, pos.z());
 	//todo slerp to rotation across a few frames so model doesn't just jerk to new direction
 	transformPtr->orientation.w = frontDir.getW();
 	transformPtr->orientation.x = frontDir.getX();
@@ -117,36 +124,76 @@ void ControllerComponent::updateTransform(Transform* transformPtr)
 
 void ControllerComponent::calcDirection(const btVector3& walkDir)
 {
-	if (walkDir.getX() < 0 && walkDir.getZ() < 0) //NW
+	if (flip)
 	{
-		frontDir.setRotation(upDir, btRadians(45));
+		if (walkDir.getX() < 0 && walkDir.getZ() < 0) //NW
+		{
+			frontDir.setRotation(upDir, btRadians(-135));
+		}
+		else if (walkDir.getX() > 0 && walkDir.getZ() < 0) //NE
+		{
+			frontDir.setRotation(upDir, btRadians(135));
+		}
+		else if (walkDir.getX() > 0 && walkDir.getZ() > 0) //SE
+		{
+			
+			frontDir.setRotation(upDir, btRadians(45));
+		}
+		else if (walkDir.getX() < 0 && walkDir.getZ() > 0) //SW
+		{
+			frontDir.setRotation(upDir, btRadians(-45));
+			
+		}
+		else if (walkDir.getZ() < 0) //N
+		{
+			frontDir.setRotation(upDir, btRadians(180));
+		}
+		else if (walkDir.getZ() > 0) //S
+		{
+			frontDir.setRotation(upDir, btRadians(0));
+		}
+		else if (walkDir.getX() > 0) //E
+		{
+			frontDir.setRotation(upDir, btRadians(90));
+		}
+		else if (walkDir.getX() < 0) //W
+		{
+			frontDir.setRotation(upDir, btRadians(-90));
+		}
 	}
-	else if (walkDir.getX() > 0 && walkDir.getZ() < 0) //NE
+	else 
 	{
-		frontDir.setRotation(upDir, btRadians(-45));
-	}
-	else if (walkDir.getX() > 0 && walkDir.getZ() > 0) //SE
-	{
-		frontDir.setRotation(upDir, btRadians(-135));
-	}
-	else if (walkDir.getX() < 0 && walkDir.getZ() > 0) //SW
-	{
-		frontDir.setRotation(upDir, btRadians(135));
-	}
-	else if (walkDir.getZ() < 0) //N
-	{
-		frontDir.setRotation(upDir, btRadians(0));
-	}
-	else if (walkDir.getZ() > 0) //S
-	{
-		frontDir.setRotation(upDir, btRadians(180));
-	}
-	else if (walkDir.getX() > 0) //E
-	{
-		frontDir.setRotation(upDir, btRadians(-90));
-	}
-	else if (walkDir.getX() < 0) //W
-	{
-		frontDir.setRotation(upDir, btRadians(90));
+		if (walkDir.getX() < 0 && walkDir.getZ() < 0) //NW
+		{
+			frontDir.setRotation(upDir, btRadians(45));
+		}
+		else if (walkDir.getX() > 0 && walkDir.getZ() < 0) //NE
+		{
+			frontDir.setRotation(upDir, btRadians(-45));
+		}
+		else if (walkDir.getX() > 0 && walkDir.getZ() > 0) //SE
+		{
+			frontDir.setRotation(upDir, btRadians(-135));
+		}
+		else if (walkDir.getX() < 0 && walkDir.getZ() > 0) //SW
+		{
+			frontDir.setRotation(upDir, btRadians(135));
+		}
+		else if (walkDir.getZ() < 0) //N
+		{
+			frontDir.setRotation(upDir, btRadians(0));
+		}
+		else if (walkDir.getZ() > 0) //S
+		{
+			frontDir.setRotation(upDir, btRadians(180));
+		}
+		else if (walkDir.getX() > 0) //E
+		{
+			frontDir.setRotation(upDir, btRadians(-90));
+		}
+		else if (walkDir.getX() < 0) //W
+		{
+			frontDir.setRotation(upDir, btRadians(90));
+		}
 	}
 }

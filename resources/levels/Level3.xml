@@ -152,26 +152,43 @@
 		<gameObject>
 			<tag>PHY_OBJ</tag>
 			<components>
-				<component type ="model">
-					<!--<file>capsule.obj</file> -->
-          <file>chest.obj</file>
+				<!-- <component type ="model">
+					<file>capsule.obj</file>
+					<file>chest.obj</file>
 					<texture>chest_diffuse.png</texture>
-				</component>
+				</component>  -->
+				<component type="animation">
+          			fbx files
+          			<default>LegoRun</default>
+          			<files>
+            			<file>
+              				<id>LegoRun</id>
+              				<filePath>resources/models/Animations/legoman@run.fbx</filePath>
+           				</file>
+          			</files>
+        		</component> 
 				<component type="transform">
 					<position>
 						<x>0.0</x>
-						<y>10.0</y>
+						<y>0.0</y>
 						<z>0.0</z>
 					</position>
 					<scale>
-						<x>0.5</x>
-						<y>0.5</y>
-						<z>0.5</z>
+						<x>0.1</x>
+						<y>0.1</y>
+						<z>0.1</z>
 					</scale>
+					<!-- <scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale> -->
 				</component>
 				<component type = "controller">
+					<flip>true</flip>
+					<offset>1.25</offset>
 					<bounding_shape type="CAPSULE">
-						<radius>0.5</radius>
+						<radius>0.75</radius>
 						<height>1.0</height>
 					</bounding_shape>
 				</component>
@@ -194,6 +211,12 @@
 						<y>0.25</y>
 						<z>0.25</z>
 					</scale>
+					<orientation>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+						<w>0</w>
+					</orientation>
 				</component>
 				<component type = "rigid_body">
 					<mass>1.0</mass>

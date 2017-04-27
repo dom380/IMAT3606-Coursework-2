@@ -261,10 +261,14 @@
     <ClCompile Include="source\Components\AnimatedModelComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="include\EngineState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="source\Audio\Listener.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\Audio\SoundComponent.cpp">
+
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -540,6 +544,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Components\AnimatedModelComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\EngineState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Audio\Listener.h">

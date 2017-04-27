@@ -52,9 +52,12 @@ void Engine::init()
 	physics = buildPhysics(physicsImplementation);
 	physics->init();
 
+	
+
 	loadFirstLevel();
 
 	DebugMenu::getInstance()->init();
+	engineState = std::make_shared<EngineState>();
 }
 
 void Engine::mainLoop()
@@ -79,12 +82,15 @@ void Engine::mainLoop()
 		while (frameTime > 0.0) //While there is still time to update the simulation
 		{
 			double deltaTime = std::min(frameTime, dt);
-			activeScreen.second->update(deltaTime, currentTime);
+
+			if (engineState->getEngineMode() == EngineMode::GAME)
+				activeScreen.second->update(deltaTime, currentTime);
 
 			frameTime -= deltaTime;
 			t += deltaTime;
 			
-			physics->update(deltaTime);
+			if (engineState->getEngineMode() == EngineMode::GAME)
+				physics->update(deltaTime);
 		}
 
 		renderer->prepare();
@@ -226,6 +232,13 @@ shared_ptr<DebugMenu> Engine::getDebugMenu()
 {
 	return DebugMenu::getInstance();
 }
+
+shared_ptr<EngineState> Engine::getEngineState()
+{
+	return engineState;
+}
+
+
 
 int Engine::getWindowWidth()
 {

@@ -1,6 +1,8 @@
 #pragma once
 #ifndef ENGINE_H
 #define ENGINE_H
+
+#include "EngineState.h"
 #include "utils\Timer.h"
 #include "AssetManager.h"
 #include "Renderers\Graphics.h"
@@ -127,6 +129,8 @@ public:
 
 	shared_ptr<DebugMenu> getDebugMenu();
 
+	shared_ptr<EngineState> getEngineState();
+
 	/*
 		Global accesor to the game engine.
 	*/
@@ -134,6 +138,7 @@ public:
 
 private:
 	//Private members
+	shared_ptr<EngineState> engineState;
 	shared_ptr<Window> window;
 	shared_ptr<Graphics> renderer;
 	shared_ptr<Input> inputHandler;

@@ -153,6 +153,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="include\EngineState.cpp" />
     <ClCompile Include="include\GUI\UIManager.cpp" />
     <ClCompile Include="include\GUI\UITextureElement.cpp" />
     <ClCompile Include="source\Animation\Math3D.cpp" />
@@ -245,6 +246,7 @@
     <ClInclude Include="include\Editor\imgui\stb_textedit.h" />
     <ClInclude Include="include\Editor\imgui\stb_truetype.h" />
     <ClInclude Include="include\Engine.h" />
+    <ClInclude Include="include\EngineState.h" />
     <ClInclude Include="include\GameObject.h" />
     <ClInclude Include="include\GameObjectTag.h" />
     <ClInclude Include="include\Graphics\Bitmap.h" />

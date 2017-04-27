@@ -80,6 +80,15 @@ void DebugMenu::updateMainMenu()
 
 			ImGui::EndMenu();
 		}
+		if (ImGui::BeginMenu("Game"))
+		{
+			static bool editorState = false;
+			if (ImGui::Checkbox("Play", &editorState))
+			{
+				Engine::g_pEngine->getEngineState()->switchEngineMode();
+			}
+			ImGui::EndMenu();
+		}
 		if (ImGui::BeginMenu("Debug"))
 		{
 			if (ImGui::Button("Objects"))
@@ -156,16 +165,16 @@ void DebugMenu::updateMainMenu()
 		virtual update;
 
 		example
-		update()
+		debugMenuItemUpdate()
 		{
-		if(beginmenu "")
-		{
-		dostuff.
-		}
+			if(beginmenu "")
+			{
+			dostuff.
+			}
 		}
 
 		debugmenu has list of debugmenuitems.
-		iterates -> update().
+		iterates -> debugMenuItemUpdate().
 		instansiation adds to list of.
 		*/
 		for (int x = 0; x < mainMenuBarItems.size(); x++)

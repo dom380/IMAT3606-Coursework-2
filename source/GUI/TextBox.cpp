@@ -48,6 +48,8 @@ void TextBox::updateText(string newText)
 
 void TextBox::render()
 {
+	if (!active)
+		return;
 	if (!haveVAO) { //If VAO hasn't been created (on this thread) yet create it now.
 		vaoHandle = graphics->createTextVertexArrayObject(vboHandle);
 		haveVAO = true;

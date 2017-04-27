@@ -320,36 +320,20 @@ bool DebugMenu::saveCurrentLevel(string fileName)
 	*/
 	for (int x = 0; x < gameScreen->getGameObjects().size(); x++)
 	{
+		FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, gameScreen->getGameObjects()[x], gameScreen);
+		//If there is a new object not saved on file
+		if (x >= numberOfObjectsInFile)
+		{
+			//addto
+			if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getGameObjects()[x], gameScreen))
+			{
+			}
+		}
 		if (gameScreen->getGameObjects().at(x)->HasComponent(ComponentType::MODEL))
 		{
 			if (!gameScreen->getGameObjects().at(x)->getModel()->isDrawing())
 			{
 				FileSaver::DeleteObjectFromFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getGameObjects()[x], gameScreen);
-			}
-			else
-			{
-				FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, gameScreen->getGameObjects()[x], gameScreen);
-				//If there is a new object not saved on file
-				if (x >= numberOfObjectsInFile)
-				{
-					//addto
-					if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getGameObjects()[x], gameScreen))
-					{
-					}
-				}
-			}
-		}
-		
-		else
-		{
-			FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, gameScreen->getGameObjects()[x], gameScreen);
-			//If there is a new object not saved on file
-			if (x >= numberOfObjectsInFile)
-			{
-				//addto
-				if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getGameObjects()[x], gameScreen))
-				{
-				}
 			}
 		}
 	}
@@ -368,6 +352,10 @@ bool DebugMenu::saveCurrentLevel(string fileName)
 			{
 			}
 		}
+		if (!gameScreen->getUIElements().at(x)->isActive())
+		{
+			FileSaver::DeleteObjectFromFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getUIElements()[x], gameScreen);
+		}	
 	}
 	return FileSaver::SaveFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(),fileName);
 }
@@ -493,13 +481,25 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 	ImGui::PushID(iterator);
 	static shared_ptr<Transform> transform = std::make_shared<Transform>();
 	gameObjectsMenuTransform(iterator, transform.get());
-
-	createTextureListBox();
+	static bool hasTexture = false;
+	if (ImGui::Checkbox("Texture", &hasTexture))
+	{
+	}
+	if (hasTexture)
+	{
+		createTextureListBox();
+	}
 	if (ImGui::Button("Create"))
 	{
 		//Load object, overide
 		shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
-		std::pair<string, string> objInfo(objName, textureCStyleArray[listbox_item_current]) ;
+		std::pair<string, string> objInfo(objName, "");
+		if (hasTexture)
+		{
+			objInfo.second = textureCStyleArray[listbox_item_current];
+			
+		}
+		
 		LevelLoader::loadGameObject(Engine::g_pEngine->getRenderer(), gameScreen, objInfo, transform);
 	}
 	ImGui::PopID();

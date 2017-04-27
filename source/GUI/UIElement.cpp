@@ -13,6 +13,16 @@ UIElement::UIElement(shared_ptr<Graphics>& engineGraphics, shared_ptr<Transform>
 	shader->setUniform("projection", projection);
 }
 
+void UIElement::setActive(bool isActive)
+{
+	active = isActive;
+}
+
+bool UIElement::isActive()
+{
+	return active;
+}
+
 shared_ptr<Button> UIElement::getButton()
 {
 	return button;

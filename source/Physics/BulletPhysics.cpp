@@ -24,7 +24,7 @@ void BulletPhysics::init()
 
 void BulletPhysics::update(double dt)
 {
-	if (!paused) 
+	//if (!paused) 
 	{
 		world->stepSimulation(btScalar(dt));
 	}

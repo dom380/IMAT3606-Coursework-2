@@ -22,6 +22,12 @@ class Listener
 		Listener();
 
 		/*
+			Singleton
+		 */
+		 static Listener* Instance();
+
+
+		/*
 			Sets the position
 		*/
 		void setPosition(int x, int y, int z);
@@ -40,5 +46,6 @@ class Listener
 
 	private:
 		sf::Listener* listener; 
+		static Listener* m_Instance; //!< Instance pointer of a Listener
 		
 };

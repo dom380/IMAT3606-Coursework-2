@@ -21,7 +21,7 @@
 
 #ifndef NDEBUG
 #include "Timer.h"
-
+using namespace std;
 #endif
 /*
 Factory class to parse level XML descriptors and create the relevant objects.
@@ -187,7 +187,7 @@ public:
 		for (int x = 0; x < button->getParams().size(); x++)
 		{
 			string paramName = button->getParams().at(x).first;
-			std::transform(paramName.begin(), paramName.end(), paramName.begin(), std::tolower);
+			transform(paramName.begin(), paramName.end(), paramName.begin(), tolower);
 			paramTable[paramName] = button->getParams().at(x).second;
 		}
 		//Bind the lua callback function, engine and parameter table as a c++ function for the button.
@@ -311,7 +311,7 @@ private:
 		tinyxml2::XMLElement* paramElement = onClickElement->FirstChildElement("params") != NULL ? onClickElement->FirstChildElement("params")->FirstChildElement():NULL;
 		while (paramElement != NULL) {
 			string paramName = paramElement->Attribute("name");
-			std::transform(paramName.begin(), paramName.end(), paramName.begin(), std::tolower);
+			transform(paramName.begin(), paramName.end(), paramName.begin(), tolower);
 			paramTable[paramName] = paramElement->GetText();
 			button->setParam(pair<string, string>(paramName, paramElement->GetText()));
 			paramElement = paramElement->NextSiblingElement();

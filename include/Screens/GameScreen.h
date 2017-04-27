@@ -22,6 +22,8 @@ using std::vector;
 #include <AssetManager.h>
 #include <Physics\Physics.h>
 #include "Components/AnimatedModelComponent.h"
+#include "Audio\Listener.h"
+#include "Audio\SoundComponent.h"
 
 #ifndef NDEBUG
 #include <utils\Timer.h>
@@ -124,6 +126,9 @@ private:
 	shared_ptr<Robot> robot;
 	int currentScore = 0;
 	glm::vec3 cameraDistanceToPlayer;
+	//Sound Stuff May need to move later
+	Listener* listener;
+	SoundComponent* sounds;
 #ifndef NDEBUG //If debugging display how long the frame took in ms.
 	Timer timer;
 	shared_ptr<TextBox> frameTime;

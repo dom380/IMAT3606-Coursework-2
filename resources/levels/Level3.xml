@@ -159,12 +159,16 @@
 				</component>  -->
 				<component type="animation">
           			fbx files
-          			<default>LegoRun</default>
+          			<default>Idle</default>
           			<files>
             			<file>
-              				<id>LegoRun</id>
+              				<id>Run</id>
               				<filePath>resources/models/Animations/legoman@run.fbx</filePath>
            				</file>
+						<file>
+							<id>Idle</id>
+							<filePath>resources/models/Animations/legoman@static.fbx</filePath>
+						</file>
           			</files>
         		</component> 
 				<component type="transform">

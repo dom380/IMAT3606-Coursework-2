@@ -6,6 +6,7 @@
 #include <string>
 #include "Component.h"
 #include "RenderMessage.h"
+#include "AnimMessage.h"
 #include "Graphics\Transform.h"
 #include "Animation/SkeletalModel.h"
 #include "GameObject.h"

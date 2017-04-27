@@ -95,7 +95,20 @@ void ControllerComponent::pollInput()
 	if (!walkDir.fuzzyZero())
 	{
 		calcDirection(walkDir);
-	} 
+		auto sp = owner.lock();
+		auto anim = sp != nullptr ? sp->getComponent<AnimatedModelComponent>(ComponentType::ANIMATION) : nullptr;
+		AnimMessage* msg = new AnimMessage("Run");
+		anim->RecieveMessage(msg);
+		delete msg;
+	}
+	else
+	{
+		auto sp = owner.lock();
+		auto anim = sp != nullptr ? sp->getComponent<AnimatedModelComponent>(ComponentType::ANIMATION) : nullptr;
+		AnimMessage* msg = new AnimMessage("Idle");
+		anim->RecieveMessage(msg);
+		delete msg;
+	}
 
 	if (space == KeyEventType::KEY_PRESSED && controller->canJump())
 	{
@@ -105,6 +118,7 @@ void ControllerComponent::pollInput()
 		//std::cout << "Vertical Offset: " << vertOffset << std::endl;
 		controller->jump(upDir*10);
 	}
+
 }
 
 void ControllerComponent::updateTransform(Transform* transformPtr)

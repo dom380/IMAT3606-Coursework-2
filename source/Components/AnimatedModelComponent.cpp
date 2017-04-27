@@ -38,22 +38,41 @@ void AnimatedModelComponent::update(double dt)
 void AnimatedModelComponent::RecieveMessage(Message* msg)
 {
 	MsgType id = msg->id;
-	if (id != MsgType::RENDER)
-		return;
-	else if (!drawing) //Did recieve message to render but disabled so return
-		return;
-	RenderMessage* renderMsg = ((RenderMessage *)msg);
-	if (renderMsg->lightingBlockId != -1 && renderMsg->lightingBuffer != -1) //Message does contain lightingBlockId and lightingBuffer so use them.
+	switch (id)
 	{
-		render(renderMsg->camera, renderMsg->lightingBuffer, renderMsg->lightingBlockId);
-		return;
+		case MsgType::RENDER:
+		{
+			if (!drawing) //Did recieve message to render but disabled so return
+				return;
+			RenderMessage* renderMsg = ((RenderMessage *)msg);
+			if (renderMsg->lightingBlockId != -1 && renderMsg->lightingBuffer != -1) //Message does contain lightingBlockId and lightingBuffer so use them.
+			{
+				render(renderMsg->camera, renderMsg->lightingBuffer, renderMsg->lightingBlockId);
+				return;
+			}
+			else if (renderMsg->lights.size() > 0) //Else if Lights have been directly passed, use those.
+			{
+				render(renderMsg->camera, renderMsg->lights);
+				return;
+			}
+			render(renderMsg->camera); //Else render with no lighting.
+		}
+		break;
+		case MsgType::ANIMATION:
+		{
+			if (!drawing) 
+				return;
+			AnimMessage* animMsg = ((AnimMessage *)msg);
+			//currentAnim = animMsg->animation;
+			auto it = models.find(animMsg->animation);
+			if (it != models.end())
+			{
+				currentAnim = animMsg->animation;
+			}
+		}
+		break;
 	}
-	else if (renderMsg->lights.size() > 0) //Else if Lights have been directly passed, use those.
-	{
-		render(renderMsg->camera, renderMsg->lights);
-		return;
-	}
-	render(renderMsg->camera); //Else render with no lighting.
+	
 
 
 	//have a message to change anim

@@ -12,7 +12,8 @@ enum class MsgType
 	RENDER,
 	LOCATION,
 	MATERIAL,
-	COLLISION
+	COLLISION,
+	ANIMATION
 };
 
 #endif // !MESSAGETYPE_H

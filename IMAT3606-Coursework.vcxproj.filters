@@ -548,6 +548,9 @@
     <ClInclude Include="include\Components\AnimatedModelComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Components\AnimMessage.h">
+      <Filter>Header Files\Components\Messages</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\text.frag">

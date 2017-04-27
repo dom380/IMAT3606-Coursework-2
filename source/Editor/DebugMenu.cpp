@@ -417,7 +417,7 @@ void DebugMenu::loadSpecificLevel()
 			//remove .xml from string
 			string levelID = levelCStyleArray[listbox_item_current];
 			levelID = levelID.substr(0, levelID.size()-4);
-			Engine::g_pEngine->replaceScreen(levelID);
+			Engine::g_pEngine->switchScreen(levelID);
 			popupText = "Load successfully";
 		}
 		else
@@ -489,7 +489,9 @@ void DebugMenu::createUIWindow(UIType type, int iterator)
 	string uiWindowName = EnumParser<UIType>().getString(type).c_str() + std::to_string(iterator);
 	ImGui::Begin(uiWindowName.c_str(), &uiWindowActive);
 	uiCreateActive[iterator] = uiWindowActive;
-	
+	//declarations
+	static char uiStringValueBuf[64] = "";
+	static glm::vec3 colour;
 	/*
 		Name of uielement
 	*/
@@ -501,14 +503,40 @@ void DebugMenu::createUIWindow(UIType type, int iterator)
 	switch (type)
 	{
 	case UIType::TEXT:
-		break;
-	case UIType::TEXTURE:
-		//
-		createTextureListBox();
-		break;
-	case UIType::BUTTON:
+	{
+		//text
+		ImGui::InputText("UITextValue", uiStringValueBuf, sizeof(uiStringValueBuf));
+		//colour
+		static float dragSpeed = 0.0025f;
+		ImGui::DragFloat3("Colour", &colour[0], dragSpeed);
+
+		//font
+		createFontsListBox();
 		break;
 	}
+	case UIType::TEXTURE:
+		//
+
+		createTextureListBox();
+		break;
+	}
+
+	//Button
+	static bool hasButton = false;
+	shared_ptr<Button> createdButton;
+	//HasButton?
+	if (ImGui::Checkbox("HasButton", &hasButton))
+	{
+	}
+	if (hasButton)
+	{
+		createdButton = createButton();
+	}
+	else
+	{
+		createdButton.reset();
+	}
+	
 	
 	/*
 		transform editor
@@ -524,17 +552,67 @@ void DebugMenu::createUIWindow(UIType type, int iterator)
 		switch (type)
 		{
 		case UIType::TEXT:
+		{
+			Font font = *AssetManager::getInstance()->getFont(const_cast<char*>(listBoxItemSelected(type).c_str()), Engine::g_pEngine->getRenderer());
+			shared_ptr<TextBox> textBox = std::make_shared<TextBox>(uiStringValueBuf, font, transform, Engine::g_pEngine->getRenderer(), colour, objNameBuf);
+			if (hasButton)
+			{
+				Engine::g_pEngine->getInput()->registerMouseListener(createdButton);
+				createdButton->init(Engine::g_pEngine->getRenderer(), font, uiStringValueBuf, transform);
+				textBox->setButton(createdButton);
+			}
+			Engine::g_pEngine->getActiveScreen()->addUIElement(textBox);
 			break;
+		}
 		case UIType::TEXTURE:
 			objInfo.second = textureCStyleArray[listbox_item_current];
-			Engine::g_pEngine->getActiveScreen()->addUIElement(std::make_shared<UITextureElement>(Engine::g_pEngine->getRenderer(), transform, objInfo.first.c_str(), objInfo.second.c_str()));
-			break;
-		case UIType::BUTTON:
+			shared_ptr<UITextureElement> uiTexture = std::make_shared<UITextureElement>(Engine::g_pEngine->getRenderer(), transform, objInfo.first.c_str(), objInfo.second.c_str());
+			if (hasButton)
+			{
+				Engine::g_pEngine->getInput()->registerMouseListener(createdButton);
+				createdButton->init(Engine::g_pEngine->getRenderer(), transform);
+				uiTexture->setButton(createdButton);
+			}
+			Engine::g_pEngine->getActiveScreen()->addUIElement(uiTexture);
 			break;
 		}
 		
 	}
 	ImGui::End();
+}
+
+shared_ptr<Button> DebugMenu::createButton()
+{
+	static shared_ptr<Button> button = std::make_shared<Button>();
+
+	if (ImGui::TreeNode("Button"))
+	{
+
+		static char buttonScriptName[64] = "";
+		static char buttonFuncName[64] = "";
+		static char buttonParamID[64] = "";
+		static char buttonParamText[64] = "";
+
+		//inputs
+		ImGui::InputText("ScriptName", buttonScriptName, sizeof(buttonScriptName));
+		ImGui::InputText("FuncName", buttonFuncName, sizeof(buttonFuncName));
+		ImGui::InputText("ParamID", buttonParamID, sizeof(buttonParamID));
+		ImGui::InputText("ParamText", buttonParamText, sizeof(buttonParamText));
+		button->setScript(buttonScriptName);
+		button->setFunc(buttonFuncName);
+		if (ImGui::Button("AddParam"))
+		{
+			button->setParam(pair<string, string>(buttonParamID, buttonParamText));
+			LevelLoader::loadButtonFunc(button);
+		}
+		ImGui::SameLine();
+		if (ImGui::Button("ClearButtonParams"))
+		{
+			button->clearParams();
+		}
+		ImGui::TreePop();
+	}
+	return button;
 }
 
 void DebugMenu::createTextureListBox()
@@ -578,6 +656,79 @@ void DebugMenu::createTextureListBox()
 	*/
 	ImGui::ListBox("Textures Available", &listbox_item_current, &textureCStyleArray[0], textureCStyleArray.size(), 4);
 
+}
+
+void DebugMenu::createFontsListBox()
+{
+	//static std::vector<const char *> textureCStyleArray;
+	if (fontList.empty())
+	{
+		//Gets all textures in tex dir
+		//vector<std::string> tempTextureList;
+		std::string path = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::FONT) + "*";
+		fontList = DirectoryReader::getFilesInDirectory(path.c_str());
+		//For specific file types
+
+		/*path = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::TEXTURE) + "*.jpg";
+		tempTextureList = DirectoryReader::getFilesInDirectory(path.c_str());
+		textureList.insert(textureList.end(), tempTextureList.begin(), tempTextureList.end());
+
+		path = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::TEXTURE) + "*.tga";
+		tempTextureList = DirectoryReader::getFilesInDirectory(path.c_str());
+		textureList.insert(textureList.end(), tempTextureList.begin(), tempTextureList.end());*/
+
+		if (!fontCStyleArray.empty())
+			fontCStyleArray.clear();
+		fontCStyleArray.reserve(fontList.size());
+		for (int index = 0; index < fontList.size(); ++index)
+		{
+			//Safety check, name must be longer than 4 to be valid (.ttf) etc.
+			if (strlen(fontList.at(index).c_str()) > 4)
+			{
+				fontCStyleArray.push_back(fontList[index].c_str());
+			}
+			else
+			{
+				fontList.at(index).erase();
+			}
+
+		}
+	}
+	/*
+	Create a selectable list for textures
+	*/
+	ImGui::ListBox("Textures Available", &listbox_item_current, &fontCStyleArray[0], fontCStyleArray.size(), 4);
+
+}
+
+string DebugMenu::listBoxItemSelected(UIType type)
+{
+	string returnedString = "";
+	switch (type)
+	{
+	case TEXT:
+		//Safety first!
+		if (fontCStyleArray.size() > listbox_item_current)
+		{
+			returnedString = fontCStyleArray[listbox_item_current];
+		}
+		else
+		{
+			returnedString = "arial.ttf";
+			listbox_item_current = 0;
+		}
+		break;
+	case TEXTURE:
+		if (textureCStyleArray[listbox_item_current])
+		{
+			returnedString = textureCStyleArray[listbox_item_current];
+		}
+		break;
+	default:
+		break;
+	}
+	return returnedString;
+	
 }
 
 void DebugMenu::render()

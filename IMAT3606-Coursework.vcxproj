@@ -78,7 +78,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>$(SolutionDir)bin\$(Configuration)\$(Platform)\</OutDir>
     <IntDir>$(SolutionDir)temp\$(Configuration)\</IntDir>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);./include;./include/freetype2;</IncludePath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);./include;./include/freetype2;./include/Audio</IncludePath>
     <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64;./lib/$(Platform);</LibraryPath>
     <SourcePath>$(VC_SourcePath);./source;</SourcePath>
   </PropertyGroup>
@@ -113,7 +113,7 @@
       <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);GUID_WINDOWS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>LinearMath_Debug.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;assimp.lib;lua53.lib;freetype27.lib;glew32.lib;opengl32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>LinearMath_Debug.lib;BulletDynamics_Debug.lib;BulletCollision_Debug.lib;assimp.lib;lua53.lib;freetype27.lib;glew32.lib;opengl32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;sfml-main-d.lib;sfml-system-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
       <AdditionalLibraryDirectories>./lib/bullet3-2.86.1/build3/vs2015/lib/Debug</AdditionalLibraryDirectories>
     </Link>
@@ -148,7 +148,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>assimp.lib;LinearMath_RelWithDebugInfo.lib;BulletDynamics_RelWithDebugInfo.lib;BulletCollision_RelWithDebugInfo.lib;lua53.lib;freetype27.lib;glew32.lib;opengl32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>assimp.lib;LinearMath_RelWithDebugInfo.lib;BulletDynamics_RelWithDebugInfo.lib;BulletCollision_RelWithDebugInfo.lib;lua53.lib;freetype27.lib;glew32.lib;opengl32.lib;glfw3.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;sfml-main-d.lib;sfml-system-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>./lib/bullet3-2.86.1/build3/vs2015/lib/RelWithDebInfo</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -159,6 +159,8 @@
     <ClCompile Include="source\Animation\Math3D.cpp" />
     <ClCompile Include="source\Animation\SkeletalModel.cpp" />
     <ClCompile Include="source\AssetManager.cpp" />
+    <ClCompile Include="source\Audio\Listener.cpp" />
+    <ClCompile Include="source\Audio\SoundComponent.cpp" />
     <ClCompile Include="source\Camera\EngineCamera.cpp" />
     <ClCompile Include="source\Camera\FollowCamera.cpp" />
     <ClCompile Include="source\Camera\PerspectiveCamera.cpp" />
@@ -213,6 +215,8 @@
     <ClInclude Include="include\Animation\Math3D.h" />
     <ClInclude Include="include\Animation\SkeletalModel.h" />
     <ClInclude Include="include\AssetManager.h" />
+    <ClInclude Include="include\Audio\Listener.h" />
+    <ClInclude Include="include\Audio\SoundComponent.h" />
     <ClInclude Include="include\Camera\Camera.h" />
     <ClInclude Include="include\Camera\EngineCamera.h" />
     <ClInclude Include="include\Camera\FollowCamera.h" />

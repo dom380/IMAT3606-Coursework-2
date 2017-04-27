@@ -3,11 +3,11 @@
 #define BUTTON_H
 #include <string>
 using std::string;
+using std::pair;
 #include "EventListener.h"
 #include "Font.h"
 #include "Graphics\Shader.h"
 #include <Graphics\Transform.h>
-#include <GUI\TextBox.h>
 #include <Renderers\Graphics.h>
 #include <gl\glm\glm\gtc\matrix_transform.hpp>
 #include <algorithm> 
@@ -26,26 +26,76 @@ private:
 	};
 	AABB aabb;
 	shared_ptr<Graphics> graphics;
-	shared_ptr<TextBox> textbox;
 
 	std::function<void()> onClickCallback;
+	bool active;
+	
+	string scriptName;
+	string funcName;
+	vector<pair<string,string>> params;
 
-	std::string id;
-
+	
+	
+public:
+	//Constructors
+	Button() { active = false;  };
 	/*
-		Inititalise the Button, creating a Textbox for rendering and building an AABB around the text.
+		Constructor
+		string text, The text to display for the button.
+		Font textfont, The font to use for the text.
+		shared_ptr<Transform>& pos, The position, scale and orientation of the button.
+		shared_ptr<Graphics>& graphics, Pointer to the graphics system.
+		glm::vec3& colour, The colour of the text, normalised to 0..1. Defaulted to white (1.0,1.0,1.0), 
+		string id, The button#s Id.
 	*/
-	void init(Font textfont, shared_ptr<Transform> pos, glm::vec3& colour = glm::vec3(1.0, 1.0, 1.0)) {
-		textbox = std::make_shared<TextBox>(text, textfont, pos, graphics);
-		font = textfont;
-		transform = pos;
-		buildAABB();
+	Button( shared_ptr<Graphics>& passedGraphics, shared_ptr<Transform>& pos, Font font, string text) {
+		init(passedGraphics, font, text, pos);
+	};
+	Button(shared_ptr<Graphics>& passedGraphics, shared_ptr<Transform>& pos) {
+		init(passedGraphics, pos);
 	};
 
+	~Button(){};
 	/*
-		Calculates a bounding box around the button text.
+		Copy constructor.
 	*/
-	void buildAABB() {
+	Button& operator=(Button& other) {
+	//	this->text = other.text;
+		//this->transform = other.transform;
+	//	this->font = other.font;
+		this->graphics = other.graphics;
+	//	this->textbox = other.textbox;
+		return *this;
+	};
+	/*
+	Inititalise the Button, creating a Textbox for rendering and building an AABB around the text.
+	*/
+	void init(shared_ptr<Graphics>& passedGraphics,Font font, string text, shared_ptr<Transform> transform) {
+		this->graphics = passedGraphics;
+		buildAABB(font, text, transform);
+		active = true;
+	};
+	/*
+	Inititalise the Button, creating a Textbox for rendering and building an AABB around the text.
+	*/
+	void init(shared_ptr<Graphics>& passedGraphics, shared_ptr<Transform> transform) {
+		this->graphics = passedGraphics;
+		buildAABB(transform);
+		active = true;
+	};
+	/*
+	/*
+	Calculates a bounding box around the button text.
+	*/
+	void buildAABB(shared_ptr<Transform> transform) {
+		float maxHeight = 0;
+		//transform from center
+		aabb.x = transform->position.x - (transform->scale.x / 2);
+		aabb.y = transform->position.y - (transform->scale.y / 2);
+		aabb.width = transform->scale.x;
+		aabb.height = transform->scale.y;
+	};
+	void buildAABB(Font font, string text, shared_ptr<Transform> transform) {
 		float maxHeight = 0;
 		aabb.x = transform->position.x;
 		aabb.y = transform->position.y;
@@ -58,59 +108,7 @@ private:
 		}
 		aabb.height = (transform->position.y - aabb.y) + maxHeight; //Height of AABB is the maximum character height add the maximum underline bearing
 	};
-	
-protected:
-	string text;
-	Font font;
-	shared_ptr<Transform> transform;
-public:
-	//Constructors
-	Button() {};
-	/*
-		Constructor
-		string text, The text to display for the button.
-		Font textfont, The font to use for the text.
-		shared_ptr<Transform>& pos, The position, scale and orientation of the button.
-		shared_ptr<Graphics>& graphics, Pointer to the graphics system.
-		glm::vec3& colour, The colour of the text, normalised to 0..1. Defaulted to white (1.0,1.0,1.0), 
-		string id, The button#s Id.
-	*/
-	Button(string text, Font textfont, shared_ptr<Transform>& pos, shared_ptr<Graphics>& graphics, glm::vec3& colour = glm::vec3(1.0,1.0,1.0), string id ="") {
-		this->text = text;
-		this->graphics = graphics;
-		this->id = id;
-		init(textfont, pos, colour);
-	};
-	/*
-		Constructor
-		const char* text, The text to display for the button.
-		Font textfont, The font to use for the text.
-		shared_ptr<Transform>& pos, The position, scale and orientation of the button.
-		shared_ptr<Graphics>& graphics, Pointer to the graphics system.
-		glm::vec3& colour, The colour of the text, normalised to 0..1. Defaulted to white (1.0,1.0,1.0),
-		string id, The button#s Id.
-	*/
-	Button(const char* text, Font textfont, shared_ptr<Transform>& pos, shared_ptr<Graphics>& graphics, glm::vec3& colour = glm::vec3(1.0, 1.0, 1.0), string id = "") {
-		this->text = string(text);
-		this->graphics = graphics;
-		this->id = id;
-		init(textfont, pos, colour);
-	};
-	~Button(){};
-	/*
-		Copy constructor.
-	*/
-	Button& operator=(Button& other) {
-		this->text = other.text;
-		this->transform = other.transform;
-		this->font = other.font;
-		this->graphics = other.graphics;
-		this->textbox = other.textbox;
-		return *this;
-	};
-
-	/*
-		Method to notify Button of Mouse Events it has subscribed to. 
+	/*		Method to notify Button of Mouse Events it has subscribed to. 
 		If the event was a click within the button's bounding box the  
 		OnClick callback method will be called.
 	*/
@@ -127,7 +125,7 @@ public:
 		int x = event.x, y = graphics->getHeight() - event.y;
 		if ((x >= aabb.x) && (x <= aabb.x + aabb.width) && (y >= aabb.y) && (y <= aabb.y + aabb.height))
 		{
-			onClickCallback();
+			if (onClickCallback) { onClickCallback();  }
 		}
 	};
 	/*
@@ -147,15 +145,35 @@ public:
 		onClickCallback = c;
 	};
 
-	/*
-		Call to the graphics system to render this button.
-	*/
-	void render() {
-		textbox->render();
+	bool isActive() {
+		return active;
 	}
 
-	std::string getId() {
-		return id;
+	void setActive(bool passedActive) {
+		active = passedActive;	
+	}
+	
+	void setScript(string setter) {
+		scriptName = setter;
+	}
+	string getScript() {
+		return scriptName;
+	}
+	void setFunc(string setter) {
+		funcName = setter;
+	}
+	string getFunc() {
+		return funcName;
+	}
+	void setParam(pair<string, string> setter) {
+		params.push_back(setter);
+	}
+	vector<pair<string, string>> getParams() {
+		return params;
+	}
+
+	void clearParams() {
+		params.clear();
 	}
 };
 

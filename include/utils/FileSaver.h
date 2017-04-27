@@ -18,8 +18,12 @@ class FileSaver
 private:
 	//update existing transform comp of element in xmlfile
 	static bool UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* ele, Transform* transform);
+	//update existing vec3
+	static bool UpdateVec3Element(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* ele, glm::vec3 passedVector, string vecNames[3]);
 	//add transform comp to element in file.
 	static bool AddTransformToFile(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* ele, Transform* transform);
+	//add vec3 
+	static bool AddVec3ToElement(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* ele, glm::vec3 passedVector, string vecNames[3]);
 public:
 	/*
 		Update existing game objects inside of the current screen doc

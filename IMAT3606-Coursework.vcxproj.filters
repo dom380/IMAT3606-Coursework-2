@@ -264,6 +264,13 @@
     <ClCompile Include="include\EngineState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\Audio\Listener.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Audio\SoundComponent.cpp">
+
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\utils\GLSupport.h">
@@ -540,6 +547,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\EngineState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Audio\Listener.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Audio\SoundComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

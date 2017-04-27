@@ -8,10 +8,10 @@
  *Audio engine for playing 3D sounds
  *Author: Natalie Downes - p12194892
  */
-
-#include <string>
+#ifndef SOUNDCOMPONENT_H
+#define SOUNDCOMPONENT_H
 #include <SFML\Audio.hpp>
-#include <string>
+
 
 /*! \class SoundComponent
 	\brief The sound loader
@@ -28,7 +28,7 @@ private:
 
 public:
 
-	//static SoundComponent* Instance();
+	static SoundComponent* Instance();
 	SoundComponent(); //!< Default constructor
 	/*
 		Gets the sound
@@ -95,3 +95,5 @@ public:
 	*/
 	void destroySounds(int index);
 };
+
+#endif // !SOUNDCOMPONENT_H

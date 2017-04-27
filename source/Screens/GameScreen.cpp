@@ -37,6 +37,19 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 	activeCamera = 0;
 
 	UIManager::getInstance()->update();
+
+
+	//Sound stuff may move later 
+	//XML??
+	//Scripting 
+	listener = listener->Instance(); //only need one of these
+	sounds = sounds->Instance(); //one need one of these (Could change this to take maps)
+	listener->setPosition(0.0, 0.0, 0.0);
+	listener->setDirection(1.0, 0.0, 0.0);
+	sounds->setRelativeToListener(true, 0);
+	sounds->GetSound(0)->play();
+	sounds->setLooping(true,0);
+
 }
 
 void GameScreen::show()
@@ -105,6 +118,16 @@ void GameScreen::render()
 	for (auto ui : uiElements) {
 		ui->render();
 	}
+	for (shared_ptr<TextBox> textBox : textBoxes)
+	{
+		textBox->render();
+	}
+	for (auto button : buttons) {
+		button->render();
+	}
+	for (auto text : textBoxes) {
+		text->render();
+	}
 	
 #ifndef NDEBUG
 	double elapsedTime = timer.getElapsedTimeMilliSec();
@@ -137,11 +160,17 @@ void GameScreen::dispose()
 	robot.reset();
 	cameras.clear();
 	componentStore.reset();
+	disposeButtons();
 }
 
 void GameScreen::addLight(Light light)
 {
 	lights.push_back(light);
+}
+
+void GameScreen::addTextBox(shared_ptr<TextBox> textbox)
+{
+	textBoxes.push_back(textbox);
 }
 
 void GameScreen::addGameObject(shared_ptr<GameObject> gameObj)
@@ -186,10 +215,9 @@ void GameScreen::handle(KeyEvent event)
 void GameScreen::updateScore(int amountToAdd)
 {
 	currentScore += amountToAdd;
-	for (shared_ptr<UIElement> uiE : uiElements)
+	for (shared_ptr<TextBox> textbox : textBoxes)
 	{
-		shared_ptr<TextBox> textbox = dynamic_pointer_cast<TextBox>(uiE);
-		if (textbox->getID() == string("score_string"))
+		if (textbox->getId() == string("score_string"))
 		{
 			textbox->updateText("Gold Collected: " + std::to_string(currentScore));
 		}

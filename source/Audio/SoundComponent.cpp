@@ -23,20 +23,29 @@ SoundComponent* SoundComponent::m_Instance = NULL;
 //!< Default constructor
 SoundComponent::SoundComponent()
 {
+	m_sSoundFile.push_back("resources/audio/Background Music/menu.wav");
+
+	for (unsigned int i = 0; i < m_sSoundFile.size(); i++)
+	{
+		m_SoundBuffer.push_back(new sf::SoundBuffer);
+		m_SoundBuffer.at(i)->loadFromFile(m_sSoundFile.at(i));
+		m_Sounds.push_back(new sf::Sound);
+		m_Sounds.at(i)->setBuffer(*m_SoundBuffer.at(i));
+	}
 
 }
 
-//!< Instance contructor to ensure that only one GameTextureLoader is created
-/*SoundComponent* SoundComponent::Instance()
+//!< Instance contructor to ensure that only one SoundComponent is created
+SoundComponent* SoundComponent::Instance()
 {
 	//if the pointer is pointing to nothing make an instance of a GameSoundLoader
-	/*if (m_Instance == NULL)
+	if (m_Instance == NULL)
 	{
 		m_Instance = new SoundComponent();
 	}
 
-	return m_Instance;*/
-//}
+	return m_Instance;
+}
 
 //!< Gets the sound of the sent index and returns a sound pointer 
 sf::Sound* SoundComponent::GetSound(unsigned int iIndex)

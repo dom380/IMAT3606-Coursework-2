@@ -21,6 +21,7 @@ using std::vector;
 #include <Components\RenderMessage.h>
 #include <AssetManager.h>
 #include <Physics\Physics.h>
+#include "Components/AnimatedModelComponent.h"
 
 #ifndef NDEBUG
 #include <utils\Timer.h>
@@ -54,7 +55,7 @@ public:
 		Update this screen's objects.
 		double dt, Current time step.
 	*/
-	void update(double dt);
+	void update(double dt, double currentTime);
 	/*
 		Render this screen.
 	*/
@@ -79,10 +80,6 @@ public:
 		Add a light.
 	*/
 	void addLight(Light light);
-	/*
-		Add a TextBox to the screen.
-	*/
-	void addTextBox(shared_ptr<TextBox> textbox);
 	/*
 		Add a GameObject
 	*/

@@ -258,7 +258,13 @@
     <ClCompile Include="source\Components\ControllerComponet.cpp">
       <Filter>Source Files\Components</Filter>
     </ClCompile>
-    <ClCompile Include="include\Components\ControllerComponent.cpp">
+    <ClCompile Include="source\Animation\Math3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Animation\SkeletalModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\AnimatedModelComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -533,6 +539,15 @@
     <ClInclude Include="include\Components\ControllerComponent.h">
       <Filter>Header Files\Components</Filter>
     </ClInclude>
+    <ClInclude Include="include\Animation\Math3D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Animation\SkeletalModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\AnimatedModelComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\text.frag">
@@ -565,5 +580,7 @@
     <None Include="shaders\colour.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="shaders\animation.frag" />
+    <None Include="shaders\animation.vert" />
   </ItemGroup>
 </Project>

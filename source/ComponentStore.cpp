@@ -29,3 +29,8 @@ Handle ComponentStore::storeComponent(std::shared_ptr<ControllerComponent> compo
 {
 	return controllers.add(*component);
 }
+
+Handle ComponentStore::storeComponent(std::shared_ptr<AnimatedModelComponent> component)
+{
+	return animatedModels.add(*component);
+}

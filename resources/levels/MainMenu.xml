@@ -1,103 +1,89 @@
 <screen type="menu" name="MainMenu">
-<strings>
-	<string>
-		<position>
-			<x>30</x>
-			<y>650</y>
-		</position>
-		<scale>
-			<x>1.0</x>
-			<y>1.0</y>
-			<z>1.0</z>
-		</scale>
-		<colour>
-			<r>1.0</r>
-			<g>0.0</g>
-			<b>0.0</b>
-		</colour>
-		<value>IMAT3606 - Coursework 1: Robot Game</value>
-	</string>
-</strings>
-<buttons>
-	<button>
-		<position>
-			<x>30</x>
-			<y>500</y>
-		</position>
-		<scale>
-			<x>1.0</x>
-			<y>1.0</y>
-			<z>1.0</z>
-		</scale>
-		<value>Level 1</value>
-		
-		<onClick>
-			<script>ui_button_callbacks.lua</script>
-			<function>replaceScreen</function>
-			<params>
-				<param name="screenId">Level1</param>
-			</params>
-		</onClick>
-	</button>
-	<button>
-		<position>
-			<x>30</x>
-			<y>440</y>
-		</position>
-		<scale>
-			<x>1.0</x>
-			<y>1.0</y>
-			<z>1.0</z>
-		</scale>
-		<value>Level 2</value>
-		<onClick>
-			<script>ui_button_callbacks.lua</script>
-			<function>replaceScreen</function>
-			<params>
-				<param name="screenId">Level2</param>
-			</params>
-		</onClick>
-	</button>
-	<button>
-		<position>
-			<x>220</x>
-			<y>500</y>
-		</position>
-		<scale>
-			<x>1.0</x>
-			<y>1.0</y>
-			<z>1.0</z>
-		</scale>
-		<value>Level 3</value>
-		
-		<onClick>
-			<script>ui_button_callbacks.lua</script>
-			<function>replaceScreen</function>
-			<params>
-				<param name="screenId">Level3</param>
-			</params>
-		</onClick>
-	</button>
-	<button>
-		<position>
+	<uiElements>
+		<uiElement>
+			<ID>l1</ID>
+			<Type>text</Type>
+			<position>
+				<x>30</x>
+				<y>500</y>
+			</position>
+			<scale>
+				<x>1.0</x>
+				<y>1.0</y>
+				<z>1.0</z>
+			</scale>
+			<value>Level 1</value>
+			<onClick>
+				<script>ui_button_callbacks.lua</script>
+				<function>replaceScreen</function>
+				<params>
+					<param name="screenId">Level1</param>
+				</params>
+			</onClick>
+		</uiElement>
+		<uiElement>
+			<ID>l2</ID>
+			<Type>text</Type>
+			<position>
+				<x>30</x>
+				<y>440</y>
+			</position>
+			<scale>
+				<x>1.0</x>
+				<y>1.0</y>
+				<z>1.0</z>
+			</scale>
+			<value>Level 2</value>
+			<onClick>
+				<script>ui_button_callbacks.lua</script>
+				<function>replaceScreen</function>
+				<params>
+					<param name="screenId">Level2</param>
+				</params>
+			</onClick>
+		</uiElement>
+		<uiElement>
+			<ID>l2</ID>
+			<Type>text</Type>
+			<position>
+				<x>220</x>
+				<y>500</y>
+			</position>
+			<scale>
+				<x>1.0</x>
+				<y>1.0</y>
+				<z>1.0</z>
+			</scale>
+			<value>Level 3</value>
+			<onClick>
+				<script>ui_button_callbacks.lua</script>
+				<function>replaceScreen</function>
+				<params>
+					<param name="screenId">Level3</param>
+				</params>
+			</onClick>
+		</uiElement>
+		<uiElement>
+			<ID>exit</ID>
+			<Type>text</Type>
+			<position>
 			<x>30</x>
 			<y>380</y>
-		</position>
-		<scale>
-			<x>1.0</x>
-			<y>1.0</y>
-			<z>1.0</z>
-		</scale>
-		<value>Exit</value>
-		<onClick>
-			<script>ui_button_callbacks.lua</script>
-			<function>exit</function>
-		</onClick>
-	</button>
-</buttons>
-<uiElements>
+			</position>
+			<scale>
+				<x>1.0</x>
+				<y>1.0</y>
+				<z>1.0</z>
+			</scale>
+			<value>Exit</value>
+			<onClick>
+				<script>ui_button_callbacks.lua</script>
+				<function>exit</function>
+			</onClick>
+		</uiElement>
 		<uiElement>
 			<ID>uitest</ID>
+			<Type>texture</Type>
 			<Texture>cloth.png</Texture>
 			<position>
 				<x>30</x>
@@ -108,6 +94,25 @@
 				<y>1.0</y>
 				<z>1.0</z>
 			</scale>
+		</uiElement>
+		<uiElement>
+			<ID>Title</ID>
+			<Type>text</Type>
+			<position>
+				<x>30</x>
+				<y>650</y>
+			</position>
+			<scale>
+				<x>1.0</x>
+				<y>1.0</y>
+				<z>1.0</z>
+			</scale>
+			<colour>
+				<r>1.0</r>
+				<g>0.0</g>
+				<b>0.0</b>
+			</colour>
+			<value>IMAT3606 - Coursework 1: Robot Game</value>
 		</uiElement>
 	</uiElements>
 </screen>

@@ -62,7 +62,7 @@ public:
 		If not, update the Loading text every second.
 		double dt, Time passed since last update.
 	*/
-	void update(double dt)
+	void update(double dt, double currentTime)
 	{
 		if (!loading)
 		{
@@ -111,10 +111,6 @@ public:
 		Clean up any resources.
 	*/
 	void dispose() {};
-	/*
-		Empty implementation.
-	*/
-	void addTextBox(shared_ptr<TextBox> textbox) {};
 
 };
 

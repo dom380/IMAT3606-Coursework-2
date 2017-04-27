@@ -108,3 +108,9 @@ string UITextureElement::getTextureName()
 {
 	return textureName;
 }
+
+void UITextureElement::setTexture(string passedTextureName)
+{
+	textureName = passedTextureName;
+	texture = AssetManager::getInstance()->getTexture(textureName.c_str());
+}

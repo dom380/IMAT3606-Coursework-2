@@ -1,5 +1,69 @@
 <screen type="level" name="Level1">
     <gameObjects>
+		 <gameObject>
+      		<components>
+        		<component type="animation">
+          			<!-- fbx files-->
+          			<default>LegoRun</default>
+          			<files>
+            			<file>
+              				<id>LegoRun</id>
+              				<filePath>resources/models/Animations/legoman@run.fbx</filePath>
+           				</file>
+          			</files>
+        		</component>
+        		<component type="transform">
+          			<position>
+            			<x>0.0</x>
+            			<y>0.0</y>
+            			<z>0.0</z>
+          			</position>
+          			<scale>
+            			<x>0.5</x>
+	        	    	<y>0.5</y>
+    		        	<z>0.5</z>
+		        	</scale>
+          			<orientation>
+		            	<x>0.0</x>
+		            	<y>1.0</y>
+		            	<z>0.0</z>
+		            	<w>90</w>
+          			</orientation>
+        		</component>
+      	</components>
+    </gameObject>
+    <gameObject>
+      <components>
+        	<component type="animation">
+          		<!-- fbx files-->
+          		<default>EnemyAttack</default>
+          		<files>
+            		<file>
+              			<id>EnemyAttack</id>
+              			<filePath>resources/models/Animations/enemy@attack.fbx</filePath>
+            		</file>
+          		</files>
+        	</component>
+        	<component type="transform">
+          			<position>
+            			<x>10.0</x>
+            			<y>0.0</y>
+            			<z>0.0</z>
+          			</position>
+          			<scale>
+            			<x>5</x>
+            			<y>5</y>
+            			<z>5</z>
+          			</scale>
+          			<orientation>
+            			<x>0.0</x>
+            			<y>1.0</y>
+            			<z>0.0</z>
+            			<w>90</w>
+          			</orientation>
+        		</component>
+      		</components>
+    	</gameObject>
         <gameObject>
             <components>
                 <component type="model" id="wall.obj">
@@ -432,7 +496,9 @@
                         <z>15</z>
                     </scale>
                 </component>
-                <component type="logic"/>
+                <component type="logic">
+                  <script>gold_collectable.lua</script>
+                </component>
             </components>
         </gameObject>
         <gameObject>
@@ -454,7 +520,9 @@
                         <z>15</z>
                     </scale>
                 </component>
-                <component type="logic"/>
+                <component type="logic">
+                  <script>gold_collectable.lua</script>
+                </component>
             </components>
         </gameObject>
         <gameObject>
@@ -476,7 +544,9 @@
                         <z>15</z>
                     </scale>
                 </component>
-                <component type="logic"/>
+                <component type="logic">
+                  <script>gold_collectable.lua</script>
+                </component>
             </components>
         </gameObject>
         <gameObject>
@@ -498,7 +568,9 @@
                         <z>15</z>
                     </scale>
                 </component>
-                <component type="logic"/>
+                <component type="logic">
+                  <script>gold_collectable.lua</script>
+                </component>
             </components>
         </gameObject>
         <gameObject>
@@ -520,7 +592,9 @@
                         <z>15</z>
                     </scale>
                 </component>
-                <component type="logic"/>
+                <component type="logic">
+                  <script>gold_collectable.lua</script>
+                </component>
             </components>
         </gameObject>
         <gameObject>
@@ -543,7 +617,7 @@
                     </scale>
                 </component>
                 <component type="logic">
-                    <!--Script file here in future-->
+                  <script>gold_collectable.lua</script>
                 </component>
             </components>
         </gameObject>
@@ -828,8 +902,10 @@
             </specular>
         </light>
     </lights>
-    <strings>
-        <string id="score_string">
+    <uiElements>
+        <uiElement>
+            <ID>score_string</ID>
+			<Type>text</Type>
             <position>
                 <x>30</x>
                 <y>650</y>
@@ -840,27 +916,6 @@
                 <z>1.0</z>
             </scale>
             <value>Gold Collected: 0</value>
-        </string>
-    </strings>
-    <uiElements>
-        <uiElement>
-            <ID>uitest</ID>
-            <Texture>cloth.png</Texture>
-            <position>
-                <x>137.25</x>
-                <y>224</y>
-                <z>0</z>
-            </position>
-            <scale>
-                <x>45</x>
-                <y>98</y>
-                <z>1</z>
-            </scale>
-            <orientation>
-                <x>0</x>
-                <y>1</y>
-                <z>0</z>
-            </orientation>
         </uiElement>
     </uiElements>
 </screen>

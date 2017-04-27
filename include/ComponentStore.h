@@ -9,6 +9,7 @@
 #include <Components\PhysicsComponent.h>
 #include <Components\CollisionTrigger.h>
 #include <Components\ControllerComponent.h>
+#include <Components\AnimatedModelComponent.h>
 class LogicComponent;
 class PhysicsComponent;
 class CollisionTrigger;
@@ -27,7 +28,7 @@ public:
 			return (T*)models.get(handle);
 			break;
 		case ComponentType::ANIMATION:
-			return nullptr;
+			return (T*)animatedModels.get(handle);
 			break;
 		case ComponentType::RIGID_BODY:
 			return (T*)physics.get(handle);
@@ -59,10 +60,12 @@ public:
 	Handle storeComponent(std::shared_ptr<Transform> component);
 
 	Handle storeComponent(std::shared_ptr<PhysicsComponent> component);
-	
+		
 	Handle storeComponent(std::shared_ptr<CollisionTrigger> component);
 
 	Handle storeComponent(std::shared_ptr<ControllerComponent> component);
+
+	Handle storeComponent(std::shared_ptr<AnimatedModelComponent> component);
 
 	template <typename T>
 	std::vector<std::pair<int, T>>* getAllComponents(ComponentType type)
@@ -74,7 +77,7 @@ public:
 			return (std::vector<std::pair<int, T>>*)models.getAll();
 			break;
 		case ComponentType::ANIMATION:
-			return nullptr;
+			return (std::vector<std::pair<int, T>>*)animatedModels.getAll();
 			break;
 		case ComponentType::RIGID_BODY:
 			return (std::vector<std::pair<int, T>>*)physics.getAll();
@@ -100,6 +103,7 @@ public:
 	}
 private:
 	HandleManager<ModelComponent> models;
+	HandleManager<AnimatedModelComponent> animatedModels;
 	HandleManager<LogicComponent> logic;
 	HandleManager<Transform> transforms;
 	HandleManager<PhysicsComponent> physics;

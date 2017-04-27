@@ -8,7 +8,7 @@
 
 /*
 	Uses OpenAL wrapped in SFML Audio
-	Only ever one listener in the project (Such as a moving main character
+	Only ever one listener in the project
 */
 
 class Listener

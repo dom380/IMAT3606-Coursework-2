@@ -39,13 +39,14 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 	UIManager::getInstance()->update();
 
 
-	//Sound stuff may move later only ever need one of these
+	//Sound stuff may move later 
 	//XML??
-	//lol
-	listener = listener->Instance();
-	sounds = sounds->Instance();
+	//Scripting 
+	listener = listener->Instance(); //only need one of these
+	sounds = sounds->Instance(); //one need one of these (Could change this to take maps)
 	listener->setPosition(0.0, 0.0, 0.0);
 	listener->setDirection(1.0, 0.0, 0.0);
+	sounds->setRelativeToListener(true, 0);
 	sounds->GetSound(0)->play();
 	sounds->setLooping(true,0);
 

@@ -56,6 +56,8 @@ EnumParser<ComponentType>::EnumParser()
 	map["transform"] = ComponentType::TRANSFORM;
 	map["TRIGGER"] = ComponentType::TRIGGER;
 	map["trigger"] = ComponentType::TRIGGER;
+	map["CONTROLLER"] = ComponentType::CONTROLLER;
+	map["controller"] = ComponentType::CONTROLLER;
 
 	strmap[ComponentType::MODEL] = "model";
 	strmap[ComponentType::ANIMATION] = "animation";
@@ -63,6 +65,7 @@ EnumParser<ComponentType>::EnumParser()
 	strmap[ComponentType::LOGIC] = "logic";
 	strmap[ComponentType::TRANSFORM] = "transform";
 	strmap[ComponentType::TRIGGER] = "trigger";
+	strmap[ComponentType::CONTROLLER] = "controller";
 }
 
 EnumParser<UIType>::EnumParser()
@@ -98,6 +101,8 @@ EnumParser<ShapeData::BoundingShape>::EnumParser()
 	map["cone"] = ShapeData::BoundingShape::CONE;
 	map["CYLINDER"] = ShapeData::BoundingShape::CYLINDER;
 	map["cylinder"] = ShapeData::BoundingShape::CYLINDER;
+	map["CAPSULE"] = ShapeData::BoundingShape::CAPSULE;
+	map["capsule"] = ShapeData::BoundingShape::CAPSULE;
 }
 
 EnumParser<GameObjectTag>::EnumParser()

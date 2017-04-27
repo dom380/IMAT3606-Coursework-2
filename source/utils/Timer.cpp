@@ -39,6 +39,11 @@ void Timer::stop()
 #endif
 }
 
+bool Timer::isRunning()
+{
+	return !stopped;
+}
+
 double Timer::getElapsedTimeMicroSec() 
 {
 #if defined(_WIN32) || defined(_WIN64)

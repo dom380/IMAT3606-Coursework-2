@@ -123,7 +123,7 @@ private:
 	vector<Light> lights;
 	unsigned int lightingBlockId = -1;
 	unsigned int lightingBufferId = -1;
-	shared_ptr<Robot> robot;
+	//shared_ptr<Robot> robot;
 	int currentScore = 0;
 	glm::vec3 cameraDistanceToPlayer;
 	//Sound Stuff May need to move later

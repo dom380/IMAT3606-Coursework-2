@@ -496,7 +496,9 @@
                         <z>15</z>
                     </scale>
                 </component>
-                <component type="logic"/>
+                <component type="logic">
+                  <script>gold_collectable.lua</script>
+                </component>
             </components>
         </gameObject>
         <gameObject>
@@ -518,7 +520,9 @@
                         <z>15</z>
                     </scale>
                 </component>
-                <component type="logic"/>
+                <component type="logic">
+                  <script>gold_collectable.lua</script>
+                </component>
             </components>
         </gameObject>
         <gameObject>
@@ -540,7 +544,9 @@
                         <z>15</z>
                     </scale>
                 </component>
-                <component type="logic"/>
+                <component type="logic">
+                  <script>gold_collectable.lua</script>
+                </component>
             </components>
         </gameObject>
         <gameObject>
@@ -562,7 +568,9 @@
                         <z>15</z>
                     </scale>
                 </component>
-                <component type="logic"/>
+                <component type="logic">
+                  <script>gold_collectable.lua</script>
+                </component>
             </components>
         </gameObject>
         <gameObject>
@@ -584,7 +592,9 @@
                         <z>15</z>
                     </scale>
                 </component>
-                <component type="logic"/>
+                <component type="logic">
+                  <script>gold_collectable.lua</script>
+                </component>
             </components>
         </gameObject>
         <gameObject>
@@ -607,7 +617,7 @@
                     </scale>
                 </component>
                 <component type="logic">
-                    <!--Script file here in future-->
+                  <script>gold_collectable.lua</script>
                 </component>
             </components>
         </gameObject>

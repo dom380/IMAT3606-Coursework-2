@@ -252,6 +252,12 @@
     <ClCompile Include="source\utils\UUID\guid.cpp">
       <Filter>Source Files\utils\UUID</Filter>
     </ClCompile>
+    <ClCompile Include="source\Physics\BulletActorController.cpp">
+      <Filter>Source Files\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Components\ControllerComponet.cpp">
+      <Filter>Source Files\Components</Filter>
+    </ClCompile>
     <ClCompile Include="source\Animation\Math3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -537,6 +543,12 @@
     <ClInclude Include="include\Input\InputGLFW.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
+    <ClInclude Include="include\Physics\BulletActerController.h">
+      <Filter>Header Files\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Components\ControllerComponent.h">
+      <Filter>Header Files\Components</Filter>
+    </ClInclude>
     <ClInclude Include="include\Animation\Math3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -554,6 +566,9 @@
     </ClInclude>
     <ClInclude Include="include\Audio\SoundComponent.h">
       <Filter>Header Files</Filter>
+	</ClInclude>
+    <ClInclude Include="include\Components\AnimMessage.h">
+      <Filter>Header Files\Components\Messages</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

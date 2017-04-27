@@ -10,10 +10,10 @@ enum EngineMode { EDITOR, GAME };
 class EngineState
 {
 private:
-	EngineMode engineMode = EngineMode::EDITOR;
+	EngineMode engineMode;
 
 public:
-	EngineState() {};
+	EngineState() { engineMode = EngineMode::GAME; };
 
 	//Switch to other state
 	void switchEngineMode();

@@ -43,6 +43,27 @@
 			</onClick>
 		</uiElement>
 		<uiElement>
+			<ID>l2</ID>
+			<Type>text</Type>
+			<position>
+				<x>220</x>
+				<y>500</y>
+			</position>
+			<scale>
+				<x>1.0</x>
+				<y>1.0</y>
+				<z>1.0</z>
+			</scale>
+			<value>Level 3</value>
+			<onClick>
+				<script>ui_button_callbacks.lua</script>
+				<function>replaceScreen</function>
+				<params>
+					<param name="screenId">Level3</param>
+				</params>
+			</onClick>
+		</uiElement>
+		<uiElement>
 			<ID>exit</ID>
 			<Type>text</Type>
 			<position>

@@ -168,6 +168,7 @@
     <ClCompile Include="source\Components\CollisionTrigger.cpp" />
     <ClCompile Include="source\Components\AnimatedModelComponent.cpp" />
     <ClCompile Include="source\Components\Component.cpp" />
+    <ClCompile Include="source\Components\ControllerComponet.cpp" />
     <ClCompile Include="source\Components\LogicComponent.cpp" />
     <ClCompile Include="source\Components\PhysicsComponent.cpp" />
     <ClCompile Include="source\Editor\DebugMenu.cpp" />
@@ -190,6 +191,7 @@
     <ClCompile Include="source\Input.cpp" />
     <ClCompile Include="source\InputGLFW.cpp" />
     <ClCompile Include="source\Main.cpp" />
+    <ClCompile Include="source\Physics\BulletActorController.cpp" />
     <ClCompile Include="source\Physics\BulletPhysics.cpp" />
     <ClCompile Include="source\Physics\Physics.cpp" />
     <ClCompile Include="source\Renderers\RenderGL.cpp" />
@@ -223,11 +225,13 @@
     <ClInclude Include="include\Camera\OrthographicCamera.h" />
     <ClInclude Include="include\Camera\PerspectiveCamera.h" />
     <ClInclude Include="include\ComponentStore.h" />
+    <ClInclude Include="include\Components\AnimMessage.h" />
     <ClInclude Include="include\Components\CollisionMessage.h" />
     <ClInclude Include="include\Components\CollisionTrigger.h" />
     <ClInclude Include="include\Components\AnimatedModelComponent.h" />
     <ClInclude Include="include\Components\Component.h" />
     <ClInclude Include="include\Components\ComponentType.h" />
+    <ClInclude Include="include\Components\ControllerComponent.h" />
     <ClInclude Include="include\Components\LocationMessage.h" />
     <ClInclude Include="include\Components\LogicComponent.h" />
     <ClInclude Include="include\Components\MaterialMessage.h" />
@@ -276,6 +280,7 @@
     <ClInclude Include="include\Input\Input.h" />
     <ClInclude Include="include\Input\InputGLFW.h" />
     <ClInclude Include="include\Input\KeyCodes.h" />
+    <ClInclude Include="include\Physics\BulletActerController.h" />
     <ClInclude Include="include\Physics\BulletPhysics.h" />
     <ClInclude Include="include\Physics\ConvexHull.h" />
     <ClInclude Include="include\Physics\Physics.h" />

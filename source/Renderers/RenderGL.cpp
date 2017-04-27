@@ -36,7 +36,18 @@ bool RenderGL::init()
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	modelMat = glm::translate(modelMat, glm::vec3(0.0f, 0.0f,0.0f));
+	modelMat = glm::translate(modelMat, glm::vec3(0.0f, 0.0f, 0.0f));
+#if defined(_WIN32) || defined(_WIN64)
+	if (WGL_EXT_swap_control)
+	{
+		wglSwapIntervalEXT(0);
+	}
+#else
+	if (GLX_EXT_swap_control)
+	{
+		glXSwapIntervalEXT(val);
+	}
+#endif
 	return true;
 }
 

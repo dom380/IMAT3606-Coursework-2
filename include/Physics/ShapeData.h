@@ -14,7 +14,8 @@ public:
 		BOX,
 		SPHERE,
 		CONE,
-		CYLINDER
+		CYLINDER,
+		CAPSULE
 	};
 	BoundingShape boundingShape;
 	float radius = -1.0;

@@ -27,6 +27,7 @@ public:
 		Stops the timer.
 	*/
 	void stop();
+	bool isRunning();
 	/*
 		Returns the current elapsed time in seconds.
 	*/

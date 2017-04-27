@@ -82,7 +82,7 @@ void DebugMenu::updateMainMenu()
 		}
 		if (ImGui::BeginMenu("Game"))
 		{
-			static bool editorState = false;
+			bool editorState = (bool)Engine::g_pEngine->getEngineState();
 			if (ImGui::Checkbox("Play", &editorState))
 			{
 				Engine::g_pEngine->getEngineState()->switchEngineMode();

@@ -9,6 +9,7 @@
 #include <Screens\GameScreen.h>
 #include <GameObject.h>
 #include <Components\LogicComponent.h>
+#include <Components\ControllerComponent.h>
 #include "tinyxml2.h"
 #include <Scripting\ScriptEngine.h>
 #include <Components\AnimatedModelComponent.h>
@@ -138,6 +139,11 @@ public:
 			case ComponentType::TRIGGER:
 			{
 				loadCollisionTrigger(physics, gameObject, componentElement);
+			}
+			break;
+			case ComponentType::CONTROLLER:
+			{
+				loadController(physics, gameObject, componentElement);
 			}
 			break;
 			default:
@@ -593,6 +599,12 @@ private:
 						);
 				break;
 			}
+			case ShapeData::BoundingShape::CAPSULE:
+			{
+				shapeData.radius = shapeElement->FirstChildElement("radius") != NULL ? shapeElement->FirstChildElement("radius")->FloatText() : 1.0f;
+				shapeData.height = shapeElement->FirstChildElement("height") != NULL ? shapeElement->FirstChildElement("height")->FloatText() : 1.0f;
+				break;
+			}
 		}
 	}
 
@@ -614,6 +626,20 @@ private:
 		{
 			physicsPtr->addTrigger(collisionTrigger);
 		}
+	}
+
+	/*
+		Utility method to load kinematic controllers.
+	*/
+	static void loadController(shared_ptr<Physics>& physics, shared_ptr<GameObject> gameObject, tinyxml2::XMLElement* controllerElement)
+	{
+		ShapeData shapeData;
+		readShapeData(controllerElement, shapeData);
+		bool flip = controllerElement->FirstChildElement("flip") != NULL ? controllerElement->FirstChildElement("flip")->BoolText() : false;
+		float offset = controllerElement->FirstChildElement("offset") != NULL ? controllerElement->FirstChildElement("offset")->FloatText() : 0.0f;
+		shared_ptr<ControllerComponent> controller = std::make_shared<ControllerComponent>(physics, gameObject, shapeData, offset, flip);
+		gameObject->AddComponent(controller, ComponentType::CONTROLLER);
+
 	}
 
 	/*

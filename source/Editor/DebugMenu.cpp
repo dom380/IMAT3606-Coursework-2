@@ -320,13 +320,36 @@ bool DebugMenu::saveCurrentLevel(string fileName)
 	*/
 	for (int x = 0; x < gameScreen->getGameObjects().size(); x++)
 	{
-		FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, gameScreen->getGameObjects()[x], gameScreen);
-		//If there is a new object not saved on file
-		if (x >= numberOfObjectsInFile)
+		if (gameScreen->getGameObjects().at(x)->HasComponent(ComponentType::MODEL))
 		{
-			//addto
-			if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getGameObjects()[x], gameScreen))
+			if (!gameScreen->getGameObjects().at(x)->getModel()->isDrawing())
 			{
+				FileSaver::DeleteObjectFromFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getGameObjects()[x], gameScreen);
+			}
+			else
+			{
+				FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, gameScreen->getGameObjects()[x], gameScreen);
+				//If there is a new object not saved on file
+				if (x >= numberOfObjectsInFile)
+				{
+					//addto
+					if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getGameObjects()[x], gameScreen))
+					{
+					}
+				}
+			}
+		}
+		
+		else
+		{
+			FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, gameScreen->getGameObjects()[x], gameScreen);
+			//If there is a new object not saved on file
+			if (x >= numberOfObjectsInFile)
+			{
+				//addto
+				if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getGameObjects()[x], gameScreen))
+				{
+				}
 			}
 		}
 	}

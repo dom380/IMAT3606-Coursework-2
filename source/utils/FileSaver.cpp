@@ -490,6 +490,48 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 	return true;
 }
 
+bool FileSaver::DeleteObjectFromFile(tinyxml2::XMLDocument * doc, int iObjectCount, shared_ptr<GameObject> go, shared_ptr<GameScreen> gameScreen)
+{
+
+	tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");
+	bool SkipObject = false;
+	int XMLObjectCount = 0;
+	const char* type = screenElement->Attribute("type");
+	if (string(type) == string("level")) {
+		tinyxml2::XMLElement* gameObjsElement = screenElement->FirstChildElement("gameObjects");
+		tinyxml2::XMLElement* gameObjectElement = gameObjsElement->FirstChildElement();
+		//iterate through gos until object count = xml count
+		while (gameObjectElement != NULL)
+		{
+			/*
+			If XML object count != the object count
+			and the object name is the same then skip.
+			Used for objects with the same name.
+			*/
+
+			if (go->HasComponent(ComponentType::MODEL))
+			{
+				auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
+				//check for objects with the same name (multiple wall.obj for example)
+				if (XMLObjectCount != iObjectCount)
+				{
+				}
+				else
+				{
+					//delete object from file.
+					gameObjsElement->DeleteChild(gameObjectElement);
+					return true;
+				}
+			}
+
+			XMLObjectCount++;
+			gameObjectElement = gameObjectElement->NextSiblingElement();
+		}
+	}
+	//could not delete obj, not found
+	return false;
+}
+
 
 bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* transformElement, Transform* transform)
 {
@@ -540,7 +582,7 @@ bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement
 			transformAngle = glm::degrees(glm::angle(transform->orientation));
 			
 			//If there is a rotation applied.
-			if ((int)transformAngle == 0)
+			if ((int)transformAngle == 0 || transform->orientation[3] == 0)
 			{
 				break;
 			}

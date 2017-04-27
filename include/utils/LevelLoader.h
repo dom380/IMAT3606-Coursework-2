@@ -343,7 +343,10 @@ private:
 			string ID = "";
 			tinyxml2::XMLElement* UIID = UIDocElement->FirstChildElement("ID");
 			if (UIID)
-				ID = string(UIID->GetText());
+			{
+				UIID->GetText() ? ID = string(UIID->GetText()) : ID = "";
+			}
+				
 			tinyxml2::XMLElement* UITexture;
 
 			

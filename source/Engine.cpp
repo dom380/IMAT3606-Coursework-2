@@ -52,12 +52,12 @@ void Engine::init()
 	physics = buildPhysics(physicsImplementation);
 	physics->init();
 
-	engineState = std::make_shared<EngineState>();
-	inputHandler->registerKeyListener(engineState);
+	
 
 	loadFirstLevel();
 
 	DebugMenu::getInstance()->init();
+	engineState = std::make_shared<EngineState>();
 }
 
 void Engine::mainLoop()

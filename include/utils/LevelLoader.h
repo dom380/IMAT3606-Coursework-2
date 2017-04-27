@@ -312,7 +312,7 @@ private:
 		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
 		shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>(engine->getWindowWidth(), engine->getWindowHeight(), 45.f);
 		shared_ptr<GameScreen> gameScreen = std::make_shared<GameScreen>(renderer, input, engine->getPhysics(), camera);
-		//input->setKeyFocus(gameScreen);
+		input->setKeyFocus(gameScreen);
 		gameScreen->setID(screenElement->Attribute("name"));
 		gameScreen->setXMLDocument(screenDocument);
 		gameScreen->setXMLFilePath(filepath);

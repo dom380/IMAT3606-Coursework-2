@@ -6,6 +6,7 @@
 #include <vector>
 using std::vector;
 #include <Graphics\Material.h>
+#include <Graphics\ModelData.h>
 #include <Physics\ConvexHull.h>
 #include <memory>
 using std::shared_ptr;
@@ -26,6 +27,8 @@ public:
 	virtual void readFile(const char * filePath, vector<glm::vec4>& vertices, vector<glm::vec3>& normals, vector<glm::vec2>& textures, vector<unsigned short>&indices, Material& material, vector<glm::vec4>& points) = 0;
 
 	virtual void readFile(const char * filePath, shared_ptr<vector<ConvexHull>>& convexHulls) = 0;
+
+	virtual vector<shared_ptr<ModelData>> readFile(const char * filePath) = 0;
 };
 
 #endif // !MODELFILEREADER_H

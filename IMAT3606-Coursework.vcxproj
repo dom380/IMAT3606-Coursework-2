@@ -154,6 +154,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="include\EngineState.cpp" />
+    <ClCompile Include="include\Graphics\ModelData.cpp" />
     <ClCompile Include="include\GUI\UIManager.cpp" />
     <ClCompile Include="include\GUI\UITextureElement.cpp" />
     <ClCompile Include="source\Animation\Math3D.cpp" />
@@ -198,6 +199,7 @@
     <ClCompile Include="source\Robot.cpp" />
     <ClCompile Include="source\Screens\GameScreen.cpp" />
     <ClCompile Include="source\Screens\MenuScreen.cpp" />
+    <ClCompile Include="source\utils\AssimpReader.cpp" />
     <ClCompile Include="source\utils\DebugUtils.cpp" />
     <ClCompile Include="source\utils\DirectoryReader.cpp" />
     <ClCompile Include="source\Scripting\LuaStateHolder.cpp" />
@@ -294,6 +296,7 @@
     <ClInclude Include="include\Screens\Screen.h" />
     <ClInclude Include="include\Scripting\LuaStateHolder.h" />
     <ClInclude Include="include\Scripting\ScriptEngine.h" />
+    <ClInclude Include="include\utils\AssimpReader.h" />
     <ClInclude Include="include\utils\DaeReader.h" />
     <ClInclude Include="include\utils\DebugUtils.h" />
     <ClInclude Include="include\utils\DirectoryReader.h" />

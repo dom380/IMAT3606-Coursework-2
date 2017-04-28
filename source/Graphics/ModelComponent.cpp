@@ -13,10 +13,7 @@ ModelComponent::~ModelComponent() {
 void ModelComponent::init(const char * objFile, const char * textureFile, string id)
 {
 	if (initalised) return;
-	shared_ptr<ModelData> modelData = AssetManager::getInstance()->getModelData(objFile, graphics);
-	vboHandles = modelData->vboHandles;
-
-	
+	modelData = AssetManager::getInstance()->getModelData(objFile, graphics);	
 	// Load the texture
 	if (textureFile == NULL)
 	{
@@ -27,13 +24,13 @@ void ModelComponent::init(const char * objFile, const char * textureFile, string
 		textureName = textureFile;
 		texture = AssetManager::getInstance()->getTexture(textureFile);
 	}
-		
-	indexSize = modelData->indexSize;
-	material = modelData->material;
-
-	if (material.used)
+	if (modelData.at(0)->material.used)
 	{
 		shader = AssetManager::getInstance()->getShader(std::pair<string, string>("phong.vert", "phong.frag"));
+		for (auto mesh : modelData)
+		{
+			materials.push_back(mesh->material);
+		}
 	}
 	else
 	{
@@ -75,8 +72,11 @@ void ModelComponent::RecieveMessage(Message * msg)
 		case MsgType::MATERIAL:
 		{
 			MaterialMessage* matMsg = ((MaterialMessage *)msg);
-			material.Kd = matMsg->material.Kd;
-			material.Ka = matMsg->material.Ka;
+			for (int i = 0; i < materials.size(); ++i)
+			{
+				materials.at(i).Kd = matMsg->material.Kd;
+				materials.at(i).Ka = matMsg->material.Ka;
+			}
 		}
 		break;
 	}
@@ -103,23 +103,6 @@ void ModelComponent::render(shared_ptr<Camera>& camera, unsigned int lightingBuf
 shared_ptr<Texture> ModelComponent::getTexture()
 {
 	return texture;
-}
-
-unsigned int ModelComponent::getVertArray()
-{
-	if (vaoHandle != 0) return vaoHandle;
-	vaoHandle = graphics->createVertexArrayObject(vboHandles);
-	return vaoHandle;
-}
-
-size_t ModelComponent::getIndexSize()
-{
-	return indexSize;
-}
-
-Material ModelComponent::getMaterial()
-{
-	return material;
 }
 
 Transform * ModelComponent::getTransform()
@@ -155,6 +138,16 @@ void ModelComponent::toggleDrawing()
 bool ModelComponent::isDrawing()
 {
 	return drawing;
+}
+
+vector<shared_ptr<ModelData>> ModelComponent::getData()
+{
+	return modelData;
+}
+
+vector<Material> ModelComponent::getMaterials()
+{
+	return materials;
 }
 
 

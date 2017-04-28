@@ -59,23 +59,20 @@ shared_ptr<Shader> AssetManager::getShader(std::pair<string, string> shaderName)
 	return shader;
 }
 
-shared_ptr<ModelData> AssetManager::getModelData(const char * fileName, shared_ptr<Graphics> graphics)
+vector<shared_ptr<ModelData>> AssetManager::getModelData(const char * fileName, shared_ptr<Graphics> graphics)
 {
 	auto it = modelData.find(fileName);
 	if (it != modelData.end())
 	{
 		return it->second;
 	}
-	shared_ptr<ModelData> data = std::make_shared<ModelData>();
 	string fullPath = buildFilePath(ResourceType::MODEL, fileName);
-	vector<glm::vec4> vertices, points; vector<glm::vec3> normals; vector<glm::vec2> textures; vector<unsigned short>indices;
-	readModelFile(fullPath, vertices, normals, textures, indices, data, points);
-	data->vboHandles = graphics->bufferModelData(vertices, normals, textures, indices, data->vaoHandle);
-	data->indexSize = indices.size();
-	data->vertices = vertices;
-	data->points = points;
-	data->indices = indices;
-	modelData.emplace(std::pair<string, shared_ptr<ModelData>>(fileName, data));
+	auto data = readModelFile(fullPath);
+	for (auto mesh : data)
+	{
+		graphics->bufferModelData(mesh);
+	}
+	modelData.emplace(std::pair<string, vector<shared_ptr<ModelData>>>(fileName, data));
 	return data;
 }
 
@@ -191,7 +188,8 @@ void AssetManager::readModelFile(string fullPath, vector<glm::vec4>& vertices, v
 {
 	string fileExtension = getFileExt(fullPath);
 	if (fileExtension == string("obj")) {
-		modelFileReader = std::make_shared<ObjReader>();
+		//modelFileReader = std::make_shared<ObjReader>();
+		modelFileReader = std::make_shared<AssimpReader>();
 		modelFileReader->readFile(fullPath.c_str(), vertices, normals, textures, indices, data->material, points);
 	}
 	else if (fileExtension == string("dae"))
@@ -208,6 +206,12 @@ void AssetManager::readModelFile(string fullPath, vector<glm::vec4>& vertices, v
 	{
 		std::cerr << "Unsupported file format" << fullPath << std::endl;
 	}
+}
+
+vector<shared_ptr<ModelData>> AssetManager::readModelFile(string fullPath)
+{
+	modelFileReader = std::make_shared<AssimpReader>();
+	return modelFileReader->readFile(fullPath.c_str());
 }
 
 void AssetManager::readCollisionFile(string fullPath, shared_ptr<vector<ConvexHull>>& convexHulls)

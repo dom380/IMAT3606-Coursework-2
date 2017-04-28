@@ -1,8 +1,8 @@
 #version 430
 
 layout (location=0) in vec4 vertPosition;
-layout (location=1) in vec2 fragTexCoord;
-layout (location=2) in vec3 normal;
+layout (location=1) in vec3 normal;
+layout (location=2) in vec2 fragTexCoord;
 
 out vec2 texCoord;
 out vec3 Normal;

@@ -63,6 +63,10 @@ public:
 	vector<unsigned int> bufferModelData(vector<glm::vec4>& vertices, vector<glm::vec3>& normals, vector<glm::vec2>& textures,
 		vector<unsigned short>& indices, unsigned int& vaoHandle);
 	/*
+		Bufferes the requested Model data. See interface for details.
+	*/
+	void bufferModelData(shared_ptr<ModelData> data);
+	/*
 		Buffers the requrest Lighting data into a Uniform block. See interface for details.
 	*/
 	void bufferLightingData(vector<Light>& lights, shared_ptr<Shader> &shader, unsigned int& uniformBuffer,

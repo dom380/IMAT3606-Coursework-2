@@ -514,7 +514,7 @@ private:
 			if (convex)
 			{
 				auto mesh = AssetManager::getInstance()->getModelData(meshFile, graphics);
-				physComp = std::make_shared<PhysicsComponent>(physics, std::weak_ptr<GameObject>(gameObject), mesh, mass, convex);
+				physComp = std::make_shared<PhysicsComponent>(physics, std::weak_ptr<GameObject>(gameObject), mesh.at(0), mass, convex);
 			}
 			else
 			{

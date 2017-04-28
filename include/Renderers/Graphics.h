@@ -13,6 +13,7 @@ class Font;
 class ModelComponent;
 class UIElement;
 class AnimatedModelComponent;
+class ModelData;
 /*
 	Interface for the Graphics system.
 */
@@ -50,6 +51,11 @@ public:
 	*/
 	virtual vector<unsigned int> bufferModelData(vector<glm::vec4>& vertices, vector<glm::vec3>& normals, vector<glm::vec2>& textures,
 		vector<unsigned short>& indices, unsigned int& vaoHandle) = 0;
+	/*
+		Build the requested vertex buffer(s)
+		shared_ptr<ModelData> data - A std::shared_ptr to a ModelData object containing the vertex, indices and material data.
+	*/
+	virtual void bufferModelData(shared_ptr<ModelData> data) = 0;
 	/*
 		Build the requested lighting data buffer.
 		vector<Light>& lights, A std::vector of Lights to buffered.

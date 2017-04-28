@@ -1628,26 +1628,27 @@
 				</component>
 			</components>
 		</gameObject>
-		<gameObject>
-			<components>
-				<component type ="model">
-					<file>oven.obj</file>
-					<texture>oven.png</texture>
-				</component>
-				<component type="transform">
-					<position>
-						<x>1.0</x>
-						<y>0.0</y>
-						<z>-50.0</z>
-					</position>
-					<scale>
-						<x>1.0</x>
-						<y>1.0</y>
-						<z>1.0</z>
-					</scale>
-				</component>
-			</components>
-		</gameObject>
+		<!-- This obj is messed up -->
+		<!-- <gameObject> -->
+			<!-- <components> -->
+				<!-- <component type ="model"> -->
+					<!-- <file>oven.obj</file> -->
+					<!-- <texture>oven.png</texture> -->
+				<!-- </component> -->
+				<!-- <component type="transform"> -->
+					<!-- <position> -->
+						<!-- <x>1.0</x> -->
+						<!-- <y>0.0</y> -->
+						<!-- <z>-50.0</z> -->
+					<!-- </position> -->
+					<!-- <scale> -->
+						<!-- <x>1.0</x> -->
+						<!-- <y>1.0</y> -->
+						<!-- <z>1.0</z> -->
+					<!-- </scale> -->
+				<!-- </component> -->
+			<!-- </components> -->
+		<!-- </gameObject> -->
 		<gameObject>
 			<components>
 				<component type ="model">

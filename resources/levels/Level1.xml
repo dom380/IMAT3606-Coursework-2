@@ -3,7 +3,7 @@
 		 <gameObject>
       		<components>
         		<component type="animation">
-          			<!-- fbx files-->
+          			<!-- fbx files  -->
           			<default>LegoRun</default>
           			<files>
             			<file>
@@ -30,20 +30,20 @@
 		            	<w>90</w>
           			</orientation>
         		</component>
-      	</components>
-    </gameObject>
-    <gameObject>
-      <components>
-        	<component type="animation">
-          		<!-- fbx files-->
-          		<default>EnemyAttack</default>
-          		<files>
-            		<file>
-              			<id>EnemyAttack</id>
-              			<filePath>resources/models/Animations/enemy@attack.fbx</filePath>
-            		</file>
-          		</files>
-        	</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type="animation">
+					<!-- fbx files  -->
+					<default>EnemyAttack</default>
+					<files>
+						<file>
+							<id>EnemyAttack</id>
+							<filePath>resources/models/Animations/enemy@attack.fbx</filePath>
+						</file>
+					</files>
+				</component>
         	<component type="transform">
           			<position>
             			<x>10.0</x>
@@ -64,6 +64,21 @@
         		</component>
       		</components>
     	</gameObject>
+		<gameObject>
+            <components>
+                <component type="model" id="test.obj">
+                    <file>test.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                </component>
+            </components>
+        </gameObject>
         <gameObject>
             <components>
                 <component type="model" id="wall.obj">
@@ -297,27 +312,27 @@
                 </component>
             </components>
         </gameObject>
-        <gameObject>
-            <components>
-                <component type="model" id="oven.obj">
-                    <file>oven.obj</file>
-                    <texture>oven.png</texture>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>1</x>
-                        <y>0</y>
-                        <z>-50</z>
-                    </position>
-                    <scale>
-                        <x>1</x>
-                        <y>1</y>
-                        <z>1</z>
-                    </scale>
-                </component>
-            </components>
-        </gameObject>
+        <!-- <gameObject> -->
+            <!-- <components> -->
+                <!-- <component type="model" id="oven.obj"> -->
+                    <!-- <file>oven.obj</file> -->
+                    <!-- <texture>oven.png</texture> -->
+                    <!-- <active>true</active> -->
+                <!-- </component> -->
+                <!-- <component type="transform"> -->
+                    <!-- <position> -->
+                        <!-- <x>1</x> -->
+                        <!-- <y>0</y> -->
+                        <!-- <z>-50</z> -->
+                    <!-- </position> -->
+                    <!-- <scale> -->
+                        <!-- <x>1</x> -->
+                        <!-- <y>1</y> -->
+                        <!-- <z>1</z> -->
+                    <!-- </scale> -->
+                <!-- </component> -->
+            <!-- </components> -->
+        <!-- </gameObject> -->
         <gameObject>
             <components>
                 <component type="model" id="worktop.obj">

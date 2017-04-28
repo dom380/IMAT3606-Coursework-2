@@ -53,19 +53,7 @@ public:
 		Returns a pointer to the models texture. Can be null.
 	*/
 	shared_ptr<Texture> getTexture();
-	/*
-		Returns the ID of the VertexArrayObject containing this models data on the GPU.
-		If the VertexArrayObject has not been created at this point it will be build and returned here.
-	*/
-	unsigned int getVertArray();
-	/*
-		Returns the number of indices of this model.
-	*/
-	size_t getIndexSize();
-	/*
-		Returns the models material.
-	*/
-	Material getMaterial();
+
 	/*
 		Returns a Handle to the GameObject's Transform this model belongs to.
 	*/
@@ -99,30 +87,32 @@ public:
 		Returns true if drawing enabled.
 	*/
 	bool isDrawing();
+
+	/*
+		Returns a vector of pointers to this models meshes.
+	*/
+	vector<shared_ptr<ModelData>> getData();
+	/*
+		Returns this models materials.
+	*/
+	vector<Material> getMaterials();
 private:
 	//Private Methods
 	//Calls to Graphics system to render this model. Parameters supplied by RENDER messages. (see RecieveMessage())
-	void render(shared_ptr<Camera>& camera);
-	void render(shared_ptr<Camera>& camera, vector<Light> lights);
+	void render(shared_ptr<Camera>& camera);//!!DEPRECATED
+	void render(shared_ptr<Camera>& camera, vector<Light> lights);//!!DEPRECATED
 	void render(shared_ptr<Camera>& camera, unsigned int lightingBuffer, unsigned int lightingBlockId);
 	//Private members
 	bool initalised = false;
 	shared_ptr<Graphics> graphics;
 	std::weak_ptr<GameObject> owner;
-	unsigned int verticesId;
-	unsigned int texCoordsId;
-	unsigned int normalsId;
-	unsigned int indexId;
-	unsigned int textureId;
-
-	size_t indexSize;
-
+	vector<shared_ptr<ModelData>> modelData;
+	vector<Material> materials;
 	vector<unsigned int> vboHandles;
 	unsigned int vaoHandle = 0;
 	shared_ptr<Shader> shader;
 	shared_ptr<Texture> texture;
 	string textureName;
-	Material material;
 	string id;
 	string objFileName;
 	bool drawing = true;

@@ -304,8 +304,13 @@ void DebugMenu::debugGameObjectsMenu()
 					}
 					ImGui::PopID();
 				}
+				
 			}
 			ImGui::TreePop();
+			if (ImGui::Button("Duplicate"))
+			{
+				LevelLoader::duplicateGameObject(gameScreen, gameScreen->getGameObjects()[x]);
+			}
 		}
 		ImGui::PopID();
 	}

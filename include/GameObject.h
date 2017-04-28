@@ -33,6 +33,15 @@ public:
 	*/
 	GameObject(std::shared_ptr<ComponentStore> componentStore, GameObjectTag tag);
 
+	GameObject& operator=(GameObject& other) {
+		this->id = other.id;
+		this->tag = other.tag;
+		this->typeParser = other.typeParser;
+		this->tagParser = other.tagParser;
+		this->guidGen = other.guidGen;
+		this->componentStore = other.componentStore;
+		
+	}
 	/*
 		Returns the handle to the component of specified type.
 		If Object doesn't have the specified component type an empty handle is return;

@@ -85,7 +85,10 @@ void Engine::mainLoop()
 			physics->update(deltaTime);
 		}
 
-		renderer->prepare();
+		renderer->prepare(1);
+		activeScreen.second->render();
+
+		renderer->prepare(2);
 		activeScreen.second->render();
 
 		DebugMenu::getInstance()->render();

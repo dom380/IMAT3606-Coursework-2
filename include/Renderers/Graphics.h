@@ -24,7 +24,7 @@ public:
 		Implementations can use this for per frame initialisation 
 		e.g. clearing colour buffers etc.
 	*/
-	virtual void prepare() = 0;
+	virtual void prepare(int passIndex) = 0;
 	/*	
 		Initialisation method called on start up.
 		Implementations should perform one off and time consuming initalisation here.
@@ -138,6 +138,8 @@ public:
 		Enable or disable v-sync
 	*/
 	virtual void setVSync(bool flag) = 0;
+
+	void initShadowFramebuffer() = 0;
 
 	/*
 		Method called on engine shutdown. 

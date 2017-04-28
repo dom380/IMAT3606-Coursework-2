@@ -36,7 +36,7 @@ public:
 	/*
 		Clears the Depth and Colour buffers,
 	*/
-	void prepare();
+	void prepare(int passIndex);
 	/*
 		Cleans up any resources.
 	*/

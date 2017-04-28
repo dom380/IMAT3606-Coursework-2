@@ -35,7 +35,7 @@ bool RenderGL::init()
 	//glEnable(GL_CULL_FACE);
 	glDepthFunc(GL_LEQUAL);
 
-	//shared_ptr<Shader> shadowDepth = AssetManager::getInstance()->getShader(std::make_tuple("shadows_depth.vert", "shadows_depth.frag", "shadows_depth.gs"));
+	shared_ptr<Shader> shadowDepth = AssetManager::getInstance()->getShader(std::make_tuple("shadows_depth.vert", "shadows_depth.frag", "shadows_depth.gs"));
 
 	shared_ptr<Shader> shader = AssetManager::getInstance()->getShader(std::make_tuple("shadows.vert", "shadows.frag", ""));// ->initialiseBoneUniforms();
 	shader->initialiseBoneUniforms();
@@ -51,9 +51,60 @@ bool RenderGL::init()
 	return true;
 }
 
-void RenderGL::prepare()
+void RenderGL::prepare(int passIndex)
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glm::vec3 lightPos = glm::vec3(0, 0, 0);
+
+	if (passIndex == 1)
+	{
+		// 0. Create depth cubemap transformation matrices
+		GLfloat aspect = (GLfloat)SHADOWMAP_WIDTH / (GLfloat)SHADOWMAP_HEIGHT;
+		glm::mat4 shadowProj = glm::perspective(90.0f, aspect, 0.1f, 1000.f);
+		std::vector<glm::mat4> shadowTransforms;
+		shadowTransforms.push_back(shadowProj * glm::lookAt(glm::vec3(0,0,0), glm::vec3(0, 0, 0) + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
+		shadowTransforms.push_back(shadowProj * glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0) + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
+		shadowTransforms.push_back(shadowProj * glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0) + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
+		shadowTransforms.push_back(shadowProj * glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0) + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0)));
+		shadowTransforms.push_back(shadowProj * glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0) + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0)));
+		shadowTransforms.push_back(shadowProj * glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0) + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0)));
+
+		// 1. Render scene to depth cubemap
+		glViewport(0, 0, SHADOWMAP_WIDTH, SHADOWMAP_HEIGHT);
+		glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		std::shared_ptr<Shader> simpleDepthShader = AssetManager::getInstance()->getShader(std::make_tuple("shadows_depth.vert", "shadows_depth.frag", "shadows_depth.gs"));
+		simpleDepthShader->bindShader();
+		for (GLuint i = 0; i < 6; ++i)
+			simpleDepthShader->setUniform(("shadowMatrices[" + std::to_string(i) + "]").c_str(), shadowTransforms[i]);
+
+		simpleDepthShader->setUniform("far_plane", 1000.f);
+		simpleDepthShader->setUniform("lightPos", &lightPos[0]);
+	}
+	else if (passIndex == 2)
+	{
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		// 2. Render scene as normal 
+		glViewport(0, 0, 800, 600);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		shader.Use();
+		glm::mat4 projection = glm::perspective(camera.Zoom, (float)800 / (float)600, 0.1f, 100.0f);
+		glm::mat4 view = camera.GetViewMatrix();
+		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
+		// Set light uniforms
+		glUniform3fv(glGetUniformLocation(shader.Program, "lightPos"), 1, &lightPos[0]);
+		glUniform3fv(glGetUniformLocation(shader.Program, "viewPos"), 1, &camera.Position[0]);
+		// Enable/Disable shadows by pressing 'SPACE'
+		glUniform1f(glGetUniformLocation(shader.Program, "far_plane"), 1000.f);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, woodTexture);
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, depthCubemap);
+	}
+
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void RenderGL::exit() {

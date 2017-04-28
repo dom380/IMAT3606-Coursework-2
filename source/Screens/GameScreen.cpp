@@ -79,7 +79,6 @@ void GameScreen::update(double dt, double currentTime)
 
 void GameScreen::render()
 {
-	
 	shared_ptr<Camera> camera = cameras.at(activeCamera);
 	robot->DrawRobot(camera->getView(), camera->getProjection());
 	Message* renderMsg = new RenderMessage(camera, lightingBufferId, lightingBlockId);
@@ -90,7 +89,7 @@ void GameScreen::render()
 		if(it->first != -1)
 			it->second.RecieveMessage(renderMsg);
 	}
-
+	 
 	std::vector<std::pair<int, AnimatedModelComponent>>* animations = componentStore->getAllComponents<AnimatedModelComponent>(ComponentType::ANIMATION);
 	std::vector<std::pair<int, AnimatedModelComponent>>::iterator animIt;
 	for (animIt = animations->begin(); animIt != animations->end(); ++animIt)

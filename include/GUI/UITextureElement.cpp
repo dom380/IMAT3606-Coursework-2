@@ -3,6 +3,7 @@
 UITextureElement::UITextureElement(shared_ptr<Graphics>& engineGraphics, shared_ptr<Transform>& passedTransform, const char * id, const char * passedTextureName)
 {
 	haveVAO = false;
+	active = true;
 	graphics = engineGraphics;
 	transform = passedTransform;
 	updateModelUsingTransform();

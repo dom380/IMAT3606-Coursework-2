@@ -10,6 +10,7 @@ TextBox::TextBox(string text, Font textfont, shared_ptr<Transform> pos, shared_p
 	this->transform = pos;
 	this->charX = pos->position.x;
 	this->charY = pos->position.y;
+	this->active = true;
 	init();
 }
 
@@ -23,6 +24,7 @@ TextBox::TextBox(const char * text, Font textfont, shared_ptr<Transform> pos, sh
 	this->transform = pos;
 	this->charX = pos->position.x;
 	this->charY = pos->position.y;
+	this->active = true;
 	init();
 }
 
@@ -38,6 +40,7 @@ TextBox & TextBox::operator=(TextBox & other)
 	this->font = other.font;
 	this->graphics = other.graphics;
 	this->textColour = other.textColour;
+	this->active = other.active;
 	return *this;
 }
 

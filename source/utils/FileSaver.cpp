@@ -28,7 +28,7 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 					and the object name is the same then skip.
 					Used for objects with the same name.
 				*/
-				if (!SkipObject)
+				if (XMLObjectCount == iObjectCount)
 				{
 					tinyxml2::XMLElement* componentElement = gameObjElement->FirstChildElement("components")->FirstChildElement();
 					/*
@@ -124,10 +124,10 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 											/*
 											 Iterate through all inner transforms and their xyz and update doc
 											*/
-											auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
-											if (!model)
+											auto transform = gameScreen->getComponentStore()->getComponent<Transform>(go->GetComponentHandle(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
+											if (!transform)
 												return false;
-											UpdateTransform(doc, componentElement, model->getTransform());
+											UpdateTransform(doc, componentElement, transform);
 											break;
 										}
 									}
@@ -138,6 +138,10 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 					}
 				}
 				XMLObjectCount++;
+				if (XMLObjectCount > iObjectCount)
+				{
+					return true;
+				}
 				SkipObject = false;
 				gameObjElement = gameObjElement->NextSiblingElement();
 			}
@@ -627,7 +631,7 @@ bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement
 			transformAngle = glm::degrees(glm::angle(transform->orientation));
 			
 			//If there is a rotation applied.
-			if ((int)transformAngle == 0 || transform->orientation[3] == 0)
+			if ((int)transformAngle == 0 || (int)transform->orientation[3] == 1)
 			{
 				break;
 			}

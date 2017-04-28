@@ -296,7 +296,8 @@ void DebugMenu::debugGameObjectsMenu()
 							gameObjectsMenuLogic();
 							break;
 						case ComponentType::TRANSFORM:
-							gameObjectsMenuTransform(i, model->getTransform());
+							auto transform = gameScreen->getComponentStore()->getComponent<Transform>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
+							gameObjectsMenuTransform(i, transform);
 							break;
 						}
 						ImGui::TreePop();

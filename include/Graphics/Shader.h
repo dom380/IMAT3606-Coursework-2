@@ -130,6 +130,12 @@ public:
 	void bindAttribLocation(GLuint location, const char* name);
 	void bindFragDataLocation(GLuint location, const char* name);
 	void setUniformIndex(unsigned int Index, const Matrix4f& matIn);
+	
+	GLuint getSubroutineHandle(GLenum shaderType, const char* name)
+	{
+		return glGetSubroutineIndex(programHandle, shaderType, name);
+	}
+	
 	void initialiseBoneUniforms();
 
 private:

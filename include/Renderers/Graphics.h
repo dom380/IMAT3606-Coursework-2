@@ -139,7 +139,7 @@ public:
 	*/
 	virtual void setVSync(bool flag) = 0;
 
-	void initShadowFramebuffer() = 0;
+	virtual void initShadowFramebuffer() = 0;
 
 	/*
 		Method called on engine shutdown. 

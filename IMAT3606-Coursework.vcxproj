@@ -313,9 +313,6 @@
     <None Include="shaders\phong.vert" />
     <None Include="shaders\phong_no_texture.frag" />
     <None Include="shaders\phong_no_texture.vert" />
-    <None Include="shaders\shadows_depth.frag" />
-    <None Include="shaders\shadows_depth.gs" />
-    <None Include="shaders\shadows_depth.vert" />
     <None Include="shaders\text.frag" />
     <None Include="shaders\text.vert" />
   </ItemGroup>

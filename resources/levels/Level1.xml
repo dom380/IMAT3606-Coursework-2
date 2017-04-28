@@ -64,7 +64,7 @@
         		</component>
       		</components>
     	</gameObject>
-        <gameObject>
+        <!--<gameObject>
             <components>
                 <component type="model" id="wall.obj">
                     <file>wall.obj</file>
@@ -233,7 +233,7 @@
                     </orientation>
                 </component>
             </components>
-        </gameObject>
+        </gameObject>-->
         <gameObject>
             <components>
                 <component type="model" id="ground.obj">
@@ -871,7 +871,7 @@
         </light>-->
         <light>
             <position>
-                <x>0.0</x>
+                <x>15.0</x>
                 <y>15.0</y>
                 <z>0.0</z>
             </position>

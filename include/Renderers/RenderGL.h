@@ -119,7 +119,20 @@ private:
 	unsigned int currBindingPoint = 0;
 	glm::mat4 modelMat = glm::mat4();
 
-	GLuint shadowFBO, depthCubemap;
+	GLuint shadowFBO, pass1Index, pass2Index;
+	glm::mat4 lightPV;
+	glm::mat4 shadowBias;
+	int currentPass;
+
+	void configureMatrices(shared_ptr<Shader>& shaderProgram, glm::mat4 model, glm::mat4 view, glm::mat4 projection)
+	{
+		glm::mat4 mv = view * model;
+		shaderProgram->setUniform("view", view);
+		shaderProgram->setUniform("model", model);
+		shaderProgram->setUniform("projection", projection);
+		shaderProgram->setUniform("normal", glm::mat3(glm::vec3(mv[0]), glm::vec3(mv[1]), glm::vec3(mv[2])));
+		shaderProgram->setUniform("ShadowMatrix", lightPV * model);
+	}
 };
 
 #endif // !RENDERGL_H

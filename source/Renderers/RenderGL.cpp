@@ -35,16 +35,26 @@ bool RenderGL::init()
 	//glEnable(GL_CULL_FACE);
 	glDepthFunc(GL_LEQUAL);
 
-	shared_ptr<Shader> shadowDepth = AssetManager::getInstance()->getShader(std::make_tuple("shadows_depth.vert", "shadows_depth.frag", "shadows_depth.gs"));
-
 	shared_ptr<Shader> shader = AssetManager::getInstance()->getShader(std::make_tuple("shadows.vert", "shadows.frag", ""));// ->initialiseBoneUniforms();
 	shader->initialiseBoneUniforms();
 	shader->bindShader();
-	//shader->setUniform("tex", 0);
-	shader->setUniform("isTextured", false);
-	//shader->setUniform("depthMap", 1);
 
 	//this->initShadowFramebuffer(); //initialise framebuffer object for shadows to be enabled
+	//shader->setUniform("ShadowMap", 1); //set to 0
+
+	//pass1Index = shader->getSubroutineHandle(GL_FRAGMENT_SHADER, "recordDepth");
+	//pass2Index = shader->getSubroutineHandle(GL_FRAGMENT_SHADER, "shadeWithShadow");
+
+	//Shadow Bias Matrix
+	shadowBias = glm::mat4(glm::vec4(0.5f, 0.0f, 0.0f, 0.0f),
+		glm::vec4(0.0f, 0.5f, 0.0f, 0.0f),
+		glm::vec4(0.0f, 0.0f, 0.5f, 0.0f),
+		glm::vec4(0.5f, 0.5f, 0.5f, 1.0f)
+	);
+
+	glm::vec3 lightPos(10, 10, 0);
+	shader->setUniform("LightIntensity", glm::vec3(0.5f, 0.5f, 0.5f));
+	shader->setUniform("LightPosition", glm::vec4(lightPos, 1.0f));
 
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	modelMat = glm::translate(modelMat, glm::vec3(0.0f, 0.0f,0.0f));
@@ -53,58 +63,34 @@ bool RenderGL::init()
 
 void RenderGL::prepare(int passIndex)
 {
-	glm::vec3 lightPos = glm::vec3(0, 0, 0);
+	currentPass = passIndex;
 
-	if (passIndex == 1)
-	{
-		// 0. Create depth cubemap transformation matrices
-		GLfloat aspect = (GLfloat)SHADOWMAP_WIDTH / (GLfloat)SHADOWMAP_HEIGHT;
-		glm::mat4 shadowProj = glm::perspective(90.0f, aspect, 0.1f, 1000.f);
-		std::vector<glm::mat4> shadowTransforms;
-		shadowTransforms.push_back(shadowProj * glm::lookAt(glm::vec3(0,0,0), glm::vec3(0, 0, 0) + glm::vec3(1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
-		shadowTransforms.push_back(shadowProj * glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0) + glm::vec3(-1.0, 0.0, 0.0), glm::vec3(0.0, -1.0, 0.0)));
-		shadowTransforms.push_back(shadowProj * glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0) + glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.0, 0.0, 1.0)));
-		shadowTransforms.push_back(shadowProj * glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0) + glm::vec3(0.0, -1.0, 0.0), glm::vec3(0.0, 0.0, -1.0)));
-		shadowTransforms.push_back(shadowProj * glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0) + glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, -1.0, 0.0)));
-		shadowTransforms.push_back(shadowProj * glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0) + glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, -1.0, 0.0)));
+	//if (passIndex == 1)
+	//{
+	//	// Pass 1 (shadow map generation)
+	//	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
+	//	glClear(GL_DEPTH_BUFFER_BIT);
+	//	glViewport(0, 0, 1024, 1024);
+	//	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &pass1Index);
+	//	glEnable(GL_CULL_FACE);
+	//	glCullFace(GL_FRONT);
+	//	//drawScene(view, projection);
+	//	
+	//}
+	//else if (passIndex == 2)
+	//{
+	//	glFlush();
+	//	glFinish();
+	//	// Pass 2 (render the scene with shadows)
+	//	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//	glViewport(0, 0, width, height);
+	//	glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &pass2Index);
+	//	glDisable(GL_CULL_FACE);
+	//	//drawScene(camera.view(), camera.projection());
+	//}
 
-		// 1. Render scene to depth cubemap
-		glViewport(0, 0, SHADOWMAP_WIDTH, SHADOWMAP_HEIGHT);
-		glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
-		glClear(GL_DEPTH_BUFFER_BIT);
-
-		std::shared_ptr<Shader> simpleDepthShader = AssetManager::getInstance()->getShader(std::make_tuple("shadows_depth.vert", "shadows_depth.frag", "shadows_depth.gs"));
-		simpleDepthShader->bindShader();
-		for (GLuint i = 0; i < 6; ++i)
-			simpleDepthShader->setUniform(("shadowMatrices[" + std::to_string(i) + "]").c_str(), shadowTransforms[i]);
-
-		simpleDepthShader->setUniform("far_plane", 1000.f);
-		simpleDepthShader->setUniform("lightPos", &lightPos[0]);
-	}
-	else if (passIndex == 2)
-	{
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-		// 2. Render scene as normal 
-		glViewport(0, 0, 800, 600);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		shader.Use();
-		glm::mat4 projection = glm::perspective(camera.Zoom, (float)800 / (float)600, 0.1f, 100.0f);
-		glm::mat4 view = camera.GetViewMatrix();
-		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-		glUniformMatrix4fv(glGetUniformLocation(shader.Program, "view"), 1, GL_FALSE, glm::value_ptr(view));
-		// Set light uniforms
-		glUniform3fv(glGetUniformLocation(shader.Program, "lightPos"), 1, &lightPos[0]);
-		glUniform3fv(glGetUniformLocation(shader.Program, "viewPos"), 1, &camera.Position[0]);
-		// Enable/Disable shadows by pressing 'SPACE'
-		glUniform1f(glGetUniformLocation(shader.Program, "far_plane"), 1000.f);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, woodTexture);
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_CUBE_MAP, depthCubemap);
-	}
-
-	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void RenderGL::exit() {
@@ -445,12 +431,17 @@ void RenderGL::renderModel(ModelComponent & model, shared_ptr<Shader>& shaderPro
 	glm::quat orientation = transform->orientation;
 	glm::mat4 mMat = glm::translate(transform->position) * glm::mat4_cast(orientation) * glm::scale(transform->scale);
 
-	glm::mat4 mv = camera->getView() * mMat;
-	shaderProgram->setUniform("view", camera->getView());
-	shaderProgram->setUniform("projection", camera->getProjection());
-	shaderProgram->setUniform("model", mMat);
-	shaderProgram->setUniform("normal", glm::mat3(glm::vec3(mv[0]), glm::vec3(mv[1]), glm::vec3(mv[2])));
-	shaderProgram->setUniform("viewPos", camera->getPosition());
+	//if (currentPass == 1)
+	//{
+		glm::mat4 view = glm::lookAt(glm::vec3(0, 0, 0), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		glm::mat4 projection = glm::perspective(glm::radians(80.0f), 1.f, 1.f, 50.f);
+		lightPV = shadowBias * projection * view;
+		this->configureMatrices(shaderProgram, mMat, view, projection);
+	//}
+	//else if (currentPass == 2)
+	//{
+		this->configureMatrices(shaderProgram, mMat, camera->getView(), camera->getProjection());
+	//}
 
 	if (model.getMaterial().used)
 	{
@@ -489,11 +480,18 @@ void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& sh
 	glm::quat orientation = transform->orientation;
 	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::mat4_cast(orientation) * glm::scale(transform->scale);
 
-	glm::mat4 mv = camera->getView() * mMat;
-	shaderProgram->setUniform("view", camera->getView());
-	shaderProgram->setUniform("projection", camera->getProjection());
-	shaderProgram->setUniform("model", mMat);
-	shaderProgram->setUniform("normal", glm::mat3(glm::vec3(mv[0]), glm::vec3(mv[1]), glm::vec3(mv[2])));
+	//if (currentPass == 1)
+	//{
+	//	glm::mat4 view = glm::lookAt(glm::vec3(0,0,0), glm::vec3(0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	//	glm::mat4 projection = glm::perspective(glm::radians(80.0f), 1.f, 1.f, 1000.f);
+	//	lightPV = shadowBias * projection * view;
+	//	this->configureMatrices(shaderProgram, mMat, view, projection);
+	//}
+	//else if (currentPass == 2)
+	//{
+		this->configureMatrices(shaderProgram, mMat, camera->getView(), camera->getProjection());
+	//}
+
 	shaderProgram->setUniform("viewPos", camera->getPosition());
 
 	glBindBufferBase(GL_UNIFORM_BUFFER, lightingBlockId, lightingBuffer); //Bind lighting data
@@ -508,30 +506,40 @@ void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& sh
 
 void RenderGL::initShadowFramebuffer()
 {
-	//generate framebuffer object
+	GLfloat border[] = { 1.0f, 0.0f,0.0f,0.0f };
+
+	// The depth buffer texture
+	GLuint depthTex;
+	glGenTextures(1, &depthTex);
+	glBindTexture(GL_TEXTURE_2D, depthTex);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 5000, 5000, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, border);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_COMPARE_REF_TO_TEXTURE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_FUNC, GL_LESS);
+
+	// Assign the depth buffer texture to texture channel 0
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, depthTex);
+
+	// Create and set up the FBO
 	glGenFramebuffers(1, &shadowFBO);
-
-	// Create depth cubemap texture
-	glGenTextures(1, &depthCubemap);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, depthCubemap);
-
-	for (GLuint i = 0; i < 6; ++i) {
-		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_DEPTH_COMPONENT, SHADOWMAP_WIDTH, SHADOWMAP_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-	}
-	
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
-	// Attach cubemap as depth map FBO's color buffer
 	glBindFramebuffer(GL_FRAMEBUFFER, shadowFBO);
-	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, depthCubemap, 0);
-	glDrawBuffer(GL_NONE);
-	glReadBuffer(GL_NONE);
-	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-		std::cout << "Framebuffer not complete!" << std::endl;
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+		GL_TEXTURE_2D, depthTex, 0);
+
+	GLenum drawBuffers[] = { GL_NONE };
+	glDrawBuffers(1, drawBuffers);
+
+	GLenum result = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+	if (result == GL_FRAMEBUFFER_COMPLETE) {
+		printf("Framebuffer is complete.\n");
+	}
+	else {
+		printf("Framebuffer is not complete.\n");
 	}
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);

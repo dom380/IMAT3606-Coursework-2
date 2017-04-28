@@ -157,11 +157,16 @@ void GameScreen::dispose()
 		input->removeMouseListener(camera);
 		input->removeKeyListener(camera);
 	}
-	//input->removeKeyListener(robot);
+	input->setKeyFocus(nullptr);
+	for (auto element : uiElements)
+	{
+		input->removeKeyListener(element->getButton());
+		input->removeMouseListener(element->getButton());
+	}
 	gameObjects.clear();
 	lights.clear();
-	//robot.reset();
 	cameras.clear();
+	uiElements.clear();
 	componentStore.reset();
 }
 
@@ -181,12 +186,13 @@ void GameScreen::updateLighting()
 	renderer->bufferLightingData(lights, shader, lightingBufferId, lightingBlockId);
 }
 
-void GameScreen::handle(MouseEvent event)
+bool GameScreen::handle(MouseEvent& event)
 {
 	//NOP
+	return false;
 }
 
-void GameScreen::handle(KeyEvent event)
+bool GameScreen::handle(KeyEvent& event)
 {
 	if (event.type == KeyEventType::KEY_PRESSED)
 	{
@@ -194,7 +200,7 @@ void GameScreen::handle(KeyEvent event)
 		{
 			activeCamera++;
 			if (activeCamera >= cameras.size()) activeCamera = 0;
-			return;
+			return true;
 		}
 	}
 	if (activeCamera == 0)
@@ -207,6 +213,7 @@ void GameScreen::handle(KeyEvent event)
 	}
 	auto phyPtr = std::dynamic_pointer_cast<BulletPhysics>(physics);
 	if(phyPtr != nullptr) phyPtr->handle(event);
+	return false;
 }
 
 void GameScreen::updateScore(int amountToAdd)

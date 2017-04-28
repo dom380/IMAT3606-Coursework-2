@@ -87,8 +87,8 @@ public:
 	//Set the animation flag
 	void setAnimate(bool flag);
 
-	void  handle(MouseEvent event);
-	void  handle(KeyEvent event);
+	bool  handle(MouseEvent& event);
+	bool  handle(KeyEvent& event);
 	glm::vec3 getPosition();
 	//bool checkCollision(shared_ptr<Model> model);
 

@@ -68,11 +68,11 @@ public:
 	/*
 		stub method
 	*/
-	void handle(MouseEvent event);
+	bool handle(MouseEvent& event);
 	/*
 		Pauses and unpauses the physics simulation on 'P' key press.
 	*/
-	void handle(KeyEvent event);
+	bool handle(KeyEvent& event);
 	
 private:
 	btBroadphaseInterface* broadphase;

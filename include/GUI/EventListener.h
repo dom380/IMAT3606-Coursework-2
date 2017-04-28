@@ -9,7 +9,7 @@
 */
 class EventListener {
 public:
-	virtual void  handle(MouseEvent event) = 0;
-	virtual void  handle(KeyEvent event) = 0;
+	virtual bool  handle(MouseEvent& event) = 0;
+	virtual bool  handle(KeyEvent& event) = 0;
 };
 #endif // !EVENTLISTENER_H

@@ -16,7 +16,7 @@ EngineCamera::EngineCamera(int width, int height, float aspect, glm::vec3 pos, g
 	lookAt(direction);
 }
 
-void EngineCamera::handle(MouseEvent event)
+bool EngineCamera::handle(MouseEvent& event)
 {
 	switch (event.eventType)
 	{
@@ -63,9 +63,10 @@ void EngineCamera::handle(MouseEvent event)
 			break;
 		}
 	}
+	return false;
 }
 
-void EngineCamera::handle(KeyEvent event)
+bool EngineCamera::handle(KeyEvent& event)
 {
 	if (event.type == KeyEventType::KEY_REPEATED || event.type == KeyEventType::KEY_PRESSED) {
 		if (event.key == KeyCodes::LEFT_SHIFT)
@@ -98,4 +99,5 @@ void EngineCamera::handle(KeyEvent event)
 			cameraSpeed = normalCameraSpeed;
 		}
 	}
+	return false;
 }

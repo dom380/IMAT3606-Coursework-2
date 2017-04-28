@@ -27,5 +27,11 @@ void MenuScreen::resize(int width, int height)
 
 void MenuScreen::dispose()
 {
+	auto input = Engine::g_pEngine->getInput();
+	for (auto element : uiElements)
+	{
+		input->removeKeyListener(element->getButton());
+		input->removeMouseListener(element->getButton());
+	}
 	uiElements.clear();
 }

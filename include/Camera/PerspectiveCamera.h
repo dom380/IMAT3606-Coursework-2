@@ -47,13 +47,13 @@ public:
 		Method to process mouse events. See EventListener interface.
 		Camera tracks the mouse movement similar to first person cameras.
 	*/
-	void handle(MouseEvent event);
+	bool handle(MouseEvent& event);
 	/*
 		Method to process key events. See EventListener interface.
 		The 'W' and 'S' keys move the camera forward and backwards, relative to it's current direction, respectively. 
 		The 'A' and 'D' keys pan the camera left and right, relative to it's current direction, respectively.
 	*/
-	void handle(KeyEvent event);
+	bool handle(KeyEvent& event);
 
 protected:
 	//protected members

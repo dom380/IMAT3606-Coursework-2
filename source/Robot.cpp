@@ -277,12 +277,13 @@ void Robot::setAnimate(bool flag)
 	animate = flag;
 }
 
-void Robot::handle(MouseEvent event)
+bool Robot::handle(MouseEvent& event)
 {
 	//NOP
+	return false;
 }
 
-void Robot::handle(KeyEvent event)
+bool Robot::handle(KeyEvent& event)
 {
 	if (event.type == KeyEventType::KEY_REPEATED || event.type == KeyEventType::KEY_PRESSED)
 	{
@@ -319,6 +320,7 @@ void Robot::handle(KeyEvent event)
 	else if (event.type == KeyEventType::KEY_RELEASED) {
 		setAnimate(false);
 	}
+	return false;
 }
 
 glm::vec3 Robot::getPosition()

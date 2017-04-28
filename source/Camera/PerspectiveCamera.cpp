@@ -39,7 +39,7 @@ void PerspectiveCamera::lookAt(glm::vec3 target)
 }
 
 
-void PerspectiveCamera::handle(MouseEvent event)
+bool PerspectiveCamera::handle(MouseEvent& event)
 {
 	switch (event.eventType)
 	{
@@ -66,9 +66,10 @@ void PerspectiveCamera::handle(MouseEvent event)
 			break;
 		}
 	}
+	return false;
 }
 
-void PerspectiveCamera::handle(KeyEvent event)
+bool PerspectiveCamera::handle(KeyEvent& event)
 {
 	if (event.type == KeyEventType::KEY_REPEATED || event.type == KeyEventType::KEY_PRESSED) {
 		if (event.key == 87) //W
@@ -89,6 +90,7 @@ void PerspectiveCamera::handle(KeyEvent event)
 		}
 		update();
 	}
+	return false;
 }
 
 glm::quat PerspectiveCamera::getRotation(glm::vec3 axis, float angle)

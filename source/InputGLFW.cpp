@@ -55,7 +55,7 @@ void InputGLFW::mouseButtonCallback(GLFWwindow * window, int button, int action,
 	{
 		for (shared_ptr<EventListener> listener : mouseSubs)
 		{
-			listener->handle(e);
+			if (listener->handle(e)) return;
 		}
 	}
 }
@@ -92,7 +92,7 @@ void InputGLFW::keyboardCallback(GLFWwindow * window, int key, int scancode, int
 	else
 	{
 		for (shared_ptr<EventListener> listener : keySubs) {
-			listener->handle(e);
+			if (listener->handle(e)) return;
 		}
 	}
 }

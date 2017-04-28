@@ -159,16 +159,18 @@ void BulletPhysics::tickCallback(btDynamicsWorld * world, btScalar timeStep)
 #endif
 }
 
-void BulletPhysics::handle(MouseEvent event)
+bool BulletPhysics::handle(MouseEvent& event)
 {
 	//no op
+	return false;
 }
 
-void BulletPhysics::handle(KeyEvent event)
+bool BulletPhysics::handle(KeyEvent& event)
 {
 	if (event.type == KeyEventType::KEY_RELEASED && event.key == KeyCodes::P) 
 	{
 		paused = !paused;
 	}
+	return false;
 }
 

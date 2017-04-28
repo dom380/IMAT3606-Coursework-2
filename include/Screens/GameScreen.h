@@ -107,11 +107,11 @@ public:
 	/*
 		Empty implementation of Mouse Event handeling
 	*/
-	void  handle(MouseEvent event);
+	bool  handle(MouseEvent& event);
 	/*
 		Switches the camera if 'C' pressed.
 	*/
-	void  handle(KeyEvent event);
+	bool  handle(KeyEvent& event);
 private:
 	shared_ptr<ComponentStore> componentStore;
 	vector<shared_ptr<GameObject>> gameObjects;

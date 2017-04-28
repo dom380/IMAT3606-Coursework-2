@@ -31,14 +31,14 @@ public:
 	Camera tracks the mouse movement similar to first person cameras.
 	Left click required to move using canMove bool
 	*/
-	void handle(MouseEvent event);
+	bool handle(MouseEvent& event);
 	/*
 	Method to process key events. See EventListener interface.
 	The 'W' and 'S' keys move the camera forward and backwards, relative to it's current direction, respectively.
 	The 'A' and 'D' keys pan the camera left and right, relative to it's current direction, respectively.
 	The SHIFT key speeds up translation using cameraSpeed.
 	*/
-	void handle(KeyEvent event);
+	bool handle(KeyEvent& event);
 protected:
 
 private:

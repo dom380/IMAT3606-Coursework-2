@@ -112,27 +112,33 @@ public:
 		If the event was a click within the button's bounding box the  
 		OnClick callback method will be called.
 	*/
-	void handle(MouseEvent event) {
+	bool handle(MouseEvent& event) {
 		//if not a click event we don't care
-		if (event.eventType != MouseEventType::LEFT_CLICK) {
-			return;
+		if (event.eventType == MouseEventType::MOUSE_MOVE) {
+			return false;
 		}
 
 		if (event.actionType != MouseActionType::MOUSE_PRESS) {
-			return;
+			return false;
 		}
 		//if this button was clicked
 		int x = event.x, y = graphics->getHeight() - event.y;
 		if ((x >= aabb.x) && (x <= aabb.x + aabb.width) && (y >= aabb.y) && (y <= aabb.y + aabb.height))
 		{
-			if (onClickCallback) { onClickCallback();  }
+			if (onClickCallback) 
+			{ 
+				onClickCallback();  
+				return true;
+			}
 		}
+		return false;
 	};
 	/*
 		Empty implementation of KeyEvent handeling.
 	*/
-	void handle(KeyEvent event) {
+	bool handle(KeyEvent& event) {
 		//NOP
+		return false;
 	}
 
 	/*

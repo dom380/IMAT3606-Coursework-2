@@ -3,8 +3,9 @@
 #include "GL\glm\glm\gtc\matrix_transform.hpp"
 #include "GL\glm\glm\gtx\transform.hpp"
 
-PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject> owner, std::shared_ptr<ModelData> mesh, float mass, bool convex) : Component(ComponentType::RIGID_BODY)
+PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject> owner, std::shared_ptr<ModelData> mesh, float mass, bool isConvex) : Component(ComponentType::RIGID_BODY)
 {
+	convex = isConvex;
 	//Retrieve the transform of the mesh
 	btTransform transform;
 	auto sp = owner.lock();
@@ -15,8 +16,9 @@ PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_
 	init(physics, owner, mass);
 }
 
-PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject> owner, std::shared_ptr<std::vector<ConvexHull>> mesh, float mass, bool convex) : Component(ComponentType::RIGID_BODY)
+PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject> owner, std::shared_ptr<std::vector<ConvexHull>> mesh, float mass, bool isConvex) : Component(ComponentType::RIGID_BODY)
 {
+	convex = isConvex;
 	//Retrieve the transform of the mesh
 	btTransform transform;
 	auto sp = owner.lock();
@@ -34,6 +36,7 @@ PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics>& physics, std::weak_
 	auto tp = sp != nullptr ? sp->getComponent<Transform>(ComponentType::TRANSFORM) : nullptr;
 
 	auto scale = tp->scale;
+	shapeData = new ShapeData(boundingShape);
 	//Build Collision shape
 	switch (boundingShape.boundingShape)
 	{
@@ -95,6 +98,56 @@ btRigidBody * PhysicsComponent::getBody()
 	return body;
 }
 
+float PhysicsComponent::getMass()
+{
+	return mass;
+}
+
+double PhysicsComponent::getRestitution()
+{
+	return body->getRestitution();
+}
+
+double PhysicsComponent::getFriction()
+{
+	return body->getFriction();
+}
+
+double PhysicsComponent::getRotationalFriction()
+{
+	return rotationalFriction;
+}
+
+btVector3 PhysicsComponent::getVelocity()
+{
+	return velocity;
+}
+
+bool PhysicsComponent::isConstVelocity()
+{
+	return constVelocity;
+}
+
+bool PhysicsComponent::isConvex()
+{
+	return convex;
+}
+
+string PhysicsComponent::getMeshFileName()
+{
+	return meshFileName;
+}
+
+ShapeData * PhysicsComponent::getShape()
+{
+	return shapeData;
+}
+
+void PhysicsComponent::setMeshFileName(string fileName)
+{
+	meshFileName = fileName;
+}
+
 void PhysicsComponent::setRestitution(double restitution)
 {
 	body->setRestitution(btScalar(restitution));
@@ -107,6 +160,7 @@ void PhysicsComponent::setFriction(double friction)
 
 void PhysicsComponent::setRotationalFriction(double friction)
 {
+	rotationalFriction = friction;
 	btScalar frictionScalar = btScalar(friction);
 	body->setRollingFriction(frictionScalar);
 	body->setSpinningFriction(frictionScalar/btScalar(2.0));

@@ -60,6 +60,20 @@ public:
 		TODO - This is bleeding implementation details. Fix it!
 	*/
 	btRigidBody* getBody();
+
+	float getMass();
+	double getRestitution();
+	double getFriction();
+	double getRotationalFriction();
+	btVector3 getVelocity();
+	bool isConstVelocity();
+	bool isConvex();
+
+	string getMeshFileName();
+
+	ShapeData* getShape();
+
+	void setMeshFileName(string fileName);
 	/*
 		Sets the restitution of the GameObject.
 		double restitution - A value between 0..1 specifying how much energy is retained by this object after collision. 
@@ -93,12 +107,16 @@ public:
 	void setTransform(Transform* transformPtr);
 private:
 	std::weak_ptr<GameObject> owner;
+	string meshFileName;
+	bool convex;
 	float mass;
 	btRigidBody* body;
 	btCollisionShape* shape;
+	ShapeData* shapeData;
 	btVector3 localInertia = btVector3(0.0, 0.0, 0.0);
 	btVector3 velocity = btVector3(0.0, 0.0, 0.0);
 	bool constVelocity = false;
+	double rotationalFriction;
 	//private utility methods
 	/*
 		Constructs the collision shape from the specified mesh

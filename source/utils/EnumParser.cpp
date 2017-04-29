@@ -103,6 +103,12 @@ EnumParser<ShapeData::BoundingShape>::EnumParser()
 	map["cylinder"] = ShapeData::BoundingShape::CYLINDER;
 	map["CAPSULE"] = ShapeData::BoundingShape::CAPSULE;
 	map["capsule"] = ShapeData::BoundingShape::CAPSULE;
+
+	strmap[ShapeData::BoundingShape::BOX] = "box";
+	strmap[ShapeData::BoundingShape::SPHERE] = "sphere";
+	strmap[ShapeData::BoundingShape::CONE] = "cone";
+	strmap[ShapeData::BoundingShape::CYLINDER] = "cylinder";
+	strmap[ShapeData::BoundingShape::CAPSULE] = "capsule";
 }
 
 EnumParser<GameObjectTag>::EnumParser()

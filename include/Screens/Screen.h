@@ -18,6 +18,7 @@ using std::shared_ptr;
 */
 class Screen {
 public:
+	enum type { MENU, LOADING, GAMESCREEN };
 	/*
 		Pure Virtual method. 
 		This function is called when the screen is first displayed. Implmentations
@@ -96,7 +97,13 @@ public:
 	{
 		uiElements.push_back(uiElement);
 	}
+
+	type getType()
+	{
+		return screenType;
+	}
 protected:
+	type screenType;
 	string screenId;
 	string xmlFilePath;
 	tinyxml2::XMLDocument* screenXmlDocument;

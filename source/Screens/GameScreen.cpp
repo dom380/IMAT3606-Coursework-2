@@ -3,6 +3,7 @@
 GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, shared_ptr<Physics>& physics, shared_ptr<Camera> camera) /*:
 	robot(std::make_shared<Robot>(AssetManager::getInstance()->getShader(std::pair<string, string>("colour.vert", "colour.frag"))))*/
 {
+	screenType = type::GAMESCREEN;
 	this->renderer = renderer;
 	this->physics = physics;
 	componentStore = std::make_shared<ComponentStore>();

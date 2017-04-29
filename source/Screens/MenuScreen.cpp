@@ -2,6 +2,7 @@
 
 MenuScreen::MenuScreen(shared_ptr<Graphics>& graphics)
 {
+	screenType = type::MENU;
 	this->graphics = graphics;
 	UIManager::getInstance()->update();
 }

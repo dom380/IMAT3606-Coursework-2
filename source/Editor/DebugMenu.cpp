@@ -99,44 +99,49 @@ void DebugMenu::updateMainMenu()
 		}
 		if (ImGui::BeginMenu("Create"))
 		{
-			if (ImGui::TreeNode("GameObject"))
+			shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
+			if (Engine::g_pEngine->getActiveScreen()->getType() == Screen::type::GAMESCREEN)
 			{
-				//Load objects from dir
-				if (objList.empty())
+				if (ImGui::TreeNode("GameObject"))
 				{
-					std::string path = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::MODEL) + "*.obj";
-					objList = DirectoryReader::getFilesInDirectory(path.c_str());
-				}
-				//Iterate through object list
-				for (int x = 0; x < objList.size(); x++)
-				{
-					ImGui::PushID(x);
-					/*
+					//Load objects from dir
+					if (objList.empty())
+					{
+						std::string path = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::MODEL) + "*.obj";
+						objList = DirectoryReader::getFilesInDirectory(path.c_str());
+					}
+					//Iterate through object list
+					for (int x = 0; x < objList.size(); x++)
+					{
+						ImGui::PushID(x);
+						/*
 						each object needs its own window
 						another vector for checking if window is active.
-					*/
-					if (objCreateActive.size() != objList.size())
-					{
-						objCreateActive.push_back(false);
+						*/
+						if (objCreateActive.size() != objList.size())
+						{
+							objCreateActive.push_back(false);
+						}
+						//If the object button pressed
+						if (ImGui::Button(objList[x].c_str()))
+						{
+							objCreateActive[x] = true;
+						}
+						//open the window for it
+						if (objCreateActive[x])
+						{
+							createObjectWindow(objList[x], x);
+						}
+						ImGui::PopID();
 					}
-					//If the object button pressed
-					if (ImGui::Button(objList[x].c_str()))
-					{
-						objCreateActive[x] = true;
-					}
-					//open the window for it
-					if (objCreateActive[x])
-					{
-						createObjectWindow(objList[x], x);
-					}
-					ImGui::PopID();
+					ImGui::TreePop();
 				}
-				ImGui::TreePop();
+				else
+				{
+					objList.clear();
+				}
 			}
-			else
-			{
-				objList.clear();
-			}
+			
 			//Create a UI element.
 			if (ImGui::TreeNode("UI"))
 			{
@@ -247,9 +252,13 @@ void DebugMenu::updateLogic()
 
 void DebugMenu::debugGameObjectsMenu()
 {
+	if (Engine::g_pEngine->getActiveScreen()->getType() != Screen::type::GAMESCREEN)
+	{
+		return;
+	}
+
 	ImGui::Begin("GameObjects", &showGameObjects);
 	shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
-	
 	/*
 		Every game object from the vector is listed.
 	*/
@@ -325,49 +334,52 @@ void DebugMenu::debugGameObjectsMenu()
 
 bool DebugMenu::saveCurrentLevel(string fileName)
 {
-	shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
-	int numberOfObjectsInFile = XMLReader::GetNumberOfGameObjectsInFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument());
-	/*
-	Every game object from the vector is listed.
-	*/
-	for (int x = 0; x < gameScreen->getGameObjects().size(); x++)
+	int numberOfObjectsInFile = 0;
+	if (Engine::g_pEngine->getActiveScreen()->getType() == Screen::type::GAMESCREEN)
 	{
-		FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, gameScreen->getGameObjects()[x], gameScreen);
-		//If there is a new object not saved on file
-		if (x >= numberOfObjectsInFile)
+		shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
+		numberOfObjectsInFile = XMLReader::GetNumberOfGameObjectsInFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument());
+		/*
+		Every game object from the vector is listed.
+		*/
+		for (int x = 0; x < gameScreen->getGameObjects().size(); x++)
 		{
-			//addto
-			if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getGameObjects()[x], gameScreen))
+			FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, gameScreen->getGameObjects()[x], gameScreen);
+			//If there is a new object not saved on file
+			if (x >= numberOfObjectsInFile)
 			{
+				//addto
+				if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getGameObjects()[x], gameScreen))
+				{
+				}
 			}
-		}
-		if (gameScreen->getGameObjects().at(x)->HasComponent(ComponentType::MODEL))
-		{
-			if (!gameScreen->getGameObjects().at(x)->getModel()->isDrawing())
+			if (gameScreen->getGameObjects().at(x)->HasComponent(ComponentType::MODEL))
 			{
-				FileSaver::DeleteObjectFromFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getGameObjects()[x], gameScreen);
+				if (!gameScreen->getGameObjects().at(x)->getModel()->isDrawing())
+				{
+					FileSaver::DeleteObjectFromFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getGameObjects()[x], gameScreen);
+				}
 			}
 		}
 	}
-
 	/*
 		Every UI object
 	*/
 	numberOfObjectsInFile = XMLReader::GetNumberOfUIElementsInFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument());
-	for (int x = 0; x < gameScreen->getUIElements().size(); x++)
+	for (int x = 0; x < Engine::g_pEngine->getActiveScreen()->getUIElements().size(); x++)
 	{
-		FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, gameScreen->getUIElements()[x], gameScreen);
+		FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, Engine::g_pEngine->getActiveScreen()->getUIElements()[x]);
 		//If there is a new object not saved on file
 		if (x >= numberOfObjectsInFile)
 		{
-			if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getUIElements()[x], gameScreen))
+			if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, Engine::g_pEngine->getActiveScreen()->getUIElements()[x]))
 			{
 			}
 		}
-		if (!gameScreen->getUIElements().at(x)->isActive())
+		if (!Engine::g_pEngine->getActiveScreen()->getUIElements().at(x)->isActive())
 		{
-			FileSaver::DeleteObjectFromFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getUIElements()[x], gameScreen);
-		}	
+			FileSaver::DeleteObjectFromFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, Engine::g_pEngine->getActiveScreen()->getUIElements()[x]);
+		}
 	}
 	return FileSaver::SaveFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(),fileName);
 }

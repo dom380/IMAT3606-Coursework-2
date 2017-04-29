@@ -32,7 +32,7 @@ public:
 	/*
 	Update existing UI elements inside of the current screen doc
 	*/
-	static bool UpdateFile(tinyxml2::XMLDocument* doc, string levelID, int iObjectCount, shared_ptr<UIElement> uiE, shared_ptr<GameScreen> gameScreen);
+	static bool UpdateFile(tinyxml2::XMLDocument* doc, string levelID, int iObjectCount, shared_ptr<UIElement> uiE);
 	/*
 		Add a new game object to the current screen doc
 	*/
@@ -40,7 +40,7 @@ public:
 	/*
 		Add a new ui object to the current screen doc
 	*/
-	static bool AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<UIElement> uiE, shared_ptr<GameScreen> gameScreen);
+	static bool AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<UIElement> uiE);
 	/*
 		Delete a game object from a file
 	*/
@@ -48,7 +48,7 @@ public:
 	/*
 	Delete a ui object from a file
 	*/
-	static bool DeleteObjectFromFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<UIElement> uiE, shared_ptr<GameScreen> gameScreen);
+	static bool DeleteObjectFromFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<UIElement> uiE);
 	/*
 		Save the current screen doc to the xml file specified
 	*/

@@ -151,7 +151,7 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 	return false;
 }
 
-bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObjectCount, shared_ptr<UIElement> uiElement, shared_ptr<GameScreen> gameScreen)
+bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObjectCount, shared_ptr<UIElement> uiElement)
 {
 	int XMLObjectCount = 0;
 	bool SkipObject = false;
@@ -401,7 +401,7 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 	
 	return true;
 }
-bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<UIElement> uiE, shared_ptr<GameScreen> gameScreen)
+bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<UIElement> uiE)
 {
 	if (doc)
 	{
@@ -539,7 +539,7 @@ bool FileSaver::DeleteObjectFromFile(tinyxml2::XMLDocument * doc, int iObjectCou
 	return false;
 }
 
-bool FileSaver::DeleteObjectFromFile(tinyxml2::XMLDocument * doc, int iObjectCount, shared_ptr<UIElement> uiE, shared_ptr<GameScreen> gameScreen)
+bool FileSaver::DeleteObjectFromFile(tinyxml2::XMLDocument * doc, int iObjectCount, shared_ptr<UIElement> uiE)
 {
 
 	tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");

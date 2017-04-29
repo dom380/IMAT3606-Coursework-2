@@ -38,6 +38,7 @@ public:
 	*/
 	LoadingScreen(shared_ptr<Window> window, Engine* engine, std::shared_ptr<Graphics> renderer, shared_ptr<Input> input, std::string levelToLoad)
 	{
+		screenType = type::LOADING;
 		shared_ptr<Transform> transform = std::make_shared<Transform>();
 		transform->orientation.y = 1.0f; transform->orientation.w = 0.0f;
 		transform->position.x = 30; transform->position.y = 500;

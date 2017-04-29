@@ -93,6 +93,59 @@ public:
 			return false;
 		}
 	}
+	static void duplicateGameObject(shared_ptr<GameScreen> gameScreen, shared_ptr<GameObject> go)
+	{
+		shared_ptr<GameObject> newGO = std::make_shared<GameObject>(*go);
+		for (int x = ComponentType::MODEL; x < ComponentType::COMPONENT_TYPE_COUNT; x++)
+		{
+			ComponentType cType = static_cast<ComponentType>(x);
+			if (go->HasComponent(cType))
+			{
+				switch (cType)
+				{
+				case MODEL:
+				{
+					auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
+					shared_ptr<ModelComponent> mc = std::make_shared<ModelComponent>(*model);
+					newGO->AddComponent(mc, ComponentType::MODEL);
+					break;
+				}
+				case ANIMATION:
+					break;
+				case RIGID_BODY:
+				{
+					auto rigid = gameScreen->getComponentStore()->getComponent<PhysicsComponent>(go->GetComponentHandle(ComponentType::RIGID_BODY), ComponentType::RIGID_BODY);
+					shared_ptr<PhysicsComponent> pc = std::make_shared<PhysicsComponent>(*rigid);
+					newGO->AddComponent(pc, ComponentType::RIGID_BODY);
+					break;
+				}
+				case LOGIC:
+					break;
+				case TRANSFORM:
+				{
+					auto transform = gameScreen->getComponentStore()->getComponent<Transform>(go->GetComponentHandle(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
+					shared_ptr<Transform> tr = std::make_shared<Transform>(*transform);
+					newGO->AddComponent(tr, ComponentType::TRANSFORM);
+					auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(newGO->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
+					model->transformHandle = newGO->GetComponentHandle(ComponentType::TRANSFORM);//transform;
+					break;
+				}
+				case TRIGGER:
+					break;
+				case CONTROLLER:
+					break;
+				case COMPONENT_TYPE_COUNT:
+					break;
+				default:
+					break;
+				}
+
+			}
+			//this->componentHandles[x] = other.componentHandles[x];
+		}
+		gameScreen->addGameObject(newGO);
+
+	}
 	static void loadGameObject(shared_ptr<Graphics>& renderer, shared_ptr<Physics>& physics, shared_ptr<GameScreen> gameSceen, tinyxml2::XMLElement* gameObjElement, shared_ptr<ComponentStore> componentStore)
 	{
 		if (gameObjElement->FirstChildElement("components") == NULL)
@@ -488,8 +541,6 @@ private:
 		if (fileElement != NULL) fileElement = fileElement->FirstChildElement();
 		while (fileElement != NULL) {
 			files.push_back(std::make_pair(fileElement->FirstChildElement("id")->GetText(),fileElement->FirstChildElement("filePath")->GetText()));
-
-			//loadStringElement(renderer, gameScreen, stringElement);
 			fileElement = fileElement->NextSiblingElement();
 		}
 		animation->init(animElement->FirstChildElement("default")->GetText(),files, "");

@@ -849,27 +849,6 @@
                 </component>
             </components>
         </gameObject>
-        <gameObject>
-            <components>
-                <component type="model" id="plant_spike.obj">
-                    <file>plant_spike.obj</file>
-                    <texture>spikes.tga</texture>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>-35</x>
-                        <y>-50</y>
-                        <z>-30</z>
-                    </position>
-                    <scale>
-                        <x>50</x>
-                        <y>50</y>
-                        <z>50</z>
-                    </scale>
-                </component>
-            </components>
-        </gameObject>
     </gameObjects>
     <lights>
         <light>

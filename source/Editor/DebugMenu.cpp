@@ -133,6 +133,10 @@ void DebugMenu::updateMainMenu()
 				}
 				ImGui::TreePop();
 			}
+			else
+			{
+				objList.clear();
+			}
 			//Create a UI element.
 			if (ImGui::TreeNode("UI"))
 			{
@@ -249,6 +253,8 @@ void DebugMenu::debugGameObjectsMenu()
 	/*
 		Every game object from the vector is listed.
 	*/
+	if (!gameScreen)
+		return;
 	for (int x = 0; x < gameScreen->getGameObjects().size(); x++)
 	{
 		//Push and PopID, useful for similarly named objects.
@@ -434,7 +440,7 @@ void DebugMenu::loadSpecificLevel()
 			//remove .xml from string
 			string levelID = levelCStyleArray[listbox_item_current];
 			levelID = levelID.substr(0, levelID.size()-4);
-			Engine::g_pEngine->switchScreen(levelID);
+			Engine::g_pEngine->replaceScreen(levelID);
 			popupText = "Load successfully";
 		}
 		else

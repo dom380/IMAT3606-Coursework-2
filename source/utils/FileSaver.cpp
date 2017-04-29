@@ -594,6 +594,7 @@ bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement
 			string xyzName[3] = { "x", "y", "z" };
 			if (!transformInnerElement)
 			{
+				transformInnerElement = doc->NewElement("position");
 				AddVec3ToElement(doc, transformInnerElement, transform->position, xyzName);
 			}
 			else
@@ -610,6 +611,7 @@ bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement
 			string xyzName[3] = { "x", "y", "z" };
 			if (!transformInnerElement)
 			{
+				transformInnerElement = doc->NewElement("scale");
 				AddVec3ToElement(doc, transformInnerElement, transform->scale, xyzName);
 			}
 			else

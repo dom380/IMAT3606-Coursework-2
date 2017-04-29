@@ -17,7 +17,7 @@ public:
 
 	void readFile(const char * filePath, shared_ptr<vector<ConvexHull>>& convexHulls) {};
 
-	vector<shared_ptr<ModelData>> readFile(const char * filePath);
+	shared_ptr<ModelData> readFile(const char * filePath);
 private:
 	const aiScene* pScene; //!< The Assimp aiScene object. 
 

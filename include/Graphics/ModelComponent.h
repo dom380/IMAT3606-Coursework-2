@@ -91,11 +91,11 @@ public:
 	/*
 		Returns a vector of pointers to this models meshes.
 	*/
-	vector<shared_ptr<ModelData>> getData();
+	shared_ptr<ModelData> getData();
 	/*
 		Returns this models materials.
 	*/
-	vector<Material> getMaterials();
+	Material getMaterial();
 private:
 	//Private Methods
 	//Calls to Graphics system to render this model. Parameters supplied by RENDER messages. (see RecieveMessage())
@@ -106,8 +106,8 @@ private:
 	bool initalised = false;
 	shared_ptr<Graphics> graphics;
 	std::weak_ptr<GameObject> owner;
-	vector<shared_ptr<ModelData>> modelData;
-	vector<Material> materials;
+	shared_ptr<ModelData> modelData;
+	Material material;
 	vector<unsigned int> vboHandles;
 	unsigned int vaoHandle = 0;
 	shared_ptr<Shader> shader;

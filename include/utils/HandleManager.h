@@ -35,6 +35,7 @@ public:
 		{
 			unsigned int index = data.size();
 			handle = Handle(index);
+			auto test = sizeof(object);
 			data.push_back(std::pair<int, T>(index,object));
 			counters.push_back(handle.getCounter());
 		} 

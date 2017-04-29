@@ -28,7 +28,7 @@ public:
 
 	virtual void readFile(const char * filePath, shared_ptr<vector<ConvexHull>>& convexHulls) = 0;
 
-	virtual vector<shared_ptr<ModelData>> readFile(const char * filePath) = 0;
+	virtual shared_ptr<ModelData> readFile(const char * filePath) = 0;
 };
 
 #endif // !MODELFILEREADER_H

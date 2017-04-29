@@ -150,13 +150,16 @@ void Engine::replaceScreen(string screenId)
 	if (it == gameScreens.end()) {
 		//try to load level
 		activeScreen.second->dispose();
+		string idToRemove = activeScreen.first;
 		activeScreen = std::pair<string, shared_ptr<Screen>>("LoadingScreen", std::make_shared<LoadingScreen>(window, this, renderer, inputHandler, screenId));
+		registerScreen(activeScreen.second);
+		if(idToRemove != "LoadingScreen") gameScreens.erase(idToRemove);
 	} else{
 		activeScreen.second->dispose();
 		activeScreen.second.reset();
 		string idToRemove = activeScreen.first;
 		activeScreen = *it;
-		gameScreens.erase(idToRemove);
+		if (idToRemove != "LoadingScreen") gameScreens.erase(idToRemove);
 	}
 	activeScreen.second->show();
 }

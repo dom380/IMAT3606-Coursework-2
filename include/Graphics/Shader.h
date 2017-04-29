@@ -117,7 +117,7 @@ public:
 		const char *name, Name of the uniform in the shader.
 		const Material & val, Value to pass through.
 	*/
-	void   setUniform(const char *name, Material val);
+	void   setUniform(const char *name, Material& val);
 	
 	/*
 		Binds the specified uniform block to the supplied binding point.

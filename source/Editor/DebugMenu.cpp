@@ -61,9 +61,8 @@ void DebugMenu::updateMainMenu()
 
 			if (ImGui::Button("Reload Scene"))
 			{
-				if (loadLevel(Engine::g_pEngine->getActiveScreen()->getXMLFilePath()))
+				if (Engine::g_pEngine->replaceScreen(Engine::g_pEngine->getActiveScreen()->getID()))
 				{
-					Engine::g_pEngine->replaceScreen(Engine::g_pEngine->getActiveScreen()->getID());
 					popupText = "Load successfully";
 				}
 				else

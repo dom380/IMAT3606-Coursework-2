@@ -96,6 +96,11 @@ public:
 		Returns this models materials.
 	*/
 	Material getMaterial();
+
+	/*
+		Free resources.
+	*/
+	void dispose();
 private:
 	//Private Methods
 	//Calls to Graphics system to render this model. Parameters supplied by RENDER messages. (see RecieveMessage())

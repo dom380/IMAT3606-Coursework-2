@@ -91,8 +91,11 @@ public:
 		Aplies the specified transform to the physics object to.
 	*/
 	void setTransform(Transform* transformPtr);
+
+	void dispose();
 private:
 	std::weak_ptr<GameObject> owner;
+	std::weak_ptr<Physics> physicsPtr;
 	float mass;
 	btRigidBody* body;
 	btCollisionShape* shape;

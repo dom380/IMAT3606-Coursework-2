@@ -32,6 +32,7 @@ public:
 		Add the specified PhysicsComponent to the dynamic world.
 	*/
 	virtual void addBody(PhysicsComponent comp) = 0;
+	virtual void removeBody(PhysicsComponent comp) = 0;
 	/*
 		Set's the Physic's implementation pause state to the specified flag.
 	*/

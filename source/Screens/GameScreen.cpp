@@ -47,7 +47,7 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 
 void GameScreen::show()
 {
-	Engine::g_pEngine->getEngineState()->switchEngineMode();
+	Engine::g_pEngine->getEngineState()->setEngineMode(EngineMode::EDITOR);
 	physics->setPaused(false);
 	for (auto go : gameObjects)
 	{
@@ -75,7 +75,6 @@ void GameScreen::update(double dt, double currentTime)
 		if (it->first != -1)
 		{
 			it->second.update(dt);
-			//it->second.RecieveMessage(robotLocMsg);
 		}
 	}
 //delete robotLocMsg;
@@ -163,11 +162,14 @@ void GameScreen::dispose()
 	{
 		input->removeKeyListener(element->getButton());
 		input->removeMouseListener(element->getButton());
+		element->dispose();
 	}
+	componentStore->dispose();
 	gameObjects.clear();
 	lights.clear();
 	cameras.clear();
 	uiElements.clear();
+	
 	componentStore.reset();
 }
 

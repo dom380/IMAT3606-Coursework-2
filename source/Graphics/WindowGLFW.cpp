@@ -96,6 +96,11 @@ void WindowGLFW::switchBackgroundContext()
 	glfwMakeContextCurrent(offscreen_context);
 }
 
+void WindowGLFW::switchMainContext()
+{
+	glfwMakeContextCurrent(window);
+}
+
 void WindowGLFW::close()
 {
 	ImGuiGLFWHandler->shutdown();

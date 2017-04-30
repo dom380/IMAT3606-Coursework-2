@@ -18,6 +18,7 @@ public:
 	void setMovementSpeed(float speed);
 	void setGravity(float value);
 	void setGravity(float x, float y, float z);
+	void dispose();
 private:
 	std::weak_ptr<GameObject> owner;
 	std::shared_ptr<Physics> physics;

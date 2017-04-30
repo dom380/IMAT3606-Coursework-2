@@ -146,6 +146,15 @@ public:
 	virtual void setVSync(bool flag) = 0;
 
 	/*
+		Free any GPU resources for the specified model.
+	*/
+	virtual void freeModel(ModelComponent& model) = 0;
+	/*
+		Free any GPU resources for the specified model.
+	*/
+	virtual void freeAnimatedModel(AnimatedModelComponent& model) = 0;
+
+	/*
 		Method called on engine shutdown. 
 		Perform any further clean up of resources here.
 	*/

@@ -444,14 +444,8 @@ void RenderGL::renderModel(ModelComponent & model, shared_ptr<Shader>& shaderPro
 
 	glBindVertexArray(model.getData()->getVertArray(this));
 	glBindBufferBase(GL_UNIFORM_BUFFER, lightingBlockId, lightingBuffer); //Bind lighting data
-	//glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->indices.size()), GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));
-	for (unsigned int i = 0; i < mesh->meshes.size(); i++) {
-		
-		
-		//shaderProgram->setUniform("ambientTest", mesh->meshes[i].material.Ka);
-		//shaderProgram->setUniform("diffuseTest", mesh->meshes[i].material.Kd);
-		//shaderProgram->setUniform("diffuseTest", glm::vec3(((double)rand() / (RAND_MAX)), ((double)rand() / (RAND_MAX)), ((double)rand() / (RAND_MAX))));
-		
+	for (unsigned int i = 0; i < mesh->meshes.size(); i++) 
+	{
 		glDrawElementsBaseVertex(GL_TRIANGLES,
 			mesh->meshes[i].NumIndices,
 			GL_UNSIGNED_INT,
@@ -463,6 +457,26 @@ void RenderGL::renderModel(ModelComponent & model, shared_ptr<Shader>& shaderPro
 	}
 	
 	glBindVertexArray(0);
+}
+
+void RenderGL::freeModel(ModelComponent & model)
+{
+	auto handles = model.getData()->vboHandles;
+	glDeleteBuffers(handles.size(), &handles[0]);
+}
+
+void RenderGL::freeAnimatedModel(AnimatedModelComponent & model)
+{
+	std::vector<unsigned int> handles;
+	auto meshes = model.getAllModels();
+	for (auto mesh : meshes)
+	{
+		if (mesh)
+		{
+			handles = mesh->getVBOHandles();
+			glDeleteBuffers(handles.size(), &handles[0]);
+		}
+	}
 }
 
 //TO DO

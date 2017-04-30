@@ -123,3 +123,12 @@ bool CollisionTrigger::isTriggered()
 {
 	return triggered;
 }
+
+void CollisionTrigger::dispose()
+{
+	std::shared_ptr<BulletPhysics> bullet = std::dynamic_pointer_cast<BulletPhysics>(Engine::g_pEngine->getPhysics());
+	if (bullet)
+	{
+		bullet->removeTrigger(this);
+	}
+}

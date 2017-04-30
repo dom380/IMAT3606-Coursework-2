@@ -45,10 +45,20 @@ void BulletPhysics::addBody(PhysicsComponent comp)
 	world->addRigidBody(comp.getBody());
 }
 
+void BulletPhysics::removeBody(PhysicsComponent comp)
+{
+	world->removeRigidBody(comp.getBody());
+}
+
 void BulletPhysics::addTrigger(std::shared_ptr<CollisionTrigger> trigger)
 {
 	world->addCollisionObject(trigger->getBody());
 	collisionTriggers.push_back(trigger);
+}
+
+void BulletPhysics::removeTrigger(CollisionTrigger* trigger)
+{
+	world->removeCollisionObject(trigger->getBody());
 }
 
 std::vector<std::shared_ptr<CollisionTrigger>> BulletPhysics::getCollisionTriggers()
@@ -65,6 +75,12 @@ void BulletPhysics::addController(BulletActerController* controller)
 void BulletPhysics::addController(std::shared_ptr<BulletActerController> controller)
 {
 	addController(controller.get());
+}
+
+void BulletPhysics::removeController(std::shared_ptr<BulletActerController> controller)
+{
+	world->removeCollisionObject(controller->getGhostObject());
+	world->removeAction(controller.get());
 }
 
 void BulletPhysics::tickCallback(btDynamicsWorld * world, btScalar timeStep)

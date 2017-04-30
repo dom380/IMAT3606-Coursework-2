@@ -41,6 +41,12 @@ public:
 		Message* msg, Pointer to some implementation of Message.
 	*/
 	virtual void RecieveMessage(Message* msg) = 0;
+	/*
+		Pure Virtual clean up function.
+		Implementations should use this method to free any resouces
+		they are solely responsible for.
+	*/
+	virtual void dispose() = 0;
 private:
 	ComponentType type;
 

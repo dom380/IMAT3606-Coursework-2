@@ -134,6 +134,15 @@ void PhysicsComponent::setTransform(Transform * transformPtr)
 	ms->setWorldTransform(transform);
 }
 
+void PhysicsComponent::dispose()
+{
+	auto physics = physicsPtr.lock();
+	if (physics)
+	{
+		physics->removeBody(*this);
+	}
+}
+
 void PhysicsComponent::buildCollisionShape(std::shared_ptr<ModelData>& mesh, glm::vec3& scale)
 {
 	//if (mass > 0.f) 
@@ -257,7 +266,7 @@ void PhysicsComponent::init(std::shared_ptr<Physics>& physics, std::weak_ptr<Gam
 {
 	this->owner = owner;
 	this->mass = mass;
-
+	this->physicsPtr = physics;
 	//Retrieve the transform of the mesh
 	btTransform transform;
 	auto sp = owner.lock();

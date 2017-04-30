@@ -40,6 +40,8 @@ public:
 	*/
 	void RecieveMessage(Message* msg) {};
 
+	void dispose() {};
+
 	//public members
 	glm::vec3 position;
 	glm::vec3 scale;

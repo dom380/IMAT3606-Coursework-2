@@ -84,6 +84,11 @@ void ModelComponent::RecieveMessage(Message * msg)
 	}
 }
 
+void ModelComponent::dispose()
+{
+	graphics->freeModel(*this);
+}
+
 void ModelComponent::render(shared_ptr<Camera>& camera)
 {
 	if (!initalised) return;

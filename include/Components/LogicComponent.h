@@ -32,6 +32,7 @@ public:
 	virtual void update(double dt);
 
 	virtual void RecieveMessage(Message* msg);
+	void dispose() {}; //Component Interface stub
 private:
 	lua_State* luaState = LuaStateHolder::getLuaState();
 	luabridge::LuaRef updateFunc;

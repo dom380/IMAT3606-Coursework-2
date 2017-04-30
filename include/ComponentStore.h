@@ -101,6 +101,8 @@ public:
 			break;
 		}
 	}
+
+	void dispose();
 private:
 	HandleManager<ModelComponent> models;
 	HandleManager<AnimatedModelComponent> animatedModels;

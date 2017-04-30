@@ -59,5 +59,6 @@ public:
 	void setModel(glm::mat4 model);
 	void updateModelUsingTransform(shared_ptr<Transform> transform=NULL);
 
+	void dispose();
 };
 #endif

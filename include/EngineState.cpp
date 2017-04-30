@@ -12,6 +12,11 @@ void EngineState::switchEngineMode()
 	}
 }
 
+void EngineState::setEngineMode(EngineMode mode)
+{
+	engineMode = mode;
+}
+
 EngineMode EngineState::getEngineMode()
 {
 	return engineMode;

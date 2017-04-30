@@ -77,6 +77,12 @@ void ControllerComponent::setGravity(float x, float y, float z)
 	controller->setGravity(btVector3(x, y, z));
 }
 
+void ControllerComponent::dispose()
+{
+	auto ptr = dynamic_pointer_cast<BulletPhysics, Physics>(physics);
+	ptr->removeController(controller);
+}
+
 void ControllerComponent::pollInput()
 {
 	KeyEventType left, right, up, down, space;

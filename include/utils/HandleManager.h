@@ -63,6 +63,13 @@ public:
 		counters[index] = 0;
 	}
 	
+	void removeAll()
+	{
+		data.clear();
+		freeIndices.clear();
+		counters.clear();
+	}
+
 	std::vector<std::pair<int, T>>* getAll()
 	{
 		return &data;

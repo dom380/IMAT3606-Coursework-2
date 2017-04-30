@@ -66,13 +66,13 @@ public:
 		The screen must have been registered with the engine before hand.
 		The previous screen will not be disposed of and will remain in memory.
 	*/
-	void switchScreen(string screenId);
+	bool switchScreen(string screenId);
 	/*
 		Replaces the current active screen to the screen with the specified ID.
 		The screen must have been registered with the engine before hand.
 		The previous screen will be disposed of and all shared assets freed.
 	*/
-	void replaceScreen(string screenId);
+	bool replaceScreen(string screenId);
 
 	/*
 		Parses the main configuration file.

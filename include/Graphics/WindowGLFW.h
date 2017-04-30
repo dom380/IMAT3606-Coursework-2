@@ -48,6 +48,7 @@ public:
 		Should only be called on a separete worker thread.
 	*/
 	void switchBackgroundContext();
+	void switchMainContext();
 	/*
 		Destroys the main and background OpenGL Contexts.
 	*/

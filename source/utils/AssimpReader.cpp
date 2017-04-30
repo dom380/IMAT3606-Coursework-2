@@ -86,12 +86,12 @@ void AssimpReader::readFile(const char * filePath, vector<glm::vec4>& vertices, 
 shared_ptr<ModelData> AssimpReader::readFile(const char * filePath)
 {
 	pScene = Importer.ReadFile(filePath,
-		//aiProcess_ValidateDataStructure |
+		aiProcess_OptimizeMeshes |
+		aiProcess_RemoveRedundantMaterials |
 		aiProcess_JoinIdenticalVertices |
 		aiProcess_SortByPType |
 		aiProcess_Triangulate |
-		aiProcess_GenSmoothNormals |
-		aiProcess_OptimizeMeshes
+		aiProcess_GenSmoothNormals
 		);
 	if (pScene) 
 	{

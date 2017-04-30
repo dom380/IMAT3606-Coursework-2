@@ -17,6 +17,7 @@ public:
 
 	//Switch to other state
 	void switchEngineMode();
+	void setEngineMode(EngineMode mode);
 	EngineMode getEngineMode();
 };
 

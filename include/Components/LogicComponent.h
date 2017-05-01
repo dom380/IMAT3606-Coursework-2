@@ -45,6 +45,7 @@ private:
 	void registerLuaBindings();
 	//private lua bindings
 	void applyTransform(glm::vec3 position, float scale, float orientation);
+	void resetTransform();
 	void toggleRender();
 	void updateScore(int incValue);
 	bool isRendering();

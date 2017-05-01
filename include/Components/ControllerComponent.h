@@ -18,6 +18,7 @@ public:
 	void setMovementSpeed(float speed);
 	void setGravity(float value);
 	void setGravity(float x, float y, float z);
+	void setTransform(Transform* transform);
 	void dispose();
 private:
 	std::weak_ptr<GameObject> owner;
@@ -31,8 +32,8 @@ private:
 	float offset = 0.0f;
 	bool flip = true;
 	void pollInput();
-	void updateTransform(Transform* transformPtr);
 	void calcDirection(const btVector3& walkDir);
+	void updateTransform(Transform* transformPtr);
 };
 
 #endif // !CONTROLLERCOMPONENT_H

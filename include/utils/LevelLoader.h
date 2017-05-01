@@ -708,6 +708,8 @@ private:
 		transform.orientation = quat;
 		transform.position = pos;
 		transform.scale = scale;
+		transform.originalPosition = pos;
+		transform.originalOrientation = quat;
 	}
 
 	/*
@@ -721,6 +723,8 @@ private:
 		transform->orientation = quat;
 		transform->position = pos;
 		transform->scale = scale;
+		transform->originalPosition = pos;
+		transform->originalOrientation = quat;
 	}
 
 	/*
@@ -735,6 +739,8 @@ private:
 		transform->orientation = quat;
 		transform->position = pos;
 		transform->scale = scale;
+		transform->originalPosition = pos;
+		transform->originalOrientation = quat;
 	}
 
 	static void readTransformData(glm::vec3 &pos, glm::vec3 &scale, glm::quat &quat, tinyxml2::XMLElement* element)

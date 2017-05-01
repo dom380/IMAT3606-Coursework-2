@@ -27,6 +27,7 @@ ControllerComponent::ControllerComponent(std::shared_ptr<Physics> physics, std::
 	actorGhost->setWorldTransform(transform);
 	actorGhost->setCollisionShape(collisionShape);
 	actorGhost->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+	actorGhost->setUserPointer(sp.get());
 	
 	
 	this->controller = std::make_shared<BulletActerController>(actorGhost, static_cast<btConvexShape*>(collisionShape), btScalar(0.5), upDir);
@@ -75,6 +76,19 @@ void ControllerComponent::setGravity(float value)
 void ControllerComponent::setGravity(float x, float y, float z)
 {
 	controller->setGravity(btVector3(x, y, z));
+}
+
+void ControllerComponent::setTransform(Transform * transform)
+{
+	btTransform btTran = controller->getGhostObject()->getWorldTransform();
+	controller->setLinearVelocity(btVector3(0, 0, 0));
+	auto pos = transform->position;
+	pos.y -= offset;
+	btTran.setOrigin(btVector3(pos.x, pos.y, pos.z));
+	btTran.setRotation(btQuaternion(transform->orientation.x, transform->orientation.y, transform->orientation.z, transform->orientation.w));
+	controller->getGhostObject()->setWorldTransform(btTran);
+
+	if (camera) camera->move(pos);
 }
 
 void ControllerComponent::dispose()

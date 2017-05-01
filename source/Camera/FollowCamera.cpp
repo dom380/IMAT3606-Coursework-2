@@ -8,7 +8,7 @@ FollowCamera::FollowCamera(int width, int height, float aspect, glm::vec3 target
 	upDir = up;
 	frontDir = direction;
 	orientation = glm::quat(1.0, 0.0, 0.0, 0.0);
-	type = CameraClass::PERSPECTIVE;
+	type = CameraClass::FOLLOW;
 	projection = glm::perspective(glm::radians(aspect), (float)width / (float)height, 0.1f, 1000.0f);
 	lookAt(direction);
 }

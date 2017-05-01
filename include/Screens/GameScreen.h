@@ -44,9 +44,9 @@ public:
 		Constructor
 		shared_ptr<Graphics>& renderer, Pointer to the graphics system.
 		shared_ptr<Input>& input, Pointer to the input system.
-		shared_ptr<Camera> camera, Pointer to a Camera. Defaulted to PerspectiveCamera.
+		std::vector<shared_ptr<Camera>> cameras, Vector of pointers to camera.
 	*/
-	GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, shared_ptr<Physics>& physics, shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>());
+	GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, shared_ptr<Physics>& physics, std::vector<shared_ptr<Camera>> cameras);
 	~GameScreen() {};
 
 	/*
@@ -123,7 +123,6 @@ private:
 	vector<Light> lights;
 	unsigned int lightingBlockId = -1;
 	unsigned int lightingBufferId = -1;
-	//shared_ptr<Robot> robot;
 	int currentScore = 0;
 	glm::vec3 cameraDistanceToPlayer;
 	//Sound Stuff May need to move later

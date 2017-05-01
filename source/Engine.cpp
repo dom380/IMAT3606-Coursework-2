@@ -148,6 +148,15 @@ bool Engine::switchScreen(string screenId)
 bool Engine::replaceScreen(string screenId)
 {
 	activeScreen.second->dispose();
+	if (activeScreen.second->getType() == Screen::GAMESCREEN)
+	{
+		auto eventPtr = std::dynamic_pointer_cast<EventListener>(activeScreen.second);
+		if (eventPtr)
+		{
+			inputHandler->removeKeyListener(eventPtr);
+			inputHandler->removeMouseListener(eventPtr);
+		}
+	}
 	string idToRemove = activeScreen.first;
 	if (idToRemove != "LoadingScreen") gameScreens.erase(idToRemove);
 	activeScreen.second.reset();

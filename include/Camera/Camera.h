@@ -3,7 +3,7 @@
 #define CAMERA_H
 #include <gl\glm\glm\glm.hpp>
 #include <GUI\EventListener.h>
-
+#include <string>
 /*
 	virtual base class for camera implementations.
 */
@@ -66,14 +66,33 @@ public:
 		return projection;
 	}
 	/*
+		Returns the camera's ID.
+	*/
+	std::string getId()
+	{
+		return id;
+	}
+	/*
+		Sets the camera's ID.
+	*/
+	void setId(std::string newID)
+	{
+		id = newID;
+	}
+	/*
 		Enum specifying the Camera type.
 	*/
 	enum CameraClass
 	{
 		PERSPECTIVE,
-		ORTHOGRAPHIC
+		ORTHOGRAPHIC,
+		ENGINE,
+		FOLLOW
 	};
-
+	CameraClass getCameraType()
+	{
+		return type;
+	}
 protected:
 	//protected functions
 	/*
@@ -88,6 +107,7 @@ protected:
 	glm::vec3 position;
 	glm::mat4 projection;
 	CameraClass type;
+	std::string id;
 
 };
 #endif // !CAMERA_H

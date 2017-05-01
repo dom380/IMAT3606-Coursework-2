@@ -40,6 +40,10 @@ EnumParser<Camera::CameraClass>::EnumParser()
 	map["perspective"] = Camera::CameraClass::PERSPECTIVE;
 	map["ORTHOGRAPHIC"] = Camera::CameraClass::ORTHOGRAPHIC;
 	map["orthographic"] = Camera::CameraClass::ORTHOGRAPHIC;
+	map["FOLLOW"] = Camera::CameraClass::FOLLOW;
+	map["follow"] = Camera::CameraClass::FOLLOW;
+	map["ENGINE"] = Camera::CameraClass::ENGINE;
+	map["engine"] = Camera::CameraClass::ENGINE;
 }
 
 EnumParser<ComponentType>::EnumParser()

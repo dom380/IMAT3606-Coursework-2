@@ -24,6 +24,8 @@ private:
 	static bool UpdateVec3Element(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* ele, glm::vec3 passedVector, string vecNames[3]);
 	//add transform comp to element in file.
 	static bool AddTransformToFile(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* ele, Transform* transform);
+	//Add rigid comp to element in xmlfile
+	static bool AddRigidBody(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* ele, PhysicsComponent* phyComp);
 	//add vec3 
 	static bool AddVec3ToElement(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* ele, glm::vec3 passedVector, string vecNames[3]);
 public:

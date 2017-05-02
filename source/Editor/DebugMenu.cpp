@@ -305,8 +305,12 @@ void DebugMenu::debugGameObjectsMenu()
 							gameObjectsMenuAnimation();
 							break;
 						case ComponentType::RIGID_BODY:
-							gameObjectsMenuRigidBody();
+						{
+							auto physComp = gameScreen->getComponentStore()->getComponent<PhysicsComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::RIGID_BODY), ComponentType::RIGID_BODY);
+							if (physComp)
+								gameObjectsMenuRigidBody(i, physComp);
 							break;
+						}
 						case ComponentType::LOGIC:
 							gameObjectsMenuLogic();
 							break;
@@ -512,6 +516,15 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 	if (hasTexture)
 	{
 		createTextureListBox();
+	}
+	static bool hasPhysics = false;
+	if (ImGui::Checkbox("Physics", &hasPhysics))
+	{
+	}
+	if (hasPhysics)
+	{
+		static shared_ptr<PhysicsComponent> phyComp = std::make_shared<PhysicsComponent>();
+		gameObjectsMenuRigidBody(0, phyComp.get());
 	}
 	if (ImGui::Button("Create"))
 	{
@@ -835,8 +848,78 @@ void DebugMenu::gameObjectsMenuAnimation()
 {
 }
 
-void DebugMenu::gameObjectsMenuRigidBody()
+void DebugMenu::gameObjectsMenuRigidBody(int i, PhysicsComponent* phyComp)
 {
+	ImGui::PushID(i);
+	ImGui::Indent();
+	static bool hasMeshFile = false;
+	static char meshNameBuf[64] = "";
+	static float dragSpeed = 0.25f;
+	static float restitution = 0.0f;
+	static float friction = 0.0f;
+	ImGui::DragFloat("Mass", phyComp->getMass(), dragSpeed);
+	ImGui::Checkbox("HasMesh", &hasMeshFile);
+	if (hasMeshFile)
+	{
+		ImGui::InputText("MeshName", meshNameBuf, IM_ARRAYSIZE(meshNameBuf));
+		phyComp->setMeshFileName(meshNameBuf);
+	}
+	else
+	{
+		static ShapeData* shapeData = new ShapeData();
+		//list of bounding shapes?
+		for (int x = ShapeData::BOX; x < ShapeData::CAPSULE; x++)
+		{
+			ShapeData::BoundingShape shapeType = (ShapeData::BoundingShape)x;
+			shapeData->boundingShape = shapeType;
+			string typeName = EnumParser<ShapeData::BoundingShape>().getString(shapeType);
+			static vector<bool> shapeBools;
+			if (shapeBools.size() < ShapeData::CAPSULE)
+			{
+				shapeBools.push_back(false);
+			}
+			bool bWindowActive = shapeBools[x];
+			ImGui::Checkbox(typeName.c_str(), &bWindowActive);
+			shapeBools[x] = bWindowActive;
+			switch (x)
+			{
+			case ShapeData::BOX:
+				if (shapeBools[x])
+					ImGui::DragFloat3("Half Extents", &shapeData->halfExtents[0], dragSpeed);
+				break;
+			case ShapeData::SPHERE:
+				if (shapeBools[x])
+					ImGui::DragFloat("Radius", &shapeData->radius, dragSpeed);
+				break;
+			case ShapeData::CONE:
+				if (shapeBools[x])
+				{
+					ImGui::DragFloat("Radius", &shapeData->radius, dragSpeed);
+					ImGui::DragFloat("Height", &shapeData->height, dragSpeed);
+				}
+				break;
+			case ShapeData::CYLINDER:
+				if (shapeBools[x])
+					ImGui::DragFloat3("Half Extents", &shapeData->halfExtents[0], dragSpeed);
+				break;
+			case ShapeData::CAPSULE:
+				if (shapeBools[x])
+				{
+					ImGui::DragFloat("Radius", &shapeData->radius, dragSpeed);
+					ImGui::DragFloat("Height", &shapeData->height, dragSpeed);
+				}
+				break;
+			default:
+				break;
+			}
+		}
+		
+	}
+	ImGui::InputFloat("restitution", &restitution, dragSpeed);
+	phyComp->setRestitution(restitution);
+	ImGui::DragFloat("friction", &friction, dragSpeed);
+	phyComp->setRestitution(friction);
+	ImGui::PopID();
 }
 
 void DebugMenu::gameObjectsMenuLogic()

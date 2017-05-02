@@ -20,6 +20,7 @@ Uses imgui to organise a menu bar full of options for debug.
 
 */
 class ModelComponent;
+class PhysicsComponent;
 class Transform;
 class DebugMenu
 {
@@ -130,7 +131,7 @@ public:
 
 	void gameObjectsMenuModel(int i, ModelComponent* model);
 	void gameObjectsMenuAnimation();
-	void gameObjectsMenuRigidBody();
+	void gameObjectsMenuRigidBody(int i, PhysicsComponent* phyComp);
 	void gameObjectsMenuLogic();
 	void gameObjectsMenuTransform(int i, Transform* transform);
 };

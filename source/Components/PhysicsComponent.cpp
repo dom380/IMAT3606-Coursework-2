@@ -36,26 +36,8 @@ PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics>& physics, std::weak_
 	auto tp = sp != nullptr ? sp->getComponent<Transform>(ComponentType::TRANSFORM) : nullptr;
 
 	auto scale = tp->scale;
-	shapeData = new ShapeData(boundingShape);
-	//Build Collision shape
-	switch (boundingShape.boundingShape)
-	{
-		case ShapeData::BoundingShape::BOX:
-			shape = new btBoxShape(btVector3(boundingShape.halfExtents.x, boundingShape.halfExtents.y, boundingShape.halfExtents.z));
-			break;
-		case ShapeData::BoundingShape::SPHERE:
-			shape = new btSphereShape(boundingShape.radius);
-			break;
-		case ShapeData::BoundingShape::CONE:
-			shape = new btConeShape(boundingShape.radius, boundingShape.height);
-			break;
-		case ShapeData::BoundingShape::CYLINDER:
-			shape = new btCylinderShape(btVector3(boundingShape.halfExtents.x, boundingShape.halfExtents.y, boundingShape.halfExtents.z));
-			break;
-		case ShapeData::BoundingShape::CAPSULE:
-			shape = new btCapsuleShape(boundingShape.radius, boundingShape.height);
-			break;
-	}
+
+	buildCollisionShape(boundingShape);
 	init(physics, owner, mass);
 }
 
@@ -98,44 +80,50 @@ btRigidBody * PhysicsComponent::getBody()
 	return body;
 }
 
-float PhysicsComponent::getMass()
+float* PhysicsComponent::getMass()
 {
-	return mass;
+	return &mass;
 }
 
 double PhysicsComponent::getRestitution()
 {
-	return body->getRestitution();
+	if (body)
+		return body->getRestitution();
+	else
+		return restitution;
 }
 
 double PhysicsComponent::getFriction()
 {
-	return body->getFriction();
+	if (body)
+		return body->getFriction();
+	else
+		return friction;
 }
 
-double PhysicsComponent::getRotationalFriction()
+double* PhysicsComponent::getRotationalFriction()
 {
-	return rotationalFriction;
+	return &rotationalFriction;
 }
 
-btVector3 PhysicsComponent::getVelocity()
+btVector3* PhysicsComponent::getVelocity()
 {
-	return velocity;
+	return &velocity;
 }
 
-bool PhysicsComponent::isConstVelocity()
+bool* PhysicsComponent::isConstVelocity()
 {
-	return constVelocity;
+	return &constVelocity;
 }
 
-bool PhysicsComponent::isConvex()
+bool* PhysicsComponent::isConvex()
 {
-	return convex;
+	return &convex;
 }
 
-string PhysicsComponent::getMeshFileName()
+string* PhysicsComponent::getMeshFileName()
 {
-	return meshFileName;
+	return &meshFileName;
 }
 
 ShapeData * PhysicsComponent::getShape()
@@ -148,14 +136,18 @@ void PhysicsComponent::setMeshFileName(string fileName)
 	meshFileName = fileName;
 }
 
-void PhysicsComponent::setRestitution(double restitution)
+void PhysicsComponent::setRestitution(double passedRestitution)
 {
-	body->setRestitution(btScalar(restitution));
+	restitution = passedRestitution;
+	if (body)
+		body->setRestitution(btScalar(passedRestitution));
 }
 
-void PhysicsComponent::setFriction(double friction)
+void PhysicsComponent::setFriction(double passedFriction)
 {
-	body->setFriction(btScalar(friction));
+	friction = passedFriction;
+	if (body)
+		body->setFriction(btScalar(passedFriction));
 }
 
 void PhysicsComponent::setRotationalFriction(double friction)
@@ -289,6 +281,30 @@ void PhysicsComponent::buildCollisionShape(std::shared_ptr<std::vector<ConvexHul
 		transform.setIdentity();
 		transform.setOrigin(centroid);
 		((btCompoundShape*)shape)->addChildShape(transform, convexShape);
+	}
+}
+
+void PhysicsComponent::buildCollisionShape(ShapeData & boundingShape)
+{
+	shapeData = new ShapeData(boundingShape);
+	//Build Collision shape
+	switch (boundingShape.boundingShape)
+	{
+	case ShapeData::BoundingShape::BOX:
+		shape = new btBoxShape(btVector3(boundingShape.halfExtents.x, boundingShape.halfExtents.y, boundingShape.halfExtents.z));
+		break;
+	case ShapeData::BoundingShape::SPHERE:
+		shape = new btSphereShape(boundingShape.radius);
+		break;
+	case ShapeData::BoundingShape::CONE:
+		shape = new btConeShape(boundingShape.radius, boundingShape.height);
+		break;
+	case ShapeData::BoundingShape::CYLINDER:
+		shape = new btCylinderShape(btVector3(boundingShape.halfExtents.x, boundingShape.halfExtents.y, boundingShape.halfExtents.z));
+		break;
+	case ShapeData::BoundingShape::CAPSULE:
+		shape = new btCapsuleShape(boundingShape.radius, boundingShape.height);
+		break;
 	}
 }
 

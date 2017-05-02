@@ -44,7 +44,17 @@ public:
 		bool convex - Specifies whether the collision mesh is convex.
 	*/
 	PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject>& owner, ShapeData& boundingShape, float mass);
-
+	/*
+		Runtime create empty constructor
+	*/
+	PhysicsComponent() : Component(ComponentType::RIGID_BODY)
+	{
+		body = nullptr;
+		shape = nullptr;
+		mass = 0.0f;
+		convex = false;
+		rotationalFriction = 0.0f;
+	}
 	/*
 		Update's the GameObject's transform component to match the physics simulation.
 		If enabled, also maintains the specified constant linear velocity. 
@@ -61,15 +71,15 @@ public:
 	*/
 	btRigidBody* getBody();
 
-	float getMass();
+	float* getMass();
 	double getRestitution();
 	double getFriction();
-	double getRotationalFriction();
-	btVector3 getVelocity();
-	bool isConstVelocity();
-	bool isConvex();
+	double* getRotationalFriction();
+	btVector3* getVelocity();
+	bool* isConstVelocity();
+	bool* isConvex();
 
-	string getMeshFileName();
+	string* getMeshFileName();
 
 	ShapeData* getShape();
 
@@ -105,6 +115,23 @@ public:
 		Aplies the specified transform to the physics object to.
 	*/
 	void setTransform(Transform* transformPtr);
+
+	/*
+	Shared initialization code between constructors.
+	*/
+	void init(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject> owner, float mass);
+	/*
+	Constructs the collision shape from the specified mesh
+	*/
+	void buildCollisionShape(std::shared_ptr<ModelData>& mesh, glm::vec3& scale);
+	/*
+	Constructs the collision shape from the specified ConvexHulls
+	*/
+	void buildCollisionShape(std::shared_ptr<std::vector<ConvexHull>> mesh, glm::vec3& scale);
+	/*
+	Constructs collisionShape without mesh
+	*/
+	void buildCollisionShape(ShapeData& boundingShape);
 private:
 	std::weak_ptr<GameObject> owner;
 	string meshFileName;
@@ -117,23 +144,15 @@ private:
 	btVector3 velocity = btVector3(0.0, 0.0, 0.0);
 	bool constVelocity = false;
 	double rotationalFriction;
+	double restitution;
+	double friction;
 	//private utility methods
-	/*
-		Constructs the collision shape from the specified mesh
-	*/
-	void buildCollisionShape(std::shared_ptr<ModelData>& mesh, glm::vec3& scale);
-	/*
-		Constructs the collision shape from the specified ConvexHulls
-	*/
-	void buildCollisionShape(std::shared_ptr<std::vector<ConvexHull>> mesh, glm::vec3& scale);
+
 	/*
 		Synchronizes the Transform component with the physics simulation transform
 	*/
 	void updateTransform(Transform* transformPtr);
-	/*
-		Shared initialization code between constructors.
-	*/
-	void init(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject> owner, float mass);
+	
 };
 
 #endif // !PHYSICSCOMPONENT_H

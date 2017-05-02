@@ -851,8 +851,20 @@ void DebugMenu::gameObjectsMenuTransform(int i, Transform* transform)
 	ImGui::PushID(i);
 	static float dragSpeed = 0.25f;
 	static float quatDragSpeed = 0.0025f;
+	static glm::quat orientationVec;
+	static glm::vec3 axis;
+
+	float transformAngle = glm::degrees(glm::angle(transform->orientation));
+	axis = glm::axis(transform->orientation);
+
+	orientationVec[0] = axis[0];
+	orientationVec[1] = axis[1];
+	orientationVec[2] = axis[2];
+	orientationVec[3] = transformAngle;
+
 	ImGui::DragFloat3("Position", &transform->position[0], dragSpeed);
-	ImGui::DragFloat4("Orientation", &transform->orientation[0], quatDragSpeed);
+	ImGui::DragFloat4("Orientation", &orientationVec[0], quatDragSpeed);
+	transform->orientation = glm::angleAxis(glm::radians(orientationVec.w), glm::vec3(orientationVec.x, orientationVec.y, orientationVec.z));
 	ImGui::DragFloat3("Scale", &transform->scale[0], dragSpeed);
 	ImGui::PopID();
 }

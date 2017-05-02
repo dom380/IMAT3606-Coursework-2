@@ -7,12 +7,12 @@ trigger_test.trigger = function(gameObject)
 	local hitBefore = false
 	--Check if collided with this object before
 	--Works, causes a big frame drop on first collision
-	-- for k,v in pairs(trigger_test.foundIds) do
-		-- if(id == v) then 
-			-- hitBefore = true
-			-- break
-		-- end
-	-- end
+	for k,v in pairs(trigger_test.foundIds) do
+		if(id == v) then 
+			hitBefore = true
+			break
+		end
+	end
 	if modelComp ~= nil then --If object has a model and hasn't be collided before, change colour
 		if hitBefore ~= true then
 			table.insert(trigger_test.foundIds, id)

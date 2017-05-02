@@ -1,24 +1,16 @@
 #include "Screens\GameScreen.h"
 
-GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, shared_ptr<Physics>& physics, shared_ptr<Camera> camera) /*:
-	robot(std::make_shared<Robot>(AssetManager::getInstance()->getShader(std::pair<string, string>("colour.vert", "colour.frag"))))*/
+GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, shared_ptr<Physics>& physics, std::vector<shared_ptr<Camera>> cameras)
 {
 	screenType = type::GAMESCREEN;
 	this->renderer = renderer;
 	this->physics = physics;
 	componentStore = std::make_shared<ComponentStore>();
-	//shared_ptr<EngineCamera> engineCam = std::make_shared<EngineCamera>(renderer->getWidth(), renderer->getHeight(), 45.0f, glm::vec3(58, 42, -68), glm::vec3(0, 1, 0), glm::vec3(-0.8,-0.42,0.42));
-	shared_ptr<EngineCamera> engineCam = std::make_shared<EngineCamera>(renderer->getWidth(), renderer->getHeight(), 45.0f, glm::vec3(0.0,3.0,15.0), glm::vec3(0, 1, 0), glm::vec3(0.0, 0.0, -1));
-	cameras.push_back(engineCam);
-	/*
-		Read cameraDistanceToPlayer from file?
-		Perhaps a mechanics file, for all things regardless of level.
-	*/
-	cameraDistanceToPlayer = glm::vec3(0, -6, -15);
-	float aspect = 45.0f;
-	shared_ptr<FollowCamera> playerCam = std::make_shared<FollowCamera>(renderer->getWidth(), renderer->getHeight(), aspect, cameraDistanceToPlayer);
-	playerCam->lookAt(glm::vec3(0.0, 0.0, -1.0));
-	cameras.push_back(playerCam);
+	for (auto cam : cameras)
+	{
+		this->cameras.push_back(cam);
+	}
+
 #ifndef NDEBUG
 	glm::quat quat; quat.y = 1.0f; quat.w = 0.0f;
 	shared_ptr<Transform> textPos = std::make_shared<Transform>(glm::vec3(30, 30, 0), glm::vec3(0.5, 0.5, 0.5), quat);
@@ -26,22 +18,19 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 	uiElements.push_back(frameTime);
 #endif
 	this->input = input;
-	//this->input->registerKeyListener(robot);
-	this->input->registerKeyListener(engineCam);
-	this->input->registerMouseListener(engineCam);
 
 	activeCamera = 0;
-	activeCamera++;
+	if(this->cameras.size() > 1) activeCamera++;
 	UIManager::getInstance()->update();
 
 	//Sound stuff may move later only ever need one of these
 	//XML??
-	listener = listener->Instance();
-	sounds = sounds->Instance();
-	listener->setPosition(0.0, 0.0, 0.0);
-	listener->setDirection(1.0, 0.0, 0.0);
-	sounds->GetSound(0)->play();
-	sounds->setLooping(true, 0);
+	//listener = listener->Instance();
+	//sounds = sounds->Instance();
+	//listener->setPosition(0.0, 0.0, 0.0);
+	//listener->setDirection(1.0, 0.0, 0.0);
+	//sounds->GetSound(0)->play();
+	//sounds->setLooping(true, 0);
 
 }
 
@@ -49,25 +38,34 @@ void GameScreen::show()
 {
 	Engine::g_pEngine->getEngineState()->setEngineMode(EngineMode::EDITOR);
 	physics->setPaused(false);
-	for (auto go : gameObjects)
+	std::shared_ptr<FollowCamera> playerCam;
+	for (auto camera : cameras)
 	{
-		if (go->HasComponent(ComponentType::CONTROLLER))
+		if (camera->getCameraType() == Camera::CameraClass::FOLLOW && camera->getId() == "PLAYER_CAM")
 		{
-			auto control = go->getComponent<ControllerComponent>(ComponentType::CONTROLLER);
-			control->setCamera(cameras.at(1));
+			playerCam = std::dynamic_pointer_cast<FollowCamera>(camera);
+			break;
+		}
+	}
+	if (playerCam)
+	{
+		for (auto go : gameObjects)
+		{
+			if (go->HasComponent(ComponentType::CONTROLLER))
+			{
+				auto control = go->getComponent<ControllerComponent>(ComponentType::CONTROLLER);
+				control->setCamera(playerCam);
+			}
 		}
 	}
 }
 
 void GameScreen::update(double dt, double currentTime)
 {
-	Timer testTimer;
-	testTimer.start();
 #ifndef NDEBUG
 	if(!timer.isRunning())
 		timer.start();
 #endif
-//Message* robotLocMsg = new LocationMessage(robot->getPosition());
 	std::vector<std::pair<int, LogicComponent>>* logicComponents = componentStore->getAllComponents<LogicComponent>(ComponentType::LOGIC);
 	std::vector<std::pair<int, LogicComponent>>::iterator it;
 	for (it = logicComponents->begin(); it != logicComponents->end(); ++it)
@@ -77,7 +75,6 @@ void GameScreen::update(double dt, double currentTime)
 			it->second.update(dt);
 		}
 	}
-//delete robotLocMsg;
 
 	auto physicsComponents = componentStore->getAllComponents<PhysicsComponent>(ComponentType::RIGID_BODY);
 	for (auto it = physicsComponents->begin(); it != physicsComponents->end(); ++it)
@@ -95,9 +92,6 @@ void GameScreen::update(double dt, double currentTime)
 			it->second.update(dt);
 		}
 	}
-	auto ms = testTimer.getElapsedTimeMilliSec();
-	testTimer.stop();
-//	delete robotLocMsg;
 	auto animComponents = componentStore->getAllComponents<AnimatedModelComponent>(ComponentType::ANIMATION);
 	for (auto it = animComponents->begin(); it != animComponents->end(); ++it)
 	{
@@ -108,7 +102,6 @@ void GameScreen::update(double dt, double currentTime)
 void GameScreen::render()
 {
 	shared_ptr<Camera> camera = cameras.at(activeCamera);
-	//robot->DrawRobot(camera->getView(), camera->getProjection());
 	Message* renderMsg = new RenderMessage(camera, lightingBufferId, lightingBlockId);
 	std::vector<std::pair<int,ModelComponent>>* models = componentStore->getAllComponents<ModelComponent>(ComponentType::MODEL);
 	std::vector<std::pair<int, ModelComponent>>::iterator it;
@@ -123,7 +116,6 @@ void GameScreen::render()
 	for (animIt = animations->begin(); animIt != animations->end(); ++animIt)
 	{
 		if (animIt->first != -1)
-			//animIt->second.update(0.07f);
 			animIt->second.RecieveMessage(renderMsg);
 	}
 
@@ -205,17 +197,16 @@ bool GameScreen::handle(KeyEvent& event)
 			if (activeCamera >= cameras.size()) activeCamera = 0;
 			return true;
 		}
+		else if (event.key == KeyCodes::P)
+		{
+			auto phyPtr = std::dynamic_pointer_cast<BulletPhysics>(physics);
+			if (phyPtr != nullptr) phyPtr->handle(event);
+		}
 	}
-	if (activeCamera == 0)
+	if (activeCamera == 0) //Redirect event to Engine camera.
 	{
 		cameras.at(0)->handle(event);
 	}
-	else if (activeCamera == 1)
-	{
-		//robot->handle(event);
-	}
-	auto phyPtr = std::dynamic_pointer_cast<BulletPhysics>(physics);
-	if(phyPtr != nullptr) phyPtr->handle(event);
 	return false;
 }
 

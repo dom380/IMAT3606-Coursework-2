@@ -125,13 +125,20 @@ void PhysicsComponent::setConstVelocity(bool flag)
 
 void PhysicsComponent::setTransform(Transform * transformPtr)
 {
+	auto physics = physicsPtr.lock();
+	physics->removeBody(*this); //Have to remove the body from the simulation to correctly reset in bullet3.
 	btTransform transform = btTransform::getIdentity();
 	auto pos = transformPtr->position;
 	transform.setOrigin(btVector3(pos.x, pos.y, pos.z));
 	auto orientation = transformPtr->orientation;
 	transform.setRotation(btQuaternion(orientation.x, orientation.y, orientation.z, orientation.w));
-	auto ms = body->getMotionState();
-	ms->setWorldTransform(transform);
+	btVector3 zeroVec = btVector3(0.0, 0.0, 0.0);
+	body->clearForces();
+	body->setLinearVelocity(zeroVec);
+	body->setAngularVelocity(zeroVec);
+	body->setWorldTransform(transform);
+	physics->addBody(*this);
+	
 }
 
 void PhysicsComponent::dispose()

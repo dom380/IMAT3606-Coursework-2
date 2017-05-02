@@ -111,11 +111,12 @@ void BulletPhysics::tickCallback(btDynamicsWorld * world, btScalar timeStep)
 				for (int i = 0; i < numOfOverlaps; ++i)
 				{
 					auto object = trigger->getBody()->getOverlappingPairs().at(i);
+					if (object->isStaticObject()) continue;
 					//Pretty unsafe but bullet forces this. 
-					auto owner = static_cast<GameObject*>(object->getUserPointer());
-					if (owner != nullptr)
+					auto collider = static_cast<GameObject*>(object->getUserPointer());
+					if (collider != nullptr)
 					{
-						trigger->trigger(owner);
+						trigger->trigger(collider);
 					}
 				}
 			}		

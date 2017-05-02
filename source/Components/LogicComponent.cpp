@@ -118,6 +118,39 @@ void LogicComponent::applyTransform(glm::vec3 position, float scale, float orien
 	}
 }
 
+void LogicComponent::resetTransform()
+{
+	std::shared_ptr<GameScreen> sp_Screen = screen.lock(); //Access GameScreen
+	auto sp_Owner = owner.lock(); //Access GameObject that owns this component
+	if (sp_Owner != nullptr && sp_Screen != nullptr)  //If it still exists 
+	{
+		Handle comp = sp_Owner->GetComponentHandle(ComponentType::TRANSFORM);
+		Transform* transformPtr = nullptr;
+		if (!comp.isNull()) //If the GameObject has a transform component, update it's transform.
+		{
+			transformPtr = sp_Screen->getComponentStore()->getComponent<Transform>(comp, ComponentType::TRANSFORM);
+			transformPtr->position = transformPtr->getOriginalPos();
+			transformPtr->orientation = transformPtr->getOrigianlOrient();
+		}
+		comp = sp_Owner->GetComponentHandle(ComponentType::RIGID_BODY);
+		if (!comp.isNull()) //If the GameObject also has a physics component, update it's transform.
+		{
+			auto physicsPtr = sp_Screen->getComponentStore()->getComponent<PhysicsComponent>(comp, ComponentType::RIGID_BODY);
+			if (transformPtr != nullptr)
+			{
+				physicsPtr->setTransform(transformPtr);
+			}
+		}
+		comp = sp_Owner->GetComponentHandle(ComponentType::CONTROLLER);
+		if (!comp.isNull()) //If the GameObject has a controller, update it's transform.
+		{
+			auto controllerPtr = sp_Screen->getComponentStore()->getComponent<ControllerComponent>(comp, ComponentType::CONTROLLER);
+			if (controllerPtr != nullptr)
+				controllerPtr->setTransform(transformPtr);
+		}
+	}
+}
+
 void LogicComponent::toggleRender()
 {
 	auto sp_Owner = owner.lock();

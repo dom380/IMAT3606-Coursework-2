@@ -83,6 +83,8 @@ protected:
 
 	btScalar m_linearDamping;
 	btScalar m_angularDamping;
+	btScalar m_jumpRay;
+	btScalar m_jumpRayOffset;
 
 	bool  m_wasOnGround;
 	bool  m_wasJumping;
@@ -132,6 +134,8 @@ public:
 
 	const btVector3& getUp() { return m_up; }
 
+	void setJumpRay(float ray);
+
 	/// This should probably be called setPositionIncrementPerSimulatorStep.
 	/// This is neither a direction nor a velocity, but the amount to
 	///	increment the position each simulation iteration, regardless
@@ -172,6 +176,8 @@ public:
 	btScalar getJumpSpeed() const { return m_jumpSpeed; }
 	void setMaxJumpHeight(btScalar maxJumpHeight);
 	bool canJump() const;
+
+	void setJumpRayOffset(float offset);
 
 	void jump(const btVector3& v = btVector3());
 

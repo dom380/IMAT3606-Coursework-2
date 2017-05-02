@@ -21,21 +21,19 @@ gold_collectable.update = function(logicComponent, dt)
 	logicComponent:applyTransform(pos, scale, gold_collectable.angle);
 end
 
--- process message function
-gold_collectable.RecieveMessage = function (logicComponent, msg, msgType)
-	if msgType == "LOCATION" then
-		local dist = engine.vec3();
-		local pos = logicComponent:getPosition();
-		local location = msg.location;
-		dist.x = location.x - pos.x;
-		dist.y = 0;
-		dist.z = location.z - pos.z;
-		distance = math.abs(gold_collectable.length(dist));
-		if distance < 8 and logicComponent:isRendering() then
+gold_collectable.trigger = function(gameObject, engineObj, logic)
+	local tag = gameObject:getTag()
+	if logic then
+		if tag == "player" or tag == "PLAYER" then
 			print("Gold collected");
-			logicComponent:toggleRender();
-			logicComponent:updateScore(1);
+			logic:toggleRender();
+			logic:updateScore(1);
 		end
 	end
+end
+
+-- process message function
+gold_collectable.RecieveMessage = function (logicComponent, msg, msgType)
+
 end
 

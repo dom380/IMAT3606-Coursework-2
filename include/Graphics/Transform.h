@@ -10,6 +10,7 @@
 	Represents a GameObjects position, scale and orientation.
 */
 class Transform : public Component {
+	friend class LevelLoader;
 public:
 	/*
 		Default Constructor
@@ -27,9 +28,21 @@ public:
 	*/
 	Transform(glm::vec3 p, glm::vec3 s, glm::quat o) : Component(ComponentType::TRANSFORM) {
 		position = p;
+		originalPosition = p;
 		scale = s;
 		orientation = o;
+		originalOrientation = o;
 	};
+
+	glm::vec3 getOriginalPos() const
+	{
+		return originalPosition;
+	}
+
+	glm::quat getOrigianlOrient() const
+	{
+		return originalOrientation;
+	}
 
 	/*
 		Empty implementation of Componet::update()
@@ -39,14 +52,18 @@ public:
 		Empty implementation of Componet::RecieveMessage()
 	*/
 	void RecieveMessage(Message* msg) {};
-
+	/*
+		Empty implementation of Component::dispose()
+	*/
 	void dispose() {};
 
 	//public members
 	glm::vec3 position;
 	glm::vec3 scale;
-	glm::quat orientation;
-
+	glm::quat orientation;	
+private:
+	glm::vec3 originalPosition;
+	glm::quat originalOrientation;
 };
 
 #endif // !TRANSFORM_H

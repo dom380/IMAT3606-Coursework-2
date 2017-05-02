@@ -13,6 +13,7 @@ PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_
 
 	//Build collision shape
 	buildCollisionShape(mesh, tp->scale);
+	hasMesh = true;
 	init(physics, owner, mass);
 }
 
@@ -27,6 +28,7 @@ PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_
 	//Build collision shape
 	auto scale = tp->scale;
 	buildCollisionShape(mesh, tp->scale);
+	hasMesh = true;
 	init(physics, owner, mass);
 }
 
@@ -38,6 +40,7 @@ PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics>& physics, std::weak_
 	auto scale = tp->scale;
 
 	buildCollisionShape(boundingShape);
+	hasMesh = false;
 	init(physics, owner, mass);
 }
 
@@ -103,6 +106,10 @@ double PhysicsComponent::getFriction()
 
 double* PhysicsComponent::getRotationalFriction()
 {
+	if (body)
+	{
+		rotationalFriction = body->getRollingFriction();
+	}
 	return &rotationalFriction;
 }
 
@@ -121,6 +128,11 @@ bool* PhysicsComponent::isConvex()
 	return &convex;
 }
 
+bool * PhysicsComponent::hasMeshFile()
+{
+	return &hasMesh;
+}
+
 string* PhysicsComponent::getMeshFileName()
 {
 	return &meshFileName;
@@ -129,6 +141,11 @@ string* PhysicsComponent::getMeshFileName()
 ShapeData * PhysicsComponent::getShape()
 {
 	return shapeData;
+}
+
+void PhysicsComponent::setShape(ShapeData * passedShapeData)
+{
+	shapeData = passedShapeData;
 }
 
 void PhysicsComponent::setMeshFileName(string fileName)
@@ -143,6 +160,12 @@ void PhysicsComponent::setRestitution(double passedRestitution)
 		body->setRestitution(btScalar(passedRestitution));
 }
 
+void PhysicsComponent::setRestitution()
+{
+	if (body)
+		body->setRestitution(btScalar(restitution));
+}
+
 void PhysicsComponent::setFriction(double passedFriction)
 {
 	friction = passedFriction;
@@ -150,18 +173,39 @@ void PhysicsComponent::setFriction(double passedFriction)
 		body->setFriction(btScalar(passedFriction));
 }
 
+void PhysicsComponent::setFriction()
+{
+	if (body)
+		body->setFriction(btScalar(friction));
+}
+
 void PhysicsComponent::setRotationalFriction(double friction)
 {
 	rotationalFriction = friction;
 	btScalar frictionScalar = btScalar(friction);
-	body->setRollingFriction(frictionScalar);
-	body->setSpinningFriction(frictionScalar/btScalar(2.0));
+	if (body)
+	{
+		body->setRollingFriction(frictionScalar);
+		body->setSpinningFriction(frictionScalar / btScalar(2.0));
+	}
+	
+}
+
+void PhysicsComponent::setRotationalFriction()
+{
+	btScalar frictionScalar = btScalar(rotationalFriction);
+	if (body)
+	{
+		body->setRollingFriction(frictionScalar);
+		body->setSpinningFriction(frictionScalar / btScalar(2.0));
+	}
 }
 
 void PhysicsComponent::setVelocity(double x, double y, double z)
 {
 	velocity = btVector3(btScalar(x), btScalar(y), btScalar(z));
-	body->setLinearVelocity(velocity);
+	if (body)
+		body->setLinearVelocity(velocity);
 }
 
 void PhysicsComponent::setConstVelocity(bool flag)

@@ -78,10 +78,13 @@ public:
 	btVector3* getVelocity();
 	bool* isConstVelocity();
 	bool* isConvex();
-
+	bool* hasMeshFile();
 	string* getMeshFileName();
 
+
 	ShapeData* getShape();
+
+	void setShape(ShapeData* shapeData);
 
 	void setMeshFileName(string fileName);
 	/*
@@ -89,16 +92,19 @@ public:
 		double restitution - A value between 0..1 specifying how much energy is retained by this object after collision. 
 	*/
 	void setRestitution(double restitution);
+	void setRestitution();
 	/*
 		Sets the friction coefficent of the GameObject.
 		double friction - A value between 0..1 specifying the frictional coefficent.
 	*/
 	void setFriction(double friction);
+	void setFriction();
 	/*
 		Sets the rotational friction coefficent of the GameObject.
 		double friction - A value between 0..1 specifying the rotational frictional coefficent.
 	*/
 	void setRotationalFriction(double friction);
+	void setRotationalFriction();
 	/*
 		Sets the object's linear velocity. Note this overrides the object's current velocity.
 		double x - The X component of the velocity vector.
@@ -135,6 +141,7 @@ public:
 private:
 	std::weak_ptr<GameObject> owner;
 	string meshFileName;
+	bool hasMesh;
 	bool convex;
 	float mass;
 	btRigidBody* body;

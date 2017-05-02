@@ -22,6 +22,7 @@ shared_ptr<Texture> AssetManager::getTexture(const char * fileName)
 	}
 	Bitmap bmp = Bitmap::bitmapFromFile(buildFilePath(ResourceType::TEXTURE, fileName));
 	bmp.flipVertically();
+
 	shared_ptr<Texture> ptr = std::make_shared<Texture>(bmp);
 	textures.emplace(std::pair<string, shared_ptr<Texture>>(sFileName, ptr));
 	return ptr;	

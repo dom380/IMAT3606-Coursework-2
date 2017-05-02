@@ -852,11 +852,16 @@ void DebugMenu::gameObjectsMenuRigidBody(int i, PhysicsComponent* phyComp)
 {
 	ImGui::PushID(i);
 	ImGui::Indent();
-	static bool hasMeshFile = false;
-	static char meshNameBuf[64] = "";
 	static float dragSpeed = 0.25f;
-	static float restitution = 0.0f;
-	static float friction = 0.0f;
+	bool hasMeshFile = *phyComp->hasMeshFile();
+	char meshNameBuf[64] = "";
+	if (phyComp->getMeshFileName()->size() > 0)
+	{
+		strncpy_s(meshNameBuf, phyComp->getMeshFileName()->c_str(), phyComp->getMeshFileName()->size());
+	}
+	
+	static float restitution = phyComp->getRestitution();
+	static float friction = phyComp->getFriction();
 	ImGui::DragFloat("Mass", phyComp->getMass(), dragSpeed);
 	ImGui::Checkbox("HasMesh", &hasMeshFile);
 	if (hasMeshFile)
@@ -866,21 +871,73 @@ void DebugMenu::gameObjectsMenuRigidBody(int i, PhysicsComponent* phyComp)
 	}
 	else
 	{
-		static ShapeData* shapeData = new ShapeData();
+		static ShapeData* shapeData;
+		if (phyComp->getShape())
+		{
+			shapeData = phyComp->getShape();
+		}
+		else
+		{
+			shapeData = new ShapeData();
+		}
+		
 		//list of bounding shapes?
+		vector<bool> shapeBools;
+		if (boundingShapesList.empty())
+		{
+			//fill
+			for (int x = ShapeData::BOX; x < ShapeData::CAPSULE; x++)
+			{
+				ShapeData::BoundingShape shapeType = (ShapeData::BoundingShape)x;
+				string shape = EnumParser<ShapeData::BoundingShape>().getString(shapeType).c_str();
+				boundingShapesList.push_back(shape);
+			}
+			if (!boundingShapesCStyleArray.empty())
+				boundingShapesCStyleArray.clear();
+			boundingShapesCStyleArray.reserve(boundingShapesList.size());
+			for (int index = 0; index < boundingShapesList.size(); ++index)
+			{
+				boundingShapesCStyleArray.push_back(boundingShapesList[index].c_str());
+			}
+		}
+		while (shapeBools.size() < ShapeData::CAPSULE)
+		{
+			shapeBools.push_back(false);
+		}
 		for (int x = ShapeData::BOX; x < ShapeData::CAPSULE; x++)
 		{
 			ShapeData::BoundingShape shapeType = (ShapeData::BoundingShape)x;
-			shapeData->boundingShape = shapeType;
-			string typeName = EnumParser<ShapeData::BoundingShape>().getString(shapeType);
-			static vector<bool> shapeBools;
-			if (shapeBools.size() < ShapeData::CAPSULE)
+			if (shapeData->boundingShape)
 			{
-				shapeBools.push_back(false);
+				switch (shapeData->boundingShape)
+				{
+				case ShapeData::BOX:
+					shapeBools[ShapeData::BOX] = true;
+					break;
+				case ShapeData::SPHERE:
+					shapeBools[ShapeData::SPHERE] = true;
+					break;
+				case ShapeData::CONE:
+					shapeBools[ShapeData::CONE] = true;
+					break;
+				case ShapeData::CYLINDER:
+					shapeBools[ShapeData::CYLINDER] = true;
+					break;
+				case ShapeData::CAPSULE:
+					shapeBools[ShapeData::CAPSULE] = true;
+					break;
+				default:
+					break;
+				}
 			}
+			
+			string typeName = EnumParser<ShapeData::BoundingShape>().getString(shapeType);
+			
 			bool bWindowActive = shapeBools[x];
-			ImGui::Checkbox(typeName.c_str(), &bWindowActive);
+			
 			shapeBools[x] = bWindowActive;
+
+			
 			switch (x)
 			{
 			case ShapeData::BOX:
@@ -912,13 +969,32 @@ void DebugMenu::gameObjectsMenuRigidBody(int i, PhysicsComponent* phyComp)
 			default:
 				break;
 			}
+
+			if (shapeBools[x])
+			{
+				
+			}
 		}
-		
+		ImGui::ListBox("BoundingShapes Available", &listbox_item_current, &boundingShapesCStyleArray[0], boundingShapesCStyleArray.size(), 4);
+		shapeBools[listbox_item_current] = true;
+		if (ImGui::Button("UpdateBoundingShape"))
+		{
+			shapeData->boundingShape = EnumParser<ShapeData::BoundingShape>().parse(boundingShapesList[listbox_item_current]);
+		}
+		phyComp->setShape(shapeData);
+	
 	}
 	ImGui::InputFloat("restitution", &restitution, dragSpeed);
 	phyComp->setRestitution(restitution);
 	ImGui::DragFloat("friction", &friction, dragSpeed);
-	phyComp->setRestitution(friction);
+	phyComp->setFriction(friction);
+	float rotationalFriction = *phyComp->getRotationalFriction();
+	ImGui::InputFloat("Rotational Friction", &rotationalFriction, dragSpeed);
+	phyComp->setRotationalFriction(rotationalFriction);
+	ImGui::Checkbox("Is Constant Velocity", phyComp->isConstVelocity());
+	glm::vec3 velo = glm::vec3(phyComp->getVelocity()->getX(), phyComp->getVelocity()->getY(), phyComp->getVelocity()->getZ());
+	ImGui::DragFloat3("Velocity", &velo[0], dragSpeed);
+	phyComp->setVelocity(velo.x, velo.y, velo.z);
 	ImGui::PopID();
 }
 

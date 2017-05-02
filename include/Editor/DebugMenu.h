@@ -46,8 +46,10 @@ private:
 	vector<std::string> objList;
 	vector<std::string> textureList;
 	vector<std::string> fontList;
+	vector<std::string> boundingShapesList;
 	std::vector<const char *> textureCStyleArray;
 	std::vector<const char *> fontCStyleArray;
+	std::vector<const char *> boundingShapesCStyleArray;
 	vector<std::string> levelList;
 	/*
 		Vectors test if the window is active.

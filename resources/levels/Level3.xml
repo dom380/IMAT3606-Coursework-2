@@ -371,7 +371,7 @@
         </components>
       </gameObject>
 	  <!-- Death collision -->
-	  <gameObject>
+		<gameObject>
 			<tag>PHY_OBJ</tag>
 			<components>
 				<component type="transform">
@@ -396,6 +396,36 @@
 						</half_extents>
 					</bounding_shape>
 					<trigger_once>false</trigger_once>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>5.0</z>
+					</position>
+					<scale>
+						<x>0.25</x>
+						<y>0.25</y>
+						<z>0.25</z>
+					</scale>
+				</component>
+				<component type="TRIGGER">
+					<script>end_screen_trigger.lua</script>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>0.25</x>
+							<y>0.25</y>
+							<z>0.25</z>
+						</half_extents>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
 				</component>
 			</components>
 		</gameObject>

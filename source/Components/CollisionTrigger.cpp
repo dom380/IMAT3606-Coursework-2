@@ -68,9 +68,15 @@ void CollisionTrigger::trigger(std::shared_ptr<GameObject> collider)
 	{
 		if (triggerFunc.isFunction()) //If the script contains a valid function
 		{
-			triggerFunc();
 			if (triggerOnce && !triggered)
-				triggered = true;
+			{
+				this->triggered = true;
+			}
+			else if (triggerOnce && triggered)
+			{
+				return;
+			}
+			triggerFunc(*collider, Engine::g_pEngine.get());
 		}
 	}
 	catch (luabridge::LuaException e)
@@ -95,7 +101,7 @@ void CollisionTrigger::trigger(GameObject * collider)
 			{
 				return;
 			}
-			triggerFunc(*collider);
+			triggerFunc(*collider, Engine::g_pEngine.get());
 		}
 	}
 	catch (luabridge::LuaException e)

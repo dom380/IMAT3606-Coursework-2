@@ -119,4 +119,9 @@ EnumParser<GameObjectTag>::EnumParser()
 	map["phy_obj"] = GameObjectTag::PHY_OBJ;
 	map["UNKNOWN"] = GameObjectTag::UNKNOWN;
 	map["unknown"] = GameObjectTag::UNKNOWN;
+
+	strmap[GameObjectTag::PLAYER] = "player";
+	strmap[GameObjectTag::ENEMY] = "enemy";
+	strmap[GameObjectTag::PHY_OBJ] = "phy_obj";
+	strmap[GameObjectTag::UNKNOWN] = "unknown";
 }

@@ -704,7 +704,12 @@ private:
 		readShapeData(controllerElement, shapeData);
 		bool flip = controllerElement->FirstChildElement("flip") != NULL ? controllerElement->FirstChildElement("flip")->BoolText() : false;
 		float offset = controllerElement->FirstChildElement("offset") != NULL ? controllerElement->FirstChildElement("offset")->FloatText() : 0.0f;
-		shared_ptr<ControllerComponent> controller = std::make_shared<ControllerComponent>(physics, gameObject, shapeData, offset, flip);
+		float jumpRayVal = controllerElement->FirstChildElement("jump_ray") != NULL ? controllerElement->FirstChildElement("jump_ray")->FloatText() : 0.13f;
+		shared_ptr<ControllerComponent> controller = std::make_shared<ControllerComponent>(physics, gameObject, shapeData, offset, jumpRayVal, flip);
+		float movementSpeed = controllerElement->FirstChildElement("movement_speed") != NULL ? controllerElement->FirstChildElement("movement_speed")->FloatText() : 0.1f;
+		float jumpForce = controllerElement->FirstChildElement("jump_force") != NULL ? controllerElement->FirstChildElement("jump_force")->FloatText() : 10.0f;
+		controller->setMovementSpeed(movementSpeed);
+		controller->setJumpForce(jumpForce);
 		gameObject->AddComponent(controller, ComponentType::CONTROLLER);
 
 	}

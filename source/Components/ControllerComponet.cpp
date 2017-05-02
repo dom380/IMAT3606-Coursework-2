@@ -1,7 +1,7 @@
 #include <Components\ControllerComponent.h>
 
 
-ControllerComponent::ControllerComponent(std::shared_ptr<Physics> physics, std::weak_ptr<GameObject> owner, ShapeData shape, float yOffset, bool flip) : Component(ComponentType::CONTROLLER)
+ControllerComponent::ControllerComponent(std::shared_ptr<Physics> physics, std::weak_ptr<GameObject> owner, ShapeData shape, float yOffset, float jumpRayVal, bool flip) : Component(ComponentType::CONTROLLER)
 {
 	this->owner = owner;
 	this->physics = physics;
@@ -34,6 +34,8 @@ ControllerComponent::ControllerComponent(std::shared_ptr<Physics> physics, std::
 	this->controller->setFallSpeed(btScalar(55.0));
 	this->controller->setGravity(btVector3(0.0f, -30.0f, 0.0f));
 	this->controller->setAngularDamping(1.0);
+	this->controller->setJumpRay(jumpRayVal);
+	this->controller->setJumpRayOffset(shape.height + shape.radius);
 	
 	auto ptr = dynamic_pointer_cast<BulletPhysics, Physics>(physics);
 	ptr->addController(this->controller);
@@ -91,6 +93,11 @@ void ControllerComponent::setTransform(Transform * transform)
 	if (camera) camera->move(pos);
 }
 
+void ControllerComponent::setJumpForce(float force)
+{
+	jumpForce = force;
+}
+
 void ControllerComponent::dispose()
 {
 	auto ptr = dynamic_pointer_cast<BulletPhysics, Physics>(physics);
@@ -132,11 +139,7 @@ void ControllerComponent::pollInput()
 
 	if (space == KeyEventType::KEY_PRESSED && controller->canJump())
 	{
-		//auto vertVel = controller->m_verticalVelocity;
-		//std::cout << "Vertical Velocity: " << vertVel << std::endl;
-		//auto vertOffset = controller->m_verticalOffset;
-		//std::cout << "Vertical Offset: " << vertOffset << std::endl;
-		controller->jump(upDir*10);
+		controller->jump(upDir*jumpForce);
 	}
 
 }

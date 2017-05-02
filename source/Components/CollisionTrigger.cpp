@@ -101,7 +101,13 @@ void CollisionTrigger::trigger(GameObject * collider)
 			{
 				return;
 			}
-			triggerFunc(*collider, Engine::g_pEngine.get());
+			auto sp = owner.lock();
+			LogicComponent* logic = nullptr;
+			if (sp)
+			{
+				logic = sp->getLogic();
+			}
+			triggerFunc(*collider, Engine::g_pEngine.get(), logic);
 		}
 	}
 	catch (luabridge::LuaException e)

@@ -54,9 +54,9 @@
 						<z>0.0</z>
 					</position>
 					<scale>
-						<x>5.0</x>
+						<x>10.0</x>
 						<y>0.25</y>
-						<z>5.0</z>
+						<z>10.0</z>
 					</scale>
 				</component>
 				<component type = "rigid_body">
@@ -65,9 +65,9 @@
 					<restitution>0.4</restitution>
 					<bounding_shape type="BOX">
 						<half_extents>
-							<x>5.0</x>
+							<x>10.0</x>
 							<y>0.25</y>
-							<z>5.0</z>
+							<z>10.0</z>
 						</half_extents>
 					</bounding_shape>
 				</component>
@@ -82,14 +82,14 @@
 				</component>
 				<component type="transform">
 					<position>
-						<x>-5.25</x>
-						<y>5.0</y>
+						<x>-10.25</x>
+						<y>10.0</y>
 						<z>0.0</z>
 					</position>
 					<scale>
-						<x>5.0</x>
+						<x>10.0</x>
 						<y>0.25</y>
-						<z>5.0</z>
+						<z>10.0</z>
 					</scale>
 					<orientation>
 						<x>0.0</x>
@@ -104,9 +104,9 @@
 					<restitution>0.4</restitution>
 					<bounding_shape type="BOX">
 						<half_extents>
-							<x>5.0</x>
+							<x>10.0</x>
 							<y>0.25</y>
-							<z>5.0</z>
+							<z>10.0</z>
 						</half_extents>
 					</bounding_shape>
 				</component>
@@ -121,14 +121,14 @@
 				</component>
 				<component type="transform">
 					<position>
-						<x>5.25</x>
-						<y>5.0</y>
+						<x>10.25</x>
+						<y>10.0</y>
 						<z>0.0</z>
 					</position>
 					<scale>
-						<x>5.0</x>
+						<x>10.0</x>
 						<y>0.25</y>
-						<z>5.0</z>
+						<z>10.0</z>
 					</scale>
 					<orientation>
 						<x>0.0</x>
@@ -142,9 +142,9 @@
 					<restitution>0.4</restitution>
 					<bounding_shape type="BOX">
 						<half_extents>
-							<x>5.0</x>
+							<x>10.0</x>
 							<y>0.25</y>
-							<z>5.0</z>
+							<z>10.0</z>
 						</half_extents>
 					</bounding_shape>
 				</component>
@@ -160,13 +160,13 @@
 				<component type="transform">
 					<position>
 						<x>0.0</x>
-						<y>5.0</y>
-						<z>-5.25</z>
+						<y>10.0</y>
+						<z>-10.25</z>
 					</position>
 					<scale>
-						<x>5.0</x>
+						<x>10.0</x>
 						<y>0.25</y>
-						<z>5.0</z>
+						<z>10.0</z>
 					</scale>
 					<orientation>
 						<x>1.0</x>
@@ -180,9 +180,9 @@
 					<restitution>0.4</restitution>
 					<bounding_shape type="BOX">
 						<half_extents>
-							<x>5.0</x>
+							<x>10.0</x>
 							<y>0.25</y>
-							<z>5.0</z>
+							<z>10.0</z>
 						</half_extents>
 					</bounding_shape>
 				</component>
@@ -233,7 +233,10 @@
 				</component>
 				<component type = "controller">
 					<flip>true</flip>
+					<jump_ray>0.13</jump_ray>
 					<offset>1.25</offset>
+					<jump_force>12</jump_force>
+					<movement_speed>0.2</movement_speed>
 					<bounding_shape type="CAPSULE">
 						<radius>0.75</radius>
 						<height>1.0</height>
@@ -424,6 +427,217 @@
 							<y>0.25</y>
 							<z>0.25</z>
 						</half_extents>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>gold.obj</file>
+					<texture>gold.tga</texture>
+				</component>
+				<component type="transform">
+					<position>
+						<x>-8.0</x>
+						<y>1.0</y>
+						<z>5.0</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>5.0</y>
+						<z>5.0</z>
+					</scale>
+				</component>
+				<component type="logic">
+					<script>gold_collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>0.5</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>gold.obj</file>
+					<texture>gold.tga</texture>
+				</component>
+				<component type="transform">
+					<position>
+						<x>-6.0</x>
+						<y>1.0</y>
+						<z>5.0</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>5.0</y>
+						<z>5.0</z>
+					</scale>
+				</component>
+				<component type="logic">
+					<script>gold_collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>0.5</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>gold.obj</file>
+					<texture>gold.tga</texture>
+				</component>
+				<component type="transform">
+					<position>
+						<x>-4.0</x>
+						<y>1.0</y>
+						<z>5.0</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>5.0</y>
+						<z>5.0</z>
+					</scale>
+				</component>
+				<component type="logic">
+					<script>gold_collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>0.5</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+				</component>
+			</components>
+		</gameObject>
+		
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>gold.obj</file>
+					<texture>gold.tga</texture>
+				</component>
+				<component type="transform">
+					<position>
+						<x>-2.0</x>
+						<y>1.0</y>
+						<z>5.0</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>5.0</y>
+						<z>5.0</z>
+					</scale>
+				</component>
+				<component type="logic">
+					<script>gold_collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>0.5</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>gold.obj</file>
+					<texture>gold.tga</texture>
+				</component>
+				<component type="transform">
+					<position>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>5.0</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>5.0</y>
+						<z>5.0</z>
+					</scale>
+				</component>
+				<component type="logic">
+					<script>gold_collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>0.5</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>gold.obj</file>
+					<texture>gold.tga</texture>
+				</component>
+				<component type="transform">
+					<position>
+						<x>2.0</x>
+						<y>1.0</y>
+						<z>5.0</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>5.0</y>
+						<z>5.0</z>
+					</scale>
+				</component>
+				<component type="logic">
+					<script>gold_collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>0.5</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>gold.obj</file>
+					<texture>gold.tga</texture>
+				</component>
+				<component type="transform">
+					<position>
+						<x>4.0</x>
+						<y>1.0</y>
+						<z>5.0</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>5.0</y>
+						<z>5.0</z>
+					</scale>
+				</component>
+				<component type="logic">
+					<script>gold_collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>0.5</radius>
 					</bounding_shape>
 					<trigger_once>true</trigger_once>
 				</component>

@@ -352,6 +352,10 @@ bool DebugMenu::saveCurrentLevel(string fileName)
 				{
 				}
 			}
+			
+		}
+		for (int x = 0; x < gameScreen->getGameObjects().size(); x++)
+		{
 			if (gameScreen->getGameObjects().at(x)->HasComponent(ComponentType::MODEL))
 			{
 				if (!gameScreen->getGameObjects().at(x)->getModel()->isDrawing())

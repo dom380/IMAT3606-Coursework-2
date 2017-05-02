@@ -234,11 +234,11 @@
 				<component type = "controller">
 					<flip>true</flip>
 					<jump_ray>0.13</jump_ray>
-					<offset>1.25</offset>
+					<offset>1.0</offset>
 					<jump_force>12</jump_force>
 					<movement_speed>0.2</movement_speed>
 					<bounding_shape type="CAPSULE">
-						<radius>0.75</radius>
+						<radius>0.5</radius>
 						<height>1.0</height>
 					</bounding_shape>
 				</component>

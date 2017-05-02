@@ -36,6 +36,7 @@ ControllerComponent::ControllerComponent(std::shared_ptr<Physics> physics, std::
 	this->controller->setAngularDamping(1.0);
 	this->controller->setJumpRay(jumpRayVal);
 	this->controller->setJumpRayOffset(shape.height + shape.radius);
+	this->controller->setRadius(shape.radius);
 	
 	auto ptr = dynamic_pointer_cast<BulletPhysics, Physics>(physics);
 	ptr->addController(this->controller);

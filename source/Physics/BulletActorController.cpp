@@ -919,6 +919,11 @@ void BulletActerController::setJumpRayOffset(float offset)
 	m_jumpRayOffset = offset;
 }
 
+void BulletActerController::setRadius(float radius)
+{
+	m_Radius = radius;
+}
+
 void BulletActerController::jump(const btVector3& v)
 {
 	m_jumpSpeed = v.length2() == 0 ? m_SetjumpSpeed : v.length();
@@ -979,9 +984,23 @@ bool BulletActerController::onGround() const
 	{
 		btKinematicClosestNotMeRayResultCallback cb(m_ghostObject);
 		auto transform = m_ghostObject->getWorldTransform();
-		//transform.getOrigin().setY(transform.getOrigin().getY() - (m_jumpRayOffset));
+		auto rayDist = 10.0 + m_jumpRayOffset;
 		auto endPoint = transform;
-		endPoint.setOrigin(transform.getOrigin() + btVector3(0.0, -(10.0 + m_jumpRayOffset), 0.0));
+		//front ray
+		transform.setOrigin(m_ghostObject->getWorldTransform().getOrigin() + btVector3(0.0, 0.0, -m_Radius));
+		endPoint.setOrigin(transform.getOrigin() + btVector3(0.0, -rayDist, 0.0));
+		m_collisionWorld->rayTest(transform.getOrigin(), endPoint.getOrigin(), cb);
+		//back ray
+		transform.setOrigin(m_ghostObject->getWorldTransform().getOrigin() + btVector3(0.0, 0.0, m_Radius));
+		endPoint.setOrigin(transform.getOrigin() + btVector3(0.0, -rayDist, 0.0));
+		m_collisionWorld->rayTest(transform.getOrigin(), endPoint.getOrigin(), cb);
+		//side ray
+		transform.setOrigin(m_ghostObject->getWorldTransform().getOrigin() + btVector3(m_Radius, 0.0, 0.0));
+		endPoint.setOrigin(transform.getOrigin() + btVector3(0.0, -rayDist, 0.0));
+		m_collisionWorld->rayTest(transform.getOrigin(), endPoint.getOrigin(), cb);
+		//side ray
+		transform.setOrigin(m_ghostObject->getWorldTransform().getOrigin() + btVector3(-m_Radius, 0.0, 0.0));
+		endPoint.setOrigin(transform.getOrigin() + btVector3(0.0, -rayDist, 0.0));
 		m_collisionWorld->rayTest(transform.getOrigin(), endPoint.getOrigin(), cb);
 		if (cb.hasHit())
 		{

@@ -85,6 +85,7 @@ protected:
 	btScalar m_angularDamping;
 	btScalar m_jumpRay;
 	btScalar m_jumpRayOffset;
+	btScalar m_Radius;
 
 	bool  m_wasOnGround;
 	bool  m_wasJumping;
@@ -178,6 +179,7 @@ public:
 	bool canJump() const;
 
 	void setJumpRayOffset(float offset);
+	void setRadius(float radius);
 
 	void jump(const btVector3& v = btVector3());
 

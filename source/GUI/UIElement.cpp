@@ -23,6 +23,16 @@ bool UIElement::isActive()
 	return active;
 }
 
+void UIElement::setSavable(bool canSave)
+{
+	savable = canSave;
+}
+
+bool UIElement::isSavable()
+{
+	return savable;
+}
+
 shared_ptr<Button> UIElement::getButton()
 {
 	return button;

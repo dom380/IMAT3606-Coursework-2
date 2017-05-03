@@ -423,19 +423,25 @@ bool DebugMenu::saveCurrentLevel(string fileName)
 		Every UI object
 	*/
 	numberOfObjectsInFile = XMLReader::GetNumberOfUIElementsInFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument());
+	int unsavableObjectsCount = 0;
 	for (int x = 0; x < Engine::g_pEngine->getActiveScreen()->getUIElements().size(); x++)
 	{
-		FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, Engine::g_pEngine->getActiveScreen()->getUIElements()[x]);
-		//If there is a new object not saved on file
-		if (x >= numberOfObjectsInFile)
+		if (!Engine::g_pEngine->getActiveScreen()->getUIElements()[x]->isSavable())
 		{
-			if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, Engine::g_pEngine->getActiveScreen()->getUIElements()[x]))
+			unsavableObjectsCount++;
+			continue;
+		}
+		FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x-unsavableObjectsCount, Engine::g_pEngine->getActiveScreen()->getUIElements()[x]);
+		//If there is a new object not saved on file
+		if (x-unsavableObjectsCount >= numberOfObjectsInFile)
+		{
+			if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x-unsavableObjectsCount, Engine::g_pEngine->getActiveScreen()->getUIElements()[x]))
 			{
 			}
 		}
 		if (!Engine::g_pEngine->getActiveScreen()->getUIElements().at(x)->isActive())
 		{
-			FileSaver::DeleteObjectFromFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, Engine::g_pEngine->getActiveScreen()->getUIElements()[x]);
+			FileSaver::DeleteObjectFromFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x-unsavableObjectsCount, Engine::g_pEngine->getActiveScreen()->getUIElements()[x]);
 		}
 	}
 	return FileSaver::SaveFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(),fileName);

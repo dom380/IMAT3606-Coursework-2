@@ -23,6 +23,7 @@ class ModelComponent;
 class PhysicsComponent;
 class Transform;
 class LogicComponent;
+class CollisionTrigger;
 class DebugMenu
 {
 private:
@@ -137,7 +138,7 @@ public:
 
 	void gameObjectsMenuRigidBody(int i, PhysicsComponent* phyComp, Transform* tranform);
 	void gameObjectsMenuLogic(int i, LogicComponent* logic);
-
+	void gameObjectsMenuTrigger(int i, CollisionTrigger* trigger);
 	void gameObjectsMenuTransform(int i, Transform* transform);
 };
 

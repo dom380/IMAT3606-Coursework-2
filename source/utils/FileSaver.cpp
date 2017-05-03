@@ -830,7 +830,7 @@ bool FileSaver::UpdateRigidBody(tinyxml2::XMLDocument * doc, tinyxml2::XMLElemen
 				if (!extentsElemenet)
 				{
 					extentsElemenet = doc->NewElement("half_extents");
-					physicsElement->InsertEndChild(extentsElemenet);
+					shapeElement->InsertEndChild(extentsElemenet);
 				}
 				if (extentsElemenet->FirstChildElement("x") == NULL)
 				{
@@ -872,7 +872,7 @@ bool FileSaver::UpdateRigidBody(tinyxml2::XMLDocument * doc, tinyxml2::XMLElemen
 				if (!extentsElemenet)
 				{
 					extentsElemenet = doc->NewElement("half_extents");
-					physicsElement->InsertEndChild(extentsElemenet);
+					shapeElement->InsertEndChild(extentsElemenet);
 				}
 				if (extentsElemenet->FirstChildElement("x") == NULL)
 				{
@@ -1005,7 +1005,7 @@ bool FileSaver::UpdateTrigger(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement 
 			if (!extentsElemenet)
 			{
 				extentsElemenet = doc->NewElement("half_extents");
-				triggerElement->InsertEndChild(extentsElemenet);
+				shapeElement->InsertEndChild(extentsElemenet);
 			}
 			if (extentsElemenet->FirstChildElement("x") == NULL)
 			{
@@ -1047,7 +1047,7 @@ bool FileSaver::UpdateTrigger(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement 
 			if (!extentsElemenet)
 			{
 				extentsElemenet = doc->NewElement("half_extents");
-				triggerElement->InsertEndChild(extentsElemenet);
+				shapeElement->InsertEndChild(extentsElemenet);
 			}
 			if (extentsElemenet->FirstChildElement("x") == NULL)
 			{
@@ -1265,7 +1265,7 @@ bool FileSaver::AddRigidBody(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement *
 			case ShapeData::BOX:
 				extentsElemenet = doc->NewElement("half_extents");
 
-				physicsElement->InsertEndChild(extentsElemenet);
+				shapeElement->InsertEndChild(extentsElemenet);
 				extentsElemenet->InsertEndChild(doc->NewElement("x"));
 				extentsElemenet->FirstChildElement("x")->SetText(phyComp->getShape()->halfExtents[0]);
 				
@@ -1288,7 +1288,7 @@ bool FileSaver::AddRigidBody(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement *
 				break;
 			case ShapeData::CYLINDER:
 				extentsElemenet = doc->NewElement("half_extents");
-				physicsElement->InsertEndChild(extentsElemenet);
+				shapeElement->InsertEndChild(extentsElemenet);
 				
 				extentsElemenet->InsertEndChild(doc->NewElement("x"));
 				extentsElemenet->FirstChildElement("x")->SetText(phyComp->getShape()->halfExtents[0]);
@@ -1369,7 +1369,7 @@ bool FileSaver::AddTrigger(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement * t
 		case ShapeData::BOX:
 			extentsElemenet = doc->NewElement("half_extents");
 
-			triggerElement->InsertEndChild(extentsElemenet);
+			shapeElement->InsertEndChild(extentsElemenet);
 			extentsElemenet->InsertEndChild(doc->NewElement("x"));
 			extentsElemenet->FirstChildElement("x")->SetText(triggerComp->getShape()->halfExtents[0]);
 
@@ -1392,7 +1392,7 @@ bool FileSaver::AddTrigger(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement * t
 			break;
 		case ShapeData::CYLINDER:
 			extentsElemenet = doc->NewElement("half_extents");
-			triggerElement->InsertEndChild(extentsElemenet);
+			shapeElement->InsertEndChild(extentsElemenet);
 
 			extentsElemenet->InsertEndChild(doc->NewElement("x"));
 			extentsElemenet->FirstChildElement("x")->SetText(triggerComp->getShape()->halfExtents[0]);

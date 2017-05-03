@@ -20,7 +20,9 @@
 class SoundComponent
 {
 private:
-
+	SoundComponent(); //!< Default constructor
+	SoundComponent(SoundComponent const&) {}; // prevent copies
+	void operator=(SoundComponent const&) {}; // prevent assignments
 	std::vector<sf::Sound*> m_Sounds; //!< Vector container of sound pointers
 	std::vector<sf::SoundBuffer*> m_SoundBuffer; //!< Vector container of SoundBuffer pointers
 	std::vector<std::string> m_sSoundFile; //!< Vector container of strings containing the names of the sound files
@@ -29,7 +31,7 @@ private:
 public:
 
 	static SoundComponent* Instance();
-	SoundComponent(); //!< Default constructor
+
 	/*
 		Gets the sound
 	*/
@@ -86,9 +88,10 @@ public:
 	void setRelativeToListener(bool b, int index);
 
 	/*
-		Loads sound
+		Loads sound if it has not already been loaded.
+		Returns the index to the sound.
 	*/
-	void loadSound(std::string pathname);
+	int loadSound(std::string pathname);
 
 	/*
 		Destorys sounds

@@ -318,10 +318,19 @@ void DebugMenu::debugGameObjectsMenu()
 							break;
 						}
 						case ComponentType::TRANSFORM:
+						{
 							auto transform = gameScreen->getComponentStore()->getComponent<Transform>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
 							gameObjectsMenuTransform(i, transform);
 							break;
 						}
+						case ComponentType::TRIGGER:
+						{
+							auto trigger = gameScreen->getComponentStore()->getComponent<CollisionTrigger>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::TRIGGER), ComponentType::TRIGGER);
+							gameObjectsMenuTrigger(i, trigger);
+							break;
+						}
+						}
+						
 						ImGui::TreePop();
 					}
 					ImGui::PopID();
@@ -371,6 +380,32 @@ void DebugMenu::debugGameObjectsMenu()
 					{
 						logic->registerLuaBindings();
 						gameScreen->getGameObjects()[x]->AddComponent(logic, ComponentType::LOGIC);
+					}
+				}
+			}
+			if (!gameScreen->getGameObjects()[x]->HasComponent(ComponentType::TRIGGER))
+			{
+				static bool hasTrigger = false;
+
+				if (ImGui::Checkbox("AddTrigger", &hasTrigger))
+				{
+
+				}
+				if (hasTrigger)
+				{
+					ImGui::Indent();
+					static shared_ptr<CollisionTrigger> trigger = std::make_shared<CollisionTrigger>();
+					gameObjectsMenuTrigger(0, trigger.get());
+					if (ImGui::Button("Add"))
+					{
+						trigger->setOwner(gameScreen->getGameObjects()[x]);
+						trigger->init();
+						gameScreen->getGameObjects()[x]->AddComponent(trigger, ComponentType::TRIGGER);
+						std::shared_ptr<BulletPhysics> physicsPtr = std::dynamic_pointer_cast<BulletPhysics>(Engine::g_pEngine->getPhysics());
+						if (physicsPtr != nullptr)
+						{
+							physicsPtr->addTrigger(trigger);
+						}
 					}
 				}
 			}
@@ -596,8 +631,16 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 	}
 	if (hasPhysics)
 	{
-		
 		gameObjectsMenuRigidBody(0, phyComp.get(), transform.get());
+	}
+	static bool hasTrigger = false;
+	static shared_ptr<CollisionTrigger> trigger = std::make_shared<CollisionTrigger>();
+	if (ImGui::Checkbox("Trigger", &hasTrigger))
+	{
+	}
+	if (hasTrigger)
+	{
+		gameObjectsMenuTrigger(0, trigger.get());
 	}
 	if (ImGui::Button("Create"))
 	{
@@ -622,6 +665,17 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 			logic->setScreen(gameScreen);
 			logic->registerLuaBindings();
 			gameScreen->getGameObjects().back()->AddComponent(logic, ComponentType::LOGIC);
+		}
+		if (hasTrigger)
+		{
+			trigger->setOwner(gameScreen->getGameObjects().back());
+			trigger->init();
+			gameScreen->getGameObjects().back()->AddComponent(trigger, ComponentType::TRIGGER);
+			std::shared_ptr<BulletPhysics> physicsPtr = std::dynamic_pointer_cast<BulletPhysics>(Engine::g_pEngine->getPhysics());
+			if (physicsPtr != nullptr)
+			{
+				physicsPtr->addTrigger(trigger);
+			}
 		}
 	}
 	ImGui::PopID();
@@ -1125,6 +1179,154 @@ void DebugMenu::gameObjectsMenuLogic(int i, LogicComponent* logic)
 	{
 		logic->registerLuaBindings();
 	}
+	ImGui::PopID();
+}
+
+void DebugMenu::gameObjectsMenuTrigger(int i, CollisionTrigger * trigger)
+{
+	ImGui::PushID(i);
+	ImGui::Indent();
+	//Script
+	static char scriptNameBuf[64] = "";
+
+	if (strlen(scriptNameBuf) == 0)
+	{
+		strncpy_s(scriptNameBuf, trigger->getScriptName().c_str(), trigger->getScriptName().size());
+	}
+
+	ImGui::InputText("Script Name", scriptNameBuf, sizeof(scriptNameBuf));
+	if (ImGui::Button("SetName"))
+	{
+		trigger->setScriptName(scriptNameBuf);
+		static string fullPath;
+		fullPath = AssetManager::getInstance()->getScript(scriptNameBuf) + ".lua";
+		trigger->setScriptFullPath(fullPath.c_str());
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("LoadScript"))
+	{
+		trigger->loadScript();
+	}
+	//triggeronce
+	static bool triggerOnce = trigger->isTriggerOnce();
+	if (ImGui::Checkbox("TriggerOnce?", &triggerOnce))
+	{
+		trigger->setTriggerOnce(triggerOnce);
+	}
+
+	//ObjectBoundingShape
+	{
+		static ShapeData* shapeData;
+		if (trigger->getShape())
+		{
+			shapeData = trigger->getShape();
+		}
+		else
+		{
+			shapeData = new ShapeData();
+		}
+
+		//list of bounding shapes?
+		vector<bool> shapeBools;
+		if (boundingShapesList.empty())
+		{
+			//fill
+			for (int x = ShapeData::BOX; x < ShapeData::CAPSULE; x++)
+			{
+				ShapeData::BoundingShape shapeType = (ShapeData::BoundingShape)x;
+				string shape = EnumParser<ShapeData::BoundingShape>().getString(shapeType).c_str();
+				boundingShapesList.push_back(shape);
+			}
+			if (!boundingShapesCStyleArray.empty())
+				boundingShapesCStyleArray.clear();
+			boundingShapesCStyleArray.reserve(boundingShapesList.size());
+			for (int index = 0; index < boundingShapesList.size(); ++index)
+			{
+				boundingShapesCStyleArray.push_back(boundingShapesList[index].c_str());
+			}
+		}
+		while (shapeBools.size() < ShapeData::CAPSULE)
+		{
+			shapeBools.push_back(false);
+		}
+		for (int x = ShapeData::BOX; x < ShapeData::CAPSULE; x++)
+		{
+			ShapeData::BoundingShape shapeType = (ShapeData::BoundingShape)x;
+			//if (shapeData->boundingShape)
+			{
+				switch (shapeData->boundingShape)
+				{
+				case ShapeData::BOX:
+					shapeBools[ShapeData::BOX] = true;
+					break;
+				case ShapeData::SPHERE:
+					shapeBools[ShapeData::SPHERE] = true;
+					break;
+				case ShapeData::CONE:
+					shapeBools[ShapeData::CONE] = true;
+					break;
+				case ShapeData::CYLINDER:
+					shapeBools[ShapeData::CYLINDER] = true;
+					break;
+				case ShapeData::CAPSULE:
+					shapeBools[ShapeData::CAPSULE] = true;
+					break;
+				default:
+					break;
+				}
+			}
+
+			string typeName = EnumParser<ShapeData::BoundingShape>().getString(shapeType);
+
+			bool bWindowActive = shapeBools[x];
+
+			shapeBools[x] = bWindowActive;
+
+			static float dragSpeed = 0.25f;
+			switch (x)
+			{
+			case ShapeData::BOX:
+				if (shapeBools[x])
+					ImGui::DragFloat3("Half Extents", &shapeData->halfExtents[0], dragSpeed);
+				break;
+			case ShapeData::SPHERE:
+				if (shapeBools[x])
+					ImGui::DragFloat("Radius", &shapeData->radius, dragSpeed);
+				break;
+			case ShapeData::CONE:
+				if (shapeBools[x])
+				{
+					ImGui::DragFloat("Radius", &shapeData->radius, dragSpeed);
+					ImGui::DragFloat("Height", &shapeData->height, dragSpeed);
+				}
+				break;
+			case ShapeData::CYLINDER:
+				if (shapeBools[x])
+					ImGui::DragFloat3("Half Extents", &shapeData->halfExtents[0], dragSpeed);
+				break;
+			case ShapeData::CAPSULE:
+				if (shapeBools[x])
+				{
+					ImGui::DragFloat("Radius", &shapeData->radius, dragSpeed);
+					ImGui::DragFloat("Height", &shapeData->height, dragSpeed);
+				}
+				break;
+			default:
+				break;
+			}
+
+		}
+		ImGui::ListBox("BoundingShapes Available", &listbox_item_current, &boundingShapesCStyleArray[0], boundingShapesCStyleArray.size(), 4);
+		shapeBools[listbox_item_current] = true;
+		if (ImGui::Button("UpdateBoundingShape"))
+		{
+			shapeData->boundingShape = EnumParser<ShapeData::BoundingShape>().parse(boundingShapesList[listbox_item_current]);
+			trigger->setShape(shapeData);
+			trigger->buildCollisionShape();
+		}
+		trigger->setShape(shapeData);
+	}
+	//
 	ImGui::PopID();
 }
 

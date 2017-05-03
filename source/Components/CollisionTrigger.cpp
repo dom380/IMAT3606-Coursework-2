@@ -1,52 +1,56 @@
 #include "..\..\include\Components\CollisionTrigger.h"
 #include <utils\Utilities.h>
 
+CollisionTrigger::CollisionTrigger() : Component(ComponentType::TRIGGER), triggerFunc(luaState)
+{
+	triggerOnce = true;
+	triggered = false;
+	shapeData = nullptr;
+	body = nullptr;
+}
+
 CollisionTrigger::CollisionTrigger(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject>& owner, ShapeData& boundingShape, const char* scriptFile, bool triggerOnce) : Component(ComponentType::TRIGGER), triggerFunc(luaState)
 {
 	this->owner = owner;
 	this->triggerOnce = triggerOnce;
 	this->triggered = false;
-	//Retrieve the transform of the game object
-	btTransform transform;
-	auto sp = owner.lock();
-	auto tp = sp != nullptr ? sp->getComponent<Transform>(ComponentType::TRANSFORM) : nullptr;
-	transform.setOrigin(btVector3(tp->position.x, tp->position.y, tp->position.z));
-	transform.setRotation(btQuaternion(tp->orientation.x, tp->orientation.y, tp->orientation.z, tp->orientation.w));
-
-	//Build Collision shape
-	switch (boundingShape.boundingShape)
-	{
-	case ShapeData::BoundingShape::BOX:
-		shape = new btBoxShape(btVector3(boundingShape.halfExtents.x, boundingShape.halfExtents.y, boundingShape.halfExtents.z));
-		break;
-	case ShapeData::BoundingShape::SPHERE:
-		shape = new btSphereShape(boundingShape.radius);
-		break;
-	case ShapeData::BoundingShape::CONE:
-		shape = new btConeShape(boundingShape.radius, boundingShape.height);
-		break;
-	case ShapeData::BoundingShape::CYLINDER:
-		shape = new btCylinderShape(btVector3(boundingShape.halfExtents.x, boundingShape.halfExtents.y, boundingShape.halfExtents.z));
-		break;
-	}
-
-	body = new btGhostObject();
-	body->setCollisionShape(shape);
-	body->setWorldTransform(transform);
-	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+	
+	shapeData = new ShapeData(boundingShape);
 
 	script = scriptFile;
 	auto splitPath = Utilities::splitFilePath(scriptFile);
 	scriptName = Utilities::removeExtension(splitPath.at(splitPath.size() - 1));
-	auto scriptEngine = ScriptEngine::getInstance();
-	scriptEngine->loadScript(script, scriptName);
-	triggerFunc = scriptEngine->getFunction(scriptName, "trigger");
+	
+	init();
 }
 
 CollisionTrigger::CollisionTrigger(std::shared_ptr<Physics>& physics, std::weak_ptr<GameObject>& owner, ShapeData & boundingShape, std::string scriptFile, bool triggerOnce)
 	: CollisionTrigger(physics, owner, boundingShape, scriptFile.c_str(), triggerOnce)
 {
 	//Delegation constructor
+}
+
+void CollisionTrigger::init()
+{
+	btTransform transform;
+	auto sp = owner.lock();
+	auto tp = sp != nullptr ? sp->getComponent<Transform>(ComponentType::TRANSFORM) : nullptr;
+	transform.setOrigin(btVector3(tp->position.x, tp->position.y, tp->position.z));
+	transform.setRotation(btQuaternion(tp->orientation.x, tp->orientation.y, tp->orientation.z, tp->orientation.w));
+	
+	buildCollisionShape();
+
+	body = new btGhostObject();
+	body->setCollisionShape(shape);
+	body->setWorldTransform(transform);
+	body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
+
+	loadScript();
+}
+
+void CollisionTrigger::setOwner(std::weak_ptr<GameObject> passedOwner)
+{
+	owner = passedOwner;
 }
 
 void CollisionTrigger::update(double dt)
@@ -126,6 +130,11 @@ void CollisionTrigger::setTransform(Transform transform)
 	body->setWorldTransform(btTran);
 }
 
+void CollisionTrigger::setTriggerOnce(bool isTriggerOnce)
+{
+	triggerOnce = isTriggerOnce;
+}
+
 bool CollisionTrigger::isTriggerOnce()
 {
 	return triggerOnce;
@@ -134,6 +143,59 @@ bool CollisionTrigger::isTriggerOnce()
 bool CollisionTrigger::isTriggered()
 {
 	return triggered;
+}
+
+void CollisionTrigger::loadScript()
+{
+	auto scriptEngine = ScriptEngine::getInstance();
+	scriptEngine->loadScript(script, scriptName);
+	triggerFunc = scriptEngine->getFunction(scriptName, "trigger");
+}
+
+
+string CollisionTrigger::getScriptName()
+{
+	return scriptName;
+}
+
+void CollisionTrigger::setScriptName(string passedName)
+{
+	scriptName = passedName;
+}
+
+void CollisionTrigger::setScriptFullPath(const char* scriptFullName)
+{
+	script = scriptFullName;
+}
+
+ShapeData * CollisionTrigger::getShape()
+{
+	return shapeData;
+}
+
+void CollisionTrigger::setShape(ShapeData * passedShapeData)
+{
+	shapeData = passedShapeData;
+}
+
+void CollisionTrigger::buildCollisionShape()
+{
+	//Build Collision shape
+	switch (shapeData->boundingShape)
+	{
+	case ShapeData::BoundingShape::BOX:
+		shape = new btBoxShape(btVector3(shapeData->halfExtents.x, shapeData->halfExtents.y, shapeData->halfExtents.z));
+		break;
+	case ShapeData::BoundingShape::SPHERE:
+		shape = new btSphereShape(shapeData->radius);
+		break;
+	case ShapeData::BoundingShape::CONE:
+		shape = new btConeShape(shapeData->radius, shapeData->height);
+		break;
+	case ShapeData::BoundingShape::CYLINDER:
+		shape = new btCylinderShape(btVector3(shapeData->halfExtents.x, shapeData->halfExtents.y, shapeData->halfExtents.z));
+		break;
+	}
 }
 
 void CollisionTrigger::dispose()

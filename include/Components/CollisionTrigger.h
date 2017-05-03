@@ -13,8 +13,12 @@
 class CollisionTrigger : public Component
 {
 public:
+	CollisionTrigger();
 	CollisionTrigger(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject>& owner, ShapeData& boundingShape, const char* scriptFile, bool triggerOnce);
 	CollisionTrigger(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject>& owner, ShapeData& boundingShape, std::string scriptFile, bool triggerOnce);
+	void init();
+	
+	void setOwner(std::weak_ptr<GameObject> owner);
 	void update(double dt);
 	void RecieveMessage(Message* msg);
 	btGhostObject* getBody();
@@ -25,11 +29,24 @@ public:
 	void trigger(std::shared_ptr<GameObject> collider);
 	void trigger(GameObject* collider);
 	void setTransform(Transform transform);
+	void setTriggerOnce(bool isTriggerOnce);
 	bool isTriggerOnce();
 	bool isTriggered();
+
+	void loadScript();
+
+	string getScriptName();
+	void setScriptName(string scriptName);
+	void setScriptFullPath(const char* scriptFullName);
+	ShapeData* getShape();
+	void setShape(ShapeData* shapeData);
+	void buildCollisionShape();
+
 	void dispose();
 private:
 	std::weak_ptr<GameObject> owner;
+
+	ShapeData* shapeData;
 	std::string scriptName;
 	std::string script;
 	lua_State* luaState = LuaStateHolder::getLuaState();

@@ -163,7 +163,15 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 											UpdateLogic(doc, componentElement, logic);
 											break;
 										}
-										
+
+										case TRIGGER:
+										{
+											auto trigger = gameScreen->getComponentStore()->getComponent<CollisionTrigger>(go->GetComponentHandle(ComponentType::TRIGGER), ComponentType::TRIGGER);
+											if (!trigger)
+												return false;
+											UpdateTrigger(doc, componentElement, trigger);
+											break;
+										}
 										}
 									}
 								}
@@ -451,7 +459,14 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 						AddLogicToFile(doc, componentElement, logic);
 						break;
 					}
-					
+					case TRIGGER:
+					{
+						auto trigger = gameScreen->getComponentStore()->getComponent<CollisionTrigger>(go->GetComponentHandle(ComponentType::TRIGGER), ComponentType::TRIGGER);
+						if (!trigger)
+							return false;
+						AddTrigger(doc, componentElement, trigger);
+						break;
+					}
 				}
 			}
 		}
@@ -802,7 +817,11 @@ bool FileSaver::UpdateRigidBody(tinyxml2::XMLDocument * doc, tinyxml2::XMLElemen
 	{
 		//bounding shape
 		tinyxml2::XMLElement* shapeElement = physicsElement->FirstChildElement("bounding_shape");
-		if (shapeElement)
+		if (!shapeElement)
+		{
+			shapeElement = doc->NewElement("bounding_shape");
+			physicsElement->InsertEndChild(shapeElement);
+		}
 		{
 			ShapeData::BoundingShape shapeType = phyComp->getShape()->boundingShape;
 			string typeName = EnumParser<ShapeData::BoundingShape>().getString(shapeType);
@@ -815,7 +834,7 @@ bool FileSaver::UpdateRigidBody(tinyxml2::XMLDocument * doc, tinyxml2::XMLElemen
 				if (!extentsElemenet)
 				{
 					extentsElemenet = doc->NewElement("half_extents");
-					physicsElement->InsertEndChild(extentsElemenet);
+					shapeElement->InsertEndChild(extentsElemenet);
 				}
 				if (extentsElemenet->FirstChildElement("x") == NULL)
 				{
@@ -857,7 +876,7 @@ bool FileSaver::UpdateRigidBody(tinyxml2::XMLDocument * doc, tinyxml2::XMLElemen
 				if (!extentsElemenet)
 				{
 					extentsElemenet = doc->NewElement("half_extents");
-					physicsElement->InsertEndChild(extentsElemenet);
+					shapeElement->InsertEndChild(extentsElemenet);
 				}
 				if (extentsElemenet->FirstChildElement("x") == NULL)
 				{
@@ -946,6 +965,130 @@ bool FileSaver::UpdateRigidBody(tinyxml2::XMLDocument * doc, tinyxml2::XMLElemen
 	}
 	velElement->FirstChildElement("z")->SetText(*phyComp->getVelocity()[2]);
 	
+	
+	return true;
+}
+
+bool FileSaver::UpdateTrigger(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement * triggerElement, CollisionTrigger * triggerComp)
+{
+	//script
+	tinyxml2::XMLElement* scriptElement = triggerElement->FirstChildElement("script");
+	if (scriptElement)
+	{
+	}
+	else
+	{
+		scriptElement = doc->NewElement("script");
+		triggerElement->InsertEndChild(scriptElement);
+	}
+	string fullScriptName = triggerComp->getScriptName() + ".lua";
+	scriptElement->SetText(fullScriptName.c_str());
+	//triggeronce
+	tinyxml2::XMLElement* triggerOnceElement = triggerElement->FirstChildElement("trigger_once");
+	if (triggerOnceElement)
+	{
+	}
+	else
+	{
+		triggerOnceElement = doc->NewElement("trigger_once");
+		triggerElement->InsertEndChild(triggerOnceElement);
+	}
+	triggerOnceElement->SetText(triggerComp->isTriggerOnce());
+	//bounding shape
+	tinyxml2::XMLElement* shapeElement = triggerElement->FirstChildElement("bounding_shape");
+	if (!shapeElement)
+	{
+		shapeElement = doc->NewElement("bounding_shape");
+		triggerElement->InsertEndChild(shapeElement);
+	}
+	{
+		ShapeData::BoundingShape shapeType = triggerComp->getShape()->boundingShape;
+		string typeName = EnumParser<ShapeData::BoundingShape>().getString(shapeType);
+		shapeElement->SetAttribute("type", typeName.c_str());
+		tinyxml2::XMLElement* extentsElemenet;
+		switch (shapeType)
+		{
+		case ShapeData::BOX:
+			extentsElemenet = shapeElement->FirstChildElement("half_extents");
+			if (!extentsElemenet)
+			{
+				extentsElemenet = doc->NewElement("half_extents");
+				shapeElement->InsertEndChild(extentsElemenet);
+			}
+			if (extentsElemenet->FirstChildElement("x") == NULL)
+			{
+				extentsElemenet->InsertEndChild(doc->NewElement("x"));
+			}
+			extentsElemenet->FirstChildElement("x")->SetText(triggerComp->getShape()->halfExtents[0]);
+			if (extentsElemenet->FirstChildElement("y") == NULL)
+			{
+				extentsElemenet->InsertEndChild(doc->NewElement("y"));
+			}
+			extentsElemenet->FirstChildElement("y")->SetText(triggerComp->getShape()->halfExtents[1]);
+			if (extentsElemenet->FirstChildElement("z") == NULL)
+			{
+				extentsElemenet->InsertEndChild(doc->NewElement("z"));
+			}
+			extentsElemenet->FirstChildElement("z")->SetText(triggerComp->getShape()->halfExtents[2]);
+			break;
+		case ShapeData::SPHERE:
+			if (shapeElement->FirstChildElement("radius") == NULL)
+			{
+				shapeElement->InsertEndChild(doc->NewElement("radius"));
+			}
+			shapeElement->FirstChildElement("radius")->SetText(triggerComp->getShape()->radius);
+			break;
+		case ShapeData::CONE:
+			if (shapeElement->FirstChildElement("radius") == NULL)
+			{
+				shapeElement->InsertEndChild(doc->NewElement("radius"));
+			}
+			shapeElement->FirstChildElement("radius")->SetText(triggerComp->getShape()->radius);
+			if (shapeElement->FirstChildElement("height") == NULL)
+			{
+				shapeElement->InsertEndChild(doc->NewElement("height"));
+			}
+			shapeElement->FirstChildElement("height")->SetText(triggerComp->getShape()->height);
+			break;
+		case ShapeData::CYLINDER:
+			extentsElemenet = shapeElement->FirstChildElement("half_extents");
+			if (!extentsElemenet)
+			{
+				extentsElemenet = doc->NewElement("half_extents");
+				shapeElement->InsertEndChild(extentsElemenet);
+			}
+			if (extentsElemenet->FirstChildElement("x") == NULL)
+			{
+				extentsElemenet->InsertEndChild(doc->NewElement("x"));
+			}
+			extentsElemenet->FirstChildElement("x")->SetText(triggerComp->getShape()->halfExtents[0]);
+			if (extentsElemenet->FirstChildElement("y") == NULL)
+			{
+				extentsElemenet->InsertEndChild(doc->NewElement("y"));
+			}
+			extentsElemenet->FirstChildElement("y")->SetText(triggerComp->getShape()->halfExtents[1]);
+			if (extentsElemenet->FirstChildElement("z") == NULL)
+			{
+				extentsElemenet->InsertEndChild(doc->NewElement("z"));
+			}
+			extentsElemenet->FirstChildElement("z")->SetText(triggerComp->getShape()->halfExtents[2]);
+			break;
+		case ShapeData::CAPSULE:
+			if (shapeElement->FirstChildElement("radius") == NULL)
+			{
+				shapeElement->InsertEndChild(doc->NewElement("radius"));
+			}
+			shapeElement->FirstChildElement("radius")->SetText(triggerComp->getShape()->radius);
+			if (shapeElement->FirstChildElement("height") == NULL)
+			{
+				shapeElement->InsertEndChild(doc->NewElement("height"));
+			}
+			shapeElement->FirstChildElement("height")->SetText(triggerComp->getShape()->height);
+			break;
+		default:
+			break;
+		}
+	}
 	
 	return true;
 }
@@ -1130,7 +1273,7 @@ bool FileSaver::AddRigidBody(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement *
 			case ShapeData::BOX:
 				extentsElemenet = doc->NewElement("half_extents");
 
-				physicsElement->InsertEndChild(extentsElemenet);
+				shapeElement->InsertEndChild(extentsElemenet);
 				extentsElemenet->InsertEndChild(doc->NewElement("x"));
 				extentsElemenet->FirstChildElement("x")->SetText(phyComp->getShape()->halfExtents[0]);
 				
@@ -1153,7 +1296,7 @@ bool FileSaver::AddRigidBody(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement *
 				break;
 			case ShapeData::CYLINDER:
 				extentsElemenet = doc->NewElement("half_extents");
-				physicsElement->InsertEndChild(extentsElemenet);
+				shapeElement->InsertEndChild(extentsElemenet);
 				
 				extentsElemenet->InsertEndChild(doc->NewElement("x"));
 				extentsElemenet->FirstChildElement("x")->SetText(phyComp->getShape()->halfExtents[0]);
@@ -1205,6 +1348,83 @@ bool FileSaver::AddRigidBody(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement *
 	
 	velElement->InsertEndChild(doc->NewElement("z"));
 	velElement->FirstChildElement("z")->SetText(*phyComp->getVelocity()[2]);
+	return true;
+}
+
+bool FileSaver::AddTrigger(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement * triggerElement, CollisionTrigger * triggerComp)
+{
+	//script
+	tinyxml2::XMLElement* scriptElement = doc->NewElement("script");
+	triggerElement->InsertEndChild(scriptElement);
+	
+	string fullScriptName = triggerComp->getScriptName() + ".lua";
+	scriptElement->SetText(fullScriptName.c_str());
+	//triggeronce
+	tinyxml2::XMLElement* triggerOnceElement = doc->NewElement("trigger_once");
+	triggerElement->InsertEndChild(triggerOnceElement);
+	
+	triggerOnceElement->SetText(triggerComp->isTriggerOnce());
+	//bounding shape
+	tinyxml2::XMLElement* shapeElement = doc->NewElement("bounding_shape");
+	if (shapeElement)
+	{
+		ShapeData::BoundingShape shapeType = triggerComp->getShape()->boundingShape;
+		string typeName = EnumParser<ShapeData::BoundingShape>().getString(shapeType);
+		shapeElement->SetAttribute("type", typeName.c_str());
+		tinyxml2::XMLElement* extentsElemenet;
+		switch (shapeType)
+		{
+		case ShapeData::BOX:
+			extentsElemenet = doc->NewElement("half_extents");
+
+			shapeElement->InsertEndChild(extentsElemenet);
+			extentsElemenet->InsertEndChild(doc->NewElement("x"));
+			extentsElemenet->FirstChildElement("x")->SetText(triggerComp->getShape()->halfExtents[0]);
+
+			extentsElemenet->InsertEndChild(doc->NewElement("y"));
+			extentsElemenet->FirstChildElement("y")->SetText(triggerComp->getShape()->halfExtents[1]);
+
+			extentsElemenet->InsertEndChild(doc->NewElement("z"));
+			extentsElemenet->FirstChildElement("z")->SetText(triggerComp->getShape()->halfExtents[2]);
+			break;
+		case ShapeData::SPHERE:
+			shapeElement->InsertEndChild(doc->NewElement("radius"));
+			shapeElement->FirstChildElement("radius")->SetText(triggerComp->getShape()->radius);
+			break;
+		case ShapeData::CONE:
+			shapeElement->InsertEndChild(doc->NewElement("radius"));
+			shapeElement->FirstChildElement("radius")->SetText(triggerComp->getShape()->radius);
+
+			shapeElement->InsertEndChild(doc->NewElement("height"));
+			shapeElement->FirstChildElement("height")->SetText(triggerComp->getShape()->height);
+			break;
+		case ShapeData::CYLINDER:
+			extentsElemenet = doc->NewElement("half_extents");
+			shapeElement->InsertEndChild(extentsElemenet);
+
+			extentsElemenet->InsertEndChild(doc->NewElement("x"));
+			extentsElemenet->FirstChildElement("x")->SetText(triggerComp->getShape()->halfExtents[0]);
+
+			extentsElemenet->InsertEndChild(doc->NewElement("y"));
+			extentsElemenet->FirstChildElement("y")->SetText(triggerComp->getShape()->halfExtents[1]);
+
+			extentsElemenet->InsertEndChild(doc->NewElement("z"));
+			extentsElemenet->FirstChildElement("z")->SetText(triggerComp->getShape()->halfExtents[2]);
+			break;
+		case ShapeData::CAPSULE:
+
+			shapeElement->InsertEndChild(doc->NewElement("radius"));
+			shapeElement->FirstChildElement("radius")->SetText(triggerComp->getShape()->radius);
+
+			shapeElement->InsertEndChild(doc->NewElement("height"));
+			shapeElement->FirstChildElement("height")->SetText(triggerComp->getShape()->height);
+			break;
+		default:
+			break;
+		}
+	}
+		triggerElement->InsertEndChild(shapeElement);
+
 	return true;
 }
 

@@ -1,4 +1,16 @@
 <screen type="level" name="Level1">
+	<cameras>
+		<camera type="engine">
+			<id>EDITOR_CAM</id>
+			<position>
+				<x>0.0</x>
+				<y>15.0</y>
+				<z>20.0</z>
+			</position>
+			<mouse_input>true</mouse_input>
+			<key_input>true</key_input>
+		</camera>
+	</cameras>
     <gameObjects>
 		 <gameObject>
       		<components>

@@ -1,5 +1,90 @@
 <screen type="level" name="Level2">
+	<cameras>
+		<camera type="engine">
+			<id>EDITOR_CAM</id>
+			<position>
+				<x>0.0</x>
+				<y>15.0</y>
+				<z>20.0</z>
+			</position>
+			<mouse_input>true</mouse_input>
+			<key_input>true</key_input>
+		</camera>
+		<camera type="follow">
+			<id>PLAYER_CAM</id>
+			<width>1080</width>
+			<height>720</height>
+			<aspect>45</aspect>
+			<position>
+				<x>0.0</x>
+				<y>0.0</y>
+				<z>0.0</z>
+			</position>
+			<up>
+				<x>0.0</x>
+				<y>1.0</y>
+				<z>0.0</z>
+			</up>
+			<direction>
+				<x>0.0</x>
+				<y>0.0</y>
+				<z>-1.0</z>
+			</direction>
+			<follow_distance>
+				<x>0.0</x>
+				<y>-20.0</y>
+				<z>-35.0</z>
+			</follow_distance>
+			<mouse_input>false</mouse_input>
+			<key_input>false</key_input>
+		</camera>
+	</cameras>
 	<gameObjects>
+		<gameObject>
+			<tag>PLAYER</tag>
+			<components>
+				<component type="animation">
+          			<!-- fbx files -->
+          			<default>Idle</default>
+          			<files>
+            			<file>
+              				<id>Run</id>
+              				<filePath>resources/models/Animations/legoman@run.fbx</filePath>
+           				</file>
+						<file>
+							<id>Idle</id>
+							<filePath>resources/models/Animations/legoman@static.fbx</filePath>
+						</file>
+          			</files>
+        		</component> 
+				<component type="transform">
+					<position>
+						<x>0.0</x>
+						<y>10.0</y>
+						<z>0.0</z>
+					</position>
+					<scale>
+						<x>0.5</x>
+						<y>0.5</y>
+						<z>0.5</z>
+					</scale>
+				</component>
+				<component type = "logic">
+					<script>default.lua</script>
+				</component>
+				<component type = "controller">
+					<flip>true</flip>
+					<offset>7.5</offset>
+					<jump_ray>0.34</jump_ray>
+					<movement_speed>1.0</movement_speed>
+					<jump_force>25</jump_force>
+					<bounding_shape type="CAPSULE">
+						<radius>2.0</radius>
+						<height>10.5</height>
+					</bounding_shape>
+				</component>
+			</components>
+		</gameObject>
 		<gameObject>
 			<components>
 				<component type ="model">
@@ -1498,7 +1583,7 @@
 			</components>
 		</gameObject>
 		
-		<gameObject>
+<!-- 		<gameObject>
 			<tag>PHY_OBJ</tag>
 			<components>
 				<component type="transform">
@@ -1521,7 +1606,7 @@
 					<trigger_once>false</trigger_once>
 				</component>
 			</components>
-		</gameObject>
+		</gameObject> -->
 		
 		<gameObject>
 			<tag>PHY_OBJ</tag>
@@ -1827,6 +1912,13 @@
 				<component type="logic">
 					<script>gold_collectable.lua</script>
 				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>3.0</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+				</component>
 			</components>
 		</gameObject>
 		<gameObject>
@@ -1849,6 +1941,13 @@
 				</component>
 				<component type="logic">
 					<script>gold_collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>3.0</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
 				</component>
 			</components>
 		</gameObject>
@@ -1873,6 +1972,13 @@
 				<component type="logic">
 					<script>gold_collectable.lua</script>
 				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>3.0</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+				</component>
 			</components>
 		</gameObject>
 		<gameObject>
@@ -1895,6 +2001,13 @@
 				</component>
 				<component type="logic">
 					<script>gold_collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>3.0</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
 				</component>
 			</components>
 		</gameObject>
@@ -1919,6 +2032,13 @@
 				<component type="logic">
 					<script>gold_collectable.lua</script>
 				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>3.0</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+				</component>
 			</components>
 		</gameObject>
 		<gameObject>
@@ -1941,6 +2061,13 @@
 				</component>
 				<component type="logic">
 					<script>gold_collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>3.0</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
 				</component>
 			</components>
 		</gameObject>

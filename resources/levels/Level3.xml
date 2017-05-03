@@ -1,4 +1,44 @@
 <screen type="level" name="Level3">
+	<cameras>
+		<camera type="engine">
+			<id>EDITOR_CAM</id>
+			<position>
+				<x>0.0</x>
+				<y>3.0</y>
+				<z>15.0</z>
+			</position>
+			<mouse_input>true</mouse_input>
+			<key_input>true</key_input>
+		</camera>
+		<camera type="follow">
+			<id>PLAYER_CAM</id>
+			<width>1080</width>
+			<height>720</height>
+			<aspect>45</aspect>
+			<position>
+				<x>0.0</x>
+				<y>0.0</y>
+				<z>0.0</z>
+			</position>
+			<up>
+				<x>0.0</x>
+				<y>1.0</y>
+				<z>0.0</z>
+			</up>
+			<direction>
+				<x>0.0</x>
+				<y>0.0</y>
+				<z>-1.0</z>
+			</direction>
+			<follow_distance>
+				<x>0.0</x>
+				<y>-6.0</y>
+				<z>-15.0</z>
+			</follow_distance>
+			<mouse_input>false</mouse_input>
+			<key_input>false</key_input>
+		</camera>
+	</cameras>
     <gameObjects>
 		<!-- ground -->
 		<gameObject>
@@ -14,9 +54,9 @@
 						<z>0.0</z>
 					</position>
 					<scale>
-						<x>5.0</x>
+						<x>10.0</x>
 						<y>0.25</y>
-						<z>5.0</z>
+						<z>10.0</z>
 					</scale>
 				</component>
 				<component type = "rigid_body">
@@ -25,9 +65,9 @@
 					<restitution>0.4</restitution>
 					<bounding_shape type="BOX">
 						<half_extents>
-							<x>5.0</x>
+							<x>10.0</x>
 							<y>0.25</y>
-							<z>5.0</z>
+							<z>10.0</z>
 						</half_extents>
 					</bounding_shape>
 				</component>
@@ -42,14 +82,14 @@
 				</component>
 				<component type="transform">
 					<position>
-						<x>-5.25</x>
-						<y>5.0</y>
+						<x>-10.25</x>
+						<y>10.0</y>
 						<z>0.0</z>
 					</position>
 					<scale>
-						<x>5.0</x>
+						<x>10.0</x>
 						<y>0.25</y>
-						<z>5.0</z>
+						<z>10.0</z>
 					</scale>
 					<orientation>
 						<x>0.0</x>
@@ -64,9 +104,9 @@
 					<restitution>0.4</restitution>
 					<bounding_shape type="BOX">
 						<half_extents>
-							<x>5.0</x>
+							<x>10.0</x>
 							<y>0.25</y>
-							<z>5.0</z>
+							<z>10.0</z>
 						</half_extents>
 					</bounding_shape>
 				</component>
@@ -81,14 +121,14 @@
 				</component>
 				<component type="transform">
 					<position>
-						<x>5.25</x>
-						<y>5.0</y>
+						<x>10.25</x>
+						<y>10.0</y>
 						<z>0.0</z>
 					</position>
 					<scale>
-						<x>5.0</x>
+						<x>10.0</x>
 						<y>0.25</y>
-						<z>5.0</z>
+						<z>10.0</z>
 					</scale>
 					<orientation>
 						<x>0.0</x>
@@ -102,9 +142,9 @@
 					<restitution>0.4</restitution>
 					<bounding_shape type="BOX">
 						<half_extents>
-							<x>5.0</x>
+							<x>10.0</x>
 							<y>0.25</y>
-							<z>5.0</z>
+							<z>10.0</z>
 						</half_extents>
 					</bounding_shape>
 				</component>
@@ -120,13 +160,13 @@
 				<component type="transform">
 					<position>
 						<x>0.0</x>
-						<y>5.0</y>
-						<z>-5.25</z>
+						<y>10.0</y>
+						<z>-10.25</z>
 					</position>
 					<scale>
-						<x>5.0</x>
+						<x>10.0</x>
 						<y>0.25</y>
-						<z>5.0</z>
+						<z>10.0</z>
 					</scale>
 					<orientation>
 						<x>1.0</x>
@@ -140,9 +180,9 @@
 					<restitution>0.4</restitution>
 					<bounding_shape type="BOX">
 						<half_extents>
-							<x>5.0</x>
+							<x>10.0</x>
 							<y>0.25</y>
-							<z>5.0</z>
+							<z>10.0</z>
 						</half_extents>
 					</bounding_shape>
 				</component>
@@ -150,7 +190,7 @@
 		</gameObject>
 		<!-- player -->
 		<gameObject>
-			<tag>PHY_OBJ</tag>
+			<tag>PLAYER</tag>
 			<components>
 				<!-- <component type ="model">
 					<file>capsule.obj</file>
@@ -158,7 +198,7 @@
 					<texture>chest_diffuse.png</texture>
 				</component>  -->
 				<component type="animation">
-          			fbx files
+          			<!-- fbx files -->
           			<default>Idle</default>
           			<files>
             			<file>
@@ -188,16 +228,23 @@
 						<z>1.0</z>
 					</scale> -->
 				</component>
+				<component type = "logic">
+					<script>default.lua</script>
+				</component>
 				<component type = "controller">
 					<flip>true</flip>
-					<offset>1.25</offset>
+					<jump_ray>0.13</jump_ray>
+					<offset>1.0</offset>
+					<jump_force>12</jump_force>
+					<movement_speed>0.2</movement_speed>
 					<bounding_shape type="CAPSULE">
-						<radius>0.75</radius>
+						<radius>0.5</radius>
 						<height>1.0</height>
 					</bounding_shape>
 				</component>
 			</components>
 		</gameObject>
+		<!-- dynamic sphere -->
 		<gameObject>
 			<tag>PHY_OBJ</tag>
 			<components>
@@ -215,12 +262,6 @@
 						<y>0.25</y>
 						<z>0.25</z>
 					</scale>
-					<orientation>
-						<x>0.0</x>
-						<y>1.0</y>
-						<z>0.0</z>
-						<w>0</w>
-					</orientation>
 				</component>
 				<component type = "rigid_body">
 					<mass>1.0</mass>
@@ -236,6 +277,9 @@
 						<z>0.0</z>
 					</velocity>
 					<constant_velocity>false</constant_velocity>
+				</component>
+				<component type = "logic">
+					<script>default.lua</script>
 				</component>
 			</components>
 		</gameObject>
@@ -329,6 +373,276 @@
           </component>
         </components>
       </gameObject>
+	  <!-- Death collision -->
+		<gameObject>
+			<tag>PHY_OBJ</tag>
+			<components>
+				<component type="transform">
+					<position>
+						<x>0.0</x>
+						<y>-10.0</y>
+						<z>0.0</z>
+					</position>
+					<scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale>
+				</component>
+				<component type="TRIGGER">
+					<script>death_trigger.lua</script>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>100.0</x>
+							<y>1.0</y>
+							<z>100.0</z>
+						</half_extents>
+					</bounding_shape>
+					<trigger_once>false</trigger_once>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>cube.obj</file>
+				</component>
+				<component type="transform">
+					<position>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>5.0</z>
+					</position>
+					<scale>
+						<x>0.25</x>
+						<y>0.25</y>
+						<z>0.25</z>
+					</scale>
+				</component>
+				<component type="TRIGGER">
+					<script>end_screen_trigger.lua</script>
+					<bounding_shape type="BOX">
+						<half_extents>
+							<x>0.25</x>
+							<y>0.25</y>
+							<z>0.25</z>
+						</half_extents>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>gold.obj</file>
+					<texture>gold.tga</texture>
+				</component>
+				<component type="transform">
+					<position>
+						<x>-8.0</x>
+						<y>1.0</y>
+						<z>5.0</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>5.0</y>
+						<z>5.0</z>
+					</scale>
+				</component>
+				<component type="logic">
+					<script>gold_collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>0.5</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>gold.obj</file>
+					<texture>gold.tga</texture>
+				</component>
+				<component type="transform">
+					<position>
+						<x>-6.0</x>
+						<y>1.0</y>
+						<z>5.0</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>5.0</y>
+						<z>5.0</z>
+					</scale>
+				</component>
+				<component type="logic">
+					<script>gold_collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>0.5</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>gold.obj</file>
+					<texture>gold.tga</texture>
+				</component>
+				<component type="transform">
+					<position>
+						<x>-4.0</x>
+						<y>1.0</y>
+						<z>5.0</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>5.0</y>
+						<z>5.0</z>
+					</scale>
+				</component>
+				<component type="logic">
+					<script>gold_collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>0.5</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+				</component>
+			</components>
+		</gameObject>
+		
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>gold.obj</file>
+					<texture>gold.tga</texture>
+				</component>
+				<component type="transform">
+					<position>
+						<x>-2.0</x>
+						<y>1.0</y>
+						<z>5.0</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>5.0</y>
+						<z>5.0</z>
+					</scale>
+				</component>
+				<component type="logic">
+					<script>gold_collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>0.5</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>gold.obj</file>
+					<texture>gold.tga</texture>
+				</component>
+				<component type="transform">
+					<position>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>5.0</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>5.0</y>
+						<z>5.0</z>
+					</scale>
+				</component>
+				<component type="logic">
+					<script>gold_collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>0.5</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>gold.obj</file>
+					<texture>gold.tga</texture>
+				</component>
+				<component type="transform">
+					<position>
+						<x>2.0</x>
+						<y>1.0</y>
+						<z>5.0</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>5.0</y>
+						<z>5.0</z>
+					</scale>
+				</component>
+				<component type="logic">
+					<script>gold_collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>0.5</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+				</component>
+			</components>
+		</gameObject>
+		<gameObject>
+			<components>
+				<component type ="model">
+					<file>gold.obj</file>
+					<texture>gold.tga</texture>
+				</component>
+				<component type="transform">
+					<position>
+						<x>4.0</x>
+						<y>1.0</y>
+						<z>5.0</z>
+					</position>
+					<scale>
+						<x>5.0</x>
+						<y>5.0</y>
+						<z>5.0</z>
+					</scale>
+				</component>
+				<component type="logic">
+					<script>gold_collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>gold_collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>0.5</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+				</component>
+			</components>
+		</gameObject>
 	</gameObjects>
 	<lights>
 		<light>

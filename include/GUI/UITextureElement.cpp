@@ -4,6 +4,7 @@ UITextureElement::UITextureElement(shared_ptr<Graphics>& engineGraphics, shared_
 {
 	haveVAO = false;
 	active = true;
+	savable = true;
 	graphics = engineGraphics;
 	transform = passedTransform;
 	updateModelUsingTransform();

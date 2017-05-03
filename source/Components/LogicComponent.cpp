@@ -85,6 +85,11 @@ void LogicComponent::RecieveMessage(Message * msg)
 	}
 }
 
+string LogicComponent::getScriptName()
+{
+	return scriptName;
+}
+
 void LogicComponent::registerLuaBindings()
 {
 	auto scriptEngine = ScriptEngine::getInstance();

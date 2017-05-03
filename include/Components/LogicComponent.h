@@ -33,6 +33,8 @@ public:
 
 	virtual void RecieveMessage(Message* msg);
 	void dispose() {}; //Component Interface stub
+
+	string getScriptName();
 private:
 	lua_State* luaState = LuaStateHolder::getLuaState();
 	luabridge::LuaRef updateFunc;

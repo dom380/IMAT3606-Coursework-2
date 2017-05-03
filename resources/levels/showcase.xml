@@ -1,4 +1,44 @@
 <screen type="level" name="showcase">
+	<cameras>
+		<camera type="engine">
+			<id>EDITOR_CAM</id>
+			<position>
+				<x>0.0</x>
+				<y>3.0</y>
+				<z>15.0</z>
+			</position>
+			<mouse_input>true</mouse_input>
+			<key_input>true</key_input>
+		</camera>
+		<camera type="follow">
+			<id>PLAYER_CAM</id>
+			<width>1080</width>
+			<height>720</height>
+			<aspect>45</aspect>
+			<position>
+				<x>0.0</x>
+				<y>0.0</y>
+				<z>0.0</z>
+			</position>
+			<up>
+				<x>0.0</x>
+				<y>1.0</y>
+				<z>0.0</z>
+			</up>
+			<direction>
+				<x>1.0</x>
+				<y>0.0</y>
+				<z>0.0</z>
+			</direction>
+			<follow_distance>
+				<x>15.0</x>
+				<y>-4.0</y>
+				<z>0.0</z>
+			</follow_distance>
+			<mouse_input>false</mouse_input>
+			<key_input>false</key_input>
+		</camera>
+	</cameras>
     <gameObjects>
         <!-- player -->
         <gameObject>
@@ -49,6 +89,11 @@
                 <component type="controller">
                     <flip>true</flip>
                     <offset>1.25</offset>
+					<world_front>
+						<x>1.0</x>
+                        <y>0.0</y>
+                        <z>0.0</z>
+					</world_front>
                     <bounding_shape type="CAPSULE">
                         <radius>0.75</radius>
                         <height>1.0</height>

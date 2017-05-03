@@ -36,6 +36,9 @@ public:
 	virtual void RecieveMessage(Message* msg);
 	void dispose() {}; //Component Interface stub
 
+	void setOwner(std::weak_ptr<GameObject> owner);
+	void setScreen(std::weak_ptr<GameScreen> screen);
+
 	string getScriptName();
 	void setScriptName(string scriptName);
 	void setScriptFullPath(const char* scriptFullName);

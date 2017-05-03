@@ -95,6 +95,16 @@ void LogicComponent::RecieveMessage(Message * msg)
 	}
 }
 
+void LogicComponent::setOwner(std::weak_ptr<GameObject> passedOwner)
+{
+	owner = passedOwner;
+}
+
+void LogicComponent::setScreen(std::weak_ptr<GameScreen> passedScreen)
+{
+	screen = passedScreen;
+}
+
 string LogicComponent::getScriptName()
 {
 	return scriptName;

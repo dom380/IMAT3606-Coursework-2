@@ -535,9 +535,16 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 	static shared_ptr<Transform> transform = std::make_shared<Transform>();
 	gameObjectsMenuTransform(iterator, transform.get());
 	//
-	//logic
+	static bool hasLogic = false;
 	static shared_ptr<LogicComponent> logic = std::make_shared<LogicComponent>();
-	gameObjectsMenuLogic(iterator, logic.get());
+	if (ImGui::Checkbox("Logic", &hasLogic))
+	{
+	}
+	if (hasLogic)
+	{
+		//logic
+		gameObjectsMenuLogic(iterator, logic.get());
+	}
 	//
 	static bool hasTexture = false;
 	if (ImGui::Checkbox("Texture", &hasTexture))
@@ -555,10 +562,16 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 		if (hasTexture)
 		{
 			objInfo.second = textureCStyleArray[listbox_item_current];
-			
 		}
 		
 		LevelLoader::loadGameObject(Engine::g_pEngine->getRenderer(), gameScreen, objInfo, transform);
+		if (hasLogic)
+		{
+			logic->setOwner(gameScreen->getGameObjects().back());
+			logic->setScreen(gameScreen);
+			logic->registerLuaBindings();
+			gameScreen->getGameObjects().back()->AddComponent(logic, ComponentType::LOGIC);
+		}
 	}
 	ImGui::PopID();
 	ImGui::End();

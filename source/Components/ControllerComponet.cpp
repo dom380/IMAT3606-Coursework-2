@@ -68,7 +68,7 @@ void ControllerComponent::setCamera(std::shared_ptr<Camera> camera)
 
 void ControllerComponent::setMovementSpeed(float speed)
 {
-	movementSpeed = speed;
+	movementSpeed = speed > 0.1f ? speed : 0.1f;
 }
 
 void ControllerComponent::setGravity(float value)
@@ -99,6 +99,12 @@ void ControllerComponent::setJumpForce(float force)
 	jumpForce = force;
 }
 
+void ControllerComponent::setWorldFront(float x, float y, float z)
+{
+	worldFront = btVector3(x, y, z);
+	angleOffset = worldFront.angle(interalFront);
+}
+
 void ControllerComponent::dispose()
 {
 	auto ptr = dynamic_pointer_cast<BulletPhysics, Physics>(physics);
@@ -119,6 +125,8 @@ void ControllerComponent::pollInput()
 	else if (right == KeyEventType::KEY_PRESSED) walkDir.setX(vel);
 	if (up == KeyEventType::KEY_PRESSED) walkDir.setZ(-vel);
 	else if (down == KeyEventType::KEY_PRESSED) walkDir.setZ(vel);
+	
+	walkDir = walkDir.rotate(upDir, -angleOffset);
 	controller->setWalkDirection(walkDir);
 	if (!walkDir.fuzzyZero())
 	{
@@ -164,37 +172,37 @@ void ControllerComponent::calcDirection(const btVector3& walkDir)
 {
 	if (flip)
 	{
-		if (walkDir.getX() < 0 && walkDir.getZ() < 0) //NW
+		if (walkDir.getX() < -0.05 && walkDir.getZ() < -0.05) //NW
 		{
 			frontDir.setRotation(upDir, btRadians(-135));
 		}
-		else if (walkDir.getX() > 0 && walkDir.getZ() < 0) //NE
+		else if (walkDir.getX() > 0.05 && walkDir.getZ() < -0.05) //NE
 		{
 			frontDir.setRotation(upDir, btRadians(135));
 		}
-		else if (walkDir.getX() > 0 && walkDir.getZ() > 0) //SE
+		else if (walkDir.getX() > 0.05 && walkDir.getZ() > 0.05) //SE
 		{
 			
 			frontDir.setRotation(upDir, btRadians(45));
 		}
-		else if (walkDir.getX() < 0 && walkDir.getZ() > 0) //SW
+		else if (walkDir.getX() < -0.05 && walkDir.getZ() > 0.05) //SW
 		{
 			frontDir.setRotation(upDir, btRadians(-45));
 			
 		}
-		else if (walkDir.getZ() < 0) //N
+		else if (walkDir.getZ() < -0.05) //N
 		{
 			frontDir.setRotation(upDir, btRadians(180));
 		}
-		else if (walkDir.getZ() > 0) //S
+		else if (walkDir.getZ() > 0.05) //S
 		{
 			frontDir.setRotation(upDir, btRadians(0));
 		}
-		else if (walkDir.getX() > 0) //E
+		else if (walkDir.getX() > 0.05) //E
 		{
 			frontDir.setRotation(upDir, btRadians(90));
 		}
-		else if (walkDir.getX() < 0) //W
+		else if (walkDir.getX() < -0.05) //W
 		{
 			frontDir.setRotation(upDir, btRadians(-90));
 		}

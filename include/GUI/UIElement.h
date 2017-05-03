@@ -19,6 +19,7 @@ class UIElement
 protected:
 	//This determines whether it should be saved to file or not
 	bool active;
+	bool savable;
 	shared_ptr<Button> button;
 	bool haveVAO;
 	vector<GLfloat> vertices;
@@ -42,6 +43,8 @@ public:
 	void setActive(bool isActive);
 	bool isActive();
 
+	void setSavable(bool canSave);
+	bool isSavable();
 	/*
 	Returns a button
 	*/

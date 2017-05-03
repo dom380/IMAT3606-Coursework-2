@@ -589,6 +589,7 @@ private:
 				auto mesh = AssetManager::getInstance()->getCollisionData(meshFile);
 				physComp = std::make_shared<PhysicsComponent>(physics, std::weak_ptr<GameObject>(gameObject), mesh, mass, convex);
 			}
+			physComp->setMeshFileName(meshFile);
 		}
 		else
 		{
@@ -712,8 +713,19 @@ private:
 		shared_ptr<ControllerComponent> controller = std::make_shared<ControllerComponent>(physics, gameObject, shapeData, offset, jumpRayVal, flip);
 		float movementSpeed = controllerElement->FirstChildElement("movement_speed") != NULL ? controllerElement->FirstChildElement("movement_speed")->FloatText() : 0.1f;
 		float jumpForce = controllerElement->FirstChildElement("jump_force") != NULL ? controllerElement->FirstChildElement("jump_force")->FloatText() : 10.0f;
+		tinyxml2::XMLElement* frontElement = controllerElement->FirstChildElement("world_front");
+		glm::vec3 front(0.0,0.0,-1.0);
+		if (frontElement != NULL) {
+			front = glm::vec3
+			(
+				frontElement->FirstChildElement("x") != NULL ? frontElement->FirstChildElement("x")->FloatText() : 0.0f,
+				frontElement->FirstChildElement("y") != NULL ? frontElement->FirstChildElement("y")->FloatText() : 0.0f,
+				frontElement->FirstChildElement("z") != NULL ? frontElement->FirstChildElement("z")->FloatText() : -1.0f
+			);
+		} 
 		controller->setMovementSpeed(movementSpeed);
 		controller->setJumpForce(jumpForce);
+		controller->setWorldFront(front.x, front.y, front.z);
 		gameObject->AddComponent(controller, ComponentType::CONTROLLER);
 
 	}

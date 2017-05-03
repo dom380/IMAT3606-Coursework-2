@@ -3,8 +3,9 @@
 #include "GL\glm\glm\gtc\matrix_transform.hpp"
 #include "GL\glm\glm\gtx\transform.hpp"
 
-PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject> owner, std::shared_ptr<ModelData> mesh, float mass, bool convex) : Component(ComponentType::RIGID_BODY)
+PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject> owner, std::shared_ptr<ModelData> mesh, float mass, bool isConvex) : Component(ComponentType::RIGID_BODY)
 {
+	convex = isConvex;
 	//Retrieve the transform of the mesh
 	btTransform transform;
 	auto sp = owner.lock();
@@ -12,11 +13,13 @@ PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_
 
 	//Build collision shape
 	buildCollisionShape(mesh, tp->scale);
+	hasMesh = true;
 	init(physics, owner, mass);
 }
 
-PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject> owner, std::shared_ptr<std::vector<ConvexHull>> mesh, float mass, bool convex) : Component(ComponentType::RIGID_BODY)
+PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject> owner, std::shared_ptr<std::vector<ConvexHull>> mesh, float mass, bool isConvex) : Component(ComponentType::RIGID_BODY)
 {
+	convex = isConvex;
 	//Retrieve the transform of the mesh
 	btTransform transform;
 	auto sp = owner.lock();
@@ -25,6 +28,7 @@ PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_
 	//Build collision shape
 	auto scale = tp->scale;
 	buildCollisionShape(mesh, tp->scale);
+	hasMesh = true;
 	init(physics, owner, mass);
 }
 
@@ -34,25 +38,9 @@ PhysicsComponent::PhysicsComponent(std::shared_ptr<Physics>& physics, std::weak_
 	auto tp = sp != nullptr ? sp->getComponent<Transform>(ComponentType::TRANSFORM) : nullptr;
 
 	auto scale = tp->scale;
-	//Build Collision shape
-	switch (boundingShape.boundingShape)
-	{
-		case ShapeData::BoundingShape::BOX:
-			shape = new btBoxShape(btVector3(boundingShape.halfExtents.x, boundingShape.halfExtents.y, boundingShape.halfExtents.z));
-			break;
-		case ShapeData::BoundingShape::SPHERE:
-			shape = new btSphereShape(boundingShape.radius);
-			break;
-		case ShapeData::BoundingShape::CONE:
-			shape = new btConeShape(boundingShape.radius, boundingShape.height);
-			break;
-		case ShapeData::BoundingShape::CYLINDER:
-			shape = new btCylinderShape(btVector3(boundingShape.halfExtents.x, boundingShape.halfExtents.y, boundingShape.halfExtents.z));
-			break;
-		case ShapeData::BoundingShape::CAPSULE:
-			shape = new btCapsuleShape(boundingShape.radius, boundingShape.height);
-			break;
-	}
+
+	buildCollisionShape(boundingShape);
+	hasMesh = false;
 	init(physics, owner, mass);
 }
 
@@ -95,27 +83,139 @@ btRigidBody * PhysicsComponent::getBody()
 	return body;
 }
 
-void PhysicsComponent::setRestitution(double restitution)
+float* PhysicsComponent::getMass()
 {
-	body->setRestitution(btScalar(restitution));
+	return &mass;
 }
 
-void PhysicsComponent::setFriction(double friction)
+double PhysicsComponent::getRestitution()
 {
-	body->setFriction(btScalar(friction));
+	if (body)
+		return body->getRestitution();
+	else
+		return restitution;
+}
+
+double PhysicsComponent::getFriction()
+{
+	if (body)
+		return body->getFriction();
+	else
+		return friction;
+}
+
+double* PhysicsComponent::getRotationalFriction()
+{
+	if (body)
+	{
+		rotationalFriction = body->getRollingFriction();
+	}
+	return &rotationalFriction;
+}
+
+btVector3* PhysicsComponent::getVelocity()
+{
+	return &velocity;
+}
+
+bool* PhysicsComponent::isConstVelocity()
+{
+	return &constVelocity;
+}
+
+bool* PhysicsComponent::isConvex()
+{
+	return &convex;
+}
+
+bool * PhysicsComponent::hasMeshFile()
+{
+	return &hasMesh;
+}
+
+string* PhysicsComponent::getMeshFileName()
+{
+	return &meshFileName;
+}
+
+void PhysicsComponent::setConvex(bool passedConvex)
+{
+	convex = passedConvex;
+}
+
+void PhysicsComponent::setHasMesh(bool passedHasMesh)
+{
+	hasMesh = passedHasMesh;
+}
+
+ShapeData * PhysicsComponent::getShape()
+{
+	return shapeData;
+}
+
+void PhysicsComponent::setShape(ShapeData * passedShapeData)
+{
+	shapeData = passedShapeData;
+}
+
+void PhysicsComponent::setMeshFileName(string fileName)
+{
+	meshFileName = fileName;
+}
+
+void PhysicsComponent::setRestitution(double passedRestitution)
+{
+	restitution = passedRestitution;
+	if (body)
+		body->setRestitution(btScalar(passedRestitution));
+}
+
+void PhysicsComponent::setRestitution()
+{
+	if (body)
+		body->setRestitution(btScalar(restitution));
+}
+
+void PhysicsComponent::setFriction(double passedFriction)
+{
+	friction = passedFriction;
+	if (body)
+		body->setFriction(btScalar(passedFriction));
+}
+
+void PhysicsComponent::setFriction()
+{
+	if (body)
+		body->setFriction(btScalar(friction));
 }
 
 void PhysicsComponent::setRotationalFriction(double friction)
 {
+	rotationalFriction = friction;
 	btScalar frictionScalar = btScalar(friction);
-	body->setRollingFriction(frictionScalar);
-	body->setSpinningFriction(frictionScalar/btScalar(2.0));
+	if (body)
+	{
+		body->setRollingFriction(frictionScalar);
+		body->setSpinningFriction(frictionScalar / btScalar(2.0));
+	}
+	
+}
+
+void PhysicsComponent::setRotationalFriction()
+{
+	btScalar frictionScalar = btScalar(rotationalFriction);
+	if (body)
+	{
+		body->setRollingFriction(frictionScalar);
+		body->setSpinningFriction(frictionScalar / btScalar(2.0));
+	}
 }
 
 void PhysicsComponent::setVelocity(double x, double y, double z)
 {
 	velocity = btVector3(btScalar(x), btScalar(y), btScalar(z));
-	body->setLinearVelocity(velocity);
+	if (body)
+		body->setLinearVelocity(velocity);
 }
 
 void PhysicsComponent::setConstVelocity(bool flag)
@@ -150,7 +250,7 @@ void PhysicsComponent::dispose()
 	}
 }
 
-void PhysicsComponent::buildCollisionShape(std::shared_ptr<ModelData>& mesh, glm::vec3& scale)
+void PhysicsComponent::buildCollisionShape(std::shared_ptr<ModelData> mesh, glm::vec3 scale)
 {
 	//if (mass > 0.f) 
 	//{
@@ -217,7 +317,7 @@ void PhysicsComponent::buildCollisionShape(std::shared_ptr<ModelData>& mesh, glm
 	//}
 }
 
-void PhysicsComponent::buildCollisionShape(std::shared_ptr<std::vector<ConvexHull>> mesh, glm::vec3 & scale)
+void PhysicsComponent::buildCollisionShape(std::shared_ptr<std::vector<ConvexHull>> mesh, glm::vec3 scale)
 {
 	shape = new btCompoundShape();
 	for (ConvexHull ch : *mesh)
@@ -254,6 +354,30 @@ void PhysicsComponent::buildCollisionShape(std::shared_ptr<std::vector<ConvexHul
 	}
 }
 
+void PhysicsComponent::buildCollisionShape(ShapeData  boundingShape)
+{
+	shapeData = new ShapeData(boundingShape);
+	//Build Collision shape
+	switch (boundingShape.boundingShape)
+	{
+	case ShapeData::BoundingShape::BOX:
+		shape = new btBoxShape(btVector3(boundingShape.halfExtents.x, boundingShape.halfExtents.y, boundingShape.halfExtents.z));
+		break;
+	case ShapeData::BoundingShape::SPHERE:
+		shape = new btSphereShape(boundingShape.radius);
+		break;
+	case ShapeData::BoundingShape::CONE:
+		shape = new btConeShape(boundingShape.radius, boundingShape.height);
+		break;
+	case ShapeData::BoundingShape::CYLINDER:
+		shape = new btCylinderShape(btVector3(boundingShape.halfExtents.x, boundingShape.halfExtents.y, boundingShape.halfExtents.z));
+		break;
+	case ShapeData::BoundingShape::CAPSULE:
+		shape = new btCapsuleShape(boundingShape.radius, boundingShape.height);
+		break;
+	}
+}
+
 void PhysicsComponent::updateTransform(Transform* transformPtr)
 {
 	auto ms = body->getMotionState();
@@ -274,6 +398,8 @@ void PhysicsComponent::init(std::shared_ptr<Physics>& physics, std::weak_ptr<Gam
 	this->owner = owner;
 	this->mass = mass;
 	this->physicsPtr = physics;
+	restitution = 0.0f;
+	friction = 0.0f;
 	//Retrieve the transform of the mesh
 	btTransform transform;
 	auto sp = owner.lock();

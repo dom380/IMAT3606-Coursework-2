@@ -307,8 +307,11 @@ void DebugMenu::debugGameObjectsMenu()
 							gameObjectsMenuRigidBody();
 							break;
 						case ComponentType::LOGIC:
-							gameObjectsMenuLogic();
+						{
+							auto logic = gameScreen->getComponentStore()->getComponent<LogicComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::LOGIC), ComponentType::LOGIC);
+							gameObjectsMenuLogic(i, logic);
 							break;
+						}
 						case ComponentType::TRANSFORM:
 							auto transform = gameScreen->getComponentStore()->getComponent<Transform>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
 							gameObjectsMenuTransform(i, transform);
@@ -321,6 +324,28 @@ void DebugMenu::debugGameObjectsMenu()
 				
 			}
 			ImGui::TreePop();
+
+			if (!gameScreen->getGameObjects()[x]->HasComponent(ComponentType::LOGIC))
+			{
+				static bool hasLogic = false;
+
+				if (ImGui::Checkbox("AddLogic", &hasLogic))
+				{
+
+				}
+				if (hasLogic)
+				{
+					ImGui::Indent();
+					static shared_ptr<LogicComponent> logic = std::make_shared<LogicComponent>(gameScreen->getGameObjects()[x], gameScreen);
+					gameObjectsMenuLogic(0, logic.get());
+					if (ImGui::Button("Add"))
+					{
+						logic->registerLuaBindings();
+						gameScreen->getGameObjects()[x]->AddComponent(logic, ComponentType::LOGIC);
+					}
+				}
+			}
+			
 			if (ImGui::Button("Duplicate"))
 			{
 				LevelLoader::duplicateGameObject(gameScreen, gameScreen->getGameObjects()[x]);
@@ -506,8 +531,21 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 	objCreateActive.at(iterator) = bWindowActive;
 
 	ImGui::PushID(iterator);
+	//transform
 	static shared_ptr<Transform> transform = std::make_shared<Transform>();
 	gameObjectsMenuTransform(iterator, transform.get());
+	//
+	static bool hasLogic = false;
+	static shared_ptr<LogicComponent> logic = std::make_shared<LogicComponent>();
+	if (ImGui::Checkbox("Logic", &hasLogic))
+	{
+	}
+	if (hasLogic)
+	{
+		//logic
+		gameObjectsMenuLogic(iterator, logic.get());
+	}
+	//
 	static bool hasTexture = false;
 	if (ImGui::Checkbox("Texture", &hasTexture))
 	{
@@ -524,10 +562,16 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 		if (hasTexture)
 		{
 			objInfo.second = textureCStyleArray[listbox_item_current];
-			
 		}
 		
 		LevelLoader::loadGameObject(Engine::g_pEngine->getRenderer(), gameScreen, objInfo, transform);
+		if (hasLogic)
+		{
+			logic->setOwner(gameScreen->getGameObjects().back());
+			logic->setScreen(gameScreen);
+			logic->registerLuaBindings();
+			gameScreen->getGameObjects().back()->AddComponent(logic, ComponentType::LOGIC);
+		}
 	}
 	ImGui::PopID();
 	ImGui::End();
@@ -842,8 +886,30 @@ void DebugMenu::gameObjectsMenuRigidBody()
 {
 }
 
-void DebugMenu::gameObjectsMenuLogic()
+void DebugMenu::gameObjectsMenuLogic(int i, LogicComponent* logic)
 {
+	ImGui::PushID(i);
+	static char scriptNameBuf[64] = "";
+
+	if (strlen(scriptNameBuf) == 0)
+	{
+		strncpy_s(scriptNameBuf, logic->getScriptName().c_str(), logic->getScriptName().size());
+	}
+
+	ImGui::InputText("Script Name", scriptNameBuf, sizeof(scriptNameBuf));
+	if (ImGui::Button("SetName"))
+	{
+		logic->setScriptName(scriptNameBuf);
+		static string fullPath;
+		fullPath = AssetManager::getInstance()->getScript(scriptNameBuf) + ".lua";
+		logic->setScriptFullPath(fullPath.c_str());
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("LoadScript"))
+	{
+		logic->registerLuaBindings();
+	}
+	ImGui::PopID();
 }
 
 void DebugMenu::gameObjectsMenuTransform(int i, Transform* transform)

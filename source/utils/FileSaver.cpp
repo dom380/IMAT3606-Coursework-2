@@ -30,13 +30,14 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 				*/
 				if (XMLObjectCount == iObjectCount)
 				{
-					tinyxml2::XMLElement* componentElement = gameObjElement->FirstChildElement("components")->FirstChildElement();
+					tinyxml2::XMLElement* componentsElement = gameObjElement->FirstChildElement("components");
+					tinyxml2::XMLElement* componentElement = componentsElement->FirstChildElement();
 					/*
 					Iterate over all components in object
 					*/
-					while (componentElement != NULL)
+					//while (componentElement != NULL)
 					{
-						string XMLCompType = componentElement->Attribute("type");
+						//string XMLCompType = componentElement->Attribute("type");
 						/*
 						If XML object count != the object count
 						and the object name is the same then skip.
@@ -53,8 +54,27 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 								
 								if (go->HasComponent(cType))
 								{
+									bool xmlHasComp = false;
+									while (componentElement != NULL)
+									{
+										string XMLCompType = componentElement->Attribute("type");
+										if (cType == EnumParser<ComponentType>().parse(XMLCompType))
+										{
+											xmlHasComp = true;
+											break;
+										}
+										componentElement = componentElement->NextSiblingElement();
+									}
+									
+									if (!xmlHasComp)
+									{
+									    componentElement = doc->NewElement("component");
+										componentElement->SetAttribute("type", EnumParser<ComponentType>().getString(cType).c_str());
+										componentsElement->InsertEndChild(componentElement);
+									}
+									
 									//XML current GO and passedGO have same component
-									if (cType == EnumParser<ComponentType>().parse(XMLCompType))
+									//if (cType == EnumParser<ComponentType>().parse(XMLCompType))
 									{
 										/*
 											Switch between all components
@@ -118,8 +138,13 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 
 											break;
 										case LOGIC:
-											//TODO
+										{
+											auto logic = gameScreen->getComponentStore()->getComponent<LogicComponent>(go->GetComponentHandle(ComponentType::LOGIC), ComponentType::LOGIC);
+											if (!logic)
+												return false;
+											UpdateLogic(doc, componentElement, logic);
 											break;
+										}
 										case TRANSFORM:
 											/*
 											 Iterate through all inner transforms and their xyz and update doc
@@ -132,9 +157,11 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 										}
 									}
 								}
+								componentElement = componentsElement->FirstChildElement();
 							}
+							
 						}
-						componentElement = componentElement->NextSiblingElement();
+						//componentElement = componentElement->NextSiblingElement();
 					}
 				}
 				XMLObjectCount++;
@@ -375,8 +402,13 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 
 						break;
 					case LOGIC:
-
+					{
+						auto logic = gameScreen->getComponentStore()->getComponent<LogicComponent>(go->GetComponentHandle(ComponentType::LOGIC), ComponentType::LOGIC);
+						if (!logic)
+							return false;
+						AddLogicToFile(doc, componentElement, logic);
 						break;
+					}
 					case TRANSFORM:
 						/*
 						Give component transform information adding xyz from transform elements
@@ -582,6 +614,23 @@ bool FileSaver::DeleteObjectFromFile(tinyxml2::XMLDocument * doc, int iObjectCou
 	return false;
 }
 
+bool FileSaver::UpdateLogic(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement * logicElement, LogicComponent * logic)
+{
+	tinyxml2::XMLElement* scriptElement = logicElement->FirstChildElement("script");
+	if (scriptElement)
+	{
+
+	}
+	else
+	{
+		scriptElement = doc->NewElement("script");
+		logicElement->InsertEndChild(scriptElement);
+	}
+	string fullScriptName = logic->getScriptName() + ".lua";
+	scriptElement->SetText(fullScriptName.c_str());
+	return true;
+}
+
 bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* transformElement, Transform* transform)
 {
 	for (int transformElementIt = 0; transformElementIt < 3; transformElementIt++)
@@ -746,6 +795,16 @@ bool FileSaver::UpdateVec3Element(tinyxml2::XMLDocument * doc, tinyxml2::XMLElem
 		}
 
 	}
+	return true;
+}
+
+bool FileSaver::AddLogicToFile(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement * logicElement, LogicComponent * logic)
+{
+	tinyxml2::XMLElement* scriptElement = doc->NewElement("script");
+	logicElement->InsertEndChild(scriptElement);
+	string fullScriptName = logic->getScriptName() + ".lua";
+	scriptElement->SetText(fullScriptName.c_str());
+
 	return true;
 }
 

@@ -383,6 +383,32 @@ void DebugMenu::debugGameObjectsMenu()
 					}
 				}
 			}
+			if (!gameScreen->getGameObjects()[x]->HasComponent(ComponentType::TRIGGER))
+			{
+				static bool hasTrigger = false;
+
+				if (ImGui::Checkbox("AddTrigger", &hasTrigger))
+				{
+
+				}
+				if (hasTrigger)
+				{
+					ImGui::Indent();
+					static shared_ptr<CollisionTrigger> trigger = std::make_shared<CollisionTrigger>();
+					gameObjectsMenuTrigger(0, trigger.get());
+					if (ImGui::Button("Add"))
+					{
+						trigger->setOwner(gameScreen->getGameObjects()[x]);
+						trigger->init();
+						gameScreen->getGameObjects()[x]->AddComponent(trigger, ComponentType::TRIGGER);
+						std::shared_ptr<BulletPhysics> physicsPtr = std::dynamic_pointer_cast<BulletPhysics>(Engine::g_pEngine->getPhysics());
+						if (physicsPtr != nullptr)
+						{
+							physicsPtr->addTrigger(trigger);
+						}
+					}
+				}
+			}
 			
 			if (ImGui::Button("Duplicate"))
 			{

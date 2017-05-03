@@ -817,7 +817,11 @@ bool FileSaver::UpdateRigidBody(tinyxml2::XMLDocument * doc, tinyxml2::XMLElemen
 	{
 		//bounding shape
 		tinyxml2::XMLElement* shapeElement = physicsElement->FirstChildElement("bounding_shape");
-		if (shapeElement)
+		if (!shapeElement)
+		{
+			shapeElement = doc->NewElement("bounding_shape");
+			physicsElement->InsertEndChild(shapeElement);
+		}
 		{
 			ShapeData::BoundingShape shapeType = phyComp->getShape()->boundingShape;
 			string typeName = EnumParser<ShapeData::BoundingShape>().getString(shapeType);
@@ -992,7 +996,11 @@ bool FileSaver::UpdateTrigger(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement 
 	triggerOnceElement->SetText(triggerComp->isTriggerOnce());
 	//bounding shape
 	tinyxml2::XMLElement* shapeElement = triggerElement->FirstChildElement("bounding_shape");
-	if (shapeElement)
+	if (!shapeElement)
+	{
+		shapeElement = doc->NewElement("bounding_shape");
+		triggerElement->InsertEndChild(shapeElement);
+	}
 	{
 		ShapeData::BoundingShape shapeType = triggerComp->getShape()->boundingShape;
 		string typeName = EnumParser<ShapeData::BoundingShape>().getString(shapeType);

@@ -26,14 +26,14 @@
                 <z>0.0</z>
             </up>
             <direction>
-                <x>0.0</x>
+                <x>1.0</x>
                 <y>0.0</y>
-                <z>-1.0</z>
+                <z>0.0</z>
             </direction>
             <follow_distance>
-                <x>0.0</x>
-                <y>-6.0</y>
-                <z>-15.0</z>
+                <x>15.0</x>
+                <y>-4.0</y>
+                <z>0.0</z>
             </follow_distance>
             <mouse_input>false</mouse_input>
             <key_input>false</key_input>
@@ -172,6 +172,11 @@
                 <component type="controller">
                     <flip>true</flip>
                     <offset>1.25</offset>
+                    <world_front>
+                        <x>1.0</x>
+                        <y>0.0</y>
+                        <z>0.0</z>
+                    </world_front>
                     <bounding_shape type="CAPSULE">
                         <radius>0.75</radius>
                         <height>1.0</height>
@@ -200,16 +205,25 @@
                     </scale>
                 </component>
                 <component type="rigid_body">
-                    <mass>0.0</mass>
+                    <mass>0</mass>
                     <!-- <collision_mesh>cube.obj</collision_mesh> -->
-                    <restitution>0.4</restitution>
-                    <bounding_shape type="BOX">
+                    <restitution>0.40000000596046448</restitution>
+                    <bounding_shape type="box">
                         <half_extents>
                             <x>24</x>
                             <y>0.25</y>
                             <z>4.25</z>
                         </half_extents>
                     </bounding_shape>
+                    <convex>false</convex>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>7.32071e-23</y>
+                        <z>-1.5881868e-23</z>
+                    </velocity>
                 </component>
             </components>
         </gameObject>
@@ -534,16 +548,25 @@
                     </orientation>
                 </component>
                 <component type="rigid_body">
-                    <mass>0.0</mass>
+                    <mass>0</mass>
                     <!-- <collision_mesh>cube.obj</collision_mesh> -->
-                    <restitution>0.4</restitution>
-                    <bounding_shape type="BOX">
+                    <restitution>0.40000000596046448</restitution>
+                    <bounding_shape type="box">
                         <half_extents>
                             <x>1.25</x>
                             <y>1</y>
                             <z>0.5</z>
                         </half_extents>
                     </bounding_shape>
+                    <convex>true</convex>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>7.3724088e-23</y>
+                        <z>-1.5881868e-23</z>
+                    </velocity>
                 </component>
             </components>
         </gameobject>
@@ -1448,7 +1471,9 @@
                     <file>littlebrick.obj</file>
                     <active>true</active>
                 </component>
-                <component type="logic"/>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
                 <component type="transform">
                     <position>
                         <x>-103</x>
@@ -1475,7 +1500,9 @@
                     <file>littlebrick.obj</file>
                     <active>true</active>
                 </component>
-                <component type="logic"/>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
                 <component type="transform">
                     <position>
                         <x>-103</x>
@@ -1496,7 +1523,9 @@
                     <file>littlebrick.obj</file>
                     <active>true</active>
                 </component>
-                <component type="logic"/>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
                 <component type="transform">
                     <position>
                         <x>-103</x>
@@ -1517,7 +1546,9 @@
                     <file>littlebrick.obj</file>
                     <active>true</active>
                 </component>
-                <component type="logic"/>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
                 <component type="transform">
                     <position>
                         <x>-103</x>
@@ -1538,7 +1569,9 @@
                     <file>littlebrick.obj</file>
                     <active>true</active>
                 </component>
-                <component type="logic"/>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
                 <component type="transform">
                     <position>
                         <x>-103</x>
@@ -1559,7 +1592,9 @@
                     <file>littlebrick.obj</file>
                     <active>true</active>
                 </component>
-                <component type="logic"/>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
                 <component type="transform">
                     <position>
                         <x>-103</x>
@@ -1580,7 +1615,9 @@
                     <file>littlebrick.obj</file>
                     <active>true</active>
                 </component>
-                <component type="logic"/>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
                 <component type="transform">
                     <position>
                         <x>-103</x>
@@ -1601,7 +1638,9 @@
                     <file>littlebrick.obj</file>
                     <active>true</active>
                 </component>
-                <component type="logic"/>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
                 <component type="transform">
                     <position>
                         <x>-104.75</x>
@@ -1759,6 +1798,7 @@
                 <z>1</z>
             </scale>
             <value>0</value>
+            <font>Cookies.ttf</font>
         </uiElement>
         <uiElement>
             <ID>heartui</ID>
@@ -1794,6 +1834,7 @@
                 <y>1</y>
                 <z>1</z>
             </scale>
+            <font>Cookies.ttf</font>
         </uiElement>
     </uiElements>
 </screen>

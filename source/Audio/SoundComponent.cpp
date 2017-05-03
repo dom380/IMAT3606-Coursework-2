@@ -23,15 +23,15 @@ SoundComponent* SoundComponent::m_Instance = NULL;
 //!< Default constructor
 SoundComponent::SoundComponent()
 {
-	m_sSoundFile.push_back("resources/audio/Background Music/menu.wav");
+	//m_sSoundFile.push_back("resources/audio/Background Music/menu.wav");
 
-	for (unsigned int i = 0; i < m_sSoundFile.size(); i++)
-	{
-		m_SoundBuffer.push_back(new sf::SoundBuffer);
-		m_SoundBuffer.at(i)->loadFromFile(m_sSoundFile.at(i));
-		m_Sounds.push_back(new sf::Sound);
-		m_Sounds.at(i)->setBuffer(*m_SoundBuffer.at(i));
-	}
+	//for (unsigned int i = 0; i < m_sSoundFile.size(); i++)
+	//{
+	//	m_SoundBuffer.push_back(new sf::SoundBuffer);
+	//	m_SoundBuffer.at(i)->loadFromFile(m_sSoundFile.at(i));
+	//	m_Sounds.push_back(new sf::Sound);
+	//	m_Sounds.at(i)->setBuffer(*m_SoundBuffer.at(i));
+	//}
 }
 
 //!< Instance contructor to ensure that only one GameTextureLoader is created
@@ -119,12 +119,15 @@ void SoundComponent::setRelativeToListener(bool b, int index)
 	m_Sounds.at(index)->setRelativeToListener(b);
 }
 
-void SoundComponent::loadSound(std::string pathname)
+int SoundComponent::loadSound(std::string pathname)
 {
 	/*
 		Loads sounds - need to test this if it works
 	*/
-
+	for (int i = 0; i < m_sSoundFile.size(); ++i)
+	{
+		if (m_sSoundFile.at(i) == pathname) return i; //If we've already loaded the sound don't load it again.
+	}
 
 	int indexBuffer = m_SoundBuffer.size();
 	int indexFile = m_sSoundFile.size();
@@ -137,6 +140,7 @@ void SoundComponent::loadSound(std::string pathname)
 
 	m_Sounds.push_back(new sf::Sound);
 	m_Sounds.at(indexSound)->setBuffer(*m_SoundBuffer.at(indexBuffer));
+	return indexSound;
 }
 
 void SoundComponent::destroySounds(int index)

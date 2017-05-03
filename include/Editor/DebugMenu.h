@@ -20,7 +20,9 @@ Uses imgui to organise a menu bar full of options for debug.
 
 */
 class ModelComponent;
+class PhysicsComponent;
 class Transform;
+class LogicComponent;
 class DebugMenu
 {
 private:
@@ -45,8 +47,10 @@ private:
 	vector<std::string> objList;
 	vector<std::string> textureList;
 	vector<std::string> fontList;
+	vector<std::string> boundingShapesList;
 	std::vector<const char *> textureCStyleArray;
 	std::vector<const char *> fontCStyleArray;
+	std::vector<const char *> boundingShapesCStyleArray;
 	vector<std::string> levelList;
 	/*
 		Vectors test if the window is active.
@@ -130,8 +134,10 @@ public:
 
 	void gameObjectsMenuModel(int i, ModelComponent* model);
 	void gameObjectsMenuAnimation();
-	void gameObjectsMenuRigidBody();
-	void gameObjectsMenuLogic();
+
+	void gameObjectsMenuRigidBody(int i, PhysicsComponent* phyComp, Transform* tranform);
+	void gameObjectsMenuLogic(int i, LogicComponent* logic);
+
 	void gameObjectsMenuTransform(int i, Transform* transform);
 };
 

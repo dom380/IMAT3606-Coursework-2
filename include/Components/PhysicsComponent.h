@@ -44,7 +44,18 @@ public:
 		bool convex - Specifies whether the collision mesh is convex.
 	*/
 	PhysicsComponent(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject>& owner, ShapeData& boundingShape, float mass);
-
+	/*
+		Runtime create empty constructor
+	*/
+	PhysicsComponent() : Component(ComponentType::RIGID_BODY)
+	{
+		body = nullptr;
+		shapeData = nullptr;
+		shape = nullptr;
+		mass = 0.0f;
+		convex = true;
+		rotationalFriction = 0.0f;
+	}
 	/*
 		Update's the GameObject's transform component to match the physics simulation.
 		If enabled, also maintains the specified constant linear velocity. 
@@ -60,21 +71,43 @@ public:
 		TODO - This is bleeding implementation details. Fix it!
 	*/
 	btRigidBody* getBody();
+
+	float* getMass();
+	double getRestitution();
+	double getFriction();
+	double* getRotationalFriction();
+	btVector3* getVelocity();
+	bool* isConstVelocity();
+	bool* isConvex();
+	bool* hasMeshFile();
+	string* getMeshFileName();
+
+	void setConvex(bool passedConvex);
+	void setHasMesh(bool passedHasMesh);
+
+	ShapeData* getShape();
+
+	void setShape(ShapeData* shapeData);
+
+	void setMeshFileName(string fileName);
 	/*
 		Sets the restitution of the GameObject.
 		double restitution - A value between 0..1 specifying how much energy is retained by this object after collision. 
 	*/
 	void setRestitution(double restitution);
+	void setRestitution();
 	/*
 		Sets the friction coefficent of the GameObject.
 		double friction - A value between 0..1 specifying the frictional coefficent.
 	*/
 	void setFriction(double friction);
+	void setFriction();
 	/*
 		Sets the rotational friction coefficent of the GameObject.
 		double friction - A value between 0..1 specifying the rotational frictional coefficent.
 	*/
 	void setRotationalFriction(double friction);
+	void setRotationalFriction();
 	/*
 		Sets the object's linear velocity. Note this overrides the object's current velocity.
 		double x - The X component of the velocity vector.
@@ -92,33 +125,48 @@ public:
 	*/
 	void setTransform(Transform* transformPtr);
 
+	/*
+	Shared initialization code between constructors.
+	*/
+	void init(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject> owner, float mass);
+	/*
+	Constructs the collision shape from the specified mesh
+	*/
+	void buildCollisionShape(std::shared_ptr<ModelData> mesh, glm::vec3 scale);
+	/*
+	Constructs the collision shape from the specified ConvexHulls
+	*/
+	void buildCollisionShape(std::shared_ptr<std::vector<ConvexHull>> mesh, glm::vec3 scale);
+	/*
+	Constructs collisionShape without mesh
+	*/
+	void buildCollisionShape(ShapeData boundingShape);
 	void dispose();
 private:
 	std::weak_ptr<GameObject> owner;
+	string meshFileName;
+	bool hasMesh;
+	bool convex;
+
 	std::weak_ptr<Physics> physicsPtr;
+
 	float mass;
 	btRigidBody* body;
 	btCollisionShape* shape;
+	ShapeData* shapeData;
 	btVector3 localInertia = btVector3(0.0, 0.0, 0.0);
 	btVector3 velocity = btVector3(0.0, 0.0, 0.0);
 	bool constVelocity = false;
+	double rotationalFriction;
+	double restitution;
+	double friction;
 	//private utility methods
-	/*
-		Constructs the collision shape from the specified mesh
-	*/
-	void buildCollisionShape(std::shared_ptr<ModelData>& mesh, glm::vec3& scale);
-	/*
-		Constructs the collision shape from the specified ConvexHulls
-	*/
-	void buildCollisionShape(std::shared_ptr<std::vector<ConvexHull>> mesh, glm::vec3& scale);
+
 	/*
 		Synchronizes the Transform component with the physics simulation transform
 	*/
 	void updateTransform(Transform* transformPtr);
-	/*
-		Shared initialization code between constructors.
-	*/
-	void init(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject> owner, float mass);
+	
 };
 
 #endif // !PHYSICSCOMPONENT_H

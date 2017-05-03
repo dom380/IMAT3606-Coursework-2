@@ -304,11 +304,19 @@ void DebugMenu::debugGameObjectsMenu()
 							gameObjectsMenuAnimation();
 							break;
 						case ComponentType::RIGID_BODY:
-							gameObjectsMenuRigidBody();
+						{
+							auto physComp = gameScreen->getComponentStore()->getComponent<PhysicsComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::RIGID_BODY), ComponentType::RIGID_BODY);
+							auto transform = gameScreen->getComponentStore()->getComponent<Transform>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
+							if (physComp && transform)
+								gameObjectsMenuRigidBody(i, physComp, transform);
 							break;
+						}
 						case ComponentType::LOGIC:
-							gameObjectsMenuLogic();
+						{
+							auto logic = gameScreen->getComponentStore()->getComponent<LogicComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::LOGIC), ComponentType::LOGIC);
+							gameObjectsMenuLogic(i, logic);
 							break;
+						}
 						case ComponentType::TRANSFORM:
 							auto transform = gameScreen->getComponentStore()->getComponent<Transform>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
 							gameObjectsMenuTransform(i, transform);
@@ -321,6 +329,52 @@ void DebugMenu::debugGameObjectsMenu()
 				
 			}
 			ImGui::TreePop();
+			if (!gameScreen->getGameObjects()[x]->HasComponent(ComponentType::RIGID_BODY))
+			{
+				static bool hasPhysics = false;
+
+				if (ImGui::Checkbox("AddPhysics", &hasPhysics))
+				{
+
+				}
+				if (hasPhysics)
+				{
+					ImGui::Indent();
+					static shared_ptr<PhysicsComponent> phy = std::make_shared<PhysicsComponent>();
+					auto transform = gameScreen->getComponentStore()->getComponent<Transform>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
+					if (transform)
+					{
+						gameObjectsMenuRigidBody(0, phy.get(), transform);
+						if (ImGui::Button("Add"))
+						{
+							phy->init(Engine::g_pEngine->getPhysics(), gameScreen->getGameObjects()[x], *phy->getMass());
+							gameScreen->getGameObjects()[x]->AddComponent(phy, ComponentType::RIGID_BODY);
+						}
+					}
+					
+				}
+			}
+			if (!gameScreen->getGameObjects()[x]->HasComponent(ComponentType::LOGIC))
+			{
+				static bool hasLogic = false;
+
+				if (ImGui::Checkbox("AddLogic", &hasLogic))
+				{
+
+				}
+				if (hasLogic)
+				{
+					ImGui::Indent();
+					static shared_ptr<LogicComponent> logic = std::make_shared<LogicComponent>(gameScreen->getGameObjects()[x], gameScreen);
+					gameObjectsMenuLogic(0, logic.get());
+					if (ImGui::Button("Add"))
+					{
+						logic->registerLuaBindings();
+						gameScreen->getGameObjects()[x]->AddComponent(logic, ComponentType::LOGIC);
+					}
+				}
+			}
+			
 			if (ImGui::Button("Duplicate"))
 			{
 				LevelLoader::duplicateGameObject(gameScreen, gameScreen->getGameObjects()[x]);
@@ -369,19 +423,25 @@ bool DebugMenu::saveCurrentLevel(string fileName)
 		Every UI object
 	*/
 	numberOfObjectsInFile = XMLReader::GetNumberOfUIElementsInFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument());
+	int unsavableObjectsCount = 0;
 	for (int x = 0; x < Engine::g_pEngine->getActiveScreen()->getUIElements().size(); x++)
 	{
-		FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, Engine::g_pEngine->getActiveScreen()->getUIElements()[x]);
-		//If there is a new object not saved on file
-		if (x >= numberOfObjectsInFile)
+		if (!Engine::g_pEngine->getActiveScreen()->getUIElements()[x]->isSavable())
 		{
-			if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, Engine::g_pEngine->getActiveScreen()->getUIElements()[x]))
+			unsavableObjectsCount++;
+			continue;
+		}
+		FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x-unsavableObjectsCount, Engine::g_pEngine->getActiveScreen()->getUIElements()[x]);
+		//If there is a new object not saved on file
+		if (x-unsavableObjectsCount >= numberOfObjectsInFile)
+		{
+			if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x-unsavableObjectsCount, Engine::g_pEngine->getActiveScreen()->getUIElements()[x]))
 			{
 			}
 		}
 		if (!Engine::g_pEngine->getActiveScreen()->getUIElements().at(x)->isActive())
 		{
-			FileSaver::DeleteObjectFromFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, Engine::g_pEngine->getActiveScreen()->getUIElements()[x]);
+			FileSaver::DeleteObjectFromFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x-unsavableObjectsCount, Engine::g_pEngine->getActiveScreen()->getUIElements()[x]);
 		}
 	}
 	return FileSaver::SaveFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(),fileName);
@@ -506,8 +566,21 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 	objCreateActive.at(iterator) = bWindowActive;
 
 	ImGui::PushID(iterator);
+	//transform
 	static shared_ptr<Transform> transform = std::make_shared<Transform>();
 	gameObjectsMenuTransform(iterator, transform.get());
+	//
+	static bool hasLogic = false;
+	static shared_ptr<LogicComponent> logic = std::make_shared<LogicComponent>();
+	if (ImGui::Checkbox("Logic", &hasLogic))
+	{
+	}
+	if (hasLogic)
+	{
+		//logic
+		gameObjectsMenuLogic(iterator, logic.get());
+	}
+	//
 	static bool hasTexture = false;
 	if (ImGui::Checkbox("Texture", &hasTexture))
 	{
@@ -515,6 +588,16 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 	if (hasTexture)
 	{
 		createTextureListBox();
+	}
+	static bool hasPhysics = false;
+	static shared_ptr<PhysicsComponent> phyComp = std::make_shared<PhysicsComponent>();
+	if (ImGui::Checkbox("Physics", &hasPhysics))
+	{
+	}
+	if (hasPhysics)
+	{
+		
+		gameObjectsMenuRigidBody(0, phyComp.get(), transform.get());
 	}
 	if (ImGui::Button("Create"))
 	{
@@ -524,10 +607,22 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 		if (hasTexture)
 		{
 			objInfo.second = textureCStyleArray[listbox_item_current];
-			
 		}
 		
 		LevelLoader::loadGameObject(Engine::g_pEngine->getRenderer(), gameScreen, objInfo, transform);
+
+		if (hasPhysics)
+		{
+			phyComp->init(Engine::g_pEngine->getPhysics(), gameScreen->getGameObjects().back(), *phyComp->getMass());
+			gameScreen->getGameObjects().back()->AddComponent(phyComp, ComponentType::RIGID_BODY);
+		}
+		if (hasLogic)
+		{
+			logic->setOwner(gameScreen->getGameObjects().back());
+			logic->setScreen(gameScreen);
+			logic->registerLuaBindings();
+			gameScreen->getGameObjects().back()->AddComponent(logic, ComponentType::LOGIC);
+		}
 	}
 	ImGui::PopID();
 	ImGui::End();
@@ -838,12 +933,199 @@ void DebugMenu::gameObjectsMenuAnimation()
 {
 }
 
-void DebugMenu::gameObjectsMenuRigidBody()
+void DebugMenu::gameObjectsMenuRigidBody(int i, PhysicsComponent* phyComp, Transform* tranform)
 {
+	ImGui::PushID(i);
+	ImGui::Indent();
+	static float dragSpeed = 0.25f;
+	bool hasMeshFile = *phyComp->hasMeshFile();
+	bool isConvex = *phyComp->isConvex();
+	char meshNameBuf[64] = "";
+	if (phyComp->getMeshFileName()->size() > 0)
+	{
+		strncpy_s(meshNameBuf, phyComp->getMeshFileName()->c_str(), phyComp->getMeshFileName()->size());
+	}
+	
+	static float restitution = phyComp->getRestitution();
+	static float friction = phyComp->getFriction();
+	if (ImGui::Checkbox("IsConvex", &isConvex))
+	{
+		phyComp->setConvex(isConvex);
+	}
+	ImGui::DragFloat("Mass", phyComp->getMass(), dragSpeed);
+	if (ImGui::Checkbox("HasMesh", &hasMeshFile))
+	{
+		phyComp->setHasMesh(hasMeshFile);
+	}
+	
+	if (hasMeshFile)
+	{
+		ImGui::InputText("MeshName", meshNameBuf, IM_ARRAYSIZE(meshNameBuf));
+		phyComp->setMeshFileName(meshNameBuf);
+		if (ImGui::Button("LoadMesh"))
+		{
+			if (isConvex)
+			{
+				auto mesh = AssetManager::getInstance()->getModelData(meshNameBuf, Engine::g_pEngine->getRenderer());
+				phyComp->buildCollisionShape(mesh, tranform->scale);
+			}
+			else
+			{
+				auto mesh = AssetManager::getInstance()->getCollisionData(meshNameBuf);
+				phyComp->buildCollisionShape(mesh, tranform->scale);
+			}
+		}
+	}
+	else
+	{
+		static ShapeData* shapeData;
+		if (phyComp->getShape())
+		{
+			shapeData = phyComp->getShape();
+		}
+		else
+		{
+			shapeData = new ShapeData();
+		}
+		
+		//list of bounding shapes?
+		vector<bool> shapeBools;
+		if (boundingShapesList.empty())
+		{
+			//fill
+			for (int x = ShapeData::BOX; x < ShapeData::CAPSULE; x++)
+			{
+				ShapeData::BoundingShape shapeType = (ShapeData::BoundingShape)x;
+				string shape = EnumParser<ShapeData::BoundingShape>().getString(shapeType).c_str();
+				boundingShapesList.push_back(shape);
+			}
+			if (!boundingShapesCStyleArray.empty())
+				boundingShapesCStyleArray.clear();
+			boundingShapesCStyleArray.reserve(boundingShapesList.size());
+			for (int index = 0; index < boundingShapesList.size(); ++index)
+			{
+				boundingShapesCStyleArray.push_back(boundingShapesList[index].c_str());
+			}
+		}
+		while (shapeBools.size() < ShapeData::CAPSULE)
+		{
+			shapeBools.push_back(false);
+		}
+		for (int x = ShapeData::BOX; x < ShapeData::CAPSULE; x++)
+		{
+			ShapeData::BoundingShape shapeType = (ShapeData::BoundingShape)x;
+			//if (shapeData->boundingShape)
+			{
+				switch (shapeData->boundingShape)
+				{
+				case ShapeData::BOX:
+					shapeBools[ShapeData::BOX] = true;
+					break;
+				case ShapeData::SPHERE:
+					shapeBools[ShapeData::SPHERE] = true;
+					break;
+				case ShapeData::CONE:
+					shapeBools[ShapeData::CONE] = true;
+					break;
+				case ShapeData::CYLINDER:
+					shapeBools[ShapeData::CYLINDER] = true;
+					break;
+				case ShapeData::CAPSULE:
+					shapeBools[ShapeData::CAPSULE] = true;
+					break;
+				default:
+					break;
+				}
+			}
+			
+			string typeName = EnumParser<ShapeData::BoundingShape>().getString(shapeType);
+			
+			bool bWindowActive = shapeBools[x];
+			
+			shapeBools[x] = bWindowActive;
+
+			
+			switch (x)
+			{
+			case ShapeData::BOX:
+				if (shapeBools[x])
+					ImGui::DragFloat3("Half Extents", &shapeData->halfExtents[0], dragSpeed);
+				break;
+			case ShapeData::SPHERE:
+				if (shapeBools[x])
+					ImGui::DragFloat("Radius", &shapeData->radius, dragSpeed);
+				break;
+			case ShapeData::CONE:
+				if (shapeBools[x])
+				{
+					ImGui::DragFloat("Radius", &shapeData->radius, dragSpeed);
+					ImGui::DragFloat("Height", &shapeData->height, dragSpeed);
+				}
+				break;
+			case ShapeData::CYLINDER:
+				if (shapeBools[x])
+					ImGui::DragFloat3("Half Extents", &shapeData->halfExtents[0], dragSpeed);
+				break;
+			case ShapeData::CAPSULE:
+				if (shapeBools[x])
+				{
+					ImGui::DragFloat("Radius", &shapeData->radius, dragSpeed);
+					ImGui::DragFloat("Height", &shapeData->height, dragSpeed);
+				}
+				break;
+			default:
+				break;
+			}
+
+		}
+		ImGui::ListBox("BoundingShapes Available", &listbox_item_current, &boundingShapesCStyleArray[0], boundingShapesCStyleArray.size(), 4);
+		shapeBools[listbox_item_current] = true;
+		if (ImGui::Button("UpdateBoundingShape"))
+		{
+			shapeData->boundingShape = EnumParser<ShapeData::BoundingShape>().parse(boundingShapesList[listbox_item_current]);
+			phyComp->buildCollisionShape(*shapeData);
+		}
+		phyComp->setShape(shapeData);
+	
+	}
+	ImGui::InputFloat("restitution", &restitution, dragSpeed);
+	phyComp->setRestitution(restitution);
+	ImGui::DragFloat("friction", &friction, dragSpeed);
+	phyComp->setFriction(friction);
+	float rotationalFriction = *phyComp->getRotationalFriction();
+	ImGui::InputFloat("Rotational Friction", &rotationalFriction, dragSpeed);
+	phyComp->setRotationalFriction(rotationalFriction);
+	ImGui::Checkbox("Is Constant Velocity", phyComp->isConstVelocity());
+	glm::vec3 velo = glm::vec3(phyComp->getVelocity()->getX(), phyComp->getVelocity()->getY(), phyComp->getVelocity()->getZ());
+	ImGui::DragFloat3("Velocity", &velo[0], dragSpeed);
+	phyComp->setVelocity(velo.x, velo.y, velo.z);
+	ImGui::PopID();
 }
 
-void DebugMenu::gameObjectsMenuLogic()
+void DebugMenu::gameObjectsMenuLogic(int i, LogicComponent* logic)
 {
+	ImGui::PushID(i);
+	static char scriptNameBuf[64] = "";
+
+	if (strlen(scriptNameBuf) == 0)
+	{
+		strncpy_s(scriptNameBuf, logic->getScriptName().c_str(), logic->getScriptName().size());
+	}
+
+	ImGui::InputText("Script Name", scriptNameBuf, sizeof(scriptNameBuf));
+	if (ImGui::Button("SetName"))
+	{
+		logic->setScriptName(scriptNameBuf);
+		static string fullPath;
+		fullPath = AssetManager::getInstance()->getScript(scriptNameBuf) + ".lua";
+		logic->setScriptFullPath(fullPath.c_str());
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("LoadScript"))
+	{
+		logic->registerLuaBindings();
+	}
+	ImGui::PopID();
 }
 
 void DebugMenu::gameObjectsMenuTransform(int i, Transform* transform)

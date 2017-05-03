@@ -2,6 +2,7 @@
 #include <utils\XMLReader.h>
 #include <utils\EnumParser.h>
 #include <GUI\UITextureElement.h>
+#include <utils/Utilities.h>
 
 bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObjectCount, shared_ptr<GameObject> go, shared_ptr<GameScreen> gameScreen)
 {
@@ -30,13 +31,14 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 				*/
 				if (XMLObjectCount == iObjectCount)
 				{
-					tinyxml2::XMLElement* componentElement = gameObjElement->FirstChildElement("components")->FirstChildElement();
+					tinyxml2::XMLElement* componentsElement = gameObjElement->FirstChildElement("components");
+					tinyxml2::XMLElement* componentElement = componentsElement->FirstChildElement();
 					/*
 					Iterate over all components in object
 					*/
-					while (componentElement != NULL)
+					//while (componentElement != NULL)
 					{
-						string XMLCompType = componentElement->Attribute("type");
+						//string XMLCompType = componentElement->Attribute("type");
 						/*
 						If XML object count != the object count
 						and the object name is the same then skip.
@@ -53,8 +55,27 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 								
 								if (go->HasComponent(cType))
 								{
+									bool xmlHasComp = false;
+									while (componentElement != NULL)
+									{
+										string XMLCompType = componentElement->Attribute("type");
+										if (cType == EnumParser<ComponentType>().parse(XMLCompType))
+										{
+											xmlHasComp = true;
+											break;
+										}
+										componentElement = componentElement->NextSiblingElement();
+									}
+									
+									if (!xmlHasComp)
+									{
+									    componentElement = doc->NewElement("component");
+										componentElement->SetAttribute("type", EnumParser<ComponentType>().getString(cType).c_str());
+										componentsElement->InsertEndChild(componentElement);
+									}
+									
 									//XML current GO and passedGO have same component
-									if (cType == EnumParser<ComponentType>().parse(XMLCompType))
+									//if (cType == EnumParser<ComponentType>().parse(XMLCompType))
 									{
 										/*
 											Switch between all components
@@ -111,18 +132,11 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 										
 											break;
 										}
-										case ANIMATION:
 
-											break;
-										case RIGID_BODY:
-
-											break;
-										case LOGIC:
-											//TODO
-											break;
 										case TRANSFORM:
+										{
 											/*
-											 Iterate through all inner transforms and their xyz and update doc
+											Iterate through all inner transforms and their xyz and update doc
 											*/
 											auto transform = gameScreen->getComponentStore()->getComponent<Transform>(go->GetComponentHandle(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
 											if (!transform)
@@ -130,11 +144,34 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 											UpdateTransform(doc, componentElement, transform);
 											break;
 										}
+										case ANIMATION:
+
+											break;
+										case RIGID_BODY:
+										{
+											auto physComp = gameScreen->getComponentStore()->getComponent<PhysicsComponent>(go->GetComponentHandle(ComponentType::RIGID_BODY), ComponentType::RIGID_BODY);
+											if (!physComp)
+												return false;
+											UpdateRigidBody(doc, componentElement, physComp);
+											break;
+										}
+										case LOGIC:
+										{
+											auto logic = gameScreen->getComponentStore()->getComponent<LogicComponent>(go->GetComponentHandle(ComponentType::LOGIC), ComponentType::LOGIC);
+											if (!logic)
+												return false;
+											UpdateLogic(doc, componentElement, logic);
+											break;
+										}
+										
+										}
 									}
 								}
+								componentElement = componentsElement->FirstChildElement();
 							}
+							
 						}
-						componentElement = componentElement->NextSiblingElement();
+						//componentElement = componentElement->NextSiblingElement();
 					}
 				}
 				XMLObjectCount++;
@@ -213,6 +250,20 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 						{
 							UpdateVec3Element(doc, XMLUIElementColour, tb->getColour(), colourName);
 						}
+
+						//font
+						tinyxml2::XMLElement* XMLUIFontElement = XMLUIElement->FirstChildElement("font");
+						if (XMLUIFontElement)
+						{
+						}
+						else
+						{
+							XMLUIFontElement = doc->NewElement("font");
+							XMLUIElement->InsertEndChild(XMLUIFontElement);
+						}
+						auto splitPath = Utilities::splitFilePath(tb->getFont().getFontPath());
+						string fontName = splitPath.at(splitPath.size() - 1);
+						XMLUIFontElement->SetText(fontName.c_str());
 						break;
 					}
 					case UIType::TEXTURE:
@@ -368,35 +419,46 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 						renderActiveElement->SetText(model->isDrawing());
 						break;
 					}
-					case ANIMATION:
 
-						break;
-					case RIGID_BODY:
-
-						break;
-					case LOGIC:
-
-						break;
 					case TRANSFORM:
+					{
 						/*
 						Give component transform information adding xyz from transform elements
 						*/
-					
+
 						auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
 						AddTransformToFile(doc, componentElement, model->getTransform());
-					
+
 						break;
+					}
+					case ANIMATION:
+					{
+						break;
+					}
+					case RIGID_BODY:
+					{
+						auto physComp = gameScreen->getComponentStore()->getComponent<PhysicsComponent>(go->GetComponentHandle(ComponentType::RIGID_BODY), ComponentType::RIGID_BODY);
+						if (!physComp)
+							return false;
+						AddRigidBody(doc, componentElement, physComp);
+						break;
+					}
+					case LOGIC:
+					{
+						auto logic = gameScreen->getComponentStore()->getComponent<LogicComponent>(go->GetComponentHandle(ComponentType::LOGIC), ComponentType::LOGIC);
+						if (!logic)
+							return false;
+						AddLogicToFile(doc, componentElement, logic);
+						break;
+					}
+					
 				}
 			}
 		}
-		
 	
 		//Insert new object at end of gameobjects file.
 		gameObjectElement->InsertEndChild(componentsElement);
 		gameObjsElement->InsertEndChild(gameObjectElement);
-		
-
-
 	}
 	
 	return true;
@@ -582,6 +644,23 @@ bool FileSaver::DeleteObjectFromFile(tinyxml2::XMLDocument * doc, int iObjectCou
 	return false;
 }
 
+bool FileSaver::UpdateLogic(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement * logicElement, LogicComponent * logic)
+{
+	tinyxml2::XMLElement* scriptElement = logicElement->FirstChildElement("script");
+	if (scriptElement)
+	{
+
+	}
+	else
+	{
+		scriptElement = doc->NewElement("script");
+		logicElement->InsertEndChild(scriptElement);
+	}
+	string fullScriptName = logic->getScriptName() + ".lua";
+	scriptElement->SetText(fullScriptName.c_str());
+	return true;
+}
+
 bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* transformElement, Transform* transform)
 {
 	for (int transformElementIt = 0; transformElementIt < 3; transformElementIt++)
@@ -702,6 +781,175 @@ bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement
 	return true;
 }
 
+bool FileSaver::UpdateRigidBody(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement * physicsElement, PhysicsComponent * phyComp)
+{
+	if (physicsElement->FirstChildElement("mass") == NULL)
+	{
+		physicsElement->InsertEndChild(doc->NewElement("mass"));
+	}
+	physicsElement->FirstChildElement("mass")->SetText(*phyComp->getMass());
+
+	
+	if (*phyComp->getMeshFileName() != "")
+	{
+		if (physicsElement->FirstChildElement("collision_mesh") == NULL)
+		{
+			physicsElement->InsertEndChild(doc->NewElement("collision_mesh"));
+		}
+		physicsElement->FirstChildElement("collision_mesh")->SetText(phyComp->getMeshFileName()->c_str());
+	}
+	else
+	{
+		//bounding shape
+		tinyxml2::XMLElement* shapeElement = physicsElement->FirstChildElement("bounding_shape");
+		if (shapeElement)
+		{
+			ShapeData::BoundingShape shapeType = phyComp->getShape()->boundingShape;
+			string typeName = EnumParser<ShapeData::BoundingShape>().getString(shapeType);
+			shapeElement->SetAttribute("type", typeName.c_str());
+			tinyxml2::XMLElement* extentsElemenet;
+			switch (shapeType)
+			{
+			case ShapeData::BOX:
+				extentsElemenet = shapeElement->FirstChildElement("half_extents");
+				if (!extentsElemenet)
+				{
+					extentsElemenet = doc->NewElement("half_extents");
+					physicsElement->InsertEndChild(extentsElemenet);
+				}
+				if (extentsElemenet->FirstChildElement("x") == NULL)
+				{
+					extentsElemenet->InsertEndChild(doc->NewElement("x"));
+				}
+				extentsElemenet->FirstChildElement("x")->SetText(phyComp->getShape()->halfExtents[0]);
+				if (extentsElemenet->FirstChildElement("y") == NULL)
+				{
+					extentsElemenet->InsertEndChild(doc->NewElement("y"));
+				}
+				extentsElemenet->FirstChildElement("y")->SetText(phyComp->getShape()->halfExtents[1]);
+				if (extentsElemenet->FirstChildElement("z") == NULL)
+				{
+					extentsElemenet->InsertEndChild(doc->NewElement("z"));
+				}
+				extentsElemenet->FirstChildElement("z")->SetText(phyComp->getShape()->halfExtents[2]);
+				break;
+			case ShapeData::SPHERE:
+				if (shapeElement->FirstChildElement("radius") == NULL)
+				{
+					shapeElement->InsertEndChild(doc->NewElement("radius"));
+				}
+				shapeElement->FirstChildElement("radius")->SetText(phyComp->getShape()->radius);
+				break;
+			case ShapeData::CONE:
+				if (shapeElement->FirstChildElement("radius") == NULL)
+				{
+					shapeElement->InsertEndChild(doc->NewElement("radius"));
+				}
+				shapeElement->FirstChildElement("radius")->SetText(phyComp->getShape()->radius);
+				if (shapeElement->FirstChildElement("height") == NULL)
+				{
+					shapeElement->InsertEndChild(doc->NewElement("height"));
+				}
+				shapeElement->FirstChildElement("height")->SetText(phyComp->getShape()->height);
+				break;
+			case ShapeData::CYLINDER:
+				extentsElemenet = shapeElement->FirstChildElement("half_extents");
+				if (!extentsElemenet)
+				{
+					extentsElemenet = doc->NewElement("half_extents");
+					physicsElement->InsertEndChild(extentsElemenet);
+				}
+				if (extentsElemenet->FirstChildElement("x") == NULL)
+				{
+					extentsElemenet->InsertEndChild(doc->NewElement("x"));
+				}
+				extentsElemenet->FirstChildElement("x")->SetText(phyComp->getShape()->halfExtents[0]);
+				if (extentsElemenet->FirstChildElement("y") == NULL)
+				{
+					extentsElemenet->InsertEndChild(doc->NewElement("y"));
+				}
+				extentsElemenet->FirstChildElement("y")->SetText(phyComp->getShape()->halfExtents[1]);
+				if (extentsElemenet->FirstChildElement("z") == NULL)
+				{
+					extentsElemenet->InsertEndChild(doc->NewElement("z"));
+				}
+				extentsElemenet->FirstChildElement("z")->SetText(phyComp->getShape()->halfExtents[2]);
+				break;
+			case ShapeData::CAPSULE:
+				if (shapeElement->FirstChildElement("radius") == NULL)
+				{
+					shapeElement->InsertEndChild(doc->NewElement("radius"));
+				}
+				shapeElement->FirstChildElement("radius")->SetText(phyComp->getShape()->radius);
+				if (shapeElement->FirstChildElement("height") == NULL)
+				{
+					shapeElement->InsertEndChild(doc->NewElement("height"));
+				}
+				shapeElement->FirstChildElement("height")->SetText(phyComp->getShape()->height);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	
+	
+	if (physicsElement->FirstChildElement("convex") == NULL)
+	{
+		physicsElement->InsertEndChild(doc->NewElement("convex"));
+	}
+	physicsElement->FirstChildElement("convex")->SetText(*phyComp->isConvex());
+
+	if (physicsElement->FirstChildElement("restitution") == NULL)
+	{
+		physicsElement->InsertEndChild(doc->NewElement("restitution"));
+	}
+	physicsElement->FirstChildElement("restitution")->SetText(phyComp->getRestitution());
+
+	if (physicsElement->FirstChildElement("friction") == NULL)
+	{
+		physicsElement->InsertEndChild(doc->NewElement("friction"));
+	}
+	physicsElement->FirstChildElement("friction")->SetText(phyComp->getFriction());
+
+	if (physicsElement->FirstChildElement("rotational_friction") == NULL)
+	{
+		physicsElement->InsertEndChild(doc->NewElement("rotational_friction"));
+	}
+	physicsElement->FirstChildElement("rotational_friction")->SetText(*phyComp->getRotationalFriction());
+
+	if (physicsElement->FirstChildElement("constant_velocity") == NULL)
+	{
+		physicsElement->InsertEndChild(doc->NewElement("constant_velocity"));
+	}
+	physicsElement->FirstChildElement("constant_velocity")->SetText(*phyComp->isConstVelocity());
+
+	if (physicsElement->FirstChildElement("velocity") == NULL)
+	{
+		physicsElement->InsertEndChild(doc->NewElement("velocity"));
+	}
+	tinyxml2::XMLElement* velElement = physicsElement->FirstChildElement("velocity");
+
+	if (velElement->FirstChildElement("x") == NULL)
+	{
+		velElement->InsertEndChild(doc->NewElement("x"));
+	}
+	velElement->FirstChildElement("x")->SetText(*phyComp->getVelocity()[0]);
+	if (velElement->FirstChildElement("y") == NULL)
+	{
+		velElement->InsertEndChild(doc->NewElement("y"));
+	}
+	velElement->FirstChildElement("y")->SetText(*phyComp->getVelocity()[1]);
+	if (velElement->FirstChildElement("z") == NULL)
+	{
+		velElement->InsertEndChild(doc->NewElement("z"));
+	}
+	velElement->FirstChildElement("z")->SetText(*phyComp->getVelocity()[2]);
+	
+	
+	return true;
+}
+
 bool FileSaver::UpdateVec3Element(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement * ele, glm::vec3 passedVector, string vecNames[3])
 {
 	for (int vector3 = 0; vector3 < 3; vector3++)
@@ -746,6 +994,16 @@ bool FileSaver::UpdateVec3Element(tinyxml2::XMLDocument * doc, tinyxml2::XMLElem
 		}
 
 	}
+	return true;
+}
+
+bool FileSaver::AddLogicToFile(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement * logicElement, LogicComponent * logic)
+{
+	tinyxml2::XMLElement* scriptElement = doc->NewElement("script");
+	logicElement->InsertEndChild(scriptElement);
+	string fullScriptName = logic->getScriptName() + ".lua";
+	scriptElement->SetText(fullScriptName.c_str());
+
 	return true;
 }
 
@@ -844,6 +1102,109 @@ bool FileSaver::AddTransformToFile(tinyxml2::XMLDocument * doc, tinyxml2::XMLEle
 
 		}
 	}
+	return true;
+}
+
+bool FileSaver::AddRigidBody(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement * physicsElement, PhysicsComponent * phyComp)
+{
+	physicsElement->InsertEndChild(doc->NewElement("mass"));
+	physicsElement->FirstChildElement("mass")->SetText(*phyComp->getMass());
+
+	if (*phyComp->getMeshFileName() != "")
+	{
+		physicsElement->InsertEndChild(doc->NewElement("collision_mesh"));
+		physicsElement->FirstChildElement("collision_mesh")->SetText(phyComp->getMeshFileName()->c_str());
+	}
+	else
+	{
+		//bounding shape
+		tinyxml2::XMLElement* shapeElement = doc->NewElement("bounding_shape");
+		if (shapeElement)
+		{
+			ShapeData::BoundingShape shapeType = phyComp->getShape()->boundingShape;
+			string typeName = EnumParser<ShapeData::BoundingShape>().getString(shapeType);
+			shapeElement->SetAttribute("type", typeName.c_str());
+			tinyxml2::XMLElement* extentsElemenet;
+			switch (shapeType)
+			{
+			case ShapeData::BOX:
+				extentsElemenet = doc->NewElement("half_extents");
+
+				physicsElement->InsertEndChild(extentsElemenet);
+				extentsElemenet->InsertEndChild(doc->NewElement("x"));
+				extentsElemenet->FirstChildElement("x")->SetText(phyComp->getShape()->halfExtents[0]);
+				
+				extentsElemenet->InsertEndChild(doc->NewElement("y"));
+				extentsElemenet->FirstChildElement("y")->SetText(phyComp->getShape()->halfExtents[1]);
+				
+				extentsElemenet->InsertEndChild(doc->NewElement("z"));
+				extentsElemenet->FirstChildElement("z")->SetText(phyComp->getShape()->halfExtents[2]);
+				break;
+			case ShapeData::SPHERE:
+				shapeElement->InsertEndChild(doc->NewElement("radius"));
+				shapeElement->FirstChildElement("radius")->SetText(phyComp->getShape()->radius);
+				break;
+			case ShapeData::CONE:
+				shapeElement->InsertEndChild(doc->NewElement("radius"));
+				shapeElement->FirstChildElement("radius")->SetText(phyComp->getShape()->radius);
+				
+				shapeElement->InsertEndChild(doc->NewElement("height"));
+				shapeElement->FirstChildElement("height")->SetText(phyComp->getShape()->height);
+				break;
+			case ShapeData::CYLINDER:
+				extentsElemenet = doc->NewElement("half_extents");
+				physicsElement->InsertEndChild(extentsElemenet);
+				
+				extentsElemenet->InsertEndChild(doc->NewElement("x"));
+				extentsElemenet->FirstChildElement("x")->SetText(phyComp->getShape()->halfExtents[0]);
+				
+				extentsElemenet->InsertEndChild(doc->NewElement("y"));
+				extentsElemenet->FirstChildElement("y")->SetText(phyComp->getShape()->halfExtents[1]);
+				
+				extentsElemenet->InsertEndChild(doc->NewElement("z"));
+				extentsElemenet->FirstChildElement("z")->SetText(phyComp->getShape()->halfExtents[2]);
+				break;
+			case ShapeData::CAPSULE:
+				
+				shapeElement->InsertEndChild(doc->NewElement("radius"));
+				shapeElement->FirstChildElement("radius")->SetText(phyComp->getShape()->radius);
+				
+				shapeElement->InsertEndChild(doc->NewElement("height"));
+				shapeElement->FirstChildElement("height")->SetText(phyComp->getShape()->height);
+				break;
+			default:
+				break;
+			}
+		}
+		physicsElement->InsertEndChild(shapeElement);
+	}
+	
+	physicsElement->InsertEndChild(doc->NewElement("convex"));
+	physicsElement->FirstChildElement("convex")->SetText(*phyComp->isConvex());
+
+	physicsElement->InsertEndChild(doc->NewElement("restitution"));
+	physicsElement->FirstChildElement("restitution")->SetText(phyComp->getRestitution());
+
+	physicsElement->InsertEndChild(doc->NewElement("friction"));
+	physicsElement->FirstChildElement("friction")->SetText(phyComp->getFriction());
+
+	physicsElement->InsertEndChild(doc->NewElement("rotational_friction"));
+	physicsElement->FirstChildElement("rotational_friction")->SetText(*phyComp->getRotationalFriction());
+
+	physicsElement->InsertEndChild(doc->NewElement("constant_velocity"));
+	physicsElement->FirstChildElement("constant_velocity")->SetText(*phyComp->isConstVelocity());
+
+	physicsElement->InsertEndChild(doc->NewElement("velocity"));
+	
+	tinyxml2::XMLElement* velElement = physicsElement->FirstChildElement("velocity");
+	velElement->InsertEndChild(doc->NewElement("x"));
+	velElement->FirstChildElement("x")->SetText(*phyComp->getVelocity()[0]);
+	
+	velElement->InsertEndChild(doc->NewElement("y"));
+	velElement->FirstChildElement("y")->SetText(*phyComp->getVelocity()[1]);
+	
+	velElement->InsertEndChild(doc->NewElement("z"));
+	velElement->FirstChildElement("z")->SetText(*phyComp->getVelocity()[2]);
 	return true;
 }
 

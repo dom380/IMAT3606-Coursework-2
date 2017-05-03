@@ -52,7 +52,9 @@ public:
 		unsigned int offset;     // Offset to advance to next glyph
 	};
 	Character getChar(char c);
+	string getFontPath();
 private:
+	string fontPath;
 	FT_Library ft;
 	FT_Face fontFace;
 	map<char, Character> charMap; //Map of char to Character to allow quick access to glyph texture information.

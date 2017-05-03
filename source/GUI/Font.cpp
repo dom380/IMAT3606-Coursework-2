@@ -8,10 +8,11 @@ Font::Font(Font * font)
 	graphics = font->graphics;
 }
 
-Font::Font(FT_Library ftLib, const char * fontPath, shared_ptr<Graphics>& graphics)
+Font::Font(FT_Library ftLib, const char * passedFontPath, shared_ptr<Graphics>& graphics)
 {
+	fontPath = passedFontPath;
 	ft = ftLib;
-	FT_Error error = FT_New_Face(ftLib, fontPath, 0, &fontFace);
+	FT_Error error = FT_New_Face(ftLib, passedFontPath, 0, &fontFace);
 	FT_Set_Pixel_Sizes(fontFace, 0, 48);
 	this->graphics = graphics;
 }
@@ -45,4 +46,9 @@ void Font::compile()
 Font::Character Font::getChar(char c)
 {
 	return charMap[c];
+}
+
+string Font::getFontPath()
+{
+	return fontPath;
 }

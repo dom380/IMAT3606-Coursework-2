@@ -2,6 +2,10 @@
 #include <Scripting\ScriptEngine.h>
 #include <utils/Utilities.h>
 
+LogicComponent::LogicComponent() : Component(ComponentType::LOGIC), updateFunc(luaState), recieveMsgFunc(luaState)
+{
+}
+
 LogicComponent::LogicComponent(std::weak_ptr<GameObject> owner, std::weak_ptr<GameScreen> screen, const char* scriptFile) : Component(ComponentType::LOGIC), updateFunc(luaState), recieveMsgFunc(luaState)
 {
 	this->owner = owner;
@@ -16,6 +20,12 @@ LogicComponent::LogicComponent(std::weak_ptr<GameObject> owner, std::weak_ptr<Ga
 	LogicComponent(owner, screen, scriptFile.c_str())
 {
 	//Just a delegation constructor
+}
+
+LogicComponent::LogicComponent(std::weak_ptr<GameObject> owner, std::weak_ptr<GameScreen> screen) : Component(ComponentType::LOGIC), updateFunc(luaState), recieveMsgFunc(luaState)
+{
+	this->owner = owner;
+	this->screen = screen;
 }
 
 LogicComponent::~LogicComponent()
@@ -83,6 +93,31 @@ void LogicComponent::RecieveMessage(Message * msg)
 	default:
 		break;
 	}
+}
+
+void LogicComponent::setOwner(std::weak_ptr<GameObject> passedOwner)
+{
+	owner = passedOwner;
+}
+
+void LogicComponent::setScreen(std::weak_ptr<GameScreen> passedScreen)
+{
+	screen = passedScreen;
+}
+
+string LogicComponent::getScriptName()
+{
+	return scriptName;
+}
+
+void LogicComponent::setScriptName(string passedName)
+{
+	scriptName = passedName;
+}
+
+void LogicComponent::setScriptFullPath(const char* scriptFullName)
+{
+	script = scriptFullName;
 }
 
 void LogicComponent::registerLuaBindings()

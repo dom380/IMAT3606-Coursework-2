@@ -15,6 +15,7 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 	glm::quat quat; quat.y = 1.0f; quat.w = 0.0f;
 	shared_ptr<Transform> textPos = std::make_shared<Transform>(glm::vec3(30, 30, 0), glm::vec3(0.5, 0.5, 0.5), quat);
 	frameTime = std::make_shared<TextBox>("Frame Time: 0", *AssetManager::getInstance()->getFont("arial.ttf", renderer), textPos, renderer);
+	frameTime->setSavable(false);
 	uiElements.push_back(frameTime);
 #endif
 	this->input = input;
@@ -25,8 +26,11 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 
 	//Sound stuff may move later only ever need one of these
 	//XML??
-	listener = listener->Instance();
-	sounds = sounds->Instance();
+
+	listener = Listener::Instance();
+	sounds = SoundComponent::Instance();
+	sounds->loadSound("resources/audio/Background Music/menu.wav");
+
 	listener->setPosition(0.0, 0.0, 0.0);
 	listener->setDirection(1.0, 0.0, 0.0);
 	sounds->GetSound(0)->play();

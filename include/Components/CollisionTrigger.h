@@ -27,9 +27,18 @@ public:
 	void setTransform(Transform transform);
 	bool isTriggerOnce();
 	bool isTriggered();
+
+	string getScriptName();
+	void setScriptName(string scriptName);
+	void setScriptFullPath(const char* scriptFullName);
+	ShapeData* getShape();
+	void setShape(ShapeData* shapeData);
+
 	void dispose();
 private:
 	std::weak_ptr<GameObject> owner;
+
+	ShapeData* shapeData;
 	std::string scriptName;
 	std::string script;
 	lua_State* luaState = LuaStateHolder::getLuaState();

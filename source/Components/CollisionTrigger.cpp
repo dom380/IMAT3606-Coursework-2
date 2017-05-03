@@ -12,7 +12,7 @@ CollisionTrigger::CollisionTrigger(std::shared_ptr<Physics> &physics, std::weak_
 	auto tp = sp != nullptr ? sp->getComponent<Transform>(ComponentType::TRANSFORM) : nullptr;
 	transform.setOrigin(btVector3(tp->position.x, tp->position.y, tp->position.z));
 	transform.setRotation(btQuaternion(tp->orientation.x, tp->orientation.y, tp->orientation.z, tp->orientation.w));
-
+	shapeData = new ShapeData(boundingShape);
 	//Build Collision shape
 	switch (boundingShape.boundingShape)
 	{
@@ -134,6 +134,32 @@ bool CollisionTrigger::isTriggerOnce()
 bool CollisionTrigger::isTriggered()
 {
 	return triggered;
+}
+
+
+string CollisionTrigger::getScriptName()
+{
+	return scriptName;
+}
+
+void CollisionTrigger::setScriptName(string passedName)
+{
+	scriptName = passedName;
+}
+
+void CollisionTrigger::setScriptFullPath(const char* scriptFullName)
+{
+	script = scriptFullName;
+}
+
+ShapeData * CollisionTrigger::getShape()
+{
+	return shapeData;
+}
+
+void CollisionTrigger::setShape(ShapeData * passedShapeData)
+{
+	shapeData = passedShapeData;
 }
 
 void CollisionTrigger::dispose()

@@ -138,6 +138,16 @@ string* PhysicsComponent::getMeshFileName()
 	return &meshFileName;
 }
 
+void PhysicsComponent::setConvex(bool passedConvex)
+{
+	convex = passedConvex;
+}
+
+void PhysicsComponent::setHasMesh(bool passedHasMesh)
+{
+	hasMesh = passedHasMesh;
+}
+
 ShapeData * PhysicsComponent::getShape()
 {
 	return shapeData;
@@ -224,7 +234,7 @@ void PhysicsComponent::setTransform(Transform * transformPtr)
 	ms->setWorldTransform(transform);
 }
 
-void PhysicsComponent::buildCollisionShape(std::shared_ptr<ModelData>& mesh, glm::vec3& scale)
+void PhysicsComponent::buildCollisionShape(std::shared_ptr<ModelData> mesh, glm::vec3 scale)
 {
 	//if (mass > 0.f) 
 	//{
@@ -291,7 +301,7 @@ void PhysicsComponent::buildCollisionShape(std::shared_ptr<ModelData>& mesh, glm
 	//}
 }
 
-void PhysicsComponent::buildCollisionShape(std::shared_ptr<std::vector<ConvexHull>> mesh, glm::vec3 & scale)
+void PhysicsComponent::buildCollisionShape(std::shared_ptr<std::vector<ConvexHull>> mesh, glm::vec3 scale)
 {
 	shape = new btCompoundShape();
 	for (ConvexHull ch : *mesh)
@@ -328,7 +338,7 @@ void PhysicsComponent::buildCollisionShape(std::shared_ptr<std::vector<ConvexHul
 	}
 }
 
-void PhysicsComponent::buildCollisionShape(ShapeData & boundingShape)
+void PhysicsComponent::buildCollisionShape(ShapeData  boundingShape)
 {
 	shapeData = new ShapeData(boundingShape);
 	//Build Collision shape

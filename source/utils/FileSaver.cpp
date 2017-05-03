@@ -111,6 +111,17 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 										
 											break;
 										}
+										case TRANSFORM:
+										{
+											/*
+											Iterate through all inner transforms and their xyz and update doc
+											*/
+											auto transform = gameScreen->getComponentStore()->getComponent<Transform>(go->GetComponentHandle(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
+											if (!transform)
+												return false;
+											UpdateTransform(doc, componentElement, transform);
+											break;
+										}
 										case ANIMATION:
 
 											break;
@@ -125,15 +136,7 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 										case LOGIC:
 											//TODO
 											break;
-										case TRANSFORM:
-											/*
-											 Iterate through all inner transforms and their xyz and update doc
-											*/
-											auto transform = gameScreen->getComponentStore()->getComponent<Transform>(go->GetComponentHandle(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
-											if (!transform)
-												return false;
-											UpdateTransform(doc, componentElement, transform);
-											break;
+										
 										}
 									}
 								}
@@ -373,6 +376,17 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 						renderActiveElement->SetText(model->isDrawing());
 						break;
 					}
+					case TRANSFORM:
+					{
+						/*
+						Give component transform information adding xyz from transform elements
+						*/
+
+						auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
+						AddTransformToFile(doc, componentElement, model->getTransform());
+
+						break;
+					}
 					case ANIMATION:
 					{
 						break;
@@ -389,15 +403,7 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 					{
 						break;
 					}
-					case TRANSFORM:
-						/*
-						Give component transform information adding xyz from transform elements
-						*/
 					
-						auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
-						AddTransformToFile(doc, componentElement, model->getTransform());
-					
-						break;
 				}
 			}
 		}

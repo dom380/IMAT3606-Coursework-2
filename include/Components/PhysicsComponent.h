@@ -50,6 +50,7 @@ public:
 	PhysicsComponent() : Component(ComponentType::RIGID_BODY)
 	{
 		body = nullptr;
+		shapeData = nullptr;
 		shape = nullptr;
 		mass = 0.0f;
 		convex = false;
@@ -81,6 +82,8 @@ public:
 	bool* hasMeshFile();
 	string* getMeshFileName();
 
+	void setConvex(bool passedConvex);
+	void setHasMesh(bool passedHasMesh);
 
 	ShapeData* getShape();
 
@@ -129,15 +132,15 @@ public:
 	/*
 	Constructs the collision shape from the specified mesh
 	*/
-	void buildCollisionShape(std::shared_ptr<ModelData>& mesh, glm::vec3& scale);
+	void buildCollisionShape(std::shared_ptr<ModelData> mesh, glm::vec3 scale);
 	/*
 	Constructs the collision shape from the specified ConvexHulls
 	*/
-	void buildCollisionShape(std::shared_ptr<std::vector<ConvexHull>> mesh, glm::vec3& scale);
+	void buildCollisionShape(std::shared_ptr<std::vector<ConvexHull>> mesh, glm::vec3 scale);
 	/*
 	Constructs collisionShape without mesh
 	*/
-	void buildCollisionShape(ShapeData& boundingShape);
+	void buildCollisionShape(ShapeData boundingShape);
 private:
 	std::weak_ptr<GameObject> owner;
 	string meshFileName;

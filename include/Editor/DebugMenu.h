@@ -133,7 +133,7 @@ public:
 
 	void gameObjectsMenuModel(int i, ModelComponent* model);
 	void gameObjectsMenuAnimation();
-	void gameObjectsMenuRigidBody(int i, PhysicsComponent* phyComp);
+	void gameObjectsMenuRigidBody(int i, PhysicsComponent* phyComp, Transform* tranform);
 	void gameObjectsMenuLogic();
 	void gameObjectsMenuTransform(int i, Transform* transform);
 };

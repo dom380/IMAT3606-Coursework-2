@@ -307,8 +307,9 @@ void DebugMenu::debugGameObjectsMenu()
 						case ComponentType::RIGID_BODY:
 						{
 							auto physComp = gameScreen->getComponentStore()->getComponent<PhysicsComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::RIGID_BODY), ComponentType::RIGID_BODY);
-							if (physComp)
-								gameObjectsMenuRigidBody(i, physComp);
+							auto transform = gameScreen->getComponentStore()->getComponent<Transform>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
+							if (physComp && transform)
+								gameObjectsMenuRigidBody(i, physComp, transform);
 							break;
 						}
 						case ComponentType::LOGIC:
@@ -518,13 +519,14 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 		createTextureListBox();
 	}
 	static bool hasPhysics = false;
+	static shared_ptr<PhysicsComponent> phyComp = std::make_shared<PhysicsComponent>();
 	if (ImGui::Checkbox("Physics", &hasPhysics))
 	{
 	}
 	if (hasPhysics)
 	{
-		static shared_ptr<PhysicsComponent> phyComp = std::make_shared<PhysicsComponent>();
-		gameObjectsMenuRigidBody(0, phyComp.get());
+		
+		gameObjectsMenuRigidBody(0, phyComp.get(), transform.get());
 	}
 	if (ImGui::Button("Create"))
 	{
@@ -538,6 +540,12 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 		}
 		
 		LevelLoader::loadGameObject(Engine::g_pEngine->getRenderer(), gameScreen, objInfo, transform);
+
+		if (hasPhysics)
+		{
+			phyComp->init(Engine::g_pEngine->getPhysics(), gameScreen->getGameObjects().back(), *phyComp->getMass());
+			gameScreen->getGameObjects().back()->AddComponent(phyComp, ComponentType::RIGID_BODY);
+		}
 	}
 	ImGui::PopID();
 	ImGui::End();
@@ -848,12 +856,13 @@ void DebugMenu::gameObjectsMenuAnimation()
 {
 }
 
-void DebugMenu::gameObjectsMenuRigidBody(int i, PhysicsComponent* phyComp)
+void DebugMenu::gameObjectsMenuRigidBody(int i, PhysicsComponent* phyComp, Transform* tranform)
 {
 	ImGui::PushID(i);
 	ImGui::Indent();
 	static float dragSpeed = 0.25f;
 	bool hasMeshFile = *phyComp->hasMeshFile();
+	bool isConvex = *phyComp->isConvex();
 	char meshNameBuf[64] = "";
 	if (phyComp->getMeshFileName()->size() > 0)
 	{
@@ -862,12 +871,34 @@ void DebugMenu::gameObjectsMenuRigidBody(int i, PhysicsComponent* phyComp)
 	
 	static float restitution = phyComp->getRestitution();
 	static float friction = phyComp->getFriction();
+	if (ImGui::Checkbox("IsConvex", &isConvex))
+	{
+		phyComp->setConvex(isConvex);
+	}
 	ImGui::DragFloat("Mass", phyComp->getMass(), dragSpeed);
-	ImGui::Checkbox("HasMesh", &hasMeshFile);
+	if (ImGui::Checkbox("HasMesh", &hasMeshFile))
+	{
+		if (hasMeshFile)
+		{
+			if (isConvex)
+			{
+				auto mesh = AssetManager::getInstance()->getModelData(meshNameBuf, Engine::g_pEngine->getRenderer());
+				phyComp->buildCollisionShape(mesh.at(0), tranform->scale);
+			}
+			else
+			{
+				auto mesh = AssetManager::getInstance()->getCollisionData(meshNameBuf);
+				phyComp->buildCollisionShape(mesh, tranform->scale);
+			}
+		}
+		phyComp->setHasMesh(hasMeshFile);
+	}
+	
 	if (hasMeshFile)
 	{
 		ImGui::InputText("MeshName", meshNameBuf, IM_ARRAYSIZE(meshNameBuf));
 		phyComp->setMeshFileName(meshNameBuf);
+		
 	}
 	else
 	{
@@ -970,16 +1001,13 @@ void DebugMenu::gameObjectsMenuRigidBody(int i, PhysicsComponent* phyComp)
 				break;
 			}
 
-			if (shapeBools[x])
-			{
-				
-			}
 		}
 		ImGui::ListBox("BoundingShapes Available", &listbox_item_current, &boundingShapesCStyleArray[0], boundingShapesCStyleArray.size(), 4);
 		shapeBools[listbox_item_current] = true;
 		if (ImGui::Button("UpdateBoundingShape"))
 		{
 			shapeData->boundingShape = EnumParser<ShapeData::BoundingShape>().parse(boundingShapesList[listbox_item_current]);
+			phyComp->buildCollisionShape(*shapeData);
 		}
 		phyComp->setShape(shapeData);
 	

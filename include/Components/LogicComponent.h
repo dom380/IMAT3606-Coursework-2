@@ -26,8 +26,10 @@ class LogicComponent : public Component
 {
 	friend class ScriptEngine;
 public:
+	LogicComponent();
 	LogicComponent(std::weak_ptr<GameObject> owner, std::weak_ptr<GameScreen> screen, const char* scriptFile);
 	LogicComponent(std::weak_ptr<GameObject> owner, std::weak_ptr<GameScreen> screen, std::string scriptFile);
+	LogicComponent(std::weak_ptr<GameObject> owner, std::weak_ptr<GameScreen> screen);
 	~LogicComponent();
 	virtual void update(double dt);
 
@@ -35,6 +37,10 @@ public:
 	void dispose() {}; //Component Interface stub
 
 	string getScriptName();
+	void setScriptName(string scriptName);
+	void setScriptFullPath(const char* scriptFullName);
+
+	void registerLuaBindings();
 private:
 	lua_State* luaState = LuaStateHolder::getLuaState();
 	luabridge::LuaRef updateFunc;
@@ -44,7 +50,7 @@ private:
 	const char* script;
 	string scriptName;
 	//private member functions
-	void registerLuaBindings();
+
 	//private lua bindings
 	void applyTransform(glm::vec3 position, float scale, float orientation);
 	void resetTransform();

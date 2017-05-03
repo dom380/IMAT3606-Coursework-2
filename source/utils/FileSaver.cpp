@@ -30,13 +30,14 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 				*/
 				if (XMLObjectCount == iObjectCount)
 				{
-					tinyxml2::XMLElement* componentElement = gameObjElement->FirstChildElement("components")->FirstChildElement();
+					tinyxml2::XMLElement* componentsElement = gameObjElement->FirstChildElement("components");
+					tinyxml2::XMLElement* componentElement = componentsElement->FirstChildElement();
 					/*
 					Iterate over all components in object
 					*/
-					while (componentElement != NULL)
+					//while (componentElement != NULL)
 					{
-						string XMLCompType = componentElement->Attribute("type");
+						//string XMLCompType = componentElement->Attribute("type");
 						/*
 						If XML object count != the object count
 						and the object name is the same then skip.
@@ -53,8 +54,27 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 								
 								if (go->HasComponent(cType))
 								{
+									bool xmlHasComp = false;
+									while (componentElement != NULL)
+									{
+										string XMLCompType = componentElement->Attribute("type");
+										if (cType == EnumParser<ComponentType>().parse(XMLCompType))
+										{
+											xmlHasComp = true;
+											break;
+										}
+										componentElement = componentElement->NextSiblingElement();
+									}
+									
+									if (!xmlHasComp)
+									{
+									    componentElement = doc->NewElement("component");
+										componentElement->SetAttribute("type", EnumParser<ComponentType>().getString(cType).c_str());
+										componentsElement->InsertEndChild(componentElement);
+									}
+									
 									//XML current GO and passedGO have same component
-									if (cType == EnumParser<ComponentType>().parse(XMLCompType))
+									//if (cType == EnumParser<ComponentType>().parse(XMLCompType))
 									{
 										/*
 											Switch between all components
@@ -137,9 +157,11 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 										}
 									}
 								}
+								componentElement = componentsElement->FirstChildElement();
 							}
+							
 						}
-						componentElement = componentElement->NextSiblingElement();
+						//componentElement = componentElement->NextSiblingElement();
 					}
 				}
 				XMLObjectCount++;

@@ -21,6 +21,7 @@ Uses imgui to organise a menu bar full of options for debug.
 */
 class ModelComponent;
 class Transform;
+class LogicComponent;
 class DebugMenu
 {
 private:
@@ -131,7 +132,7 @@ public:
 	void gameObjectsMenuModel(int i, ModelComponent* model);
 	void gameObjectsMenuAnimation();
 	void gameObjectsMenuRigidBody();
-	void gameObjectsMenuLogic();
+	void gameObjectsMenuLogic(int i, LogicComponent* logic);
 	void gameObjectsMenuTransform(int i, Transform* transform);
 };
 

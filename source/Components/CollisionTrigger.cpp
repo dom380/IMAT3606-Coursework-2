@@ -68,9 +68,15 @@ void CollisionTrigger::trigger(std::shared_ptr<GameObject> collider)
 	{
 		if (triggerFunc.isFunction()) //If the script contains a valid function
 		{
-			triggerFunc();
 			if (triggerOnce && !triggered)
-				triggered = true;
+			{
+				this->triggered = true;
+			}
+			else if (triggerOnce && triggered)
+			{
+				return;
+			}
+			triggerFunc(*collider, Engine::g_pEngine.get());
 		}
 	}
 	catch (luabridge::LuaException e)
@@ -95,7 +101,13 @@ void CollisionTrigger::trigger(GameObject * collider)
 			{
 				return;
 			}
-			triggerFunc(*collider);
+			auto sp = owner.lock();
+			LogicComponent* logic = nullptr;
+			if (sp)
+			{
+				logic = sp->getLogic();
+			}
+			triggerFunc(*collider, Engine::g_pEngine.get(), logic);
 		}
 	}
 	catch (luabridge::LuaException e)
@@ -122,4 +134,13 @@ bool CollisionTrigger::isTriggerOnce()
 bool CollisionTrigger::isTriggered()
 {
 	return triggered;
+}
+
+void CollisionTrigger::dispose()
+{
+	std::shared_ptr<BulletPhysics> bullet = std::dynamic_pointer_cast<BulletPhysics>(Engine::g_pEngine->getPhysics());
+	if (bullet)
+	{
+		bullet->removeTrigger(this);
+	}
 }

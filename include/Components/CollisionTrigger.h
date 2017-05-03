@@ -27,6 +27,7 @@ public:
 	void setTransform(Transform transform);
 	bool isTriggerOnce();
 	bool isTriggered();
+	void dispose();
 private:
 	std::weak_ptr<GameObject> owner;
 	std::string scriptName;

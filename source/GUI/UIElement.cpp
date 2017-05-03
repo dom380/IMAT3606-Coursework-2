@@ -89,3 +89,9 @@ void UIElement::updateModelUsingTransform(shared_ptr<Transform> passedTransform)
 	}
 	
 }
+
+void UIElement::dispose()
+{
+	glDeleteBuffers(1, &vboHandle);
+	glDeleteBuffers(1, &eboHandle);
+}

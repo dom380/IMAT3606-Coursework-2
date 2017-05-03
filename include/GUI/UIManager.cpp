@@ -171,11 +171,6 @@ void UIManager::debugMenuItemUpdate()
 						//reinit bounding box
 						uiElements[x]->getButton()->buildAABB(font, uiText->getText(), uiElements[x]->getTransform());
 					}
-					//AttemptRebuild
-					if (ImGui::Button("Update"))
-					{
-						uiText->init();
-					}
 					break;
 				}
 				case UIType::TEXTURE:

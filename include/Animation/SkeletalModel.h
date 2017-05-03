@@ -124,7 +124,7 @@ public:
 	bool isTextured();
 
 	float interval;
-
+	std::vector<unsigned int> getVBOHandles();
 private:
 
 	void LoadBones(unsigned int MeshIndex, const aiMesh* pMesh, std::vector<VertexBoneData>& Bones); //!< Loads the bone data from a given mesh. 

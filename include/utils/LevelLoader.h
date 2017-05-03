@@ -17,6 +17,10 @@
 #include "utils\DebugUtils.h"
 #include <GUI\UITextureElement.h>
 #include <GUI\UIType.h>
+#include <Camera\OrthographicCamera.h>
+#include <Camera\PerspectiveCamera.h>
+#include <Camera\EngineCamera.h>
+#include <Camera\FollowCamera.h>
 #include <gl/glm/glm/gtc/quaternion.hpp>
 #include <gl/glm/glm/gtx/quaternion.hpp>
 
@@ -331,6 +335,10 @@ private:
 	static void loadStringElement(shared_ptr<Graphics>& renderer, shared_ptr<Screen> screen, shared_ptr<Transform> transform, string id, tinyxml2::XMLElement* stringElement)
 	{
 		Font font = *AssetManager::getInstance()->getFont("arial.ttf", renderer);
+		if (stringElement->FirstChildElement("font") != NULL)
+		{
+			font = *AssetManager::getInstance()->getFont(const_cast<char*>(stringElement->FirstChildElement("font")->GetText()), renderer);
+		}
 		const char* text = stringElement->FirstChildElement("value") != NULL ? stringElement->FirstChildElement("value")->GetText() : "MISSING_STRING";
 		if (!transform)
 		{
@@ -457,14 +465,23 @@ private:
 		timer.start();
 #endif
 		tinyxml2::XMLElement* screenElement = screenDocument->FirstChildElement("screen");
+		std::vector<shared_ptr<Camera>> cameras;
 		shared_ptr<Camera> camera = std::make_shared<PerspectiveCamera>(engine->getWindowWidth(), engine->getWindowHeight(), 45.f);
-		shared_ptr<GameScreen> gameScreen = std::make_shared<GameScreen>(renderer, input, engine->getPhysics(), camera);
+		tinyxml2::XMLElement* cameraElement = screenElement->FirstChildElement("cameras")->FirstChildElement();
+		while (cameraElement != NULL)
+		{
+			cameras.push_back(loadCamera(renderer, input, cameraElement));
+			cameraElement = cameraElement->NextSiblingElement();
+		}
+		if (cameras.empty()) cameras.push_back(camera);
+		shared_ptr<GameScreen> gameScreen = std::make_shared<GameScreen>(renderer, input, engine->getPhysics(), cameras);
 		input->setKeyFocus(gameScreen);
 		gameScreen->setID(screenElement->Attribute("name"));
 		gameScreen->setXMLDocument(screenDocument);
 		gameScreen->setXMLFilePath(filepath);
 		tinyxml2::XMLElement* gameObjElement = screenElement->FirstChildElement("gameObjects")->FirstChildElement();
-		while (gameObjElement != NULL) {
+		while (gameObjElement != NULL) 
+		{
 			loadGameObject(renderer, engine->getPhysics(), gameScreen, gameObjElement, gameScreen->getComponentStore());
 			gameObjElement = gameObjElement->NextSiblingElement();
 		}
@@ -565,7 +582,7 @@ private:
 			if (convex)
 			{
 				auto mesh = AssetManager::getInstance()->getModelData(meshFile, graphics);
-				physComp = std::make_shared<PhysicsComponent>(physics, std::weak_ptr<GameObject>(gameObject), mesh.at(0), mass, convex);
+				physComp = std::make_shared<PhysicsComponent>(physics, std::weak_ptr<GameObject>(gameObject), mesh, mass, convex);
 			}
 			else
 			{
@@ -692,7 +709,23 @@ private:
 		readShapeData(controllerElement, shapeData);
 		bool flip = controllerElement->FirstChildElement("flip") != NULL ? controllerElement->FirstChildElement("flip")->BoolText() : false;
 		float offset = controllerElement->FirstChildElement("offset") != NULL ? controllerElement->FirstChildElement("offset")->FloatText() : 0.0f;
-		shared_ptr<ControllerComponent> controller = std::make_shared<ControllerComponent>(physics, gameObject, shapeData, offset, flip);
+		float jumpRayVal = controllerElement->FirstChildElement("jump_ray") != NULL ? controllerElement->FirstChildElement("jump_ray")->FloatText() : 0.13f;
+		shared_ptr<ControllerComponent> controller = std::make_shared<ControllerComponent>(physics, gameObject, shapeData, offset, jumpRayVal, flip);
+		float movementSpeed = controllerElement->FirstChildElement("movement_speed") != NULL ? controllerElement->FirstChildElement("movement_speed")->FloatText() : 0.1f;
+		float jumpForce = controllerElement->FirstChildElement("jump_force") != NULL ? controllerElement->FirstChildElement("jump_force")->FloatText() : 10.0f;
+		tinyxml2::XMLElement* frontElement = controllerElement->FirstChildElement("world_front");
+		glm::vec3 front(0.0,0.0,-1.0);
+		if (frontElement != NULL) {
+			front = glm::vec3
+			(
+				frontElement->FirstChildElement("x") != NULL ? frontElement->FirstChildElement("x")->FloatText() : 0.0f,
+				frontElement->FirstChildElement("y") != NULL ? frontElement->FirstChildElement("y")->FloatText() : 0.0f,
+				frontElement->FirstChildElement("z") != NULL ? frontElement->FirstChildElement("z")->FloatText() : -1.0f
+			);
+		} 
+		controller->setMovementSpeed(movementSpeed);
+		controller->setJumpForce(jumpForce);
+		controller->setWorldFront(front.x, front.y, front.z);
 		gameObject->AddComponent(controller, ComponentType::CONTROLLER);
 
 	}
@@ -709,6 +742,8 @@ private:
 		transform.orientation = quat;
 		transform.position = pos;
 		transform.scale = scale;
+		transform.originalPosition = pos;
+		transform.originalOrientation = quat;
 	}
 
 	/*
@@ -722,6 +757,8 @@ private:
 		transform->orientation = quat;
 		transform->position = pos;
 		transform->scale = scale;
+		transform->originalPosition = pos;
+		transform->originalOrientation = quat;
 	}
 
 	/*
@@ -736,6 +773,8 @@ private:
 		transform->orientation = quat;
 		transform->position = pos;
 		transform->scale = scale;
+		transform->originalPosition = pos;
+		transform->originalOrientation = quat;
 	}
 
 	static void readTransformData(glm::vec3 &pos, glm::vec3 &scale, glm::quat &quat, tinyxml2::XMLElement* element)
@@ -771,7 +810,95 @@ private:
 			quat = glm::angleAxis(glm::radians(quat.w), glm::vec3(quat.x, quat.y, quat.z));
 		}
 	}
-
+	/*
+		Utility method to load Camera objects.
+	*/
+	static std::shared_ptr<Camera> loadCamera(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input, tinyxml2::XMLElement* cameraElement)
+	{
+		string typeStr = cameraElement->Attribute("type") != NULL ? cameraElement->Attribute("type") : "PERSPECTIVE";
+		EnumParser<Camera::CameraClass> parser;
+		Camera::CameraClass type = parser.parse(typeStr);
+		string id = cameraElement->FirstChildElement("id") != NULL ? cameraElement->FirstChildElement("id")->GetText() : string("UNKNOWN");
+		int width = cameraElement->FirstChildElement("width") != NULL ? cameraElement->FirstChildElement("width")->IntText() : renderer->getWidth();
+		int height = cameraElement->FirstChildElement("height") != NULL ? cameraElement->FirstChildElement("height")->IntText() : renderer->getHeight();
+		float aspect = cameraElement->FirstChildElement("aspect") != NULL ? cameraElement->FirstChildElement("aspect")->FloatText() : 45.f;
+		bool mouseListener = cameraElement->FirstChildElement("mouse_input") != NULL ? cameraElement->FirstChildElement("mouse_input")->BoolText() : false;
+		bool keyListener = cameraElement->FirstChildElement("key_input") != NULL ? cameraElement->FirstChildElement("key_input")->BoolText() : false;
+		glm::vec3 pos(0.0f, 0.0f, 0.0f), up(0.0f, 1.0f, 0.0f), direction(0.0f, 0.0f, -1.0f);
+		tinyxml2::XMLElement* posElement = cameraElement->FirstChildElement("position");
+		shared_ptr<Camera> camera;
+		if (posElement != NULL) 
+		{
+			pos = glm::vec3
+				(
+					posElement->FirstChildElement("x") != NULL ? posElement->FirstChildElement("x")->FloatText() : 0.0f,
+					posElement->FirstChildElement("y") != NULL ? posElement->FirstChildElement("y")->FloatText() : 0.0f,
+					posElement->FirstChildElement("z") != NULL ? posElement->FirstChildElement("z")->FloatText() : 0.0f
+				);
+		}
+		tinyxml2::XMLElement* upElement = cameraElement->FirstChildElement("up");
+		if (upElement != NULL)
+		{
+			up = glm::vec3
+				(
+					upElement->FirstChildElement("x") != NULL ? upElement->FirstChildElement("x")->FloatText() : 0.0f,
+					upElement->FirstChildElement("y") != NULL ? upElement->FirstChildElement("y")->FloatText() : 1.0f,
+					upElement->FirstChildElement("z") != NULL ? upElement->FirstChildElement("z")->FloatText() : 0.0f
+				);
+		}
+		tinyxml2::XMLElement* directionElement = cameraElement->FirstChildElement("direction");
+		if (directionElement != NULL)
+		{
+			direction = glm::vec3
+				(
+					directionElement->FirstChildElement("x") != NULL ? directionElement->FirstChildElement("x")->FloatText() : 0.0f,
+					directionElement->FirstChildElement("y") != NULL ? directionElement->FirstChildElement("y")->FloatText() : 0.0f,
+					directionElement->FirstChildElement("z") != NULL ? directionElement->FirstChildElement("z")->FloatText() : -1.0f
+				);
+		}
+		switch (type)
+		{
+			case Camera::CameraClass::ORTHOGRAPHIC:
+			{
+				//todo
+				//shared_ptr<OrthographicCamera> cam = std::make_shared<OrthographicCamera>();
+				camera = nullptr;
+			}
+				break;
+			case Camera::CameraClass::PERSPECTIVE:
+			{
+				camera = std::make_shared<PerspectiveCamera>(width, height, aspect, pos, up, direction);
+			}
+				break;
+			case Camera::CameraClass::FOLLOW:
+			{
+				tinyxml2::XMLElement* targetDistElement = cameraElement->FirstChildElement("follow_distance");
+				glm::vec3 targetDist(0.f,-6.f,-15.f);
+				if (targetDistElement != NULL)
+				{
+					targetDist = glm::vec3
+						(
+							targetDistElement->FirstChildElement("x") != NULL ? targetDistElement->FirstChildElement("x")->FloatText() : 0.0f,
+							targetDistElement->FirstChildElement("y") != NULL ? targetDistElement->FirstChildElement("y")->FloatText() : -6.0f,
+							targetDistElement->FirstChildElement("z") != NULL ? targetDistElement->FirstChildElement("z")->FloatText() : -15.0f
+						);
+				}
+				camera = std::make_shared<FollowCamera>(width, height, aspect, targetDist, pos, up, direction);
+			}
+				break;
+			case Camera::CameraClass::ENGINE:
+			{
+				camera = std::make_shared<EngineCamera>(width, height, aspect, pos, up, direction);
+			}
+				break;
+			default:
+				camera = std::make_shared<PerspectiveCamera>(width, height, aspect, pos, up, direction);
+		}
+		camera->setId(id);
+		if (mouseListener) input->registerMouseListener(camera);
+		if (keyListener) input->registerKeyListener(camera);
+		return camera;
+	}
 	/*
 	Utility method to load Light objcts
 	*/

@@ -40,6 +40,10 @@ EnumParser<Camera::CameraClass>::EnumParser()
 	map["perspective"] = Camera::CameraClass::PERSPECTIVE;
 	map["ORTHOGRAPHIC"] = Camera::CameraClass::ORTHOGRAPHIC;
 	map["orthographic"] = Camera::CameraClass::ORTHOGRAPHIC;
+	map["FOLLOW"] = Camera::CameraClass::FOLLOW;
+	map["follow"] = Camera::CameraClass::FOLLOW;
+	map["ENGINE"] = Camera::CameraClass::ENGINE;
+	map["engine"] = Camera::CameraClass::ENGINE;
 }
 
 EnumParser<ComponentType>::EnumParser()
@@ -121,4 +125,9 @@ EnumParser<GameObjectTag>::EnumParser()
 	map["phy_obj"] = GameObjectTag::PHY_OBJ;
 	map["UNKNOWN"] = GameObjectTag::UNKNOWN;
 	map["unknown"] = GameObjectTag::UNKNOWN;
+
+	strmap[GameObjectTag::PLAYER] = "player";
+	strmap[GameObjectTag::ENEMY] = "enemy";
+	strmap[GameObjectTag::PHY_OBJ] = "phy_obj";
+	strmap[GameObjectTag::UNKNOWN] = "unknown";
 }

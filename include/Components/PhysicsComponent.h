@@ -146,6 +146,12 @@ private:
 	string meshFileName;
 	bool hasMesh;
 	bool convex;
+
+	void dispose();
+
+	std::weak_ptr<GameObject> owner;
+	std::weak_ptr<Physics> physicsPtr;
+
 	float mass;
 	btRigidBody* body;
 	btCollisionShape* shape;

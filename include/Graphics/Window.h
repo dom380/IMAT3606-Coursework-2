@@ -49,6 +49,7 @@ public:
 		Allows for loading of graphical data on a background thread.
 	*/
 	virtual void switchBackgroundContext() = 0;
+	virtual void switchMainContext() = 0;
 
 	/*
 		Called on program exit.

@@ -47,7 +47,7 @@ public:
 		const char* fileName, The name of the model to retrieve.
 		shared_ptr<Graphics>& graphics, Pointer to the graphics system.
 	*/
-	vector<shared_ptr<ModelData>> getModelData(const char* fileName, shared_ptr<Graphics> graphics);
+	shared_ptr<ModelData> getModelData(const char* fileName, shared_ptr<Graphics> graphics);
 	/*
 		Load and/or Return a Pointer to a vector of ConvexHull.
 		const char* fileName, The name of the collision mesh to retrieve.
@@ -113,7 +113,7 @@ private:
 	/*
 		Utility method to read model file.
 	*/
-	vector<shared_ptr<ModelData>> readModelFile(string fullPath);
+	shared_ptr<ModelData> readModelFile(string fullPath);
 
 	/*
 		Utility method to read a collision mesh file.
@@ -125,7 +125,7 @@ private:
 	map<string, shared_ptr<Font>> fonts;
 	map<string, shared_ptr<Texture>> textures;
 	map<std::pair<string, string>, shared_ptr<Shader>> shaders;
-	map<string, vector<shared_ptr<ModelData>>> modelData;
+	map<string, shared_ptr<ModelData>> modelData;
 	map<string, shared_ptr<std::vector<ConvexHull>>> collisionData;
 	map<string, string> scripts;
 	string fontFolder;

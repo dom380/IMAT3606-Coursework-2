@@ -40,11 +40,21 @@ public:
 
 	//text file of model animations and simply read those for list
 
-	
+	void dispose();
 
 	std::shared_ptr<SkeletalModel> getCurrentModel()
 	{
 		return models.at(currentAnim);
+	}
+
+	std::vector<std::shared_ptr<SkeletalModel>> getAllModels()
+	{
+		std::vector<std::shared_ptr<SkeletalModel>> modelVec(models.size());
+		for (auto it = models.begin(); it != models.end(); ++it)
+		{
+			modelVec.push_back(it->second);
+		}
+		return modelVec;
 	}
 
 private:

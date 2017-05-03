@@ -571,3 +571,12 @@ bool SkeletalModel::isTextured()
 	return m_isTextured;
 }
 
+std::vector<unsigned int> SkeletalModel::getVBOHandles()
+{
+	std::vector<unsigned int> handles;
+	handles.push_back(vbo);
+	handles.push_back(ebo);
+	handles.push_back(boneBo);
+	return handles;
+}
+

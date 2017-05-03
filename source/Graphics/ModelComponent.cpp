@@ -24,12 +24,17 @@ void ModelComponent::init(const char * objFile, const char * textureFile, string
 		textureName = textureFile;
 		texture = AssetManager::getInstance()->getTexture(textureFile);
 	}
-	if (modelData.at(0)->material.used)
+	if (modelData->material.used)
 	{
 		shader = AssetManager::getInstance()->getShader(std::pair<string, string>("phong.vert", "phong.frag"));
-		for (auto mesh : modelData)
+		if (modelData->numOfMeshes == 1)
 		{
-			materials.push_back(mesh->material);
+			this->material = modelData->material;
+			this->material.used = true;
+		}
+		else
+		{
+			this->material.used = false;
 		}
 	}
 	else
@@ -72,14 +77,16 @@ void ModelComponent::RecieveMessage(Message * msg)
 		case MsgType::MATERIAL:
 		{
 			MaterialMessage* matMsg = ((MaterialMessage *)msg);
-			for (int i = 0; i < materials.size(); ++i)
-			{
-				materials.at(i).Kd = matMsg->material.Kd;
-				materials.at(i).Ka = matMsg->material.Ka;
-			}
+			modelData->material.Kd = matMsg->material.Kd;
+			modelData->material.Ka = matMsg->material.Ka;
 		}
 		break;
 	}
+}
+
+void ModelComponent::dispose()
+{
+	graphics->freeModel(*this);
 }
 
 void ModelComponent::render(shared_ptr<Camera>& camera)
@@ -140,14 +147,14 @@ bool ModelComponent::isDrawing()
 	return drawing;
 }
 
-vector<shared_ptr<ModelData>> ModelComponent::getData()
+shared_ptr<ModelData> ModelComponent::getData()
 {
 	return modelData;
 }
 
-vector<Material> ModelComponent::getMaterials()
+Material ModelComponent::getMaterial()
 {
-	return materials;
+	return material;
 }
 
 

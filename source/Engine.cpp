@@ -83,7 +83,7 @@ void Engine::mainLoop()
 		{
 			double deltaTime = std::min(frameTime, dt);
 
-			if (engineState->getEngineMode() == EngineMode::GAME)
+			if (engineState->getEngineMode() == EngineMode::GAME || activeScreen.first == "LoadingScreen")
 				activeScreen.second->update(deltaTime, currentTime);
 
 			frameTime -= deltaTime;
@@ -131,7 +131,7 @@ shared_ptr<Screen> Engine::getActiveScreen()
 	return activeScreen.second;
 }
 
-void Engine::switchScreen(string screenId)
+bool Engine::switchScreen(string screenId)
 {
 	auto it = gameScreens.find(screenId);
 	if (it == gameScreens.end()) {
@@ -142,23 +142,37 @@ void Engine::switchScreen(string screenId)
 		activeScreen = *it;
 	}
 	activeScreen.second->show();
+	return true;
 }
 
-void Engine::replaceScreen(string screenId)
+bool Engine::replaceScreen(string screenId)
 {
+	activeScreen.second->dispose();
+	if (activeScreen.second->getType() == Screen::GAMESCREEN)
+	{
+		auto eventPtr = std::dynamic_pointer_cast<EventListener>(activeScreen.second);
+		if (eventPtr)
+		{
+			inputHandler->removeKeyListener(eventPtr);
+			inputHandler->removeMouseListener(eventPtr);
+		}
+	}
+	string idToRemove = activeScreen.first;
+	if (idToRemove != "LoadingScreen") gameScreens.erase(idToRemove);
+	activeScreen.second.reset();
+
 	auto it = gameScreens.find(screenId);
-	if (it == gameScreens.end()) {
-		//try to load level
-		activeScreen.second->dispose();
+	if (it == gameScreens.end()) 
+	{
 		activeScreen = std::pair<string, shared_ptr<Screen>>("LoadingScreen", std::make_shared<LoadingScreen>(window, this, renderer, inputHandler, screenId));
-	} else{
-		activeScreen.second->dispose();
-		activeScreen.second.reset();
-		string idToRemove = activeScreen.first;
+		registerScreen(activeScreen.second);
+	}
+	else
+	{
 		activeScreen = *it;
-		gameScreens.erase(idToRemove);
 	}
 	activeScreen.second->show();
+	return true;
 }
 
 void Engine::loadConfig()

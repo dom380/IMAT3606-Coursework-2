@@ -35,6 +35,7 @@ public:
 		{
 			unsigned int index = data.size();
 			handle = Handle(index);
+			auto test = sizeof(object);
 			data.push_back(std::pair<int, T>(index,object));
 			counters.push_back(handle.getCounter());
 		} 
@@ -62,6 +63,13 @@ public:
 		counters[index] = 0;
 	}
 	
+	void removeAll()
+	{
+		data.clear();
+		freeIndices.clear();
+		counters.clear();
+	}
+
 	std::vector<std::pair<int, T>>* getAll()
 	{
 		return &data;

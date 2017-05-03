@@ -1,7 +1,7 @@
 #include <Components\ControllerComponent.h>
 
 
-ControllerComponent::ControllerComponent(std::shared_ptr<Physics> physics, std::weak_ptr<GameObject> owner, ShapeData shape, float yOffset, bool flip) : Component(ComponentType::CONTROLLER)
+ControllerComponent::ControllerComponent(std::shared_ptr<Physics> physics, std::weak_ptr<GameObject> owner, ShapeData shape, float yOffset, float jumpRayVal, bool flip) : Component(ComponentType::CONTROLLER)
 {
 	this->owner = owner;
 	this->physics = physics;
@@ -27,12 +27,16 @@ ControllerComponent::ControllerComponent(std::shared_ptr<Physics> physics, std::
 	actorGhost->setWorldTransform(transform);
 	actorGhost->setCollisionShape(collisionShape);
 	actorGhost->setCollisionFlags(btCollisionObject::CF_CHARACTER_OBJECT);
+	actorGhost->setUserPointer(sp.get());
 	
 	
 	this->controller = std::make_shared<BulletActerController>(actorGhost, static_cast<btConvexShape*>(collisionShape), btScalar(0.5), upDir);
 	this->controller->setFallSpeed(btScalar(55.0));
 	this->controller->setGravity(btVector3(0.0f, -30.0f, 0.0f));
 	this->controller->setAngularDamping(1.0);
+	this->controller->setJumpRay(jumpRayVal);
+	this->controller->setJumpRayOffset(shape.height + shape.radius);
+	this->controller->setRadius(shape.radius);
 	
 	auto ptr = dynamic_pointer_cast<BulletPhysics, Physics>(physics);
 	ptr->addController(this->controller);
@@ -64,7 +68,7 @@ void ControllerComponent::setCamera(std::shared_ptr<Camera> camera)
 
 void ControllerComponent::setMovementSpeed(float speed)
 {
-	movementSpeed = speed;
+	movementSpeed = speed > 0.1f ? speed : 0.1f;
 }
 
 void ControllerComponent::setGravity(float value)
@@ -75,6 +79,36 @@ void ControllerComponent::setGravity(float value)
 void ControllerComponent::setGravity(float x, float y, float z)
 {
 	controller->setGravity(btVector3(x, y, z));
+}
+
+void ControllerComponent::setTransform(Transform * transform)
+{
+	btTransform btTran = controller->getGhostObject()->getWorldTransform();
+	controller->setLinearVelocity(btVector3(0, 0, 0));
+	auto pos = transform->position;
+	pos.y -= offset;
+	btTran.setOrigin(btVector3(pos.x, pos.y, pos.z));
+	btTran.setRotation(btQuaternion(transform->orientation.x, transform->orientation.y, transform->orientation.z, transform->orientation.w));
+	controller->getGhostObject()->setWorldTransform(btTran);
+
+	if (camera) camera->move(pos);
+}
+
+void ControllerComponent::setJumpForce(float force)
+{
+	jumpForce = force;
+}
+
+void ControllerComponent::setWorldFront(float x, float y, float z)
+{
+	worldFront = btVector3(x, y, z);
+	angleOffset = worldFront.angle(interalFront);
+}
+
+void ControllerComponent::dispose()
+{
+	auto ptr = dynamic_pointer_cast<BulletPhysics, Physics>(physics);
+	ptr->removeController(controller);
 }
 
 void ControllerComponent::pollInput()
@@ -91,6 +125,8 @@ void ControllerComponent::pollInput()
 	else if (right == KeyEventType::KEY_PRESSED) walkDir.setX(vel);
 	if (up == KeyEventType::KEY_PRESSED) walkDir.setZ(-vel);
 	else if (down == KeyEventType::KEY_PRESSED) walkDir.setZ(vel);
+	
+	walkDir = walkDir.rotate(upDir, -angleOffset);
 	controller->setWalkDirection(walkDir);
 	if (!walkDir.fuzzyZero())
 	{
@@ -112,11 +148,7 @@ void ControllerComponent::pollInput()
 
 	if (space == KeyEventType::KEY_PRESSED && controller->canJump())
 	{
-		//auto vertVel = controller->m_verticalVelocity;
-		//std::cout << "Vertical Velocity: " << vertVel << std::endl;
-		//auto vertOffset = controller->m_verticalOffset;
-		//std::cout << "Vertical Offset: " << vertOffset << std::endl;
-		controller->jump(upDir*10);
+		controller->jump(upDir*jumpForce);
 	}
 
 }
@@ -140,37 +172,37 @@ void ControllerComponent::calcDirection(const btVector3& walkDir)
 {
 	if (flip)
 	{
-		if (walkDir.getX() < 0 && walkDir.getZ() < 0) //NW
+		if (walkDir.getX() < -0.05 && walkDir.getZ() < -0.05) //NW
 		{
 			frontDir.setRotation(upDir, btRadians(-135));
 		}
-		else if (walkDir.getX() > 0 && walkDir.getZ() < 0) //NE
+		else if (walkDir.getX() > 0.05 && walkDir.getZ() < -0.05) //NE
 		{
 			frontDir.setRotation(upDir, btRadians(135));
 		}
-		else if (walkDir.getX() > 0 && walkDir.getZ() > 0) //SE
+		else if (walkDir.getX() > 0.05 && walkDir.getZ() > 0.05) //SE
 		{
 			
 			frontDir.setRotation(upDir, btRadians(45));
 		}
-		else if (walkDir.getX() < 0 && walkDir.getZ() > 0) //SW
+		else if (walkDir.getX() < -0.05 && walkDir.getZ() > 0.05) //SW
 		{
 			frontDir.setRotation(upDir, btRadians(-45));
 			
 		}
-		else if (walkDir.getZ() < 0) //N
+		else if (walkDir.getZ() < -0.05) //N
 		{
 			frontDir.setRotation(upDir, btRadians(180));
 		}
-		else if (walkDir.getZ() > 0) //S
+		else if (walkDir.getZ() > 0.05) //S
 		{
 			frontDir.setRotation(upDir, btRadians(0));
 		}
-		else if (walkDir.getX() > 0) //E
+		else if (walkDir.getX() > 0.05) //E
 		{
 			frontDir.setRotation(upDir, btRadians(90));
 		}
-		else if (walkDir.getX() < 0) //W
+		else if (walkDir.getX() < -0.05) //W
 		{
 			frontDir.setRotation(upDir, btRadians(-90));
 		}

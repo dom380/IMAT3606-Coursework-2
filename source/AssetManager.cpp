@@ -60,7 +60,7 @@ shared_ptr<Shader> AssetManager::getShader(std::pair<string, string> shaderName)
 	return shader;
 }
 
-vector<shared_ptr<ModelData>> AssetManager::getModelData(const char * fileName, shared_ptr<Graphics> graphics)
+shared_ptr<ModelData> AssetManager::getModelData(const char * fileName, shared_ptr<Graphics> graphics)
 {
 	auto it = modelData.find(fileName);
 	if (it != modelData.end())
@@ -69,11 +69,9 @@ vector<shared_ptr<ModelData>> AssetManager::getModelData(const char * fileName, 
 	}
 	string fullPath = buildFilePath(ResourceType::MODEL, fileName);
 	auto data = readModelFile(fullPath);
-	for (auto mesh : data)
-	{
-		graphics->bufferModelData(mesh);
-	}
-	modelData.emplace(std::pair<string, vector<shared_ptr<ModelData>>>(fileName, data));
+	graphics->bufferModelData(data);
+	data->vertices.clear();
+	modelData.emplace(std::pair<string, shared_ptr<ModelData>>(fileName, data));
 	return data;
 }
 
@@ -209,7 +207,7 @@ void AssetManager::readModelFile(string fullPath, vector<glm::vec4>& vertices, v
 	}
 }
 
-vector<shared_ptr<ModelData>> AssetManager::readModelFile(string fullPath)
+shared_ptr<ModelData> AssetManager::readModelFile(string fullPath)
 {
 	modelFileReader = std::make_shared<AssimpReader>();
 	return modelFileReader->readFile(fullPath.c_str());

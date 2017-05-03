@@ -61,9 +61,8 @@ void DebugMenu::updateMainMenu()
 
 			if (ImGui::Button("Reload Scene"))
 			{
-				if (loadLevel(Engine::g_pEngine->getActiveScreen()->getXMLFilePath()))
+				if (Engine::g_pEngine->replaceScreen(Engine::g_pEngine->getActiveScreen()->getID()))
 				{
-					Engine::g_pEngine->replaceScreen(Engine::g_pEngine->getActiveScreen()->getID());
 					popupText = "Load successfully";
 				}
 				else
@@ -313,8 +312,11 @@ void DebugMenu::debugGameObjectsMenu()
 							break;
 						}
 						case ComponentType::LOGIC:
-							gameObjectsMenuLogic();
+						{
+							auto logic = gameScreen->getComponentStore()->getComponent<LogicComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::LOGIC), ComponentType::LOGIC);
+							gameObjectsMenuLogic(i, logic);
 							break;
+						}
 						case ComponentType::TRANSFORM:
 							auto transform = gameScreen->getComponentStore()->getComponent<Transform>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
 							gameObjectsMenuTransform(i, transform);
@@ -327,6 +329,28 @@ void DebugMenu::debugGameObjectsMenu()
 				
 			}
 			ImGui::TreePop();
+
+			if (!gameScreen->getGameObjects()[x]->HasComponent(ComponentType::LOGIC))
+			{
+				static bool hasLogic = false;
+
+				if (ImGui::Checkbox("AddLogic", &hasLogic))
+				{
+
+				}
+				if (hasLogic)
+				{
+					ImGui::Indent();
+					static shared_ptr<LogicComponent> logic = std::make_shared<LogicComponent>(gameScreen->getGameObjects()[x], gameScreen);
+					gameObjectsMenuLogic(0, logic.get());
+					if (ImGui::Button("Add"))
+					{
+						logic->registerLuaBindings();
+						gameScreen->getGameObjects()[x]->AddComponent(logic, ComponentType::LOGIC);
+					}
+				}
+			}
+			
 			if (ImGui::Button("Duplicate"))
 			{
 				LevelLoader::duplicateGameObject(gameScreen, gameScreen->getGameObjects()[x]);
@@ -358,6 +382,10 @@ bool DebugMenu::saveCurrentLevel(string fileName)
 				{
 				}
 			}
+			
+		}
+		for (int x = 0; x < gameScreen->getGameObjects().size(); x++)
+		{
 			if (gameScreen->getGameObjects().at(x)->HasComponent(ComponentType::MODEL))
 			{
 				if (!gameScreen->getGameObjects().at(x)->getModel()->isDrawing())
@@ -508,8 +536,21 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 	objCreateActive.at(iterator) = bWindowActive;
 
 	ImGui::PushID(iterator);
+	//transform
 	static shared_ptr<Transform> transform = std::make_shared<Transform>();
 	gameObjectsMenuTransform(iterator, transform.get());
+	//
+	static bool hasLogic = false;
+	static shared_ptr<LogicComponent> logic = std::make_shared<LogicComponent>();
+	if (ImGui::Checkbox("Logic", &hasLogic))
+	{
+	}
+	if (hasLogic)
+	{
+		//logic
+		gameObjectsMenuLogic(iterator, logic.get());
+	}
+	//
 	static bool hasTexture = false;
 	if (ImGui::Checkbox("Texture", &hasTexture))
 	{
@@ -536,7 +577,6 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 		if (hasTexture)
 		{
 			objInfo.second = textureCStyleArray[listbox_item_current];
-			
 		}
 		
 		LevelLoader::loadGameObject(Engine::g_pEngine->getRenderer(), gameScreen, objInfo, transform);
@@ -545,6 +585,13 @@ void DebugMenu::createObjectWindow(std::string objName, int iterator)
 		{
 			phyComp->init(Engine::g_pEngine->getPhysics(), gameScreen->getGameObjects().back(), *phyComp->getMass());
 			gameScreen->getGameObjects().back()->AddComponent(phyComp, ComponentType::RIGID_BODY);
+		}
+		if (hasLogic)
+		{
+			logic->setOwner(gameScreen->getGameObjects().back());
+			logic->setScreen(gameScreen);
+			logic->registerLuaBindings();
+			gameScreen->getGameObjects().back()->AddComponent(logic, ComponentType::LOGIC);
 		}
 	}
 	ImGui::PopID();
@@ -1026,8 +1073,30 @@ void DebugMenu::gameObjectsMenuRigidBody(int i, PhysicsComponent* phyComp, Trans
 	ImGui::PopID();
 }
 
-void DebugMenu::gameObjectsMenuLogic()
+void DebugMenu::gameObjectsMenuLogic(int i, LogicComponent* logic)
 {
+	ImGui::PushID(i);
+	static char scriptNameBuf[64] = "";
+
+	if (strlen(scriptNameBuf) == 0)
+	{
+		strncpy_s(scriptNameBuf, logic->getScriptName().c_str(), logic->getScriptName().size());
+	}
+
+	ImGui::InputText("Script Name", scriptNameBuf, sizeof(scriptNameBuf));
+	if (ImGui::Button("SetName"))
+	{
+		logic->setScriptName(scriptNameBuf);
+		static string fullPath;
+		fullPath = AssetManager::getInstance()->getScript(scriptNameBuf) + ".lua";
+		logic->setScriptFullPath(fullPath.c_str());
+	}
+	ImGui::SameLine();
+	if (ImGui::Button("LoadScript"))
+	{
+		logic->registerLuaBindings();
+	}
+	ImGui::PopID();
 }
 
 void DebugMenu::gameObjectsMenuTransform(int i, Transform* transform)
@@ -1035,8 +1104,20 @@ void DebugMenu::gameObjectsMenuTransform(int i, Transform* transform)
 	ImGui::PushID(i);
 	static float dragSpeed = 0.25f;
 	static float quatDragSpeed = 0.0025f;
+	static glm::quat orientationVec;
+	static glm::vec3 axis;
+
+	float transformAngle = glm::degrees(glm::angle(transform->orientation));
+	axis = glm::axis(transform->orientation);
+
+	orientationVec[0] = axis[0];
+	orientationVec[1] = axis[1];
+	orientationVec[2] = axis[2];
+	orientationVec[3] = transformAngle;
+
 	ImGui::DragFloat3("Position", &transform->position[0], dragSpeed);
-	ImGui::DragFloat4("Orientation", &transform->orientation[0], quatDragSpeed);
+	ImGui::DragFloat4("Orientation", &orientationVec[0], quatDragSpeed);
+	transform->orientation = glm::angleAxis(glm::radians(orientationVec.w), glm::vec3(orientationVec.x, orientationVec.y, orientationVec.z));
 	ImGui::DragFloat3("Scale", &transform->scale[0], dragSpeed);
 	ImGui::PopID();
 }

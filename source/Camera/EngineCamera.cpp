@@ -11,7 +11,7 @@ EngineCamera::EngineCamera(int width, int height, float aspect, glm::vec3 pos, g
 	previousX = -1;
 	previousY = -1;
 	orientation = glm::quat(1.0, 0.0, 0.0, 0.0);
-	type = CameraClass::PERSPECTIVE;
+	type = CameraClass::ENGINE;
 	projection = glm::perspective(glm::radians(aspect), (float)width / (float)height, 0.1f, 1000.0f);
 	lookAt(direction);
 }

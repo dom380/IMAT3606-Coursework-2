@@ -332,7 +332,7 @@ void Shader::setUniform(const char *name, vector<Light> vals)
 	}
 }
 
-void Shader::setUniform(const char * name, Material val)
+void Shader::setUniform(const char * name, Material& val)
 {
 	string locationName = name;
 	locationName += ".d";
@@ -349,6 +349,9 @@ void Shader::setUniform(const char * name, Material val)
 	locationName = name;
 	locationName += ".Ns";
 	setUniform(locationName.c_str(), val.Ns);
+	locationName = name;
+	locationName += ".used";
+	setUniform(locationName.c_str(), val.used);
 }
 
 void Shader::bindUniformBlock(const char * blockName, unsigned int & bindingPoint)

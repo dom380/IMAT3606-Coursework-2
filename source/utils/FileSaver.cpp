@@ -2,6 +2,7 @@
 #include <utils\XMLReader.h>
 #include <utils\EnumParser.h>
 #include <GUI\UITextureElement.h>
+#include <utils/Utilities.h>
 
 bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObjectCount, shared_ptr<GameObject> go, shared_ptr<GameScreen> gameScreen)
 {
@@ -30,13 +31,14 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 				*/
 				if (XMLObjectCount == iObjectCount)
 				{
-					tinyxml2::XMLElement* componentElement = gameObjElement->FirstChildElement("components")->FirstChildElement();
+					tinyxml2::XMLElement* componentsElement = gameObjElement->FirstChildElement("components");
+					tinyxml2::XMLElement* componentElement = componentsElement->FirstChildElement();
 					/*
 					Iterate over all components in object
 					*/
-					while (componentElement != NULL)
+					//while (componentElement != NULL)
 					{
-						string XMLCompType = componentElement->Attribute("type");
+						//string XMLCompType = componentElement->Attribute("type");
 						/*
 						If XML object count != the object count
 						and the object name is the same then skip.
@@ -53,8 +55,27 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 								
 								if (go->HasComponent(cType))
 								{
+									bool xmlHasComp = false;
+									while (componentElement != NULL)
+									{
+										string XMLCompType = componentElement->Attribute("type");
+										if (cType == EnumParser<ComponentType>().parse(XMLCompType))
+										{
+											xmlHasComp = true;
+											break;
+										}
+										componentElement = componentElement->NextSiblingElement();
+									}
+									
+									if (!xmlHasComp)
+									{
+									    componentElement = doc->NewElement("component");
+										componentElement->SetAttribute("type", EnumParser<ComponentType>().getString(cType).c_str());
+										componentsElement->InsertEndChild(componentElement);
+									}
+									
 									//XML current GO and passedGO have same component
-									if (cType == EnumParser<ComponentType>().parse(XMLCompType))
+									//if (cType == EnumParser<ComponentType>().parse(XMLCompType))
 									{
 										/*
 											Switch between all components
@@ -111,6 +132,7 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 										
 											break;
 										}
+
 										case TRANSFORM:
 										{
 											/*
@@ -134,15 +156,22 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 											break;
 										}
 										case LOGIC:
-											//TODO
+										{
+											auto logic = gameScreen->getComponentStore()->getComponent<LogicComponent>(go->GetComponentHandle(ComponentType::LOGIC), ComponentType::LOGIC);
+											if (!logic)
+												return false;
+											UpdateLogic(doc, componentElement, logic);
 											break;
+										}
 										
 										}
 									}
 								}
+								componentElement = componentsElement->FirstChildElement();
 							}
+							
 						}
-						componentElement = componentElement->NextSiblingElement();
+						//componentElement = componentElement->NextSiblingElement();
 					}
 				}
 				XMLObjectCount++;
@@ -221,6 +250,20 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 						{
 							UpdateVec3Element(doc, XMLUIElementColour, tb->getColour(), colourName);
 						}
+
+						//font
+						tinyxml2::XMLElement* XMLUIFontElement = XMLUIElement->FirstChildElement("font");
+						if (XMLUIFontElement)
+						{
+						}
+						else
+						{
+							XMLUIFontElement = doc->NewElement("font");
+							XMLUIElement->InsertEndChild(XMLUIFontElement);
+						}
+						auto splitPath = Utilities::splitFilePath(tb->getFont().getFontPath());
+						string fontName = splitPath.at(splitPath.size() - 1);
+						XMLUIFontElement->SetText(fontName.c_str());
 						break;
 					}
 					case UIType::TEXTURE:
@@ -376,6 +419,7 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 						renderActiveElement->SetText(model->isDrawing());
 						break;
 					}
+
 					case TRANSFORM:
 					{
 						/*
@@ -401,6 +445,10 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 					}
 					case LOGIC:
 					{
+						auto logic = gameScreen->getComponentStore()->getComponent<LogicComponent>(go->GetComponentHandle(ComponentType::LOGIC), ComponentType::LOGIC);
+						if (!logic)
+							return false;
+						AddLogicToFile(doc, componentElement, logic);
 						break;
 					}
 					
@@ -594,6 +642,23 @@ bool FileSaver::DeleteObjectFromFile(tinyxml2::XMLDocument * doc, int iObjectCou
 	
 	//could not delete obj, not found
 	return false;
+}
+
+bool FileSaver::UpdateLogic(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement * logicElement, LogicComponent * logic)
+{
+	tinyxml2::XMLElement* scriptElement = logicElement->FirstChildElement("script");
+	if (scriptElement)
+	{
+
+	}
+	else
+	{
+		scriptElement = doc->NewElement("script");
+		logicElement->InsertEndChild(scriptElement);
+	}
+	string fullScriptName = logic->getScriptName() + ".lua";
+	scriptElement->SetText(fullScriptName.c_str());
+	return true;
 }
 
 bool FileSaver::UpdateTransform(tinyxml2::XMLDocument* doc, tinyxml2::XMLElement* transformElement, Transform* transform)
@@ -929,6 +994,16 @@ bool FileSaver::UpdateVec3Element(tinyxml2::XMLDocument * doc, tinyxml2::XMLElem
 		}
 
 	}
+	return true;
+}
+
+bool FileSaver::AddLogicToFile(tinyxml2::XMLDocument * doc, tinyxml2::XMLElement * logicElement, LogicComponent * logic)
+{
+	tinyxml2::XMLElement* scriptElement = doc->NewElement("script");
+	logicElement->InsertEndChild(scriptElement);
+	string fullScriptName = logic->getScriptName() + ".lua";
+	scriptElement->SetText(fullScriptName.c_str());
+
 	return true;
 }
 

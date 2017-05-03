@@ -48,16 +48,20 @@ public:
 		Add the specified PhysicsComponent to the dynamic world.
 	*/
 	void addBody(PhysicsComponent comp);
+	void removeBody(PhysicsComponent comp);
 
 	/*
 		Add the specified CollisionTrigger to the dymaic world.
 	*/
 	void addTrigger(std::shared_ptr<CollisionTrigger> trigger);
+	void removeTrigger(CollisionTrigger* trigger);
 
 	std::vector<std::shared_ptr<CollisionTrigger>> getCollisionTriggers();
 
 	void addController(BulletActerController* controller);
 	void addController(std::shared_ptr<BulletActerController> controller);
+
+	void removeController(std::shared_ptr<BulletActerController> controller);
 
 	/*
 		Per step callback function for the simulation.

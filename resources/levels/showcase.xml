@@ -1,0 +1,886 @@
+<screen type="level" name="showcase">
+	<cameras>
+		<camera type="engine">
+			<id>EDITOR_CAM</id>
+			<position>
+				<x>0.0</x>
+				<y>3.0</y>
+				<z>15.0</z>
+			</position>
+			<mouse_input>true</mouse_input>
+			<key_input>true</key_input>
+		</camera>
+		<camera type="follow">
+			<id>PLAYER_CAM</id>
+			<width>1080</width>
+			<height>720</height>
+			<aspect>45</aspect>
+			<position>
+				<x>0.0</x>
+				<y>0.0</y>
+				<z>0.0</z>
+			</position>
+			<up>
+				<x>0.0</x>
+				<y>1.0</y>
+				<z>0.0</z>
+			</up>
+			<direction>
+				<x>1.0</x>
+				<y>0.0</y>
+				<z>0.0</z>
+			</direction>
+			<follow_distance>
+				<x>15.0</x>
+				<y>-4.0</y>
+				<z>0.0</z>
+			</follow_distance>
+			<mouse_input>false</mouse_input>
+			<key_input>false</key_input>
+		</camera>
+	</cameras>
+    <gameObjects>
+        <!-- player -->
+        <gameObject>
+            <tag>PHY_OBJ</tag>
+            <components>
+                <!-- <component type ="model">
+					<file>capsule.obj</file>
+					<file>chest.obj</file>
+					<texture>chest_diffuse.png</texture>
+				</component>  -->
+                <component type="animation">
+          			fbx files
+          			                                                                                                                                                                                    <default>Idle</default>
+                    <files>
+                        <file>
+                            <id>Run</id>
+                            <filePath>resources/models/Animations/legoman@run.fbx</filePath>
+                        </file>
+                        <file>
+                            <id>Idle</id>
+                            <filePath>resources/models/Animations/legoman@static.fbx</filePath>
+                        </file>
+                    </files>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-12.5001</x>
+                        <y>0.21</y>
+                        <z>9.8</z>
+                    </position>
+                    <scale>
+                        <x>0.1</x>
+                        <y>0.1</y>
+                        <z>0.1</z>
+                    </scale>
+                    <!-- <scale>
+						<x>1.0</x>
+						<y>1.0</y>
+						<z>1.0</z>
+					</scale> -->
+                    <orientation>
+                        <x>-0</x>
+                        <y>-1</y>
+                        <z>-0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="controller">
+                    <flip>true</flip>
+                    <offset>1.25</offset>
+					<world_front>
+						<x>1.0</x>
+                        <y>0.0</y>
+                        <z>0.0</z>
+					</world_front>
+                    <bounding_shape type="CAPSULE">
+                        <radius>0.75</radius>
+                        <height>1.0</height>
+                    </bounding_shape>
+                </component>
+            </components>
+        </gameObject>
+        <!-- ground -->
+        <gameObject>
+            <tag>PHY_OBJ</tag>
+            <components>
+                <component type="model" id="cube.obj">
+                    <file>cube.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>2</x>
+                        <y>0</y>
+                        <z>9.5</z>
+                    </position>
+                    <scale>
+                        <x>24</x>
+                        <y>0.25</y>
+                        <z>4.25</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>0.0</mass>
+                    <!-- <collision_mesh>cube.obj</collision_mesh> -->
+                    <restitution>0.4</restitution>
+                    <bounding_shape type="BOX">
+                        <half_extents>
+                            <x>24</x>
+                            <y>0.25</y>
+                            <z>4.25</z>
+                        </half_extents>
+                    </bounding_shape>
+                </component>
+            </components>
+        </gameObject>
+        <!-- Left wall -->
+        <!-- Right wall -->
+        <!-- Front wall -->
+        <!-- player -->
+        <!--block-->
+        <!-- blocks -->
+        <!-- slope-->
+        <gameobject>
+            <components>
+                <component type="model" id="clouds.obj">
+                    <file>clouds.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="leftside.obj">
+                    <file>leftside.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="trees2.obj">
+                    <file>trees2.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="end.obj">
+                    <file>end.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>58.2509</w>
+                    </orientation>
+                </component>
+                <component type="logic">
+                    <script>gold_collectable.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="endside.obj">
+                    <file>endside.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="rocks2.obj">
+                    <file>rocks2.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="rocks.obj">
+                    <file>rocks.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="trees.obj">
+                    <file>trees.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="leftside.obj">
+                    <file>leftside.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="leftside.obj">
+                    <file>leftside.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="one side.obj">
+                    <file>one side.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="newtree.obj">
+                    <file>newtree.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-15.75</x>
+                        <y>1</y>
+                        <z>-1.25</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="gate.obj">
+                    <file>gate.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="gate.obj">
+                    <file>gate.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>-9.25</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="log.obj">
+                    <file>log.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>23.25</x>
+                        <y>0.5</y>
+                        <z>9.75</z>
+                    </position>
+                    <scale>
+                        <x>1.25</x>
+                        <y>1</y>
+                        <z>0.5</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>45</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0.0</mass>
+                    <!-- <collision_mesh>cube.obj</collision_mesh> -->
+                    <restitution>0.4</restitution>
+                    <bounding_shape type="BOX">
+                        <half_extents>
+                            <x>1.25</x>
+                            <y>1</y>
+                            <z>0.5</z>
+                        </half_extents>
+                    </bounding_shape>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="spikes.obj">
+                    <file>spikes.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-3</x>
+                        <y>0.25</y>
+                        <z>8.25</z>
+                    </position>
+                    <scale>
+                        <x>-0.5</x>
+                        <y>0.5</y>
+                        <z>-1</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="spikes.obj">
+                    <file>spikes.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-3</x>
+                        <y>0.25</y>
+                        <z>9</z>
+                    </position>
+                    <scale>
+                        <x>-0.5</x>
+                        <y>0.5</y>
+                        <z>-1</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="spikes.obj">
+                    <file>spikes.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-3</x>
+                        <y>0.25</y>
+                        <z>7.5</z>
+                    </position>
+                    <scale>
+                        <x>-0.5</x>
+                        <y>0.5</y>
+                        <z>-1</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="spikes.obj">
+                    <file>spikes.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-3</x>
+                        <y>0.25</y>
+                        <z>6</z>
+                    </position>
+                    <scale>
+                        <x>-0.5</x>
+                        <y>0.5</y>
+                        <z>-1</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="spikes.obj">
+                    <file>spikes.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-3</x>
+                        <y>0.25</y>
+                        <z>6.75</z>
+                    </position>
+                    <scale>
+                        <x>-0.5</x>
+                        <y>0.5</y>
+                        <z>-1</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="spikes.obj">
+                    <file>spikes.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-3</x>
+                        <y>0.25</y>
+                        <z>11.75</z>
+                    </position>
+                    <scale>
+                        <x>-0.5</x>
+                        <y>0.5</y>
+                        <z>-1</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="spikes.obj">
+                    <file>spikes.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-3</x>
+                        <y>0.25</y>
+                        <z>11.25</z>
+                    </position>
+                    <scale>
+                        <x>-0.5</x>
+                        <y>0.5</y>
+                        <z>-1</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="spikes.obj">
+                    <file>spikes.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-3</x>
+                        <y>0.25</y>
+                        <z>10.5</z>
+                    </position>
+                    <scale>
+                        <x>-0.5</x>
+                        <y>0.5</y>
+                        <z>-1</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="spikes.obj">
+                    <file>spikes.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-3</x>
+                        <y>0.25</y>
+                        <z>9.75</z>
+                    </position>
+                    <scale>
+                        <x>-0.5</x>
+                        <y>0.5</y>
+                        <z>-1</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="spikes.obj">
+                    <file>spikes.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-3</x>
+                        <y>0.25</y>
+                        <z>12.5</z>
+                    </position>
+                    <scale>
+                        <x>-0.5</x>
+                        <y>0.5</y>
+                        <z>-1</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="star.obj">
+                    <file>star.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>0.5</x>
+                        <y>1.25</y>
+                        <z>9.75</z>
+                    </position>
+                    <scale>
+                        <x>0.5</x>
+                        <y>0.5</y>
+                        <z>0.5</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="gem.obj">
+                    <file>gem.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-10.5</x>
+                        <y>0.25</y>
+                        <z>9</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>58.2565</w>
+                    </orientation>
+                </component>
+                <component type="logic">
+                    <script>gold_collectable.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="heart.obj">
+                    <file>heart.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>7</x>
+                        <y>0.25</y>
+                        <z>8.25</z>
+                    </position>
+                    <scale>
+                        <x>2</x>
+                        <y>2</y>
+                        <z>2</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>58.262</w>
+                    </orientation>
+                </component>
+                <component type="logic">
+                    <script>gold_collectable.lua</script>
+                </component>
+            </components>
+        </gameobject>
+    </gameObjects>
+    <lights>
+        <light>
+            <position>
+                <x>0.0</x>
+                <y>15.0</y>
+                <z>0.0</z>
+            </position>
+            <ambient>
+                <r>0.1</r>
+                <g>0.1</g>
+                <b>0.1</b>
+            </ambient>
+            <diffuse>
+                <r>0.5</r>
+                <g>0.5</g>
+                <b>0.5</b>
+            </diffuse>
+            <specular>
+                <r>0.5</r>
+                <g>0.5</g>
+                <b>0.5</b>
+            </specular>
+        </light>
+        <light>
+            <position>
+                <x>1.0</x>
+                <y>15.0</y>
+                <z>-10.0</z>
+            </position>
+            <ambient>
+                <r>0.1</r>
+                <g>0.1</g>
+                <b>0.1</b>
+            </ambient>
+            <diffuse>
+                <r>0.5</r>
+                <g>0.5</g>
+                <b>0.5</b>
+            </diffuse>
+            <specular>
+                <r>0.5</r>
+                <g>0.5</g>
+                <b>0.5</b>
+            </specular>
+        </light>
+        <light>
+            <position>
+                <x>1.0</x>
+                <y>15.0</y>
+                <z>50.0</z>
+            </position>
+            <ambient>
+                <r>0.1</r>
+                <g>0.1</g>
+                <b>0.1</b>
+            </ambient>
+            <diffuse>
+                <r>0.5</r>
+                <g>0.5</g>
+                <b>0.5</b>
+            </diffuse>
+            <specular>
+                <r>0.5</r>
+                <g>0.5</g>
+                <b>0.5</b>
+            </specular>
+        </light>
+    </lights>
+    <uiElements>
+        <uiElement>
+            <ID>gem</ID>
+            <Type>texture</Type>
+            <Texture>gemui.png</Texture>
+            <position>
+                <x>78.25</x>
+                <y>54.75</y>
+                <z>0</z>
+            </position>
+            <scale>
+                <x>105.75</x>
+                <y>112.25</y>
+                <z>10</z>
+            </scale>
+        </uiElement>
+        <uiElement>
+            <ID>score_string</ID>
+            <Type>text</Type>
+            <position>
+                <x>136.25</x>
+                <y>29.5</y>
+                <z>0</z>
+            </position>
+            <scale>
+                <x>1</x>
+                <y>1</y>
+                <z>1</z>
+            </scale>
+            <value>0</value>
+        </uiElement>
+        <uiElement>
+            <ID>heartui</ID>
+            <Type>texture</Type>
+            <Texture>heartui.png</Texture>
+            <position>
+                <x>947.5</x>
+                <y>48.25</y>
+                <z>0</z>
+            </position>
+            <scale>
+                <x>100</x>
+                <y>100</y>
+                <z>1</z>
+            </scale>
+        </uiElement>
+        <uiElement>
+            <ID>heartcount</ID>
+            <Type>text</Type>
+            <value>3</value>
+            <colour>
+                <r>1</r>
+                <g>1</g>
+                <b>1</b>
+            </colour>
+            <position>
+                <x>1000</x>
+                <y>27</y>
+                <z>0</z>
+            </position>
+            <scale>
+                <x>1</x>
+                <y>1</y>
+                <z>1</z>
+            </scale>
+        </uiElement>
+    </uiElements>
+</screen>

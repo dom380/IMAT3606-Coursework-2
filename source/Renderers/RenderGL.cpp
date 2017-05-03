@@ -32,22 +32,11 @@ bool RenderGL::init()
 	}
 
 	AssetManager::getInstance()->getShader(std::make_pair("animation.vert", "animation.frag"))->initialiseBoneUniforms();
-	
+
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	modelMat = glm::translate(modelMat, glm::vec3(0.0f, 0.0f, 0.0f));
-#if defined(_WIN32) || defined(_WIN64)
-	if (WGL_EXT_swap_control)
-	{
-		wglSwapIntervalEXT(0);
-	}
-#else
-	if (GLX_EXT_swap_control)
-	{
-		glXSwapIntervalEXT(val);
-	}
-#endif
 	return true;
 }
 
@@ -210,22 +199,32 @@ vector<unsigned int> RenderGL::bufferModelData(vector<glm::vec4>& vertices, vect
 
 void RenderGL::bufferModelData(shared_ptr<ModelData> data)
 {
+#ifndef NDEBUG
+	string check = OpenGLSupport().GetError();
+#endif
 	unsigned int vboHandles[2];
 	glGenBuffers(2, vboHandles);
-
 	glBindBuffer(GL_ARRAY_BUFFER, vboHandles[0]);
 	glBufferData(GL_ARRAY_BUFFER, data->vertices.size() * sizeof(ModelData::Vertex),
 		&data->vertices[0], GL_STATIC_DRAW);
-
+#ifndef NDEBUG
+	check = OpenGLSupport().GetError();
+#endif
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboHandles[1]);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, data->indices.size() * sizeof(GLushort),
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, data->indices.size() * sizeof(GLuint),
 		&data->indices[0], GL_STATIC_DRAW);
 
+#ifndef NDEBUG
+	check = OpenGLSupport().GetError();
+#endif
 	vector<unsigned int> handles;
 	handles.push_back(vboHandles[0]);
 	handles.push_back(vboHandles[1]);
 	data->vboHandles = handles;
 	glFlush();
+#ifndef NDEBUG
+	check = OpenGLSupport().GetError();
+#endif
 }
 
 void RenderGL::bufferLightingData(vector<Light>& lights, shared_ptr<Shader> &shader, unsigned int& uniformBuffer, unsigned int& bindingPoint)
@@ -295,12 +294,24 @@ unsigned int RenderGL::createVertexArrayObject(vector<unsigned int>& vboHandles)
 			(GLvoid*)0);
 		// Vertex Normals
 		glEnableVertexAttribArray(1);
-		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(ModelData::Vertex),
+		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(ModelData::Vertex),
 			(GLvoid*)offsetof(ModelData::Vertex, Normal));
 		// Vertex Texture Coords
 		glEnableVertexAttribArray(2);
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(ModelData::Vertex),
 			(GLvoid*)offsetof(ModelData::Vertex, TexCoords));
+		//Ambient 
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(ModelData::Vertex),
+			(GLvoid*)offsetof(ModelData::Vertex, Ka));
+		//Diffuse
+		glEnableVertexAttribArray(4);
+		glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(ModelData::Vertex),
+			(GLvoid*)offsetof(ModelData::Vertex, Kd));
+		//Specular
+		glEnableVertexAttribArray(5);
+		glVertexAttribPointer(5, 1, GL_FLOAT, GL_FALSE, sizeof(ModelData::Vertex),
+			(GLvoid*)offsetof(ModelData::Vertex, Shininess));
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboHandles[1]);
 		return vaoHandle;
 	}
@@ -409,44 +420,62 @@ void RenderGL::renderModel(ModelComponent & model, shared_ptr<Shader>& shaderPro
 #ifndef NDEBUG
 	check = OpenGLSupport().GetError();
 #endif
-	auto meshes = model.getData();
-	auto materials = model.getMaterials();
-	auto arraySize = meshes.size();
-	for (int i = 0; i < arraySize; ++i)
+	auto mesh = model.getData();
+	auto material = model.getMaterial();
+	if (model.getTexture() != nullptr) {
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, model.getTexture()->object());
+		shaderProgram->setUniform("tex", 0);
+	}
+	else {
+		shaderProgram = AssetManager::getInstance()->getShader(std::pair<std::string, std::string>("phong_no_texture.vert", "phong_no_texture.frag"));
+		shaderProgram->bindShader();
+	}
+	//Set number of lights
+	numOfLights <= MAX_NUM_LIGHTS ? shaderProgram->setUniform("NUM_LIGHTS", numOfLights) : shaderProgram->setUniform("NUM_LIGHTS", 0);
+	Transform* transform = model.getTransform();
+	glm::quat orientation = transform->orientation;
+	glm::mat4 mMat = glm::translate(transform->position) * glm::mat4_cast(orientation) * glm::scale(transform->scale);
+	shaderProgram->setUniform("mView", camera->getView());
+	shaderProgram->setUniform("mProjection", camera->getProjection());
+	shaderProgram->setUniform("mModel", mMat);
+	shaderProgram->setUniform("viewPos", camera->getPosition());
+	shaderProgram->setUniform("material", mesh->material);
+
+	glBindVertexArray(model.getData()->getVertArray(this));
+	glBindBufferBase(GL_UNIFORM_BUFFER, lightingBlockId, lightingBuffer); //Bind lighting data
+	for (unsigned int i = 0; i < mesh->meshes.size(); i++) 
 	{
-		auto mesh = meshes.at(i);
-		glBindVertexArray(mesh->getVertArray(this));
-		if (model.getTexture() != nullptr) {
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, model.getTexture()->object());
-			shaderProgram->setUniform("tex", 0);
-		}
-		else {
-			shaderProgram = AssetManager::getInstance()->getShader(std::pair<std::string, std::string>("phong_no_texture.vert", "phong_no_texture.frag"));
-			shaderProgram->bindShader();
-		}
-		//Set number of lights
-		numOfLights <= MAX_NUM_LIGHTS ? shaderProgram->setUniform("NUM_LIGHTS", numOfLights) : shaderProgram->setUniform("NUM_LIGHTS", 0);
-		Transform* transform = model.getTransform();
-		glm::quat orientation = transform->orientation;
-		glm::mat4 mMat = glm::translate(transform->position) * glm::mat4_cast(orientation) * glm::scale(transform->scale);
-		shaderProgram->setUniform("mView", camera->getView());
-		shaderProgram->setUniform("mProjection", camera->getProjection());
-		shaderProgram->setUniform("mModel", mMat);
-		shaderProgram->setUniform("viewPos", camera->getPosition());
-		if (materials.size() > i)
-		{
-			if (materials.at(i).used)
-			{
-				shaderProgram->setUniform("material", materials.at(i));
-			}
-		}
-		glBindBufferBase(GL_UNIFORM_BUFFER, lightingBlockId, lightingBuffer); //Bind lighting data
-		glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh->indices.size()), GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));
+		glDrawElementsBaseVertex(GL_TRIANGLES,
+			mesh->meshes[i].NumIndices,
+			GL_UNSIGNED_INT,
+			(void*)(sizeof(unsigned int) * mesh->meshes[i].BaseIndex),
+			mesh->meshes[i].BaseVertex);
 #ifndef NDEBUG
 		check = OpenGLSupport().GetError();
 #endif
-		glBindVertexArray(0);
+	}
+	
+	glBindVertexArray(0);
+}
+
+void RenderGL::freeModel(ModelComponent & model)
+{
+	auto handles = model.getData()->vboHandles;
+	glDeleteBuffers(handles.size(), &handles[0]);
+}
+
+void RenderGL::freeAnimatedModel(AnimatedModelComponent & model)
+{
+	std::vector<unsigned int> handles;
+	auto meshes = model.getAllModels();
+	for (auto mesh : meshes)
+	{
+		if (mesh)
+		{
+			handles = mesh->getVBOHandles();
+			glDeleteBuffers(handles.size(), &handles[0]);
+		}
 	}
 }
 

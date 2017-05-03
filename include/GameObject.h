@@ -61,15 +61,19 @@ public:
 		{
 			return nullptr;
 		}
-		auto spStore = componentStore.lock();
-		if (spStore != nullptr) 
+		if (!componentStore.expired()) 
 		{
-			return spStore->getComponent<T>(componentHandles[type], type);
-		} 
-		else
-		{
-			return nullptr;
+			auto spStore = componentStore.lock();
+			if (spStore != nullptr)
+			{
+				return spStore->getComponent<T>(componentHandles[type], type);
+			}
+			else
+			{
+				return nullptr;
+			}
 		}
+		return nullptr;
 	};
 
 	//TODO think of a better way of exposing this to lua

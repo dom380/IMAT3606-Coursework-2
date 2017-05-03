@@ -45,10 +45,20 @@ void BulletPhysics::addBody(PhysicsComponent comp)
 	world->addRigidBody(comp.getBody());
 }
 
+void BulletPhysics::removeBody(PhysicsComponent comp)
+{
+	world->removeRigidBody(comp.getBody());
+}
+
 void BulletPhysics::addTrigger(std::shared_ptr<CollisionTrigger> trigger)
 {
 	world->addCollisionObject(trigger->getBody());
 	collisionTriggers.push_back(trigger);
+}
+
+void BulletPhysics::removeTrigger(CollisionTrigger* trigger)
+{
+	world->removeCollisionObject(trigger->getBody());
 }
 
 std::vector<std::shared_ptr<CollisionTrigger>> BulletPhysics::getCollisionTriggers()
@@ -65,6 +75,12 @@ void BulletPhysics::addController(BulletActerController* controller)
 void BulletPhysics::addController(std::shared_ptr<BulletActerController> controller)
 {
 	addController(controller.get());
+}
+
+void BulletPhysics::removeController(std::shared_ptr<BulletActerController> controller)
+{
+	world->removeCollisionObject(controller->getGhostObject());
+	world->removeAction(controller.get());
 }
 
 void BulletPhysics::tickCallback(btDynamicsWorld * world, btScalar timeStep)
@@ -95,11 +111,12 @@ void BulletPhysics::tickCallback(btDynamicsWorld * world, btScalar timeStep)
 				for (int i = 0; i < numOfOverlaps; ++i)
 				{
 					auto object = trigger->getBody()->getOverlappingPairs().at(i);
+					if (object->isStaticObject()) continue;
 					//Pretty unsafe but bullet forces this. 
-					auto owner = static_cast<GameObject*>(object->getUserPointer());
-					if (owner != nullptr)
+					auto collider = static_cast<GameObject*>(object->getUserPointer());
+					if (collider != nullptr)
 					{
-						trigger->trigger(owner);
+						trigger->trigger(collider);
 					}
 				}
 			}		

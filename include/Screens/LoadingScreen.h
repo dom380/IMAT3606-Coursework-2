@@ -45,11 +45,13 @@ public:
 		loadingText = TextBox("Loading", *AssetManager::getInstance()->getFont("arial.ttf", renderer), transform, renderer);
 		levelId = levelToLoad;
 		gameEngine = engine;
+		screenId = "LoadingScreen";
 		backgroundThread = std::thread([this, window, engine, renderer, input, levelToLoad] {
 			window->switchBackgroundContext();
 			string path = AssetManager::getInstance()->getRootFolder(AssetManager::ResourceType::LEVEL) + levelToLoad + ".xml";
 			this->succeded = LevelLoader::loadLevel(engine, renderer, input, path.c_str());
 			this->loading = false;
+			window->switchMainContext();
 		});
 	}
 
@@ -76,6 +78,7 @@ public:
 			{
 				gameEngine->replaceScreen(gameEngine->getInitialScreenId());
 			}
+			return;
 		}
 		time += dt;
 		if (time > 1.0 && time < 2.0)

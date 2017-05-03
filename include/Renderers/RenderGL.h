@@ -101,6 +101,14 @@ public:
 	*/
 	void setVSync(bool flag);
 
+	/*
+		Frees allocated buffers for the specified model.
+	*/
+	void freeModel(ModelComponent& model);
+	/*
+		Frees allocated buffers for the specified model.
+	*/
+	void freeAnimatedModel(AnimatedModelComponent& model);
 
 	//TO DO
 	void renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera);

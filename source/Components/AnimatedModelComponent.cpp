@@ -89,6 +89,11 @@ Transform * AnimatedModelComponent::getTransform()
 	return nullptr;
 }
 
+void AnimatedModelComponent::dispose()
+{
+	graphics->freeAnimatedModel(*this);
+}
+
 //TO DO
 void AnimatedModelComponent::render(shared_ptr<Camera>& camera)
 {

@@ -8,5 +8,8 @@ uniform sampler2D tex;
 
 void main()
 {
-    color = texture(tex, TexCoord);
+	vec4 texel = texture(tex, TexCoord);
+	if(texel.a < 0.3) //Discard any low alpha value fragments as a quick fix for transparency with depth testing 
+		discard;
+    color = texel;
 }

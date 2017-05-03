@@ -16,10 +16,6 @@
 class Listener
 {
 	public:
-		/*
-			Default constructor.
-		*/
-		Listener();
 
 		/*
 			Singleton
@@ -45,6 +41,12 @@ class Listener
 
 
 	private:
+		/*
+		Default constructor.
+		*/
+		Listener();
+		Listener(Listener const&) {}; // prevent copies
+		void operator=(Listener const&) {}; // prevent assignments
 		sf::Listener* listener; 
 		static Listener* m_Instance; //!< Instance pointer of a Listener
 		

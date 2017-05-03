@@ -398,6 +398,8 @@ void PhysicsComponent::init(std::shared_ptr<Physics>& physics, std::weak_ptr<Gam
 	this->owner = owner;
 	this->mass = mass;
 	this->physicsPtr = physics;
+	restitution = 0.0f;
+	friction = 0.0f;
 	//Retrieve the transform of the mesh
 	btTransform transform;
 	auto sp = owner.lock();

@@ -53,7 +53,7 @@ public:
 		shapeData = nullptr;
 		shape = nullptr;
 		mass = 0.0f;
-		convex = false;
+		convex = true;
 		rotationalFriction = 0.0f;
 	}
 	/*
@@ -141,15 +141,13 @@ public:
 	Constructs collisionShape without mesh
 	*/
 	void buildCollisionShape(ShapeData boundingShape);
+	void dispose();
 private:
 	std::weak_ptr<GameObject> owner;
 	string meshFileName;
 	bool hasMesh;
 	bool convex;
 
-	void dispose();
-
-	std::weak_ptr<GameObject> owner;
 	std::weak_ptr<Physics> physicsPtr;
 
 	float mass;

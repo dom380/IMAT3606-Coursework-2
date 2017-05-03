@@ -329,7 +329,31 @@ void DebugMenu::debugGameObjectsMenu()
 				
 			}
 			ImGui::TreePop();
+			if (!gameScreen->getGameObjects()[x]->HasComponent(ComponentType::RIGID_BODY))
+			{
+				static bool hasPhysics = false;
 
+				if (ImGui::Checkbox("AddPhysics", &hasPhysics))
+				{
+
+				}
+				if (hasPhysics)
+				{
+					ImGui::Indent();
+					static shared_ptr<PhysicsComponent> phy = std::make_shared<PhysicsComponent>();
+					auto transform = gameScreen->getComponentStore()->getComponent<Transform>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
+					if (transform)
+					{
+						gameObjectsMenuRigidBody(0, phy.get(), transform);
+						if (ImGui::Button("Add"))
+						{
+							phy->init(Engine::g_pEngine->getPhysics(), gameScreen->getGameObjects()[x], *phy->getMass());
+							gameScreen->getGameObjects()[x]->AddComponent(phy, ComponentType::RIGID_BODY);
+						}
+					}
+					
+				}
+			}
 			if (!gameScreen->getGameObjects()[x]->HasComponent(ComponentType::LOGIC))
 			{
 				static bool hasLogic = false;
@@ -925,19 +949,6 @@ void DebugMenu::gameObjectsMenuRigidBody(int i, PhysicsComponent* phyComp, Trans
 	ImGui::DragFloat("Mass", phyComp->getMass(), dragSpeed);
 	if (ImGui::Checkbox("HasMesh", &hasMeshFile))
 	{
-		if (hasMeshFile)
-		{
-			if (isConvex)
-			{
-				auto mesh = AssetManager::getInstance()->getModelData(meshNameBuf, Engine::g_pEngine->getRenderer());
-				phyComp->buildCollisionShape(mesh.at(0), tranform->scale);
-			}
-			else
-			{
-				auto mesh = AssetManager::getInstance()->getCollisionData(meshNameBuf);
-				phyComp->buildCollisionShape(mesh, tranform->scale);
-			}
-		}
 		phyComp->setHasMesh(hasMeshFile);
 	}
 	
@@ -945,7 +956,19 @@ void DebugMenu::gameObjectsMenuRigidBody(int i, PhysicsComponent* phyComp, Trans
 	{
 		ImGui::InputText("MeshName", meshNameBuf, IM_ARRAYSIZE(meshNameBuf));
 		phyComp->setMeshFileName(meshNameBuf);
-		
+		if (ImGui::Button("LoadMesh"))
+		{
+			if (isConvex)
+			{
+				auto mesh = AssetManager::getInstance()->getModelData(meshNameBuf, Engine::g_pEngine->getRenderer());
+				phyComp->buildCollisionShape(mesh, tranform->scale);
+			}
+			else
+			{
+				auto mesh = AssetManager::getInstance()->getCollisionData(meshNameBuf);
+				phyComp->buildCollisionShape(mesh, tranform->scale);
+			}
+		}
 	}
 	else
 	{
@@ -985,7 +1008,7 @@ void DebugMenu::gameObjectsMenuRigidBody(int i, PhysicsComponent* phyComp, Trans
 		for (int x = ShapeData::BOX; x < ShapeData::CAPSULE; x++)
 		{
 			ShapeData::BoundingShape shapeType = (ShapeData::BoundingShape)x;
-			if (shapeData->boundingShape)
+			//if (shapeData->boundingShape)
 			{
 				switch (shapeData->boundingShape)
 				{

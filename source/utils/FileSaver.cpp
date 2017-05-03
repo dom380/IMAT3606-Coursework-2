@@ -2,6 +2,7 @@
 #include <utils\XMLReader.h>
 #include <utils\EnumParser.h>
 #include <GUI\UITextureElement.h>
+#include <utils/Utilities.h>
 
 bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObjectCount, shared_ptr<GameObject> go, shared_ptr<GameScreen> gameScreen)
 {
@@ -240,6 +241,20 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 						{
 							UpdateVec3Element(doc, XMLUIElementColour, tb->getColour(), colourName);
 						}
+
+						//font
+						tinyxml2::XMLElement* XMLUIFontElement = XMLUIElement->FirstChildElement("font");
+						if (XMLUIFontElement)
+						{
+						}
+						else
+						{
+							XMLUIFontElement = doc->NewElement("font");
+							XMLUIElement->InsertEndChild(XMLUIFontElement);
+						}
+						auto splitPath = Utilities::splitFilePath(tb->getFont().getFontPath());
+						string fontName = splitPath.at(splitPath.size() - 1);
+						XMLUIFontElement->SetText(fontName.c_str());
 						break;
 					}
 					case UIType::TEXTURE:

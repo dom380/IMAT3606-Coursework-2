@@ -335,6 +335,10 @@ private:
 	static void loadStringElement(shared_ptr<Graphics>& renderer, shared_ptr<Screen> screen, shared_ptr<Transform> transform, string id, tinyxml2::XMLElement* stringElement)
 	{
 		Font font = *AssetManager::getInstance()->getFont("arial.ttf", renderer);
+		if (stringElement->FirstChildElement("font") != NULL)
+		{
+			font = *AssetManager::getInstance()->getFont(const_cast<char*>(stringElement->FirstChildElement("font")->GetText()), renderer);
+		}
 		const char* text = stringElement->FirstChildElement("value") != NULL ? stringElement->FirstChildElement("value")->GetText() : "MISSING_STRING";
 		if (!transform)
 		{

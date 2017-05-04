@@ -14,6 +14,7 @@ class ModelComponent;
 class UIElement;
 class AnimatedModelComponent;
 class ModelData;
+class Skybox;
 /*
 	Interface for the Graphics system.
 */
@@ -96,6 +97,9 @@ public:
 		Creates a VAO for a UI object.
 	*/
 	virtual unsigned int createUIVertextArrayObject(unsigned int& vboHandle, unsigned int& eboHandle, vector<GLfloat> vertices, vector<GLuint> indices) = 0;
+	
+	virtual unsigned int createSkyboxVertexArrayObject(GLuint& vboHandle, std::vector<GLfloat> vertices) = 0;
+	
 	/*	
 		Render text.
 		string& text, The string to render.
@@ -139,6 +143,13 @@ public:
 	virtual void renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, vector<Light>& lights) = 0;
 	//TO DO
 	virtual void renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, unsigned int lightingBuffer, unsigned int lightingBlockId) = 0;
+
+	virtual void renderSkybox(shared_ptr<Skybox>& skybox, shared_ptr<Camera>& camera) = 0;
+
+	/*
+		Creates a cube map
+	*/
+	virtual GLuint loadCubemapTexture(std::string& filePrefix) = 0;
 
 	/*
 		Enable or disable v-sync

@@ -24,6 +24,7 @@ using std::vector;
 #include "Components/AnimatedModelComponent.h"
 #include "Audio\Listener.h"
 #include "Audio\SoundComponent.h"
+#include "Graphics/Skybox.h"
 
 #ifndef NDEBUG
 #include <utils\Timer.h>
@@ -139,6 +140,9 @@ private:
 	//Sound Stuff May need to move later
 	Listener* listener;
 	SoundComponent* sounds;
+
+	shared_ptr<Skybox> skybox;
+
 #ifndef NDEBUG //If debugging display how long the frame took in ms.
 	Timer timer;
 	shared_ptr<TextBox> frameTime;

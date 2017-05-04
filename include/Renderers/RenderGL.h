@@ -9,9 +9,11 @@
 #include <Graphics\Shader.h>
 #include <Graphics\ModelComponent.h>
 #include "Components/AnimatedModelComponent.h"
+#include "Graphics/Skybox.h"
 #include <vector>
 using std::string; using std::vector;
 #include <memory>
+#include <array>
 using std::shared_ptr;
 /*
 	The OpenGL implementation of the Graphics system.
@@ -83,6 +85,9 @@ public:
 	
 	*/
 	unsigned int createUIVertextArrayObject(unsigned int& vboHandle, unsigned int& eboHandle, vector<GLfloat> vertices, vector<GLuint> indices);
+	
+	unsigned int createSkyboxVertexArrayObject(GLuint& vboHandle, std::vector<GLfloat> vertices);
+	
 	/*
 		Renders the requested model. See interface for details.
 	*/
@@ -96,10 +101,14 @@ public:
 	*/
 	void renderModel(ModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, unsigned int lightingBuffer, unsigned int lightingBlockId);
 	
+	void renderSkybox(shared_ptr<Skybox>& skybox, shared_ptr<Camera>& camera);
+
 	/*
 		Enable or disable v-sync
 	*/
 	void setVSync(bool flag);
+
+	GLuint loadCubemapTexture(std::string& filePrefix);
 
 	/*
 		Frees allocated buffers for the specified model.
@@ -125,11 +134,6 @@ private:
 	const int MAX_NUM_LIGHTS = 10;
 	unsigned int currBindingPoint = 0;
 	glm::mat4 modelMat = glm::mat4();
-
-	GLuint shadowFBO, pass1Index, pass2Index;
-	int shadowMapWidth, shadowMapHeight;
-	glm::mat4 lightPV;
-	glm::mat4 shadowBias;
 };
 
 #endif // !RENDERGL_H

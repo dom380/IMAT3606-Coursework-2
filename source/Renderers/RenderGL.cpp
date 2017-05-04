@@ -564,7 +564,7 @@ void RenderGL::renderSkybox(shared_ptr<Skybox>& skybox, shared_ptr<Camera>& came
 	shader->setUniform("projection", camera->getProjection());
 
 	glm::mat4 model = glm::mat4();
-	model = glm::scale(model, glm::vec3(50.f));
+	model = glm::scale(model, glm::vec3(1500.f));
 	shader->setUniform("model", model);
 
 	glBindVertexArray(skybox->vao);

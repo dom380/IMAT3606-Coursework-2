@@ -159,8 +159,32 @@ void DebugMenu::updateMainMenu()
 				}
 				ImGui::TreePop();
 			}
+
+			
 			
 
+			ImGui::EndMenu();
+		}
+		//Create a UI element.
+		if (ImGui::BeginMenu("Lights"))
+		{
+			shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
+			if (Engine::g_pEngine->getActiveScreen()->getType() == Screen::type::GAMESCREEN)
+			{
+				for (int x = 0; x < gameScreen->getLights()->size(); x++)
+				{
+					char lightName[14];
+					snprintf(lightName, sizeof(lightName), "L_%d", x);
+					if (ImGui::TreeNode(lightName))
+					{
+						lightsMenu(x, &gameScreen->getLights()->at(x));
+						gameScreen->updateLighting();
+						ImGui::TreePop();
+					}
+				}
+			}
+			
+			
 			ImGui::EndMenu();
 		}
 		/*
@@ -1371,5 +1395,13 @@ void DebugMenu::gameObjectsMenuTransform(int i, Transform* transform)
 	ImGui::DragFloat4("Orientation", &orientationVec[0], quatDragSpeed);
 	transform->orientation = glm::angleAxis(glm::radians(orientationVec.w), glm::vec3(orientationVec.x, orientationVec.y, orientationVec.z));
 	ImGui::DragFloat3("Scale", &transform->scale[0], dragSpeed);
+	ImGui::PopID();
+}
+
+void DebugMenu::lightsMenu(int i, Light * light)
+{
+	ImGui::PushID(i);
+	static float dragSpeed = 0.25f;
+	ImGui::DragFloat3("Position", &light->pos[0], dragSpeed);
 	ImGui::PopID();
 }

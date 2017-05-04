@@ -14,7 +14,7 @@ void AssimpReader::readFile(const char * filePath, vector<glm::vec4>& vertices, 
 		aiProcess_OptimizeMeshes
 		);
 	if (pScene) {
-		for (int i = 0; i < pScene->mNumMeshes; ++i)
+		for (unsigned int i = 0; i < pScene->mNumMeshes; ++i)
 		{
 			const aiMesh* paiMesh = pScene->mMeshes[i];
 			if (paiMesh->mMaterialIndex >= 0)
@@ -54,7 +54,7 @@ void AssimpReader::readFile(const char * filePath, vector<glm::vec4>& vertices, 
 				indices.push_back(Face.mIndices[1]);
 				indices.push_back(Face.mIndices[2]);
 			}
-			int vertSize = tempVertices.size();
+			auto vertSize = tempVertices.size();
 			for (int i = 0; i < indices.size(); i++)
 			{
 				if (vertSize != tempVertices.size())
@@ -117,7 +117,7 @@ shared_ptr<ModelData> AssimpReader::readFile(const char * filePath)
 		}
 		mesh->vertices.reserve(NumVertices);
 		mesh->indices.reserve(NumIndices);
-		for (int i = 0; i < pScene->mNumMeshes; ++i)
+		for (unsigned int i = 0; i < pScene->mNumMeshes; ++i)
 		{
 			const aiMesh* paiMesh = pScene->mMeshes[i];
 			ModelData::Vertex vertex;

@@ -180,9 +180,7 @@ public:
 				break;
 			case ComponentType::LOGIC:
 			{
-				auto scriptElement = componentElement->FirstChildElement("script");
-				const char* scriptName = scriptElement != NULL ? scriptElement->GetText() : "default.lua";
-				shared_ptr<LogicComponent> logicComp = std::make_shared<LogicComponent>(gameObject, gameSceen, AssetManager::getInstance()->getScript(scriptName));
+				auto logicComp = loadLogicComponent(gameObject, gameSceen, componentElement);
 				gameObject->AddComponent(logicComp, ComponentType::LOGIC);
 			}
 			break;
@@ -589,7 +587,6 @@ private:
 				auto mesh = AssetManager::getInstance()->getCollisionData(meshFile);
 				physComp = std::make_shared<PhysicsComponent>(physics, std::weak_ptr<GameObject>(gameObject), mesh, mass, convex);
 			}
-			physComp->setMeshFileName(meshFile);
 		}
 		else
 		{
@@ -728,6 +725,45 @@ private:
 		controller->setWorldFront(front.x, front.y, front.z);
 		gameObject->AddComponent(controller, ComponentType::CONTROLLER);
 
+	}
+	/*	
+		Utility method to laod Logic Components
+	*/
+	static shared_ptr<LogicComponent> loadLogicComponent(shared_ptr<GameObject>& gameObject, shared_ptr<GameScreen>& gameScreen, tinyxml2::XMLElement* componentElement)
+	{
+		auto scriptElement = componentElement->FirstChildElement("script");
+		const char* scriptName = scriptElement != NULL ? scriptElement->GetText() : "default.lua";
+		//Build up a table of the provided parameters for the lua script
+		luabridge::LuaRef paramTable = luabridge::newTable(LuaStateHolder::getLuaState());
+		tinyxml2::XMLElement* paramElement = componentElement->FirstChildElement("params") != NULL ? componentElement->FirstChildElement("params")->FirstChildElement() : NULL;
+		if (paramElement == NULL) 
+			return std::make_shared<LogicComponent>(gameObject, gameScreen, AssetManager::getInstance()->getScript(scriptName));
+		while (paramElement != NULL)
+		{
+			string paramName = paramElement->Attribute("name");
+			string paramType = paramElement->Attribute("type") != NULL ? paramElement->Attribute("type") : "string";
+			transform(paramName.begin(), paramName.end(), paramName.begin(), tolower);
+			if (paramType == "string")
+				paramTable[paramName] = paramElement->GetText();
+			else if (paramType == "vec3")
+			{
+				glm::vec3 param(0.0);
+				param = glm::vec3
+				(
+					paramElement->FirstChildElement("x") != NULL ? paramElement->FirstChildElement("x")->FloatText() : 0.0f,
+					paramElement->FirstChildElement("y") != NULL ? paramElement->FirstChildElement("y")->FloatText() : 0.0f,
+					paramElement->FirstChildElement("z") != NULL ? paramElement->FirstChildElement("z")->FloatText() : 0.0f
+				);
+				paramTable[paramName] = param;
+
+			}
+			else if (paramType == "float")
+			{
+				paramTable[paramName] = paramElement->FloatText();
+			}
+			paramElement = paramElement->NextSiblingElement();
+		}
+		return std::make_shared<LogicComponent>(gameObject, gameScreen, AssetManager::getInstance()->getScript(scriptName), paramTable);
 	}
 
 	/*

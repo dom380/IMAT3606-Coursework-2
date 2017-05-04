@@ -2315,7 +2315,7 @@
                     </velocity>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
             </components>
         </gameobject>
@@ -2358,7 +2358,7 @@
                     </velocity>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
             </components>
         </gameobject>
@@ -2401,7 +2401,7 @@
                     </velocity>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
             </components>
         </gameobject>

@@ -101,8 +101,19 @@ public:
 	/*
 		Increments the score and updates the score text by the specified amount.
 		int amountToAdd, The number of points to add to the current score.
+		string idToUpdate, The Id of the UI element to update.
 	*/
 	void updateScore(int amountToAdd, string idToUpdate);
+	/*
+		Returns the text of the specified UI element as an int.
+		-1 is returned if the id wasn't found or the string couldn't
+		convert to an int.
+	*/
+	int getTextValueInt(string id);
+	/*
+		Returns the text of the specified UI element.
+	*/
+	string getTextValue(string id);
 
 	/*
 		Empty implementation of Mouse Event handeling

@@ -221,9 +221,49 @@ void GameScreen::updateScore(int amountToAdd, string idToUpdate)
 		shared_ptr<TextBox> textbox = dynamic_pointer_cast<TextBox>(uiE);
 		if (textbox && textbox->getID() == idToUpdate)
 		{
-			int val = std::stoi(textbox->getText());
+			int val;
+			try {
+				val = std::stoi(textbox->getText());
+			}
+			catch (invalid_argument e)
+			{
+				std::cout << "Failed to convert UI text to Int" << std::endl;
+				val = -1;
+			}
 			val += amountToAdd;
 			textbox->updateText(std::to_string(val));
 		}
 	}
+}
+
+int GameScreen::getTextValueInt(string id)
+{
+	for (shared_ptr<UIElement> uiE : uiElements)
+	{
+		shared_ptr<TextBox> textbox = dynamic_pointer_cast<TextBox>(uiE);
+		if (textbox && textbox->getID() == id)
+		{
+			try {
+				return std::stoi(textbox->getText());
+			}
+			catch (invalid_argument e)
+			{
+				return -1;
+			}
+		}
+	}
+	return -1;
+}
+
+string GameScreen::getTextValue(string id)
+{
+	for (shared_ptr<UIElement> uiE : uiElements)
+	{
+		shared_ptr<TextBox> textbox = dynamic_pointer_cast<TextBox>(uiE);
+		if (textbox && textbox->getID() == id)
+		{
+			return textbox->getText();
+		}
+	}
+	return string();
 }

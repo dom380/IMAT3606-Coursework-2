@@ -96,8 +96,10 @@ private:
 	void resetTransform();
 	void toggleRender();
 	void updateScore(int incValue, string idToUpdat);
+	int getUIValueInt(string id);
 	bool isRendering();
 	glm::vec3 getPosition();
+	//Vector and Quat maths
 	glm::vec3 vec3Addition(glm::vec3 v1, glm::vec3 v2);
 	glm::vec3 vec3Subtract(glm::vec3 v1, glm::vec3 v2);
 	glm::vec3 vec3Normalise(glm::vec3 v1);

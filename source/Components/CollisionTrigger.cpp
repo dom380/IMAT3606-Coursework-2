@@ -55,6 +55,7 @@ void CollisionTrigger::setOwner(std::weak_ptr<GameObject> passedOwner)
 
 void CollisionTrigger::update(double dt)
 {
+	body->setActivationState(ACTIVE_TAG);
 }
 
 void CollisionTrigger::RecieveMessage(Message * msg)

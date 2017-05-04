@@ -25,9 +25,9 @@ enemy_pathfinding.update = function(logicComponent, dt, params)
 			end
 			local diff = logicComponent:vec3Subtract(endPoint, pos)
 			diff = logicComponent:vec3Normalise(diff)
-			pos.x = diff.x * dt * speed
-			pos.y = diff.y * dt * speed
-			pos.z = diff.z * dt * speed
+			pos.x = pos.x + (diff.x * dt * speed)
+			pos.y = pos.y + (diff.y * dt * speed)
+			pos.z = pos.z + (diff.z * dt * speed)
 		else
 			local dist = logicComponent:getDistance(startPoint, pos)
 			if dist < 0.5 then
@@ -38,9 +38,9 @@ enemy_pathfinding.update = function(logicComponent, dt, params)
 			end
 			local diff = logicComponent:vec3Subtract(startPoint, pos)
 			diff = logicComponent:vec3Normalise(diff)
-			pos.x = diff.x * dt * speed
-			pos.y = diff.y * dt * speed
-			pos.z = diff.z * dt * speed
+			pos.x = pos.x + (diff.x * dt * speed)
+			pos.y = pos.y + (diff.y * dt * speed)
+			pos.z = pos.z + (diff.z * dt * speed)
 		end
 		logicComponent:applyTransform(pos, 1.0, angle);
 	else

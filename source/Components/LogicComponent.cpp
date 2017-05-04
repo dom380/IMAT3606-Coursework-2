@@ -155,7 +155,7 @@ void LogicComponent::applyTransform(glm::vec3 position, float scale, glm::quat o
 		if (!comp.isNull()) //If the GameObject has a transform component, update it's transform.
 		{ 
 			transformPtr = sp_Screen->getComponentStore()->getComponent<Transform>(comp, ComponentType::TRANSFORM);
-			transformPtr->position += position;
+			transformPtr->position = position;
 			transformPtr->scale *= scale;
 			transformPtr->orientation = orientation;
 		}
@@ -248,6 +248,15 @@ void LogicComponent::updateScore(int incValue, string idToUpdate)
 	{
 		sp_Screen->updateScore(incValue, idToUpdate);
 	}
+}
+
+int LogicComponent::getUIValueInt(string id)
+{
+	auto sp_Screen = screen.lock();
+	if (sp_Screen)
+		return sp_Screen->getTextValueInt(id);
+	else
+		return -1;
 }
 
 bool LogicComponent::isRendering()

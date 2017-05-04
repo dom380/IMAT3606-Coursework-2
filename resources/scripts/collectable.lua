@@ -13,10 +13,7 @@ collectable.update = function(logicComponent, dt, params)
 	if collectable.angle > 360 then
 		collectable.angle = 0
 	end
-	local pos = engine.vec3();
-	pos.x = 0.0;
-	pos.y = 0.0;
-	pos.z = 0.0;
+	local pos = logicComponent:getPosition()
 	local scale = 1.0;
 	local rotAxis = engine.vec3()
 	rotAxis.y = 1

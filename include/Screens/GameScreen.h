@@ -124,6 +124,8 @@ public:
 		Switches the camera if 'C' pressed.
 	*/
 	bool  handle(KeyEvent& event);
+
+	vector<Light>* getLights();
 private:
 	shared_ptr<ComponentStore> componentStore;
 	vector<shared_ptr<GameObject>> gameObjects;

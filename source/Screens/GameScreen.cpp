@@ -217,6 +217,11 @@ bool GameScreen::handle(KeyEvent& event)
 	return false;
 }
 
+vector<Light>* GameScreen::getLights()
+{
+	return &lights;
+}
+
 void GameScreen::updateScore(int amountToAdd, string idToUpdate)
 {
 	for (shared_ptr<UIElement> uiE : uiElements)

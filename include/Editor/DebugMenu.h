@@ -24,6 +24,7 @@ class PhysicsComponent;
 class Transform;
 class LogicComponent;
 class CollisionTrigger;
+class Light;
 class DebugMenu
 {
 private:
@@ -140,6 +141,10 @@ public:
 	void gameObjectsMenuLogic(int i, LogicComponent* logic);
 	void gameObjectsMenuTrigger(int i, CollisionTrigger* trigger);
 	void gameObjectsMenuTransform(int i, Transform* transform);
+	/*
+		Lights editor, position only.
+	*/
+	void lightsMenu(int i, Light* light);
 };
 
 #endif // !DEBUGMENU_h

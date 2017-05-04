@@ -689,7 +689,13 @@ private:
 		const char* scriptName = triggerElement->FirstChildElement("script") != NULL ? triggerElement->FirstChildElement("script")->GetText() : "default.lua";
 		auto scriptPath = AssetManager::getInstance()->getScript(scriptName);
 		bool triggerOnce = triggerElement->FirstChildElement("trigger_once") != NULL ? triggerElement->FirstChildElement("trigger_once")->BoolText() : true;
-		collisionTrigger = std::make_shared<CollisionTrigger>(physics, std::weak_ptr<GameObject>(gameObject), shapeData, scriptPath, triggerOnce);
+		auto logic = gameObject->getLogic();
+
+		luabridge::LuaRef paramTable = logic ? logic->getParams() : luabridge::newTable(LuaStateHolder::getLuaState());
+		tinyxml2::XMLElement* paramElement = triggerElement->FirstChildElement("params") != NULL ? triggerElement->FirstChildElement("params")->FirstChildElement() : NULL;
+		loadScriptParameters(paramTable, gameObject, paramElement);
+		collisionTrigger = std::make_shared<CollisionTrigger>(physics, std::weak_ptr<GameObject>(gameObject), shapeData, scriptPath, triggerOnce, paramTable);
+		
 		gameObject->AddComponent(collisionTrigger, ComponentType::TRIGGER);
 		std::shared_ptr<BulletPhysics> physicsPtr = std::dynamic_pointer_cast<BulletPhysics>(physics);
 		if (physicsPtr != nullptr)
@@ -734,11 +740,17 @@ private:
 	{
 		auto scriptElement = componentElement->FirstChildElement("script");
 		const char* scriptName = scriptElement != NULL ? scriptElement->GetText() : "default.lua";
-		//Build up a table of the provided parameters for the lua script
-		luabridge::LuaRef paramTable = luabridge::newTable(LuaStateHolder::getLuaState());
 		tinyxml2::XMLElement* paramElement = componentElement->FirstChildElement("params") != NULL ? componentElement->FirstChildElement("params")->FirstChildElement() : NULL;
-		if (paramElement == NULL) 
-			return std::make_shared<LogicComponent>(gameObject, gameScreen, AssetManager::getInstance()->getScript(scriptName));
+		auto trigger = gameObject->getTrigger();
+		luabridge::LuaRef paramTable = trigger ? trigger->getParams() : luabridge::newTable(LuaStateHolder::getLuaState());
+		loadScriptParameters(paramTable, gameObject, paramElement);
+	
+		return std::make_shared<LogicComponent>(gameObject, gameScreen, AssetManager::getInstance()->getScript(scriptName), paramTable);
+	}
+
+	static void loadScriptParameters(luabridge::LuaRef& paramTable, shared_ptr<GameObject>& gameObject, tinyxml2::XMLElement* paramElement)
+	{
+		if(!paramTable.isTable()) paramTable = luabridge::newTable(LuaStateHolder::getLuaState());
 		while (paramElement != NULL)
 		{
 			string paramName = paramElement->Attribute("name");
@@ -764,7 +776,6 @@ private:
 			}
 			paramElement = paramElement->NextSiblingElement();
 		}
-		return std::make_shared<LogicComponent>(gameObject, gameScreen, AssetManager::getInstance()->getScript(scriptName), paramTable);
 	}
 
 	/*

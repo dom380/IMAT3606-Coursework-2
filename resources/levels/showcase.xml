@@ -40,6 +40,97 @@
         </camera>
     </cameras>
     <gameObjects>
+        <!-- otter -->
+        <gameObject>
+            <components>
+                <!-- <component type ="model">
+					<file>capsule.obj</file>
+					<file>chest.obj</file>
+					<texture>chest_diffuse.png</texture>
+				</component>  -->
+                <component type="animation">
+                    <!-- fbx files  -->
+                    <default>otterwalk</default>
+                    <files>
+                        <file>
+                            <id>otterwalk</id>
+                            <filePath>resources/models/Animations/otter@walk.fbx</filePath>
+                        </file>
+                    </files>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>32.5</x>
+                        <y>1</y>
+                        <z>10</z>
+                    </position>
+                    <scale>
+                        <x>0.125</x>
+                        <y>0.125</y>
+                        <z>0.125</z>
+                    </scale>
+                </component>
+            </components>
+        </gameObject>
+        <!-- turtle -->
+        <gameObject>
+            <components>
+                <!-- <component type ="model">
+					<file>capsule.obj</file>
+					<file>chest.obj</file>
+					<texture>chest_diffuse.png</texture>
+				</component>  -->
+                <component type="animation">
+                    <!-- fbx files  -->
+                    <default>turtlewalk</default>
+                    <files>
+                        <file>
+                            <id>turtlewalk</id>
+                            <filePath>resources/models/Animations/turtle@walk.fbx</filePath>
+                        </file>
+                    </files>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>41.25</x>
+                        <y>0.5</y>
+                        <z>10.75</z>
+                    </position>
+                    <scale>
+                        <x>0.125</x>
+                        <y>0.125</y>
+                        <z>0.125</z>
+                    </scale>
+                </component>
+            </components>
+        </gameObject>
+        <!-- fox -->
+        <gameObject>
+            <components>
+                <!-- <component type ="model">
+					<file>capsule.obj</file>
+					<file>chest.obj</file>
+					<texture>chest_diffuse.png</texture>
+				</component>  -->
+                <component type="animation">
+                    <!-- fbx files  -->
+                    <default>foxwalk</default>
+                    <files>
+                        <file>
+                            <id>foxwalk</id>
+                            <filePath>resources/models/Animations/fox@walk.fbx</filePath>
+                        </file>
+                    </files>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>46.25</x>
+                        <y>0.25</y>
+                        <z>9.5</z>
+                    </position>
+                </component>
+            </components>
+        </gameObject>
         <!-- Bird -->
         <gameObject>
             <components>
@@ -113,19 +204,19 @@
 					</scale> -->
                     <orientation>
                         <x>0</x>
-                        <y>1</y>
+                        <y>0.999999</y>
                         <z>0</z>
-                        <w>320.963</w>
+                        <w>345.61</w>
                     </orientation>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
             </components>
         </gameObject>
         <!-- player -->
         <gameObject>
-            <tag>PHY_OBJ</tag>
+            <tag>PLAYER</tag>
             <components>
                 <!-- <component type ="model">
 					<file>capsule.obj</file>
@@ -149,7 +240,7 @@
                 <component type="transform">
                     <position>
                         <x>-16.7001</x>
-                        <y>2</y>
+                        <y>0.3</y>
                         <z>10.4</z>
                     </position>
                     <scale>
@@ -164,9 +255,9 @@
 					</scale> -->
                     <orientation>
                         <x>0</x>
-                        <y>0.99987</y>
+                        <y>1</y>
                         <z>0</z>
-                        <w>90</w>
+                        <w>180</w>
                     </orientation>
                 </component>
                 <component type="controller">
@@ -217,7 +308,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0.33410645</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -311,11 +402,11 @@
                         <x>0</x>
                         <y>1</y>
                         <z>0</z>
-                        <w>321.007</w>
+                        <w>345.659</w>
                     </orientation>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
             </components>
         </gameobject>
@@ -768,12 +859,22 @@
                         <x>0</x>
                         <y>1</y>
                         <z>0</z>
-                        <w>321.05</w>
+                        <w>345.708</w>
                     </orientation>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
-                </component>
+					<script>collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>1.5</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+					<params>
+						<param type="string" name="string_id">score_string</param>
+					</params>
+				</component>
             </components>
         </gameobject>
         <gameobject>
@@ -795,14 +896,24 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>1</y>
+                        <y>0.999999</y>
                         <z>0</z>
-                        <w>321.093</w>
+                        <w>345.756</w>
                     </orientation>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
-                </component>
+					<script>collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>1.5</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+					<params>
+						<param type="string" name="string_id">heartcount</param>
+					</params>
+				</component>
             </components>
         </gameobject>
         <gameobject>
@@ -1296,13 +1407,13 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>1</y>
+                        <y>0.999999</y>
                         <z>0</z>
-                        <w>321.136</w>
+                        <w>345.805</w>
                     </orientation>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
                 <component type="rigid_body">
                     <mass>0</mass>
@@ -1339,13 +1450,13 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>1</y>
+                        <y>0.999999</y>
                         <z>0</z>
-                        <w>321.179</w>
+                        <w>345.853</w>
                     </orientation>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
                 <component type="rigid_body">
                     <mass>0</mass>
@@ -1357,7 +1468,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-2.6720581</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1382,13 +1493,13 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>1</y>
+                        <y>0.999999</y>
                         <z>0</z>
-                        <w>321.222</w>
+                        <w>345.902</w>
                     </orientation>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
                 <component type="rigid_body">
                     <mass>0</mass>
@@ -1425,13 +1536,13 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>1</y>
+                        <y>0.999998</y>
                         <z>0</z>
-                        <w>321.266</w>
+                        <w>345.951</w>
                     </orientation>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
                 <component type="rigid_body">
                     <mass>0</mass>
@@ -1470,11 +1581,11 @@
                         <x>0</x>
                         <y>1</y>
                         <z>0</z>
-                        <w>321.309</w>
+                        <w>345.999</w>
                     </orientation>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
                 <component type="rigid_body">
                     <mass>0</mass>
@@ -1529,7 +1640,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-1</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1603,7 +1714,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>6.75</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1677,7 +1788,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-3</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1868,7 +1979,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>4</y>
+                        <y>0.125</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1942,7 +2053,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-3</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2176,7 +2287,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>0.5</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2210,7 +2321,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>13.25</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2275,9 +2386,9 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>1</y>
+                        <y>0.999997</y>
                         <z>0</z>
-                        <w>321.136</w>
+                        <w>346.048</w>
                     </orientation>
                 </component>
                 <component type="rigid_body">
@@ -2290,12 +2401,12 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>9.75</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
             </components>
         </gameobject>
@@ -2320,7 +2431,7 @@
                         <x>0</x>
                         <y>1</y>
                         <z>0</z>
-                        <w>321.136</w>
+                        <w>346.097</w>
                     </orientation>
                 </component>
                 <component type="rigid_body">
@@ -2333,12 +2444,12 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0.33161163</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
             </components>
         </gameobject>
@@ -2361,9 +2472,9 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>1</y>
+                        <y>0.999998</y>
                         <z>0</z>
-                        <w>321.136</w>
+                        <w>346.145</w>
                     </orientation>
                 </component>
                 <component type="rigid_body">
@@ -2381,7 +2492,7 @@
                     </velocity>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
             </components>
         </gameobject>

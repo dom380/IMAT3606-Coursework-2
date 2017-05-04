@@ -1910,10 +1910,10 @@
 					</scale>
 				</component>
 				<component type="logic">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 				</component>
 				<component type="trigger">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 					<bounding_shape type="SPHERE">
 						<radius>3.0</radius>
 					</bounding_shape>
@@ -1940,10 +1940,10 @@
 					</scale>
 				</component>
 				<component type="logic">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 				</component>
 				<component type="trigger">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 					<bounding_shape type="SPHERE">
 						<radius>3.0</radius>
 					</bounding_shape>
@@ -1970,10 +1970,10 @@
 					</scale>
 				</component>
 				<component type="logic">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 				</component>
 				<component type="trigger">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 					<bounding_shape type="SPHERE">
 						<radius>3.0</radius>
 					</bounding_shape>
@@ -2000,10 +2000,10 @@
 					</scale>
 				</component>
 				<component type="logic">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 				</component>
 				<component type="trigger">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 					<bounding_shape type="SPHERE">
 						<radius>3.0</radius>
 					</bounding_shape>
@@ -2030,10 +2030,10 @@
 					</scale>
 				</component>
 				<component type="logic">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 				</component>
 				<component type="trigger">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 					<bounding_shape type="SPHERE">
 						<radius>3.0</radius>
 					</bounding_shape>
@@ -2060,10 +2060,10 @@
 					</scale>
 				</component>
 				<component type="logic">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 				</component>
 				<component type="trigger">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 					<bounding_shape type="SPHERE">
 						<radius>3.0</radius>
 					</bounding_shape>

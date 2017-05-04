@@ -472,7 +472,7 @@
 					</params>
 				</component>
 				<component type="trigger">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 					<bounding_shape type="SPHERE">
 						<radius>0.5</radius>
 					</bounding_shape>
@@ -499,7 +499,7 @@
 					</scale>
 				</component>
 				<component type="logic">
-					<!-- <script>gold_collectable.lua</script> -->
+					<!-- <script>collectable.lua</script> -->
 					<script>enemy_pathfinding.lua</script>
 					<params>
 						<param name="start_point" type="vec3">
@@ -515,7 +515,7 @@
 					</params>
 				</component>
 				<component type="trigger">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 					<bounding_shape type="SPHERE">
 						<radius>0.5</radius>
 					</bounding_shape>
@@ -542,10 +542,10 @@
 					</scale>
 				</component>
 				<component type="logic">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 				</component>
 				<component type="trigger">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 					<bounding_shape type="SPHERE">
 						<radius>0.5</radius>
 					</bounding_shape>
@@ -573,10 +573,10 @@
 					</scale>
 				</component>
 				<component type="logic">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 				</component>
 				<component type="trigger">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 					<bounding_shape type="SPHERE">
 						<radius>0.5</radius>
 					</bounding_shape>
@@ -603,10 +603,10 @@
 					</scale>
 				</component>
 				<component type="logic">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 				</component>
 				<component type="trigger">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 					<bounding_shape type="SPHERE">
 						<radius>0.5</radius>
 					</bounding_shape>
@@ -633,10 +633,10 @@
 					</scale>
 				</component>
 				<component type="logic">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 				</component>
 				<component type="trigger">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 					<bounding_shape type="SPHERE">
 						<radius>0.5</radius>
 					</bounding_shape>
@@ -663,10 +663,10 @@
 					</scale>
 				</component>
 				<component type="logic">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 				</component>
 				<component type="trigger">
-					<script>gold_collectable.lua</script>
+					<script>collectable.lua</script>
 					<bounding_shape type="SPHERE">
 						<radius>0.5</radius>
 					</bounding_shape>
@@ -699,4 +699,27 @@
 			</specular>
 		</light>
 	</lights>
+	<uiElements>
+	 <uiElement>
+            <ID>heartcount</ID>
+            <Type>text</Type>
+            <value>3</value>
+            <colour>
+                <r>1</r>
+                <g>1</g>
+                <b>1</b>
+            </colour>
+            <position>
+                <x>1000</x>
+                <y>27</y>
+                <z>0</z>
+            </position>
+            <scale>
+                <x>1</x>
+                <y>1</y>
+                <z>1</z>
+            </scale>
+            <font>Cookies.ttf</font>
+        </uiElement>
+    </uiElements>
 </screen>

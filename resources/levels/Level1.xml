@@ -524,7 +524,7 @@
                     </scale>
                 </component>
                 <component type="logic">
-                  <script>gold_collectable.lua</script>
+                  <script>collectable.lua</script>
                 </component>
             </components>
         </gameObject>
@@ -548,7 +548,7 @@
                     </scale>
                 </component>
                 <component type="logic">
-                  <script>gold_collectable.lua</script>
+                  <script>collectable.lua</script>
                 </component>
             </components>
         </gameObject>
@@ -572,7 +572,7 @@
                     </scale>
                 </component>
                 <component type="logic">
-                  <script>gold_collectable.lua</script>
+                  <script>collectable.lua</script>
                 </component>
             </components>
         </gameObject>
@@ -596,7 +596,7 @@
                     </scale>
                 </component>
                 <component type="logic">
-                  <script>gold_collectable.lua</script>
+                  <script>collectable.lua</script>
                 </component>
             </components>
         </gameObject>
@@ -620,7 +620,7 @@
                     </scale>
                 </component>
                 <component type="logic">
-                  <script>gold_collectable.lua</script>
+                  <script>collectable.lua</script>
                 </component>
             </components>
         </gameObject>
@@ -644,7 +644,7 @@
                     </scale>
                 </component>
                 <component type="logic">
-                  <script>gold_collectable.lua</script>
+                  <script>collectable.lua</script>
                 </component>
             </components>
         </gameObject>

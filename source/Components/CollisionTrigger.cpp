@@ -1,7 +1,7 @@
 #include "..\..\include\Components\CollisionTrigger.h"
 #include <utils\Utilities.h>
 
-CollisionTrigger::CollisionTrigger() : Component(ComponentType::TRIGGER), triggerFunc(luaState)
+CollisionTrigger::CollisionTrigger() : Component(ComponentType::TRIGGER), triggerFunc(luaState), params(luaState)
 {
 	triggerOnce = true;
 	triggered = false;
@@ -9,12 +9,12 @@ CollisionTrigger::CollisionTrigger() : Component(ComponentType::TRIGGER), trigge
 	body = nullptr;
 }
 
-CollisionTrigger::CollisionTrigger(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject>& owner, ShapeData& boundingShape, const char* scriptFile, bool triggerOnce) : Component(ComponentType::TRIGGER), triggerFunc(luaState)
+CollisionTrigger::CollisionTrigger(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject>& owner, ShapeData& boundingShape, const char* scriptFile, bool triggerOnce, luabridge::LuaRef params) : Component(ComponentType::TRIGGER), triggerFunc(luaState), params(luaState)
 {
 	this->owner = owner;
 	this->triggerOnce = triggerOnce;
 	this->triggered = false;
-	
+	this->params = params;
 	shapeData = new ShapeData(boundingShape);
 
 	script = scriptFile;
@@ -24,8 +24,8 @@ CollisionTrigger::CollisionTrigger(std::shared_ptr<Physics> &physics, std::weak_
 	init();
 }
 
-CollisionTrigger::CollisionTrigger(std::shared_ptr<Physics>& physics, std::weak_ptr<GameObject>& owner, ShapeData & boundingShape, std::string scriptFile, bool triggerOnce)
-	: CollisionTrigger(physics, owner, boundingShape, scriptFile.c_str(), triggerOnce)
+CollisionTrigger::CollisionTrigger(std::shared_ptr<Physics>& physics, std::weak_ptr<GameObject>& owner, ShapeData & boundingShape, std::string scriptFile, bool triggerOnce, luabridge::LuaRef params)
+	: CollisionTrigger(physics, owner, boundingShape, scriptFile.c_str(), triggerOnce, params)
 {
 	//Delegation constructor
 }
@@ -80,7 +80,7 @@ void CollisionTrigger::trigger(std::shared_ptr<GameObject> collider)
 			{
 				return;
 			}
-			triggerFunc(*collider, Engine::g_pEngine.get());
+			triggerFunc(*collider, Engine::g_pEngine.get(), params);
 		}
 	}
 	catch (luabridge::LuaException e)
@@ -111,7 +111,7 @@ void CollisionTrigger::trigger(GameObject * collider)
 			{
 				logic = sp->getLogic();
 			}
-			triggerFunc(*collider, Engine::g_pEngine.get(), logic);
+			triggerFunc(*collider, Engine::g_pEngine.get(), logic, params);
 		}
 	}
 	catch (luabridge::LuaException e)
@@ -196,6 +196,11 @@ void CollisionTrigger::buildCollisionShape()
 		shape = new btCylinderShape(btVector3(shapeData->halfExtents.x, shapeData->halfExtents.y, shapeData->halfExtents.z));
 		break;
 	}
+}
+
+luabridge::LuaRef CollisionTrigger::getParams()
+{
+	return params;
 }
 
 void CollisionTrigger::dispose()

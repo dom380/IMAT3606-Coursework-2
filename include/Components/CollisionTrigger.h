@@ -14,8 +14,8 @@ class CollisionTrigger : public Component
 {
 public:
 	CollisionTrigger();
-	CollisionTrigger(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject>& owner, ShapeData& boundingShape, const char* scriptFile, bool triggerOnce);
-	CollisionTrigger(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject>& owner, ShapeData& boundingShape, std::string scriptFile, bool triggerOnce);
+	CollisionTrigger(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject>& owner, ShapeData& boundingShape, const char* scriptFile, bool triggerOnce, luabridge::LuaRef params);
+	CollisionTrigger(std::shared_ptr<Physics> &physics, std::weak_ptr<GameObject>& owner, ShapeData& boundingShape, std::string scriptFile, bool triggerOnce, luabridge::LuaRef params);
 	void init();
 	
 	void setOwner(std::weak_ptr<GameObject> owner);
@@ -41,7 +41,7 @@ public:
 	ShapeData* getShape();
 	void setShape(ShapeData* shapeData);
 	void buildCollisionShape();
-
+	luabridge::LuaRef getParams();
 	void dispose();
 private:
 	std::weak_ptr<GameObject> owner;
@@ -51,6 +51,7 @@ private:
 	std::string script;
 	lua_State* luaState = LuaStateHolder::getLuaState();
 	luabridge::LuaRef triggerFunc;
+	luabridge::LuaRef params;
 	bool triggerOnce = false;
 	bool triggered = false;
 	//TODO - This is tied to the bullet physics implementation. Make Generic.

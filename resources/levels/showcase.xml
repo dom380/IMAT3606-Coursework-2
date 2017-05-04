@@ -119,13 +119,13 @@
                     </orientation>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
             </components>
         </gameObject>
         <!-- player -->
         <gameObject>
-            <tag>PHY_OBJ</tag>
+            <tag>PLAYER</tag>
             <components>
                 <!-- <component type ="model">
 					<file>capsule.obj</file>
@@ -315,7 +315,7 @@
                     </orientation>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
             </components>
         </gameobject>
@@ -772,8 +772,18 @@
                     </orientation>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
-                </component>
+					<script>collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>1.5</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+					<params>
+						<param type="string" name="string_id">score_string</param>
+					</params>
+				</component>
             </components>
         </gameobject>
         <gameobject>
@@ -801,8 +811,18 @@
                     </orientation>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
-                </component>
+					<script>collectable.lua</script>
+				</component>
+				<component type="trigger">
+					<script>collectable.lua</script>
+					<bounding_shape type="SPHERE">
+						<radius>1.5</radius>
+					</bounding_shape>
+					<trigger_once>true</trigger_once>
+					<params>
+						<param type="string" name="string_id">heartcount</param>
+					</params>
+				</component>
             </components>
         </gameobject>
         <gameobject>
@@ -1302,7 +1322,7 @@
                     </orientation>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
                 <component type="rigid_body">
                     <mass>0</mass>
@@ -1345,7 +1365,7 @@
                     </orientation>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
                 <component type="rigid_body">
                     <mass>0</mass>
@@ -1388,7 +1408,7 @@
                     </orientation>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
                 <component type="rigid_body">
                     <mass>0</mass>
@@ -1431,7 +1451,7 @@
                     </orientation>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
                 <component type="rigid_body">
                     <mass>0</mass>
@@ -1474,7 +1494,7 @@
                     </orientation>
                 </component>
                 <component type="logic">
-                    <script>gold_collectable.lua</script>
+                    <script>collectable.lua</script>
                 </component>
                 <component type="rigid_body">
                     <mass>0</mass>

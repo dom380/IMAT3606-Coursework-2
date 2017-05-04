@@ -116,6 +116,11 @@ void LogicComponent::setScreen(std::weak_ptr<GameScreen> passedScreen)
 	screen = passedScreen;
 }
 
+luabridge::LuaRef LogicComponent::getParams()
+{
+	return params;
+}
+
 string LogicComponent::getScriptName()
 {
 	return scriptName;
@@ -236,12 +241,12 @@ void LogicComponent::toggleRender()
 	}
 }
 
-void LogicComponent::updateScore(int incValue)
+void LogicComponent::updateScore(int incValue, string idToUpdate)
 {
 	auto sp_Screen = screen.lock();
 	if (sp_Screen != nullptr)
 	{
-		sp_Screen->updateScore(incValue);
+		sp_Screen->updateScore(incValue, idToUpdate);
 	}
 }
 

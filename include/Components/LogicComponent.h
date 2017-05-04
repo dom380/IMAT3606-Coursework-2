@@ -74,7 +74,7 @@ public:
 
 	void setOwner(std::weak_ptr<GameObject> owner);
 	void setScreen(std::weak_ptr<GameScreen> screen);
-
+	luabridge::LuaRef getParams();
 	string getScriptName();
 	void setScriptName(string scriptName);
 	void setScriptFullPath(const char* scriptFullName);
@@ -95,7 +95,7 @@ private:
 	void applyTransform(glm::vec3 position, float scale, glm::quat orientation);
 	void resetTransform();
 	void toggleRender();
-	void updateScore(int incValue);
+	void updateScore(int incValue, string idToUpdat);
 	bool isRendering();
 	glm::vec3 getPosition();
 	glm::vec3 vec3Addition(glm::vec3 v1, glm::vec3 v2);

@@ -102,7 +102,7 @@ public:
 		Increments the score and updates the score text by the specified amount.
 		int amountToAdd, The number of points to add to the current score.
 	*/
-	void updateScore(int amountToAdd);
+	void updateScore(int amountToAdd, string idToUpdate);
 
 	/*
 		Empty implementation of Mouse Event handeling

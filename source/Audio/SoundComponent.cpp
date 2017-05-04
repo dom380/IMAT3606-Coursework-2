@@ -102,7 +102,7 @@ void SoundComponent::play(int index)
 
 void SoundComponent::setAttenuation(int attenuation, int index)
 {
-	m_Sounds.at(index)->setAttenuation(attenuation);
+	m_Sounds.at(index)->setAttenuation((float)attenuation);
 
 	/*
 	MinDistance   is the sound's minimum distance, set with setMinDistance
@@ -129,9 +129,9 @@ int SoundComponent::loadSound(std::string pathname)
 		if (m_sSoundFile.at(i) == pathname) return i; //If we've already loaded the sound don't load it again.
 	}
 
-	int indexBuffer = m_SoundBuffer.size();
-	int indexFile = m_sSoundFile.size();
-	int indexSound = m_Sounds.size();
+	int indexBuffer = static_cast<int>(m_SoundBuffer.size());
+	int indexFile = static_cast<int>(m_sSoundFile.size());
+	int indexSound = static_cast<int>(m_Sounds.size());
 
 	m_sSoundFile.push_back(pathname);
 

@@ -988,19 +988,19 @@ bool BulletActerController::onGround() const
 		auto endPoint = transform;
 		//front ray
 		transform.setOrigin(m_ghostObject->getWorldTransform().getOrigin() + btVector3(0.0, 0.0, -m_Radius));
-		endPoint.setOrigin(transform.getOrigin() + btVector3(0.0, -rayDist, 0.0));
+		endPoint.setOrigin(transform.getOrigin() + btVector3(0.0, btScalar(-rayDist), 0.0));
 		m_collisionWorld->rayTest(transform.getOrigin(), endPoint.getOrigin(), cb);
 		//back ray
 		transform.setOrigin(m_ghostObject->getWorldTransform().getOrigin() + btVector3(0.0, 0.0, m_Radius));
-		endPoint.setOrigin(transform.getOrigin() + btVector3(0.0, -rayDist, 0.0));
+		endPoint.setOrigin(transform.getOrigin() + btVector3(0.0, btScalar(-rayDist), 0.0));
 		m_collisionWorld->rayTest(transform.getOrigin(), endPoint.getOrigin(), cb);
 		//side ray
 		transform.setOrigin(m_ghostObject->getWorldTransform().getOrigin() + btVector3(m_Radius, 0.0, 0.0));
-		endPoint.setOrigin(transform.getOrigin() + btVector3(0.0, -rayDist, 0.0));
+		endPoint.setOrigin(transform.getOrigin() + btVector3(0.0, btScalar(-rayDist), 0.0));
 		m_collisionWorld->rayTest(transform.getOrigin(), endPoint.getOrigin(), cb);
 		//side ray
 		transform.setOrigin(m_ghostObject->getWorldTransform().getOrigin() + btVector3(-m_Radius, 0.0, 0.0));
-		endPoint.setOrigin(transform.getOrigin() + btVector3(0.0, -rayDist, 0.0));
+		endPoint.setOrigin(transform.getOrigin() + btVector3(0.0, btScalar(-rayDist), 0.0));
 		m_collisionWorld->rayTest(transform.getOrigin(), endPoint.getOrigin(), cb);
 		if (cb.hasHit())
 		{

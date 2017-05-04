@@ -88,6 +88,17 @@
               </param>
                     </params>
                 </component>
+                <component type="trigger">
+                    <script>death_trigger.lua</script>
+                    <trigger_once>false</trigger_once>
+                    <bounding_shape type="box">
+                        <half_extents>
+                            <x>0.5</x>
+                            <y>1</y>
+                            <z>0.5</z>
+                        </half_extents>
+                    </bounding_shape>
+                </component>
             </components>
         </gameObject>
         <!-- turtle -->
@@ -277,7 +288,7 @@
 					</scale> -->
                     <orientation>
                         <x>0</x>
-                        <y>0.952541</y>
+                        <y>0.95255</y>
                         <z>0</z>
                         <w>345.61</w>
                     </orientation>
@@ -941,7 +952,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999988</y>
+                        <y>0.999979</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -1454,7 +1465,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999975</y>
+                        <y>0.999957</y>
                         <z>0</z>
                         <w>345.853</w>
                     </orientation>
@@ -1540,7 +1551,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999982</y>
+                        <y>0.99997</y>
                         <z>0</z>
                         <w>345.951</w>
                     </orientation>
@@ -1583,7 +1594,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999976</y>
+                        <y>0.999958</y>
                         <z>0</z>
                         <w>345.999</w>
                     </orientation>
@@ -2227,24 +2238,24 @@
             <components>
                 <component type="model" id="slope.obj">
                     <file>slope.obj</file>
-                    <active>true</active>
+                    <active>false</active>
                 </component>
                 <component type="transform">
                     <position>
                         <x>48.5</x>
-                        <y>0</y>
-                        <z>9.5</z>
+                        <y>0.25</y>
+                        <z>9.75</z>
                     </position>
                     <scale>
-                        <x>1.75</x>
-                        <y>1.25</y>
-                        <z>9</z>
+                        <x>2.75</x>
+                        <y>5</y>
+                        <z>9.25</z>
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>1</y>
-                        <z>0</z>
-                        <w>180</w>
+                        <y>0</y>
+                        <z>1.00982</z>
+                        <w>191.714</w>
                     </orientation>
                 </component>
                 <component type="rigid_body">
@@ -2267,16 +2278,16 @@
             <components>
                 <component type="model" id="phyground_next_high">
                     <file>cube.obj</file>
-                    <active>true</active>
+                    <active>false</active>
                 </component>
                 <component type="transform">
                     <position>
-                        <x>60.65</x>
+                        <x>63.65</x>
                         <y>1</y>
                         <z>9.5</z>
                     </position>
                     <scale>
-                        <x>2.5</x>
+                        <x>5.25</x>
                         <y>0.25</y>
                         <z>4.75</z>
                     </scale>
@@ -2379,7 +2390,7 @@
                 </component>
                 <component type="transform">
                     <position>
-                        <x>66.25</x>
+                        <x>70.5</x>
                         <y>-2.25</y>
                         <z>12</z>
                     </position>
@@ -2390,7 +2401,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999973</y>
+                        <y>0.999021</y>
                         <z>0</z>
                         <w>346.048</w>
                     </orientation>
@@ -2422,7 +2433,7 @@
                 </component>
                 <component type="transform">
                     <position>
-                        <x>70.75</x>
+                        <x>73.75</x>
                         <y>-1.75</y>
                         <z>8.75</z>
                     </position>
@@ -2433,7 +2444,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999988</y>
+                        <y>1.045</y>
                         <z>0</z>
                         <w>346.097</w>
                     </orientation>
@@ -2448,7 +2459,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0.12229156</y>
+                        <y>0.12228966</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2465,9 +2476,9 @@
                 </component>
                 <component type="transform">
                     <position>
-                        <x>74.25</x>
-                        <y>-3.5</y>
-                        <z>12</z>
+                        <x>77</x>
+                        <y>-2</y>
+                        <z>10.25</z>
                     </position>
                     <scale>
                         <x>0.75</x>
@@ -2476,7 +2487,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999998</y>
+                        <y>0.996017</y>
                         <z>0</z>
                         <w>346.145</w>
                     </orientation>
@@ -2698,6 +2709,58 @@
                     <position>
                         <x>45.5</x>
                         <y>-1.25</y>
+                        <z>10</z>
+                    </position>
+                    <scale>
+                        <x>0.82</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>0.993887</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="legobricksoptimised_slope">
+                    <file>legobricksoptimised.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>51.75</x>
+                        <y>-0.5</y>
+                        <z>12</z>
+                    </position>
+                    <scale>
+                        <x>0.8</x>
+                        <y>1</y>
+                        <z>0.8</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>1.01704</z>
+                        <w>9.99997</w>
+                    </orientation>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="legobricksoptimised.obj">
+                    <file>legobricksoptimised.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>66.5</x>
+                        <y>0.25</y>
                         <z>10</z>
                     </position>
                     <scale>

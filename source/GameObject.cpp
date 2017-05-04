@@ -3,11 +3,12 @@
 GameObject::GameObject(std::shared_ptr<ComponentStore> componentStore):
 	GameObject(componentStore, GameObjectTag::UNKNOWN)
 {
-	
+	savable = true;
 }
 
 GameObject::GameObject(std::shared_ptr<ComponentStore> componentStore, GameObjectTag tag)
 {
+	this->savable = true;
 	this->componentStore = componentStore;
 	this->tag = tag;
 	id = guidGen.newGuid();
@@ -99,4 +100,14 @@ GameObjectTag GameObject::getTag()
 string GameObject::getTagString()
 {
 	return tagParser.getString(tag);
+}
+
+bool GameObject::isSavable()
+{
+	return savable;
+}
+
+void GameObject::setSavable(bool isSavable)
+{
+	savable = isSavable;
 }

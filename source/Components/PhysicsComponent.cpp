@@ -259,7 +259,7 @@ void PhysicsComponent::buildCollisionShape(std::shared_ptr<ModelData> mesh, glm:
 			btConvexHullShape* originalConvexShape = new btConvexHullShape();
 			for (glm::vec3 point : mesh->points)
 			{
-				originalConvexShape->addPoint(btVector3(point.x, point.y, point.z));
+				originalConvexShape->addPoint(btVector3(point.x *scale.x, point.y *scale.y, point.z * scale.z));
 			}
 
 			btShapeHull* hull = new btShapeHull(originalConvexShape);

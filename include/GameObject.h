@@ -34,6 +34,7 @@ public:
 	GameObject(std::shared_ptr<ComponentStore> componentStore, GameObjectTag tag);
 
 	GameObject& operator=(GameObject& other) {
+		this->savable = other.savable;
 		this->id = other.id;
 		this->tag = other.tag;
 		this->typeParser = other.typeParser;
@@ -108,6 +109,9 @@ public:
 		Returns the game object's tag as a string.
 	*/
 	string getTagString();
+
+	bool isSavable();
+	void setSavable(bool isSavable);
 private:
 	Handle componentHandles[ComponentType::COMPONENT_TYPE_COUNT];
 	std::weak_ptr<ComponentStore> componentStore;
@@ -116,6 +120,7 @@ private:
 	GuidGenerator guidGen;
 	Guid id;
 	GameObjectTag tag;
+	bool savable;
 };
 
 #endif // !GAMEOBJECT_H

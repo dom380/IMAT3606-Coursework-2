@@ -277,9 +277,17 @@ void DebugMenu::debugGameObjectsMenu()
 		else {
 			snprintf(goName, sizeof(goName), "GO_%s_%d", "ID_ERROR", x);
 		}
+
+		
 		//Tree node creates a tree from the game object name
 		if (ImGui::TreeNode(goName))
 		{
+			//savable
+			static bool savable = gameScreen->getGameObjects().at(x)->isSavable();
+			if (ImGui::Checkbox("Savable", &savable))
+			{
+				gameScreen->getGameObjects().at(x)->setSavable(savable);
+			}
 			/*
 				Inside the gameobject is a list of the components
 			*/
@@ -447,7 +455,7 @@ bool DebugMenu::saveCurrentLevel(string fileName)
 		{
 			if (gameScreen->getGameObjects().at(x)->HasComponent(ComponentType::MODEL))
 			{
-				if (!gameScreen->getGameObjects().at(x)->getModel()->isDrawing())
+				if (!gameScreen->getGameObjects().at(x)->isSavable())
 				{
 					FileSaver::DeleteObjectFromFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, gameScreen->getGameObjects()[x], gameScreen);
 				}

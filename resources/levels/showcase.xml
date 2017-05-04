@@ -206,15 +206,8 @@
                 </component>
                 <component type="rigid_body">
                     <mass>0</mass>
-                    <!-- <collision_mesh>cube.obj</collision_mesh> -->
+                    <collision_mesh>cube.obj</collision_mesh>
                     <restitution>0.40000000596046448</restitution>
-                    <bounding_shape type="box">
-                        <half_extents>
-                            <x>24</x>
-                            <y>0.25</y>
-                            <z>4.25</z>
-                        </half_extents>
-                    </bounding_shape>
                     <convex>true</convex>
                     <friction>0.5</friction>
                     <rotational_friction>0</rotational_friction>
@@ -224,7 +217,6 @@
                         <y>0.33410645</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
-                    <collision_mesh>cube.obj</collision_mesh>
                 </component>
             </components>
         </gameObject>
@@ -2387,6 +2379,38 @@
                 </component>
                 <component type="logic">
                     <script>gold_collectable.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+			<tag>PHY_OBJ</tag>
+            <components>
+                <component type="model" id="cube.obj">
+                    <file>cube.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>0</x>
+                        <y>-6.5</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>500</x>
+                        <y>0.1</y>
+                        <z>500</z>
+                    </scale>
+                </component>
+                <component type="TRIGGER">
+                    <script>death_trigger.lua</script>
+                    <trigger_once>false</trigger_once>
+                    <bounding_shape type="BOX">
+                        <half_extents>
+                            <x>500</x>
+                            <y>1.0</y>
+                            <z>500</z>
+                        </half_extents>
+                    </bounding_shape>
                 </component>
             </components>
         </gameobject>

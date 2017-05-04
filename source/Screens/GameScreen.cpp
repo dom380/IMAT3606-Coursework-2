@@ -36,7 +36,7 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 	sounds->GetSound(0)->play();
 	sounds->setLooping(true, 0);
 
-	skybox = std::make_shared<Skybox>(renderer, std::string("./resources/textures/cubemap/miramar"));
+	skybox = std::make_shared<Skybox>(renderer, std::string("./resources/textures/cubemap/st"));
 }
 
 void GameScreen::show()

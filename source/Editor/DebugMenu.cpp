@@ -272,10 +272,16 @@ void DebugMenu::debugGameObjectsMenu()
 		auto model =  gameScreen->getComponentStore()->getComponent<ModelComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
 		if (model)
 		{
-			snprintf(goName, sizeof(goName), "GO_%s_%d", model->getId().c_str(), x);
+			snprintf(goName, sizeof(goName), "%s_%d", model->getId().c_str(), x);
 		}
 		else {
-			snprintf(goName, sizeof(goName), "GO_%s_%d", "ID_ERROR", x);
+			auto ani = gameScreen->getComponentStore()->getComponent<AnimatedModelComponent>(gameScreen->getGameObjects()[x]->GetComponentHandle(ComponentType::ANIMATION), ComponentType::ANIMATION);
+			if (ani)
+			{
+				snprintf(goName, sizeof(goName), "%s_%d", ani->getCurrentAnim().c_str(), x);
+			}
+			else
+				snprintf(goName, sizeof(goName), "%s_%d", "ID_ERROR", x);
 		}
 
 		

@@ -57,6 +57,11 @@ public:
 		return modelVec;
 	}
 
+	string getCurrentAnim()
+	{
+		return currentAnim;
+	}
+
 private:
 	std::map<std::string, std::shared_ptr<SkeletalModel>> models;
 

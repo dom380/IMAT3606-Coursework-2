@@ -149,7 +149,7 @@
                 <component type="transform">
                     <position>
                         <x>-16.7001</x>
-                        <y>0.71</y>
+                        <y>2</y>
                         <z>10.4</z>
                     </position>
                     <scale>
@@ -181,6 +181,9 @@
                         <radius>0.75</radius>
                         <height>1.0</height>
                     </bounding_shape>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
                 </component>
             </components>
         </gameObject>
@@ -2383,11 +2386,11 @@
             </components>
         </gameobject>
         <gameobject>
-			<tag>PHY_OBJ</tag>
+            <tag>PHY_OBJ</tag>
             <components>
-                <component type="model" id="cube.obj">
+                <component type="model" id="death_floor">
                     <file>cube.obj</file>
-                    <active>true</active>
+                    <active>false</active>
                 </component>
                 <component type="transform">
                     <position>
@@ -2404,10 +2407,10 @@
                 <component type="TRIGGER">
                     <script>death_trigger.lua</script>
                     <trigger_once>false</trigger_once>
-                    <bounding_shape type="BOX">
+                    <bounding_shape type="box">
                         <half_extents>
                             <x>500</x>
-                            <y>1.0</y>
+                            <y>1</y>
                             <z>500</z>
                         </half_extents>
                     </bounding_shape>

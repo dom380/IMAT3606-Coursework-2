@@ -1185,6 +1185,13 @@ void DebugMenu::gameObjectsMenuLogic(int i, LogicComponent* logic)
 	ImGui::SameLine();
 	if (ImGui::Button("LoadScript"))
 	{
+		if (logic->getScriptName() == "")
+		{
+			logic->setScriptName("default");
+			static string fullPath;
+			fullPath = AssetManager::getInstance()->getScript("default") + ".lua";
+			logic->setScriptFullPath(fullPath.c_str());
+		}
 		logic->registerLuaBindings();
 	}
 	ImGui::PopID();

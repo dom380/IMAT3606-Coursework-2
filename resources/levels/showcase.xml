@@ -40,166 +40,170 @@
         </camera>
     </cameras>
     <gameObjects>
-      <!-- otter -->
-      <gameObject>
-        <components>
-          <!-- <component type ="model">
+        <!-- otter -->
+        <gameObject>
+            <components>
+                <!-- <component type ="model">
 					<file>capsule.obj</file>
 					<file>chest.obj</file>
 					<texture>chest_diffuse.png</texture>
 				</component>  -->
-          <component type="animation">
-            <!-- fbx files  -->
-            <default>otterwalk</default>
-            <files>
-              <file>
-                <id>otterwalk</id>
-                <filePath>resources/models/Animations/otter@walk.fbx</filePath>
-              </file>
-            </files>
-          </component>
-          <component type="transform">
-            <position>
-              <x>32.5</x>
-              <y>1</y>
-              <z>12.5</z>
-            </position>
-            <scale>
-              <x>0.2</x>
-              <y>0.2</y>
-              <z>0.2</z>
-            </scale>
-          </component>
-          <component type="logic">
-            <script>enemy_pathfinding.lua</script>
-            <params>
-              <param name="start_point" type="vec3">
-                <x>32.5</x>
-                <y>1</y>
-                <z>12.5</z>
-              </param>
-              <param name="end_point" type="vec3">
-                <x>32.5</x>
-                <y>1</y>
-                <z>6.5</z>
-              </param>
-              <param name="move_speed" type="float">
+                <component type="animation">
+                    <!-- fbx files  -->
+                    <default>otterwalk</default>
+                    <files>
+                        <file>
+                            <id>otterwalk</id>
+                            <filePath>resources/models/Animations/otter@walk.fbx</filePath>
+                        </file>
+                    </files>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>32.5</x>
+                        <y>1</y>
+                        <z>12.5</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="logic">
+                    <script>enemy_pathfinding.lua</script>
+                    <params>
+                        <param name="start_point" type="vec3">
+                            <x>32.5</x>
+                            <y>1</y>
+                            <z>12.5</z>
+                        </param>
+                        <param name="end_point" type="vec3">
+                            <x>32.5</x>
+                            <y>1</y>
+                            <z>6.5</z>
+                        </param>
+                        <param name="move_speed" type="float">
                 5.0
               </param>
-            </params>
-          </component>
-        </components>
-      </gameObject>
-
-      <!-- turtle -->
-      <gameObject>
-        <components>
-          <!-- <component type ="model">
+                    </params>
+                </component>
+            </components>
+        </gameObject>
+        <!-- turtle -->
+        <gameObject>
+            <components>
+                <!-- <component type ="model">
 					<file>capsule.obj</file>
 					<file>chest.obj</file>
 					<texture>chest_diffuse.png</texture>
 				</component>  -->
-          <component type="animation">
-            <!-- fbx files  -->
-            <default>turtlewalk</default>
-            <files>
-              <file>
-                <id>turtlewalk</id>
-                <filePath>resources/models/Animations/turtle@walk.fbx</filePath>
-              </file>
-            </files>
-          </component>
-          <component type="transform">
-            <position>
-              <x>41.25</x>
-              <y>0.5</y>
-              <z>10.75</z>
-            </position>
-            <scale>
-              <x>0.125</x>
-              <y>0.125</y>
-              <z>0.125</z>
-            </scale>
-          </component>
-        </components>
-      </gameObject>
-      <!-- fox -->
-      <gameObject>
-        <components>
-          <!-- <component type ="model">
+                <component type="animation">
+                    <!-- fbx files  -->
+                    <default>turtlewalk</default>
+                    <files>
+                        <file>
+                            <id>turtlewalk</id>
+                            <filePath>resources/models/Animations/turtle@walk.fbx</filePath>
+                        </file>
+                    </files>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>41.25</x>
+                        <y>0.5</y>
+                        <z>10.75</z>
+                    </position>
+                    <scale>
+                        <x>0.125</x>
+                        <y>0.125</y>
+                        <z>0.125</z>
+                    </scale>
+                </component>
+            </components>
+        </gameObject>
+        <!-- fox -->
+        <gameObject>
+            <components>
+                <!-- <component type ="model">
 					<file>capsule.obj</file>
 					<file>chest.obj</file>
 					<texture>chest_diffuse.png</texture>
 				</component>  -->
-          <component type="animation">
-            <!-- fbx files  -->
-            <default>foxwalk</default>
-            <files>
-              <file>
-                <id>foxwalk</id>
-                <filePath>resources/models/Animations/fox@walk.fbx</filePath>
-              </file>
-            </files>
-          </component>
-          <component type="transform">
-            <position>
-              <x>46.25</x>
-              <y>0.25</y>
-              <z>9.5</z>
-            </position>
-          </component>
-        </components>
-      </gameObject>
-      <!-- Bird -->
-      <gameObject>
-        <components>
-          <!-- <component type ="model">
+                <component type="animation">
+                    <!-- fbx files  -->
+                    <default>foxwalk</default>
+                    <files>
+                        <file>
+                            <id>foxwalk</id>
+                            <filePath>resources/models/Animations/fox@walk.fbx</filePath>
+                        </file>
+                    </files>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>46.25</x>
+                        <y>0.25</y>
+                        <z>12.5</z>
+                    </position>
+                    <scale>
+                        <x>0.3</x>
+                        <y>0.3</y>
+                        <z>0.3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameObject>
+        <!-- Bird -->
+        <gameObject>
+            <components>
+                <!-- <component type ="model">
 					<file>capsule.obj</file>
 					<file>chest.obj</file>
 					<texture>chest_diffuse.png</texture>
 				</component>  -->
-          <component type="animation">
-            <!-- fbx files  -->
-            <default>birdfly</default>
-            <files>
-              <file>
-                <id>birdfly</id>
-                <filePath>resources/models/Animations/bird@flying.fbx</filePath>
-              </file>
-            </files>
-          </component>
-          <component type="transform">
-            <position>
-              <x>-85.75</x>
-              <y>45</y>
-              <z>62.75</z>
-            </position>
-            <scale>
-              <x>1</x>
-              <y>1</y>
-              <z>1</z>
-            </scale>
-          </component>
-          <component type="logic">
-            <script>enemy_pathfinding.lua</script>
-            <params>
-              <param name="start_point" type="vec3">
-                <x>-85.75</x>
-                <y>45</y>
-                <z>62.75</z>
-              </param>
-              <param name="end_point" type="vec3">
-                <x>-85.5</x>
-                <y>30.0</y>
-                <z>61.75</z>
-              </param>
-              <param name="move_speed" type="float">
+                <component type="animation">
+                    <!-- fbx files  -->
+                    <default>birdfly</default>
+                    <files>
+                        <file>
+                            <id>birdfly</id>
+                            <filePath>resources/models/Animations/bird@flying.fbx</filePath>
+                        </file>
+                    </files>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-85.75</x>
+                        <y>45</y>
+                        <z>62.75</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                </component>
+                <component type="logic">
+                    <script>enemy_pathfinding.lua</script>
+                    <params>
+                        <param name="start_point" type="vec3">
+                            <x>-85.75</x>
+                            <y>45</y>
+                            <z>62.75</z>
+                        </param>
+                        <param name="end_point" type="vec3">
+                            <x>-85.5</x>
+                            <y>30.0</y>
+                            <z>61.75</z>
+                        </param>
+                        <param name="move_speed" type="float">
                 3.0
               </param>
-            </params>
-          </component>
-        </components>
-      </gameObject>
+                    </params>
+                </component>
+            </components>
+        </gameObject>
         <!-- Bird -->
         <gameObject>
             <components>
@@ -273,13 +277,24 @@
 					</scale> -->
                     <orientation>
                         <x>0</x>
-                        <y>1</y>
+                        <y>0.952541</y>
                         <z>0</z>
                         <w>345.61</w>
                     </orientation>
                 </component>
                 <component type="logic">
                     <script>collectable.lua</script>
+                </component>
+                <component type="trigger">
+                    <script>death_trigger.lua</script>
+                    <trigger_once>false</trigger_once>
+                    <bounding_shape type="cylinder">
+                        <half_extents>
+                            <x>0.5</x>
+                            <y>1.5</y>
+                            <z>0.5</z>
+                        </half_extents>
+                    </bounding_shape>
                 </component>
             </components>
         </gameObject>
@@ -568,7 +583,7 @@
                 <component type="transform">
                     <position>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-0.5</y>
                         <z>0</z>
                     </position>
                     <scale>
@@ -608,7 +623,7 @@
                 <component type="transform">
                     <position>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-0.25</y>
                         <z>0</z>
                     </position>
                     <scale>
@@ -926,7 +941,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999995</y>
+                        <y>0.999988</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -1439,7 +1454,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999989</y>
+                        <y>0.999975</y>
                         <z>0</z>
                         <w>345.853</w>
                     </orientation>
@@ -1525,7 +1540,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999991</y>
+                        <y>0.999982</y>
                         <z>0</z>
                         <w>345.951</w>
                     </orientation>
@@ -1568,7 +1583,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.99999</y>
+                        <y>0.999976</y>
                         <z>0</z>
                         <w>345.999</w>
                     </orientation>
@@ -1703,7 +1718,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>9</y>
+                        <y>8.25</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1944,7 +1959,7 @@
             <components>
                 <component type="model" id="phyground_next">
                     <file>cube.obj</file>
-                    <active>true</active>
+                    <active>false</active>
                 </component>
                 <component type="transform">
                     <position>
@@ -2010,19 +2025,19 @@
         </gameobject>
         <gameobject>
             <components>
-                <component type="model" id="back_phy_barrier">
+                <component type="model" id="left_phy_barrier">
                     <file>cube.obj</file>
                     <active>false</active>
                 </component>
                 <component type="transform">
                     <position>
                         <x>27.5</x>
-                        <y>0.75</y>
+                        <y>4.5</y>
                         <z>14.25</z>
                     </position>
                     <scale>
                         <x>0.25</x>
-                        <y>5.25</y>
+                        <y>7.5</y>
                         <z>50</z>
                     </scale>
                     <orientation>
@@ -2050,19 +2065,19 @@
         </gameobject>
         <gameobject>
             <components>
-                <component type="model" id="back_phy_barrier">
+                <component type="model" id="right_phy_barrier">
                     <file>cube.obj</file>
                     <active>false</active>
                 </component>
                 <component type="transform">
                     <position>
                         <x>27.5</x>
-                        <y>0.75</y>
+                        <y>4.25</y>
                         <z>4.75</z>
                     </position>
                     <scale>
                         <x>0.25</x>
-                        <y>5.25</y>
+                        <y>7.5</y>
                         <z>50</z>
                     </scale>
                     <orientation>
@@ -2096,8 +2111,8 @@
                 </component>
                 <component type="transform">
                     <position>
-                        <x>57.25</x>
-                        <y>0</y>
+                        <x>55.75</x>
+                        <y>-0.75</y>
                         <z>0</z>
                     </position>
                     <scale>
@@ -2117,7 +2132,7 @@
                 <component type="transform">
                     <position>
                         <x>119.75</x>
-                        <y>0</y>
+                        <y>-1.25</y>
                         <z>0</z>
                     </position>
                     <scale>
@@ -2136,8 +2151,8 @@
                 </component>
                 <component type="transform">
                     <position>
-                        <x>45.75</x>
-                        <y>0</y>
+                        <x>47.5</x>
+                        <y>-0.5</y>
                         <z>0</z>
                     </position>
                     <scale>
@@ -2310,7 +2325,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>13.5</y>
+                        <y>12.75</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2375,7 +2390,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999987</y>
+                        <y>0.999973</y>
                         <z>0</z>
                         <w>346.048</w>
                     </orientation>
@@ -2390,7 +2405,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>11.25</y>
+                        <y>9.75</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2418,7 +2433,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999995</y>
+                        <y>0.999988</y>
                         <z>0</z>
                         <w>346.097</w>
                     </orientation>
@@ -2433,7 +2448,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0.12187576</y>
+                        <y>0.12229156</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2630,6 +2645,58 @@
                 <component type="transform">
                     <position>
                         <x>24.75</x>
+                        <y>-1.25</y>
+                        <z>10</z>
+                    </position>
+                    <scale>
+                        <x>0.82</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>0.993887</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="legobricksoptimised.obj">
+                    <file>legobricksoptimised.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>35.25</x>
+                        <y>-1.25</y>
+                        <z>10</z>
+                    </position>
+                    <scale>
+                        <x>0.82</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>0.993887</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="legobricksoptimised.obj">
+                    <file>legobricksoptimised.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>45.5</x>
                         <y>-1.25</y>
                         <z>10</z>
                     </position>

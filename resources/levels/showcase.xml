@@ -40,97 +40,166 @@
         </camera>
     </cameras>
     <gameObjects>
-        <!-- otter -->
-        <gameObject>
-            <components>
-                <!-- <component type ="model">
+      <!-- otter -->
+      <gameObject>
+        <components>
+          <!-- <component type ="model">
 					<file>capsule.obj</file>
 					<file>chest.obj</file>
 					<texture>chest_diffuse.png</texture>
 				</component>  -->
-                <component type="animation">
-                    <!-- fbx files  -->
-                    <default>otterwalk</default>
-                    <files>
-                        <file>
-                            <id>otterwalk</id>
-                            <filePath>resources/models/Animations/otter@walk.fbx</filePath>
-                        </file>
-                    </files>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>32.5</x>
-                        <y>1</y>
-                        <z>10</z>
-                    </position>
-                    <scale>
-                        <x>0.125</x>
-                        <y>0.125</y>
-                        <z>0.125</z>
-                    </scale>
-                </component>
-            </components>
-        </gameObject>
-        <!-- turtle -->
-        <gameObject>
-            <components>
-                <!-- <component type ="model">
+          <component type="animation">
+            <!-- fbx files  -->
+            <default>otterwalk</default>
+            <files>
+              <file>
+                <id>otterwalk</id>
+                <filePath>resources/models/Animations/otter@walk.fbx</filePath>
+              </file>
+            </files>
+          </component>
+          <component type="transform">
+            <position>
+              <x>32.5</x>
+              <y>1</y>
+              <z>12.5</z>
+            </position>
+            <scale>
+              <x>0.2</x>
+              <y>0.2</y>
+              <z>0.2</z>
+            </scale>
+          </component>
+          <component type="logic">
+            <script>enemy_pathfinding.lua</script>
+            <params>
+              <param name="start_point" type="vec3">
+                <x>32.5</x>
+                <y>1</y>
+                <z>12.5</z>
+              </param>
+              <param name="end_point" type="vec3">
+                <x>32.5</x>
+                <y>1</y>
+                <z>6.5</z>
+              </param>
+              <param name="move_speed" type="float">
+                5.0
+              </param>
+            </params>
+          </component>
+        </components>
+      </gameObject>
+
+      <!-- turtle -->
+      <gameObject>
+        <components>
+          <!-- <component type ="model">
 					<file>capsule.obj</file>
 					<file>chest.obj</file>
 					<texture>chest_diffuse.png</texture>
 				</component>  -->
-                <component type="animation">
-                    <!-- fbx files  -->
-                    <default>turtlewalk</default>
-                    <files>
-                        <file>
-                            <id>turtlewalk</id>
-                            <filePath>resources/models/Animations/turtle@walk.fbx</filePath>
-                        </file>
-                    </files>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>41.25</x>
-                        <y>0.5</y>
-                        <z>10.75</z>
-                    </position>
-                    <scale>
-                        <x>0.125</x>
-                        <y>0.125</y>
-                        <z>0.125</z>
-                    </scale>
-                </component>
-            </components>
-        </gameObject>
-        <!-- fox -->
-        <gameObject>
-            <components>
-                <!-- <component type ="model">
+          <component type="animation">
+            <!-- fbx files  -->
+            <default>turtlewalk</default>
+            <files>
+              <file>
+                <id>turtlewalk</id>
+                <filePath>resources/models/Animations/turtle@walk.fbx</filePath>
+              </file>
+            </files>
+          </component>
+          <component type="transform">
+            <position>
+              <x>41.25</x>
+              <y>0.5</y>
+              <z>10.75</z>
+            </position>
+            <scale>
+              <x>0.125</x>
+              <y>0.125</y>
+              <z>0.125</z>
+            </scale>
+          </component>
+        </components>
+      </gameObject>
+      <!-- fox -->
+      <gameObject>
+        <components>
+          <!-- <component type ="model">
 					<file>capsule.obj</file>
 					<file>chest.obj</file>
 					<texture>chest_diffuse.png</texture>
 				</component>  -->
-                <component type="animation">
-                    <!-- fbx files  -->
-                    <default>foxwalk</default>
-                    <files>
-                        <file>
-                            <id>foxwalk</id>
-                            <filePath>resources/models/Animations/fox@walk.fbx</filePath>
-                        </file>
-                    </files>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>46.25</x>
-                        <y>0.25</y>
-                        <z>9.5</z>
-                    </position>
-                </component>
-            </components>
-        </gameObject>
+          <component type="animation">
+            <!-- fbx files  -->
+            <default>foxwalk</default>
+            <files>
+              <file>
+                <id>foxwalk</id>
+                <filePath>resources/models/Animations/fox@walk.fbx</filePath>
+              </file>
+            </files>
+          </component>
+          <component type="transform">
+            <position>
+              <x>46.25</x>
+              <y>0.25</y>
+              <z>9.5</z>
+            </position>
+          </component>
+        </components>
+      </gameObject>
+      <!-- Bird -->
+      <gameObject>
+        <components>
+          <!-- <component type ="model">
+					<file>capsule.obj</file>
+					<file>chest.obj</file>
+					<texture>chest_diffuse.png</texture>
+				</component>  -->
+          <component type="animation">
+            <!-- fbx files  -->
+            <default>birdfly</default>
+            <files>
+              <file>
+                <id>birdfly</id>
+                <filePath>resources/models/Animations/bird@flying.fbx</filePath>
+              </file>
+            </files>
+          </component>
+          <component type="transform">
+            <position>
+              <x>-85.75</x>
+              <y>45</y>
+              <z>62.75</z>
+            </position>
+            <scale>
+              <x>1</x>
+              <y>1</y>
+              <z>1</z>
+            </scale>
+          </component>
+          <component type="logic">
+            <script>enemy_pathfinding.lua</script>
+            <params>
+              <param name="start_point" type="vec3">
+                <x>-85.75</x>
+                <y>45</y>
+                <z>62.75</z>
+              </param>
+              <param name="end_point" type="vec3">
+                <x>-85.5</x>
+                <y>30.0</y>
+                <z>61.75</z>
+              </param>
+              <param name="move_speed" type="float">
+                3.0
+              </param>
+            </params>
+          </component>
+        </components>
+      </gameObject>
         <!-- Bird -->
         <gameObject>
             <components>

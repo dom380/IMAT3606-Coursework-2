@@ -32,7 +32,7 @@
             </direction>
             <follow_distance>
                 <x>15.0</x>
-                <y>-10.0</y>
+                <y>-7.0</y>
                 <z>0.0</z>
             </follow_distance>
             <mouse_input>false</mouse_input>
@@ -204,7 +204,7 @@
 					</scale> -->
                     <orientation>
                         <x>0</x>
-                        <y>0.999999</y>
+                        <y>1</y>
                         <z>0</z>
                         <w>345.61</w>
                     </orientation>
@@ -240,7 +240,7 @@
                 <component type="transform">
                     <position>
                         <x>-16.7001</x>
-                        <y>0.3</y>
+                        <y>2</y>
                         <z>10.4</z>
                     </position>
                     <scale>
@@ -857,24 +857,24 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>1</y>
+                        <y>0.999995</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
                 </component>
                 <component type="logic">
-					<script>collectable.lua</script>
-				</component>
-				<component type="trigger">
-					<script>collectable.lua</script>
-					<bounding_shape type="SPHERE">
-						<radius>1.5</radius>
-					</bounding_shape>
-					<trigger_once>true</trigger_once>
-					<params>
-						<param type="string" name="string_id">score_string</param>
-					</params>
-				</component>
+                    <script>collectable.lua</script>
+                </component>
+                <component type="trigger">
+                    <script>collectable.lua</script>
+                    <bounding_shape type="sphere">
+                        <radius>1.5</radius>
+                    </bounding_shape>
+                    <trigger_once>true</trigger_once>
+                    <params>
+                        <param type="string" name="string_id">score_string</param>
+                    </params>
+                </component>
             </components>
         </gameobject>
         <gameobject>
@@ -896,24 +896,24 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999999</y>
+                        <y>1</y>
                         <z>0</z>
                         <w>345.756</w>
                     </orientation>
                 </component>
                 <component type="logic">
-					<script>collectable.lua</script>
-				</component>
-				<component type="trigger">
-					<script>collectable.lua</script>
-					<bounding_shape type="SPHERE">
-						<radius>1.5</radius>
-					</bounding_shape>
-					<trigger_once>true</trigger_once>
-					<params>
-						<param type="string" name="string_id">heartcount</param>
-					</params>
-				</component>
+                    <script>collectable.lua</script>
+                </component>
+                <component type="trigger">
+                    <script>collectable.lua</script>
+                    <bounding_shape type="sphere">
+                        <radius>1.5</radius>
+                    </bounding_shape>
+                    <trigger_once>true</trigger_once>
+                    <params>
+                        <param type="string" name="string_id">heartcount</param>
+                    </params>
+                </component>
             </components>
         </gameobject>
         <gameobject>
@@ -992,46 +992,6 @@
                         <x>3</x>
                         <y>3</y>
                         <z>3</z>
-                    </scale>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="legobricks1.obj">
-                    <file>legobricks1.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>-21</x>
-                        <y>-0.5</y>
-                        <z>4</z>
-                    </position>
-                    <scale>
-                        <x>1</x>
-                        <y>0.5</y>
-                        <z>0.89</z>
-                    </scale>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="legobricks1.obj">
-                    <file>legobricks1.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>-10.75</x>
-                        <y>-0.5</y>
-                        <z>4</z>
-                    </position>
-                    <scale>
-                        <x>1</x>
-                        <y>0.5</y>
-                        <z>0.89</z>
                     </scale>
                 </component>
             </components>
@@ -1350,46 +1310,6 @@
         </gameobject>
         <gameobject>
             <components>
-                <component type="model" id="legobricks1.obj">
-                    <file>legobricks1.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>-0.25</x>
-                        <y>-0.5</y>
-                        <z>4</z>
-                    </position>
-                    <scale>
-                        <x>1</x>
-                        <y>0.5</y>
-                        <z>0.89</z>
-                    </scale>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="legobricks1.obj">
-                    <file>legobricks1.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>17.5</x>
-                        <y>-0.5</y>
-                        <z>4</z>
-                    </position>
-                    <scale>
-                        <x>1</x>
-                        <y>0.5</y>
-                        <z>0.89</z>
-                    </scale>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
                 <component type="model" id="littlebrick.obj">
                     <file>littlebrick.obj</file>
                     <active>true</active>
@@ -1407,7 +1327,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999999</y>
+                        <y>1</y>
                         <z>0</z>
                         <w>345.805</w>
                     </orientation>
@@ -1450,7 +1370,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999999</y>
+                        <y>0.999989</y>
                         <z>0</z>
                         <w>345.853</w>
                     </orientation>
@@ -1468,7 +1388,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-2.6720581</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1536,7 +1456,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999998</y>
+                        <y>0.999991</y>
                         <z>0</z>
                         <w>345.951</w>
                     </orientation>
@@ -1579,7 +1499,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>1</y>
+                        <y>0.99999</y>
                         <z>0</z>
                         <w>345.999</w>
                     </orientation>
@@ -1640,7 +1560,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-1</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1714,7 +1634,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>9</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1788,7 +1708,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-3</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1979,7 +1899,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0.125</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2053,7 +1973,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-3</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2287,7 +2207,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0.5</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2321,7 +2241,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>13.5</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2386,7 +2306,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999997</y>
+                        <y>0.999987</y>
                         <z>0</z>
                         <w>346.048</w>
                     </orientation>
@@ -2401,7 +2321,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>11.25</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2429,7 +2349,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>1</y>
+                        <y>0.999995</y>
                         <z>0</z>
                         <w>346.097</w>
                     </orientation>
@@ -2444,7 +2364,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>0.12187576</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2525,6 +2445,136 @@
                             <z>500</z>
                         </half_extents>
                     </bounding_shape>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="legobricksoptimised.obj">
+                    <file>legobricksoptimised.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-14.5</x>
+                        <y>-1.25</y>
+                        <z>10</z>
+                    </position>
+                    <scale>
+                        <x>0.82</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>0.993887</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="legobricksoptimised.obj">
+                    <file>legobricksoptimised.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-4</x>
+                        <y>-1.25</y>
+                        <z>10</z>
+                    </position>
+                    <scale>
+                        <x>0.82</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>0.993887</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="legobricksoptimised.obj">
+                    <file>legobricksoptimised.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>6.5</x>
+                        <y>-1.25</y>
+                        <z>10</z>
+                    </position>
+                    <scale>
+                        <x>0.82</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>0.993887</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="legobricksoptimised.obj">
+                    <file>legobricksoptimised.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>24.75</x>
+                        <y>-1.25</y>
+                        <z>10</z>
+                    </position>
+                    <scale>
+                        <x>0.82</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>0.993887</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="legobricksoptimised.obj">
+                    <file>legobricksoptimised.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>24.75</x>
+                        <y>-1.25</y>
+                        <z>10</z>
+                    </position>
+                    <scale>
+                        <x>0.82</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>0.993887</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
                 </component>
             </components>
         </gameobject>

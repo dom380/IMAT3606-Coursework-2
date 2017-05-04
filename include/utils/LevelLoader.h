@@ -587,6 +587,7 @@ private:
 				auto mesh = AssetManager::getInstance()->getCollisionData(meshFile);
 				physComp = std::make_shared<PhysicsComponent>(physics, std::weak_ptr<GameObject>(gameObject), mesh, mass, convex);
 			}
+			physComp->setMeshFileName(meshFile);
 		}
 		else
 		{

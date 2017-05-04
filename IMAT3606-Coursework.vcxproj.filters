@@ -584,6 +584,9 @@
     <ClInclude Include="include\utils\AssimpReader.h">
       <Filter>Header Files\utils\FileParsers</Filter>
     </ClInclude>
+    <ClInclude Include="include\Graphics\Skybox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\text.frag">
@@ -616,7 +619,9 @@
     <None Include="shaders\colour.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="shaders\animation.frag" />
-    <None Include="shaders\animation.vert" />
+    <None Include="shaders\lighting.frag" />
+    <None Include="shaders\lighting.vert" />
+    <None Include="shaders\skybox.frag" />
+    <None Include="shaders\skybox.vert" />
   </ItemGroup>
 </Project>

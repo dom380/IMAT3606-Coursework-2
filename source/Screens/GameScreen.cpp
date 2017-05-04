@@ -31,11 +31,12 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 	sounds = SoundComponent::Instance();
 	sounds->loadSound("resources/audio/Background Music/menu.wav");
 
-	listener->setPosition(0.0, 0.0, 0.0);
-	listener->setDirection(1.0, 0.0, 0.0);
+	listener->setPosition(0, 0.0, 0.0);
+	listener->setDirection(1, 0.0, 0.0);
 	sounds->GetSound(0)->play();
 	sounds->setLooping(true, 0);
 
+	skybox = std::make_shared<Skybox>(renderer, std::string("./resources/textures/cubemap/miramar"));
 }
 
 void GameScreen::show()
@@ -106,6 +107,8 @@ void GameScreen::update(double dt, double currentTime)
 void GameScreen::render()
 {
 	shared_ptr<Camera> camera = cameras.at(activeCamera);
+	renderer->renderSkybox(skybox, camera);
+
 	Message* renderMsg = new RenderMessage(camera, lightingBufferId, lightingBlockId);
 	std::vector<std::pair<int,ModelComponent>>* models = componentStore->getAllComponents<ModelComponent>(ComponentType::MODEL);
 	std::vector<std::pair<int, ModelComponent>>::iterator it;

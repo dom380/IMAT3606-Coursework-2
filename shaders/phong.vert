@@ -19,11 +19,8 @@ out Data
 } outData;
 
 uniform mat4 mModel;
-
 uniform mat4 mView;
-
 uniform mat4 mProjection;
-
 
 void main()
 {

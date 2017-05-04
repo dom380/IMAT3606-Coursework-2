@@ -140,7 +140,7 @@ shared_ptr<ModelData> AssimpReader::readFile(const char * filePath)
 					assimpMat->Get(AI_MATKEY_COLOR_SPECULAR, colour);
 					mesh->material.Ks = glm::vec3(colour.r, colour.g, colour.b);
 					mesh->material.used = true;
-				}			
+				}	
 			}
 			const aiVector3D Zero3D(0.0f, 0.0f, 0.0f);
 			for (unsigned int i = 0; i < paiMesh->mNumVertices; i++)

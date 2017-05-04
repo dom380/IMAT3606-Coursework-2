@@ -22,19 +22,19 @@ RenderGL::~RenderGL()
 
 bool RenderGL::init()
 {
+	glewExperimental = true;
 	GLenum err = glewInit();
 	if (GLEW_OK != err)
 	{
 		/* Problem: glewInit failed, something is seriously wrong. */
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 		return false;
-
 	}
 
-	AssetManager::getInstance()->getShader(std::make_pair("animation.vert", "animation.frag"))->initialiseBoneUniforms();
+	AssetManager::getInstance()->getShader(std::make_pair("lighting.vert", "lighting.frag"))->initialiseBoneUniforms();
 
 	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
+	glDepthFunc(GL_LESS);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	modelMat = glm::translate(modelMat, glm::vec3(0.0f, 0.0f, 0.0f));
 	return true;
@@ -357,6 +357,27 @@ unsigned int RenderGL::createUIVertextArrayObject(unsigned int & vboHandle, unsi
 	return vertArrayObj;
 }
 
+unsigned int RenderGL::createSkyboxVertexArrayObject(GLuint& vboHandle, std::vector<GLfloat> vertices)
+{
+	unsigned int arrayObject;
+
+	glGenVertexArrays(1, &arrayObject);
+	glBindVertexArray(arrayObject);
+	glGenBuffers(1, &vboHandle);
+
+	//load data into vertex buffers
+	glBindBuffer(GL_ARRAY_BUFFER, vboHandle);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+
+	//setup vertex attribute pointers
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+
+	glBindVertexArray(0);
+
+	return arrayObject;
+}
+
 void RenderGL::renderModel(ModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera)
 {
 	vector<Light> defaultLights;
@@ -423,12 +444,14 @@ void RenderGL::renderModel(ModelComponent & model, shared_ptr<Shader>& shaderPro
 	auto mesh = model.getData();
 	auto material = model.getMaterial();
 	if (model.getTexture() != nullptr) {
+		shaderProgram->setUniform("isTextured", true);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, model.getTexture()->object());
 		shaderProgram->setUniform("tex", 0);
 	}
 	else {
-		shaderProgram = AssetManager::getInstance()->getShader(std::pair<std::string, std::string>("phong_no_texture.vert", "phong_no_texture.frag"));
+		shaderProgram->setUniform("isTextured", false);
+		shaderProgram = AssetManager::getInstance()->getShader(std::pair<std::string, std::string>("lighting.vert", "lighting.frag"));
 		shaderProgram->bindShader();
 	}
 	//Set number of lights
@@ -436,9 +459,12 @@ void RenderGL::renderModel(ModelComponent & model, shared_ptr<Shader>& shaderPro
 	Transform* transform = model.getTransform();
 	glm::quat orientation = transform->orientation;
 	glm::mat4 mMat = glm::translate(transform->position) * glm::mat4_cast(orientation) * glm::scale(transform->scale);
-	shaderProgram->setUniform("mView", camera->getView());
-	shaderProgram->setUniform("mProjection", camera->getProjection());
-	shaderProgram->setUniform("mModel", mMat);
+	glm::mat4 mv = camera->getView() * mMat;
+
+	shaderProgram->setUniform("view", camera->getView());
+	shaderProgram->setUniform("projection", camera->getProjection());
+	shaderProgram->setUniform("model", mMat);
+	shaderProgram->setUniform("normal", glm::mat3(glm::vec3(mv[0]), glm::vec3(mv[1]), glm::vec3(mv[2])));
 	shaderProgram->setUniform("viewPos", camera->getPosition());
 	shaderProgram->setUniform("material", mesh->material);
 
@@ -482,44 +508,70 @@ void RenderGL::freeAnimatedModel(AnimatedModelComponent & model)
 //TO DO
 void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera)
 {
-
+	vector<Light> defaultLights;
+	defaultLights.push_back(Light());
+	renderModel(model, shaderProgram, camera, defaultLights);
 }
 //TO DO
 void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, vector<Light>& lights)
 {
 
 }
+
 //TO DO - change animation shader to use light uniform blocks for multiple lights - address vertex array objects not existing across threads
 //ability to change animation being played and user input to move the character - texture support?
 void RenderGL::renderModel(AnimatedModelComponent& model, shared_ptr<Shader>& shaderProgram, shared_ptr<Camera>& camera, unsigned int lightingBuffer, unsigned int lightingBlockId)
 {
 	shaderProgram->bindShader();
-
+	shaderProgram->setUniform("isTextured", false);
+	//Set number of lights
+	numOfLights <= MAX_NUM_LIGHTS ? shaderProgram->setUniform("NUM_LIGHTS", numOfLights) : shaderProgram->setUniform("NUM_LIGHTS", 0);
 	Transform* transform = model.getTransform();
 	glm::quat orientation = transform->orientation;
-	glm::mat4 mMat = modelMat * glm::translate(transform->position) * glm::mat4_cast(orientation) * glm::scale(transform->scale);
-
+	glm::mat4 mMat = glm::translate(transform->position) * glm::mat4_cast(orientation) * glm::scale(transform->scale);
 	glm::mat4 mv = camera->getView() * mMat;
-	shaderProgram->setUniform("ViewMatrix", camera->getView());
-	shaderProgram->setUniform("ModelMatrix", mMat);
-	shaderProgram->setUniform("ModelViewMatrix", mv);
-	shaderProgram->setUniform("NormalMatrix", glm::mat3(glm::vec3(mv[0]), glm::vec3(mv[1]), glm::vec3(mv[2])));
-	shaderProgram->setUniform("MVP", camera->getProjection() * mv);
-
-	//glBindBufferBase(GL_UNIFORM_BUFFER, lightingBlockId, lightingBuffer); //Bind lighting data
-	//set shader uniform
 	
-	shaderProgram->setUniform("animatedCharacter", true);
+	shaderProgram->setUniform("view", camera->getView());
+	shaderProgram->setUniform("projection", camera->getProjection());
+	shaderProgram->setUniform("model", mMat);
+	shaderProgram->setUniform("normal", glm::mat3(glm::vec3(mv[0]), glm::vec3(mv[1]), glm::vec3(mv[2])));
+	shaderProgram->setUniform("viewPos", camera->getPosition());
+	//material for animated model is set within render function of animated model and not here
+
+	glBindBufferBase(GL_UNIFORM_BUFFER, lightingBlockId, lightingBuffer); //Bind lighting data
+
 	//Set the Teapot material properties in the shader and render
-	shaderProgram->setUniform("Material.Ka", glm::vec3(0.225f, 0.125f, 0.0f));
-	shaderProgram->setUniform("Material.Kd", glm::vec3(1.0f, 0.6f, 0.0f));
-	shaderProgram->setUniform("Material.Ks", glm::vec3(1.0f, 1.0f, 1.0f));
-	shaderProgram->setUniform("Material.Shininess", 1.0f);
+	shaderProgram->setUniform("animatedCharacter", true);
 	model.getCurrentModel()->render();
 	shaderProgram->setUniform("animatedCharacter", false);
 #ifndef NDEBUG
 	auto check = OpenGLSupport().GetError();
-#endif
+#endif		
+}
+
+void RenderGL::renderSkybox(shared_ptr<Skybox>& skybox, shared_ptr<Camera>& camera)
+{
+	glDepthFunc(GL_LEQUAL);
+
+	if (skybox->initialized == false)
+	{
+		skybox->init();
+	}
+
+	shared_ptr<Shader> shader = AssetManager::getInstance()->getShader(std::make_pair("skybox.vert", "skybox.frag"));
+	shader->bindShader();
+	shader->setUniform("view", camera->getView());
+	shader->setUniform("projection", camera->getProjection());
+
+	glm::mat4 model = glm::mat4();
+	model = glm::scale(model, glm::vec3(50.f));
+	shader->setUniform("model", model);
+
+	glBindVertexArray(skybox->vao);
+	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+
+	glDepthFunc(GL_LESS);
 }
 
 void RenderGL::setVSync(bool flag)
@@ -537,3 +589,44 @@ void RenderGL::setVSync(bool flag)
 #endif
 }
 
+GLuint RenderGL::loadCubemapTexture(std::string& filePrefix)
+{
+	shared_ptr<Shader> shader = AssetManager::getInstance()->getShader(std::make_pair("skybox.vert", "skybox.frag"));
+	shader->bindShader();
+
+	glActiveTexture(GL_TEXTURE0); //active an opengl texture unit to use
+
+	GLuint texID;
+	glGenTextures(1, &texID); //generate a texture id and store in texID variable
+	glBindTexture(GL_TEXTURE_CUBE_MAP, texID); //binds a type cube map texture to the generated texID
+
+	const std::string suffixes[] = { "right", "left", "top", "bottom", "back", "front" }; //suffixes for the image names
+
+	//specifys the targets for each face of the cube, these are pre-defined types in opengl
+	GLuint targets[] = {
+		GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+		GL_TEXTURE_CUBE_MAP_POSITIVE_Y, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+		GL_TEXTURE_CUBE_MAP_POSITIVE_Z, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z
+	};
+
+	//Loops through each face, loading the bitmap texture and assigns that images to the corresponding target location
+	for (int i = 0; i < 6; i++)
+	{
+		std::string textureFile = filePrefix + "_" + suffixes[i] + ".tga";
+		Bitmap bmp = Bitmap::bitmapFromFile(textureFile);
+
+		glTexImage2D(targets[i], 0, GL_RGB, bmp.width(), bmp.height(), 0, GL_RGB, GL_UNSIGNED_BYTE, bmp.pixelBuffer());
+	}
+
+	//sets the properties to be used for the texture
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	//set the shader uniform	
+	shader->setUniform("skybox", 0);
+
+	return texID;
+}

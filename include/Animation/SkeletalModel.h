@@ -15,11 +15,12 @@
 
 struct VertexStruct
 {
-	glm::vec3 position; //!< Vertex position 
+	glm::vec4 position; //!< Vertex position 
 	glm::vec3 normal; //!< Vertex normal
 	glm::vec2 uvs; //!< Vertex uv's
-
-	glm::vec3 colour;
+	glm::vec3 Ka;
+	glm::vec3 Kd;
+	float Shininess;
 };
 
 struct VertexBoneData
@@ -72,32 +73,20 @@ struct BoneInfo
 	}
 };
 
-//struct Texture //!< Struct to hold data for a texture
-//{
-//	GLuint id;
-//	std::string type;
-//	aiString path;
-//};
-
 // A mesh entry for each mesh read in from the Assimp scene. A model is usually consisted of a collection of these. 
-#define INVALID_MATERIAL 0xFFFFFFFF
 struct MeshEntry {
-
-
 	unsigned int BaseVertex; //!< Total number of mesh indices. 
 	unsigned int BaseIndex; //!< The base vertex of this mesh in the vertices array for the entire model.
 	unsigned int NumIndices; //!< The base index of this mesh in the indices array for the entire model. 
-	unsigned int MaterialIndex;
 	//Texture texture; //make this a vector to hold multiple textures ->>to do
 
+	Material material;
 
 	MeshEntry()
 	{
-
 		NumIndices = 0;
 		BaseVertex = 0;
 		BaseIndex = 0;
-		MaterialIndex = INVALID_MATERIAL;
 	}
 
 	~MeshEntry() {}
@@ -140,7 +129,7 @@ private:
 
 	void InitFromScene(const aiScene* pScene, const std::string& Filename); //!< Prepares the model for rendering. 
 	void InitMesh(unsigned int index, const aiMesh* paiMesh, std::vector<VertexStruct>& Vertices,
-		std::vector<GLuint>& Indices, std::vector<VertexBoneData>& Bones/*, Texture& texture*/); //!< Fetches mesh data from given Assimp mesh. 
+		std::vector<GLuint>& Indices, std::vector<VertexBoneData>& Bones); //!< Fetches mesh data from given Assimp mesh. 
 
 	void Clear(); //!< Deletes the vertex array object. 
 

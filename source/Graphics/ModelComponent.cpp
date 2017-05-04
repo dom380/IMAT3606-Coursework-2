@@ -26,7 +26,7 @@ void ModelComponent::init(const char * objFile, const char * textureFile, string
 	}
 	if (modelData->material.used)
 	{
-		shader = AssetManager::getInstance()->getShader(std::pair<string, string>("phong.vert", "phong.frag"));
+		shader = AssetManager::getInstance()->getShader(std::pair<string, string>("lighting.vert", "lighting.frag"));
 		if (modelData->numOfMeshes == 1)
 		{
 			this->material = modelData->material;
@@ -39,7 +39,7 @@ void ModelComponent::init(const char * objFile, const char * textureFile, string
 	}
 	else
 	{
-		shader = AssetManager::getInstance()->getShader(std::pair<string, string>("basic.vert", "basic.frag"));
+		shader = AssetManager::getInstance()->getShader(std::pair<string, string>("lighting.vert", "lighting.frag"));
 	}
 	this->objFileName = objFile;
 	this->id = id;

@@ -442,16 +442,34 @@
 					<position>
 						<x>-8.0</x>
 						<y>1.0</y>
-						<z>5.0</z>
+						<z>8.0</z>
 					</position>
 					<scale>
 						<x>5.0</x>
 						<y>5.0</y>
 						<z>5.0</z>
 					</scale>
+					<orientation>
+						<x>0.0</x>
+						<y>1.0</y>
+						<z>0.0</z>
+						<w>55</w>
+					</orientation>
 				</component>
 				<component type="logic">
-					<script>gold_collectable.lua</script>
+					<script>enemy_pathfinding.lua</script>
+					<params>
+						<param name="start_point" type="vec3">
+							<x>-8.0</x>
+							<y>1.0</y>
+							<z>8.0</z>
+						</param>
+						<param name="end_point" type="vec3">
+							<x>8.0</x>
+							<y>1.0</y>
+							<z>8.0</z>
+						</param>
+					</params>
 				</component>
 				<component type="trigger">
 					<script>gold_collectable.lua</script>
@@ -481,7 +499,20 @@
 					</scale>
 				</component>
 				<component type="logic">
-					<script>gold_collectable.lua</script>
+					<!-- <script>gold_collectable.lua</script> -->
+					<script>enemy_pathfinding.lua</script>
+					<params>
+						<param name="start_point" type="vec3">
+							<x>-6.0</x>
+							<y>1.0</y>
+							<z>5.0</z>
+						</param>
+						<param name="end_point" type="vec3">
+							<x>-6.0</x>
+							<y>10.0</y>
+							<z>8.0</z>
+						</param>
+					</params>
 				</component>
 				<component type="trigger">
 					<script>gold_collectable.lua</script>

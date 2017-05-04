@@ -32,7 +32,7 @@
             </direction>
             <follow_distance>
                 <x>15.0</x>
-                <y>-4.0</y>
+                <y>-10.0</y>
                 <z>0.0</z>
             </follow_distance>
             <mouse_input>false</mouse_input>
@@ -149,7 +149,7 @@
                 <component type="transform">
                     <position>
                         <x>-16.7001</x>
-                        <y>-0.29</y>
+                        <y>0.71</y>
                         <z>10.4</z>
                     </position>
                     <scale>
@@ -164,9 +164,9 @@
 					</scale> -->
                     <orientation>
                         <x>0</x>
-                        <y>1</y>
+                        <y>0.99987</y>
                         <z>0</z>
-                        <w>180</w>
+                        <w>90</w>
                     </orientation>
                 </component>
                 <component type="controller">
@@ -188,18 +188,18 @@
         <gameObject>
             <tag>PHY_OBJ</tag>
             <components>
-                <component type="model" id="cube.obj">
+                <component type="model" id="phyground">
                     <file>cube.obj</file>
-                    <active>true</active>
+                    <active>false</active>
                 </component>
                 <component type="transform">
                     <position>
-                        <x>-11.5</x>
-                        <y>-0.5</y>
+                        <x>-6.75</x>
+                        <y>0.05</y>
                         <z>9.5</z>
                     </position>
                     <scale>
-                        <x>10.25</x>
+                        <x>15.75</x>
                         <y>0.25</y>
                         <z>4.75</z>
                     </scale>
@@ -215,15 +215,16 @@
                             <z>4.25</z>
                         </half_extents>
                     </bounding_shape>
-                    <convex>false</convex>
+                    <convex>true</convex>
                     <friction>0.5</friction>
                     <rotational_friction>0</rotational_friction>
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>7.32071e-23</y>
-                        <z>-1.5881868e-23</z>
+                        <y>0.33410645</y>
+                        <z>-1.0842022e-19</z>
                     </velocity>
+                    <collision_mesh>cube.obj</collision_mesh>
                 </component>
             </components>
         </gameObject>
@@ -276,7 +277,7 @@
         </gameobject>
         <gameobject>
             <components>
-                <component type="model" id="trees2.obj">
+                <component type="model" id="trees_left">
                     <file>trees2.obj</file>
                     <active>true</active>
                 </component>
@@ -445,7 +446,7 @@
         </gameobject>
         <gameobject>
             <components>
-                <component type="model" id="one side.obj">
+                <component type="model" id="rightside">
                     <file>one side.obj</file>
                     <active>true</active>
                 </component>
@@ -458,46 +459,6 @@
                     <scale>
                         <x>3</x>
                         <y>3</y>
-                        <z>3</z>
-                    </scale>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="newtree.obj">
-                    <file>newtree.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>-15.75</x>
-                        <y>1</y>
-                        <z>-1.25</z>
-                    </position>
-                    <scale>
-                        <x>3</x>
-                        <y>3</y>
-                        <z>3</z>
-                    </scale>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="gate.obj">
-                    <file>gate.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>30.25</x>
-                        <y>-0.5</y>
-                        <z>0</z>
-                    </position>
-                    <scale>
-                        <x>7</x>
-                        <y>10</y>
                         <z>3</z>
                     </scale>
                 </component>
@@ -564,9 +525,10 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>7.3724088e-23</y>
-                        <z>-1.5881868e-23</z>
+                        <y>0</y>
+                        <z>-1.0842022e-19</z>
                     </velocity>
+                    <collision_mesh>log.obj</collision_mesh>
                 </component>
             </components>
         </gameobject>
@@ -1347,6 +1309,20 @@
                 <component type="logic">
                     <script>gold_collectable.lua</script>
                 </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
             </components>
         </gameobject>
         <gameobject>
@@ -1375,6 +1351,20 @@
                 </component>
                 <component type="logic">
                     <script>gold_collectable.lua</script>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
                 </component>
             </components>
         </gameobject>
@@ -1405,6 +1395,20 @@
                 <component type="logic">
                     <script>gold_collectable.lua</script>
                 </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
             </components>
         </gameobject>
         <gameobject>
@@ -1433,6 +1437,20 @@
                 </component>
                 <component type="logic">
                     <script>gold_collectable.lua</script>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
                 </component>
             </components>
         </gameobject>
@@ -1463,6 +1481,20 @@
                 <component type="logic">
                     <script>gold_collectable.lua</script>
                 </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
             </components>
         </gameobject>
         <gameobject>
@@ -1492,6 +1524,20 @@
                         <w>277.544</w>
                     </orientation>
                 </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
             </components>
         </gameobject>
         <gameobject>
@@ -1514,6 +1560,20 @@
                         <y>0.3</y>
                         <z>-0.35</z>
                     </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
                 </component>
             </components>
         </gameobject>
@@ -1538,6 +1598,20 @@
                         <z>-0.35</z>
                     </scale>
                 </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>6.75</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
             </components>
         </gameobject>
         <gameobject>
@@ -1560,6 +1634,20 @@
                         <y>0.3</y>
                         <z>-0.35</z>
                     </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
                 </component>
             </components>
         </gameobject>
@@ -1584,6 +1672,20 @@
                         <z>-0.35</z>
                     </scale>
                 </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-3</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
             </components>
         </gameobject>
         <gameobject>
@@ -1606,6 +1708,20 @@
                         <y>0.3</y>
                         <z>-0.35</z>
                     </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
                 </component>
             </components>
         </gameobject>
@@ -1630,6 +1746,20 @@
                         <z>1.15</z>
                     </scale>
                 </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
             </components>
         </gameobject>
         <gameobject>
@@ -1652,6 +1782,611 @@
                         <y>0.3</y>
                         <z>1.15</z>
                     </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="gate.obj">
+                    <file>gate.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>30.75</x>
+                        <y>-0.5</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>7</x>
+                        <y>10</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="gate.obj">
+                    <file>gate.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-36.25</x>
+                        <y>-0.5</y>
+                        <z>-4.5</z>
+                    </position>
+                    <scale>
+                        <x>7</x>
+                        <y>10</y>
+                        <z>3</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="phyground_next">
+                    <file>cube.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>32.25</x>
+                        <y>0.05</y>
+                        <z>9.5</z>
+                    </position>
+                    <scale>
+                        <x>15.75</x>
+                        <y>0.25</y>
+                        <z>4.75</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>cube.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>4</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="back_phy_barrier">
+                    <file>cube.obj</file>
+                    <active>false</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-22.5</x>
+                        <y>0.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>-0.25</x>
+                        <y>5.25</y>
+                        <z>6</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>cube.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="back_phy_barrier">
+                    <file>cube.obj</file>
+                    <active>false</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>27.5</x>
+                        <y>0.75</y>
+                        <z>14.25</z>
+                    </position>
+                    <scale>
+                        <x>0.25</x>
+                        <y>5.25</y>
+                        <z>50</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>cube.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-3</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="back_phy_barrier">
+                    <file>cube.obj</file>
+                    <active>false</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>27.5</x>
+                        <y>0.75</y>
+                        <z>4.75</z>
+                    </position>
+                    <scale>
+                        <x>0.25</x>
+                        <y>5.25</y>
+                        <z>50</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>cube.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="leftside_next1">
+                    <file>leftside.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>57.25</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="leftside_next2">
+                    <file>leftside.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>119.75</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="rightside_next">
+                    <file>one side.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>45.75</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="rightside_next2">
+                    <file>one side.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>105</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="trees_right1">
+                    <file>trees.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>65.75</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="trees_left">
+                    <file>trees2.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>56.75</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>3</x>
+                        <y>3</y>
+                        <z>3</z>
+                    </scale>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="slope.obj">
+                    <file>slope.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>48.5</x>
+                        <y>0</y>
+                        <z>9.5</z>
+                    </position>
+                    <scale>
+                        <x>1.75</x>
+                        <y>1.25</y>
+                        <z>9</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>180</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>slope.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="phyground_next_high">
+                    <file>cube.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>60.65</x>
+                        <y>1</y>
+                        <z>9.5</z>
+                    </position>
+                    <scale>
+                        <x>2.5</x>
+                        <y>0.25</y>
+                        <z>4.75</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>cube.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="rock_self.obj">
+                    <file>rock_self.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>62</x>
+                        <y>-0.25</y>
+                        <z>23.75</z>
+                    </position>
+                    <scale>
+                        <x>2.75</x>
+                        <y>3.5</y>
+                        <z>3.25</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>rock_self.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>13.25</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="rock_self.obj">
+                    <file>rock_self.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>59.25</x>
+                        <y>4.75</y>
+                        <z>24.75</z>
+                    </position>
+                    <scale>
+                        <x>2</x>
+                        <y>2</y>
+                        <z>2</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0.999879</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>rock_self.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="littlebrick.obj">
+                    <file>littlebrick.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>66.25</x>
+                        <y>-2.25</y>
+                        <z>12</z>
+                    </position>
+                    <scale>
+                        <x>0.75</x>
+                        <y>1.3</y>
+                        <z>0.65</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>321.136</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>9.75</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>gold_collectable.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="littlebrick.obj">
+                    <file>littlebrick.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>70.75</x>
+                        <y>-1.75</y>
+                        <z>8.75</z>
+                    </position>
+                    <scale>
+                        <x>0.75</x>
+                        <y>1.3</y>
+                        <z>0.65</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>321.136</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0.33161163</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>gold_collectable.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="littlebrick.obj">
+                    <file>littlebrick.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>74.25</x>
+                        <y>-3.5</y>
+                        <z>12</z>
+                    </position>
+                    <scale>
+                        <x>0.75</x>
+                        <y>1.3</y>
+                        <z>0.65</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>321.136</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>gold_collectable.lua</script>
                 </component>
             </components>
         </gameobject>

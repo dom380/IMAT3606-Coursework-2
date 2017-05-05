@@ -109,8 +109,10 @@ KeyEventType InputGLFW::getKeyState(KeyCodes key)
 {
 	WindowGLFW* gw = (WindowGLFW*)Engine::g_pEngine->GetWindow().get();
 	auto state = glfwGetKey(gw->getWindow(), key);
-	if 
-		(state == GLFW_PRESS) return KeyEventType::KEY_PRESSED; 
+	if (state == GLFW_PRESS)
+		return KeyEventType::KEY_PRESSED;
+	else if (state == GLFW_REPEAT)
+		return KeyEventType::KEY_REPEATED;
 	else 
 		return KeyEventType::KEY_RELEASED;
 }

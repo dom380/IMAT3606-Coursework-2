@@ -445,7 +445,7 @@
                         <z>0.0</z>
                     </world_front>
                     <bounding_shape type="CAPSULE">
-                        <radius>0.75</radius>
+                        <radius>0.5</radius>
                         <height>1.0</height>
                     </bounding_shape>
                 </component>

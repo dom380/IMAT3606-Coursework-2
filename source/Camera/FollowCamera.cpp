@@ -42,3 +42,8 @@ void FollowCamera::move(glm::vec3 newPosition)
 	position = newPosition - distanceToTarget;
 	update();
 }
+
+void FollowCamera::setFollowDist(glm::vec3 dist)
+{
+	distanceToTarget = dist;
+}

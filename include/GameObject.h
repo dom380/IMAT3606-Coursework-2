@@ -83,7 +83,7 @@ public:
 	PhysicsComponent* getPhysics();
 	LogicComponent* getLogic();
 	CollisionTrigger* getTrigger();
-	
+	ControllerComponent* getController();
 	/*
 		Adds the specified component to the GameObject.
 		T comp, The component to add.

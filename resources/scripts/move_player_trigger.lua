@@ -9,6 +9,20 @@ move_player_trigger.trigger = function(gameObject, engineObj, logic, params)
 			if posToMove ~= nil then
 				logicComp:applyTransform(posToMove, 1.0, logicComp:getOrientation())
 			end
+			local worldFront = params["world_front"]
+			--Todo - Add when Ben's controller change is checked in.
+			-- local worldFrontNegative = params["world_front_negative"]
+			-- if worldFrontNegative == nil then 
+				-- worldFrontNegative = false
+			-- end
+			local controller = gameObject:getController()
+			if controller and worldFront ~= nil then
+				controller:setWorldFront(worldFront.x, worldFront.y, worldFront.z)
+			end
+			local camDistance = params["camera_distance"]
+			if controller and camDistance then
+				controller:setCameraDistance(camDistance)
+			end
 		end
 	else
 		print("logic or params nil")

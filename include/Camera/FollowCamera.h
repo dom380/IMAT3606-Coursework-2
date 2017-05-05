@@ -46,6 +46,8 @@ public:
 	*/
 	void move(glm::vec3 Position);
 
+	void setFollowDist(glm::vec3 dist);
+
 	/*
 	TODO: Possible future handling required
 

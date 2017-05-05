@@ -105,6 +105,18 @@ void ControllerComponent::setWorldFront(float x, float y, float z)
 	angleOffset = worldFront.angle(interalFront);
 }
 
+void ControllerComponent::setCameraDistance(glm::vec3 dist)
+{
+	if (camera)
+	{
+		auto followCam = dynamic_pointer_cast<FollowCamera>(camera);
+		if (followCam)
+		{
+			followCam->setFollowDist(dist);
+		}
+	}
+}
+
 void ControllerComponent::dispose()
 {
 	auto ptr = dynamic_pointer_cast<BulletPhysics, Physics>(physics);

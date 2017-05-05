@@ -705,6 +705,7 @@
 				<g>0.5</g>
 				<b>0.5</b>
 			</specular>
+			<enabled>true</enabled>
 		</light>
 	</lights>
 	<uiElements>

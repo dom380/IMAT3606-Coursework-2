@@ -21,6 +21,7 @@ public:
 	void setTransform(Transform* transform);
 	void setJumpForce(float force);
 	void setWorldFront(float x, float y, float z);
+	void setCameraDistance(glm::vec3 dist);
 	void dispose();
 private:
 	std::weak_ptr<GameObject> owner;

@@ -1,5 +1,6 @@
 #include <Scripting\ScriptEngine.h>
 #include <Components\LogicComponent.h>
+#include <Components\ControllerComponent.h>
 #include <Components\CollisionMessage.h>
 #include <Engine.h>
 #include <Graphics\Material.h>
@@ -139,6 +140,10 @@ ScriptEngine::ScriptEngine()
 			.endClass()
 			.deriveClass<PhysicsComponent, Component>("PhysicsComponent")
 			.endClass()
+			.deriveClass<ControllerComponent, Component>("Controller")
+				.addFunction("setCameraDistance", &ControllerComponent::setCameraDistance)
+				.addFunction("setWorldFront", &ControllerComponent::setWorldFront)
+			.endClass()
 			.beginClass<MsgType>("MsgType")
 			.endClass()
 			.beginClass<Message>("Message")
@@ -167,6 +172,7 @@ ScriptEngine::ScriptEngine()
 				.addFunction("getLogic", &GameObject::getLogic)
 				.addFunction("getPhysics", &GameObject::getPhysics)
 				.addFunction("getTrigger", &GameObject::getTrigger)
+				.addFunction("getController", &GameObject::getController)
 				.addFunction("getId", &GameObject::getId)
 				.addFunction("getTag", &GameObject::getTagString)
 			.endClass()

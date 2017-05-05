@@ -501,6 +501,25 @@ bool DebugMenu::saveCurrentLevel(string fileName)
 				}
 			}
 		}
+		/*
+		every light
+		*/
+		numberOfObjectsInFile = XMLReader::GetNumberOfLightElementsInFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument());
+		for (int x = 0; x < gameScreen->getLights()->size(); x++)
+		{
+			FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, &gameScreen->getLights()->at(x));
+			//If there is a new object not saved on file
+			if (x >= numberOfObjectsInFile)
+			{
+				if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, &gameScreen->getLights()->at(x)))
+				{
+				}
+			}
+			if (!gameScreen->getLights()->at(x).saved)
+			{
+				FileSaver::DeleteObjectFromFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, &gameScreen->getLights()->at(x));
+			}
+		}
 	}
 	/*
 		Every UI object
@@ -528,26 +547,7 @@ bool DebugMenu::saveCurrentLevel(string fileName)
 		}
 	}
 
-	/*
-		every light
-	*/
-	numberOfObjectsInFile = XMLReader::GetNumberOfLightElementsInFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument());
-	shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
-	for (int x = 0; x < gameScreen->getLights()->size(); x++)
-	{
-		FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, &gameScreen->getLights()->at(x));
-		//If there is a new object not saved on file
-		if (x >= numberOfObjectsInFile)
-		{
-			if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, &gameScreen->getLights()->at(x)))
-			{
-			}
-		}
-		if (!gameScreen->getLights()->at(x).saved)
-		{
-			FileSaver::DeleteObjectFromFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, &gameScreen->getLights()->at(x));
-		}
-	}
+	
 
 	return FileSaver::SaveFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(),fileName);
 }

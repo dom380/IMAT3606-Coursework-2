@@ -14,6 +14,10 @@ death_trigger.trigger = function(gameObject, engineObject, param)
 				logic:updateScore(-1, "heartcount")
 				hp = logic:getUIValueInt("heartcount")
 			end
+			local sound = engine.Sound:getInstance()
+			if sound ~= nil then
+				sound:play(3)
+			end
 			if hp == 0 then
 				engineObject:replaceScreen("GameOver")
 			end

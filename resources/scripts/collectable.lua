@@ -31,6 +31,10 @@ collectable.trigger = function(gameObject, engineObj, logic, params)
 			else
 				logic:updateScore(1, "score_string");
 			end
+			local sound = engine.Sound:getInstance()
+			if sound ~= nil then
+				sound:play(2)
+			end
 		end
 	end
 end

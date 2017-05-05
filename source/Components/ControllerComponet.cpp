@@ -178,6 +178,7 @@ void ControllerComponent::pollInput()
 	if ((space == KeyEventType::KEY_PRESSED || space == KeyEventType::KEY_REPEATED) && controller->canJump())
 	{
 		controller->jump(upDir*jumpForce);
+		SoundComponent::Instance()->play(1);
 	}
 
 }

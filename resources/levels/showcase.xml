@@ -288,7 +288,7 @@
 					</scale> -->
                     <orientation>
                         <x>0</x>
-                        <y>0.95255</y>
+                        <y>0.952554</y>
                         <z>0</z>
                         <w>345.61</w>
                     </orientation>
@@ -403,7 +403,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -706,7 +706,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                     <collision_mesh>log.obj</collision_mesh>
@@ -952,7 +952,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999979</y>
+                        <y>0.999975</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -1440,7 +1440,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1465,7 +1465,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999957</y>
+                        <y>0.999949</y>
                         <z>0</z>
                         <w>345.853</w>
                     </orientation>
@@ -1483,7 +1483,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1526,7 +1526,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1551,7 +1551,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.99997</y>
+                        <y>0.999965</y>
                         <z>0</z>
                         <w>345.951</w>
                     </orientation>
@@ -1569,7 +1569,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1594,7 +1594,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999958</y>
+                        <y>0.99995</y>
                         <z>0</z>
                         <w>345.999</w>
                     </orientation>
@@ -1612,7 +1612,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1655,7 +1655,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1692,7 +1692,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1729,7 +1729,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>8.25</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1766,7 +1766,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1803,7 +1803,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-3</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1840,7 +1840,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1877,7 +1877,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1914,7 +1914,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -1994,7 +1994,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2028,7 +2028,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2068,7 +2068,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-3</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2108,7 +2108,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2268,7 +2268,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2302,7 +2302,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2336,7 +2336,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>12.75</y>
+                        <y>-4.3159552e+08</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2376,7 +2376,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2401,7 +2401,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999021</y>
+                        <y>0.999013</y>
                         <z>0</z>
                         <w>346.048</w>
                     </orientation>
@@ -2416,7 +2416,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>9.75</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2459,7 +2459,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0.12228966</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2502,7 +2502,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-4.3159552e+08</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2781,9 +2781,9 @@
     <lights>
         <light>
             <position>
-                <x>0.0</x>
-                <y>15.0</y>
-                <z>0.0</z>
+                <x>0</x>
+                <y>15</y>
+                <z>0</z>
             </position>
             <ambient>
                 <r>0.1</r>
@@ -2800,12 +2800,13 @@
                 <g>0.5</g>
                 <b>0.5</b>
             </specular>
+            <enabled>true</enabled>
         </light>
         <light>
             <position>
-                <x>1.0</x>
-                <y>15.0</y>
-                <z>-10.0</z>
+                <x>1</x>
+                <y>15</y>
+                <z>-10</z>
             </position>
             <ambient>
                 <r>0.1</r>
@@ -2822,12 +2823,13 @@
                 <g>0.5</g>
                 <b>0.5</b>
             </specular>
+            <enabled>true</enabled>
         </light>
         <light>
             <position>
-                <x>1.0</x>
-                <y>15.0</y>
-                <z>50.0</z>
+                <x>1</x>
+                <y>15</y>
+                <z>50</z>
             </position>
             <ambient>
                 <r>0.1</r>
@@ -2844,12 +2846,13 @@
                 <g>0.5</g>
                 <b>0.5</b>
             </specular>
+            <enabled>true</enabled>
         </light>
         <light>
             <position>
-                <x>-10.0</x>
-                <y>15.0</y>
-                <z>-10.0</z>
+                <x>-10</x>
+                <y>15</y>
+                <z>-10</z>
             </position>
             <ambient>
                 <r>0.1</r>
@@ -2866,12 +2869,13 @@
                 <g>0.5</g>
                 <b>0.5</b>
             </specular>
+            <enabled>true</enabled>
         </light>
         <light>
             <position>
-                <x>1.0</x>
-                <y>15.0</y>
-                <z>50.0</z>
+                <x>1</x>
+                <y>15</y>
+                <z>50</z>
             </position>
             <ambient>
                 <r>0.1</r>
@@ -2888,6 +2892,7 @@
                 <g>0.5</g>
                 <b>0.5</b>
             </specular>
+            <enabled>true</enabled>
         </light>
     </lights>
     <uiElements>

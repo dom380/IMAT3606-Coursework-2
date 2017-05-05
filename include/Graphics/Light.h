@@ -40,6 +40,7 @@ public:
 	glm::vec3 diffuse;
 	glm::vec3 specular;
 	bool enabled = false;
+	bool saved = true;
 };
 
 #endif // !LIGHT_H

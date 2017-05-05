@@ -380,6 +380,92 @@ bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObj
 	return false;
 }
 
+bool FileSaver::UpdateFile(tinyxml2::XMLDocument * doc, string levelID, int iObjectCount, Light * light)
+{
+	int XMLObjectCount = 0;
+	tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");
+	tinyxml2::XMLElement* lightsElement = screenElement->FirstChildElement("lights");
+	if (!lightsElement)
+	{
+		screenElement->InsertEndChild(doc->NewElement("lights"));
+	}
+	tinyxml2::XMLElement* lightElement = lightsElement->FirstChildElement("light");
+	while (lightElement != NULL)
+	{
+		if (XMLObjectCount != iObjectCount)
+		{
+			//not the same object
+		}
+		else
+		{
+			//enabled
+			tinyxml2::XMLElement* enabledElement = lightElement->FirstChildElement("enabled");
+			if (!enabledElement)
+			{
+				enabledElement = doc->NewElement("enabled");
+				lightElement->InsertEndChild(enabledElement);
+			}
+			enabledElement->SetText(light->enabled);
+			//pos
+			tinyxml2::XMLElement* posElement = lightElement->FirstChildElement("position");
+			string vecName[3] = { "x", "y", "z" };
+			if (posElement)
+			{
+				UpdateVec3Element(doc, posElement, light->pos, vecName);
+			}
+			else
+			{
+				posElement = doc->NewElement("position");
+				lightElement->InsertEndChild(posElement);
+				AddVec3ToElement(doc, posElement, light->pos, vecName);
+			}
+			//dif
+			tinyxml2::XMLElement* diffElement = lightElement->FirstChildElement("diffuse");
+			string rgbvecName[3] = { "r", "g", "b" };
+			if (diffElement)
+			{
+				UpdateVec3Element(doc, diffElement, light->diffuse, rgbvecName);
+			}
+			else
+			{
+				diffElement = doc->NewElement("diffuse");
+				lightElement->InsertEndChild(diffElement);
+				AddVec3ToElement(doc, diffElement, light->diffuse, rgbvecName);
+			}
+			//am
+			tinyxml2::XMLElement* ambientElement = lightElement->FirstChildElement("ambient");
+			if (ambientElement)
+			{
+				UpdateVec3Element(doc, ambientElement, light->ambient, rgbvecName);
+			}
+			else
+			{
+				ambientElement = doc->NewElement("ambient");
+				lightElement->InsertEndChild(ambientElement);
+				AddVec3ToElement(doc, ambientElement, light->ambient, rgbvecName);
+			}
+			//spec
+			tinyxml2::XMLElement* specElement = lightElement->FirstChildElement("specular");
+			if (specElement)
+			{
+				UpdateVec3Element(doc, specElement, light->specular, rgbvecName);
+			}
+			else
+			{
+				specElement = doc->NewElement("specular");
+				lightElement->InsertEndChild(specElement);
+				AddVec3ToElement(doc, specElement, light->specular, rgbvecName);
+			}
+		}
+		
+		//
+		lightElement = lightElement->NextSiblingElement();
+		XMLObjectCount++;
+	}
+
+	return true;
+}
+
 bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<GameObject> go, shared_ptr<GameScreen> gameScreen)
 {
 	tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");
@@ -571,6 +657,48 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 	return true;
 }
 
+bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument * doc, int iObjectCount, Light * light)
+{
+	tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");
+	tinyxml2::XMLElement* lightsElement = screenElement->FirstChildElement("lights");
+	if (!lightsElement)
+	{
+		screenElement->InsertEndChild(doc->NewElement("lights"));
+	}
+	tinyxml2::XMLElement* lightElement = doc->NewElement("light");
+	lightsElement->InsertEndChild(lightElement);
+	
+	//enabled
+	tinyxml2::XMLElement* enabledElement = doc->NewElement("enabled");
+	lightElement->InsertEndChild(enabledElement);
+	enabledElement->SetText(light->enabled);
+
+	//pos
+	tinyxml2::XMLElement* posElement = doc->NewElement("position");
+	string vecName[3] = { "x", "y", "z" };
+	lightElement->InsertEndChild(posElement);
+	AddVec3ToElement(doc, posElement, light->pos, vecName);
+	
+	//dif
+	tinyxml2::XMLElement* diffElement = doc->NewElement("diffuse");
+	string rgbvecName[3] = { "r", "g", "b" };
+	lightElement->InsertEndChild(diffElement);
+	AddVec3ToElement(doc, diffElement, light->diffuse, rgbvecName);
+	
+	//am
+	tinyxml2::XMLElement* ambientElement = doc->NewElement("ambient");
+	lightElement->InsertEndChild(ambientElement);
+	AddVec3ToElement(doc, ambientElement, light->ambient, rgbvecName);
+	
+	//spec
+	tinyxml2::XMLElement* specElement = doc->NewElement("specular");
+	lightElement->InsertEndChild(specElement);
+	AddVec3ToElement(doc, specElement, light->specular, rgbvecName);
+	
+	
+	return true;
+}
+
 bool FileSaver::DeleteObjectFromFile(tinyxml2::XMLDocument * doc, int iObjectCount, shared_ptr<GameObject> go, shared_ptr<GameScreen> gameScreen)
 {
 
@@ -656,6 +784,46 @@ bool FileSaver::DeleteObjectFromFile(tinyxml2::XMLDocument * doc, int iObjectCou
 	}
 	
 	//could not delete obj, not found
+	return false;
+}
+
+bool FileSaver::DeleteObjectFromFile(tinyxml2::XMLDocument * doc, int iObjectCount, Light * light)
+{
+	tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");
+	bool SkipObject = false;
+	int XMLObjectCount = 0;
+
+	tinyxml2::XMLElement* lightElements = screenElement->FirstChildElement("lights");
+	if (!lightElements)
+	{
+		return false;
+	}
+	tinyxml2::XMLElement* lightElement = lightElements->FirstChildElement();
+	//iterate through gos until object count = xml count
+	while (lightElement != NULL)
+	{
+		/*
+		If XML object count != the object count
+		and the object name is the same then skip.
+		Used for objects with the same name.
+		*/
+
+
+		//check for objects with the same name (multiple wall.obj for example)
+		if (XMLObjectCount != iObjectCount)
+		{
+		}
+		else
+		{
+			//delete object from file.
+			lightElements->DeleteChild(lightElement);
+			return true;
+		}
+
+
+		XMLObjectCount++;
+		lightElement = lightElement->NextSiblingElement();
+	}
 	return false;
 }
 

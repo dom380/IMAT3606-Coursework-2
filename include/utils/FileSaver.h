@@ -46,6 +46,10 @@ public:
 	*/
 	static bool UpdateFile(tinyxml2::XMLDocument* doc, string levelID, int iObjectCount, shared_ptr<UIElement> uiE);
 	/*
+	Update existing light elements inside of the current screen doc
+	*/
+	static bool UpdateFile(tinyxml2::XMLDocument* doc, string levelID, int iObjectCount, Light* light);
+	/*
 		Add a new game object to the current screen doc
 	*/
 	static bool AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<GameObject> go, shared_ptr<GameScreen> gameScreen);
@@ -54,6 +58,10 @@ public:
 	*/
 	static bool AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<UIElement> uiE);
 	/*
+	Add a new light to the current screen doc
+	*/
+	static bool AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, Light* light);
+	/*
 		Delete a game object from a file
 	*/
 	static bool DeleteObjectFromFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<GameObject> go, shared_ptr<GameScreen> gameScreen);
@@ -61,6 +69,10 @@ public:
 	Delete a ui object from a file
 	*/
 	static bool DeleteObjectFromFile(tinyxml2::XMLDocument* doc, int iObjectCount, shared_ptr<UIElement> uiE);
+	/*
+	Delete a light object from a file
+	*/
+	static bool DeleteObjectFromFile(tinyxml2::XMLDocument* doc, int iObjectCount, Light* light);
 	/*
 		Save the current screen doc to the xml file specified
 	*/

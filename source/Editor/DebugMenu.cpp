@@ -139,6 +139,16 @@ void DebugMenu::updateMainMenu()
 				{
 					objList.clear();
 				}
+				if (ImGui::TreeNode("Lights"))
+				{
+					static Light* light = new Light();
+					lightsMenu(0, light);
+					if (ImGui::Button("Create"))
+					{
+						gameScreen->addLight(*light);
+					}
+					ImGui::TreePop();
+				}
 			}
 			
 			//Create a UI element.
@@ -517,6 +527,28 @@ bool DebugMenu::saveCurrentLevel(string fileName)
 			FileSaver::DeleteObjectFromFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x-unsavableObjectsCount, Engine::g_pEngine->getActiveScreen()->getUIElements()[x]);
 		}
 	}
+
+	/*
+		every light
+	*/
+	numberOfObjectsInFile = XMLReader::GetNumberOfLightElementsInFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument());
+	shared_ptr<GameScreen> gameScreen = std::static_pointer_cast<GameScreen>(Engine::g_pEngine->getActiveScreen());
+	for (int x = 0; x < gameScreen->getLights()->size(); x++)
+	{
+		FileSaver::UpdateFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), fileName, x, &gameScreen->getLights()->at(x));
+		//If there is a new object not saved on file
+		if (x >= numberOfObjectsInFile)
+		{
+			if (FileSaver::AddObjectToFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, &gameScreen->getLights()->at(x)))
+			{
+			}
+		}
+		if (!gameScreen->getLights()->at(x).saved)
+		{
+			FileSaver::DeleteObjectFromFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(), x, &gameScreen->getLights()->at(x));
+		}
+	}
+
 	return FileSaver::SaveFile(Engine::g_pEngine->getActiveScreen()->getXMLDocument(),fileName);
 }
 
@@ -1403,5 +1435,10 @@ void DebugMenu::lightsMenu(int i, Light * light)
 	ImGui::PushID(i);
 	static float dragSpeed = 0.25f;
 	ImGui::DragFloat3("Position", &light->pos[0], dragSpeed);
+	ImGui::DragFloat3("ambient", &light->ambient[0], dragSpeed);
+	ImGui::DragFloat3("diffuse", &light->diffuse[0], dragSpeed);
+	ImGui::DragFloat3("specular", &light->specular[0], dragSpeed);
+	ImGui::Checkbox("Enabled", &light->enabled);
+	ImGui::Checkbox("Save?", &light->saved);
 	ImGui::PopID();
 }

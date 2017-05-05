@@ -953,6 +953,11 @@ private:
 	static void loadLight(shared_ptr<GameScreen> gameScreen, tinyxml2::XMLElement* element)
 	{
 		Light light = Light();
+		tinyxml2::XMLElement* enabledElement = element->FirstChildElement("enabled");
+		if (enabledElement != NULL)
+		{
+			light.enabled = enabledElement->BoolText();
+		}
 		tinyxml2::XMLElement* posElement = element->FirstChildElement("position");
 		if (posElement != NULL)
 		{

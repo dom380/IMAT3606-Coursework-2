@@ -65,6 +65,30 @@ int XMLReader::GetNumberOfUIElementsInFile(tinyxml2::XMLDocument * doc)
 	}
 	return objectCount;
 }
+int XMLReader::GetNumberOfLightElementsInFile(tinyxml2::XMLDocument * doc)
+{
+	int objectCount = 0;
+	if (doc)
+	{
+		tinyxml2::XMLElement* screenElement = doc->FirstChildElement("screen");
+
+		tinyxml2::XMLElement* lightElements = screenElement->FirstChildElement("lights");
+		if (lightElements)
+		{
+			lightElements = lightElements->FirstChildElement();
+		}
+		else
+		{
+			//no lightElements elements
+			return 0;
+		}
+		while (lightElements != NULL) {
+			objectCount++;
+			lightElements = lightElements->NextSiblingElement();
+		}
+	}
+	return objectCount;
+}
 /*
 bool XMLReader::LoadDoc(string i_sDocName)
 {

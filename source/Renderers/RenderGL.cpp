@@ -234,14 +234,21 @@ void RenderGL::bufferLightingData(vector<Light>& lights, shared_ptr<Shader> &sha
 	numOfLights = 0;
 	for (Light currLight : lights)
 	{
-		//GLSL pads vec3 as vec4 so when buffering store them as vec4.
-		data.push_back(glm::vec4(currLight.pos, 1.0));
-		data.push_back(glm::vec4(currLight.ambient, 1.0));
-		data.push_back(glm::vec4(currLight.diffuse, 1.0));
-		data.push_back(glm::vec4(currLight.specular, 1.0));
-		numOfLights++;
-		if (numOfLights >= MAX_NUM_LIGHTS) break; //Only support MAX_NUM_LIGHTS lights
+		if (currLight.enabled)
+		{
+			//GLSL pads vec3 as vec4 so when buffering store them as vec4.
+			data.push_back(glm::vec4(currLight.pos, 1.0));
+			data.push_back(glm::vec4(currLight.ambient, 1.0));
+			data.push_back(glm::vec4(currLight.diffuse, 1.0));
+			data.push_back(glm::vec4(currLight.specular, 1.0));
+			numOfLights++;
+			if (numOfLights >= MAX_NUM_LIGHTS) break; //Only support MAX_NUM_LIGHTS lights
+		}
+		
 	}
+	if (data.size() <= 0)
+		return;
+
 	shader->setUniform("NUM_LIGHTS", numOfLights);
 	if (bindingPoint >= 0 && bindingPoint <= currBindingPoint) //If buffer has already been created, just update the data
 	{

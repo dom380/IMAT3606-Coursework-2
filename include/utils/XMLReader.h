@@ -14,6 +14,7 @@ public:
 	static tinyxml2::XMLDocument* GetDoc(string i_sDocName);
 	static int GetNumberOfGameObjectsInFile(tinyxml2::XMLDocument* doc);
 	static int GetNumberOfUIElementsInFile(tinyxml2::XMLDocument* doc);
+	static int GetNumberOfLightElementsInFile(tinyxml2::XMLDocument* doc);
 
 
 	static int			iReadDataFromElements(string i_sDocName, int i_iInnerElementNumber,string i_sOuterElement);

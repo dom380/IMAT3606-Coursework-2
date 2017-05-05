@@ -17,7 +17,7 @@
 				<script>ui_button_callbacks.lua</script>
 				<function>replaceScreen</function>
 				<params>
-					<param name="screenId">Level3</param>
+					<param name="screenId">showcase</param>
 				</params>
 			</onClick>
 		</uiElement>

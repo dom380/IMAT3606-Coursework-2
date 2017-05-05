@@ -774,6 +774,10 @@ private:
 			{
 				paramTable[paramName] = paramElement->FloatText();
 			}
+			else if (paramType == "bool")
+			{
+				paramTable[paramName] = paramElement->BoolText();
+			}
 			paramElement = paramElement->NextSiblingElement();
 		}
 	}

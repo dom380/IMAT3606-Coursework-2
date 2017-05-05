@@ -12,15 +12,21 @@ enemy_pathfinding.update = function(logicComponent, dt, params)
 		local startPoint = params["start_point"]
 		local movingForward = params["movingForward"]
 		local speed = 1.0
+		local canRotate = true
 		if params["move_speed"] ~= nil then
 			speed = params["move_speed"]
+		end
+		if params["can_rotate"] ~= nil then
+			canRotate = params["can_rotate"]
 		end
 		if movingForward then
 			local dist = logicComponent:getDistance(endPoint, pos)
 			if dist < 0.5 then
 				local rotAxis = engine.vec3()
-				rotAxis.y = 1
-				angle = logicComponent:quatMultiply(angle,logicComponent:angleAxis(180,rotAxis))
+				if canRotate then
+					rotAxis.y = 1
+					angle = logicComponent:quatMultiply(angle,logicComponent:angleAxis(180,rotAxis))
+				end
 				params["movingForward"] = false
 			end
 			local diff = logicComponent:vec3Subtract(endPoint, pos)
@@ -32,8 +38,10 @@ enemy_pathfinding.update = function(logicComponent, dt, params)
 			local dist = logicComponent:getDistance(startPoint, pos)
 			if dist < 0.5 then
 				local rotAxis = engine.vec3()
-				rotAxis.y = 1
-				angle = logicComponent:quatMultiply(angle,logicComponent:angleAxis(180,rotAxis))
+				if canRotate then
+					rotAxis.y = 1
+					angle = logicComponent:quatMultiply(angle,logicComponent:angleAxis(180,rotAxis))
+				end
 				params["movingForward"] = true
 			end
 			local diff = logicComponent:vec3Subtract(startPoint, pos)

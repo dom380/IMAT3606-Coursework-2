@@ -1,0 +1,65 @@
+newmtl A_2SG
+illum 4
+Kd 0.80 0.26 0.90
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.20 0.20 0.20
+Ns 48.00
+newmtl E_2SG
+illum 4
+Kd 0.80 0.26 0.90
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.20 0.20 0.20
+Ns 48.00
+newmtl Extrude_NURBS_1_2SG
+illum 4
+Kd 0.80 0.26 0.90
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.20 0.20 0.20
+Ns 48.00
+newmtl M_2SG
+illum 4
+Kd 0.41 0.72 0.30
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.20 0.20 0.20
+Ns 48.00
+newmtl N_2SG
+illum 4
+Kd 0.82 0.89 0.11
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl SphereSG
+illum 4
+Kd 0.80 0.26 0.90
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.20 0.20 0.20
+Ns 48.00
+newmtl SphereSG1
+illum 4
+Kd 0.96 0.94 0.96
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+newmtl blinn1SG
+illum 4
+Kd 0.00 0.00 1.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.50 0.50 0.50
+newmtl clouds_2_2SG
+illum 4
+Kd 0.27 0.68 0.83
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00

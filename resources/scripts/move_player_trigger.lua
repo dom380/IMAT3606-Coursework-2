@@ -23,6 +23,10 @@ move_player_trigger.trigger = function(gameObject, engineObj, logic, params)
 			if controller and camDistance then
 				controller:setCameraDistance(camDistance)
 			end
+			local camDirection = params["camera_direction"]
+			if controller and camDirection then
+				controller:setCameraDirection(camDirection)
+			end
 		end
 	else
 		print("logic or params nil")

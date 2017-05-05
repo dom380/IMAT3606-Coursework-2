@@ -22,6 +22,7 @@ public:
 	void setJumpForce(float force);
 	void setWorldFront(float x, float y, float z);
 	void setCameraDistance(glm::vec3 dist);
+	void setCameraDirection(glm::vec3 direction);
 	void dispose();
 private:
 	std::weak_ptr<GameObject> owner;

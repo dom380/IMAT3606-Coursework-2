@@ -339,7 +339,7 @@ void DebugMenu::debugGameObjectsMenu()
 				{
 					ImGui::PushID(i);
 					char compName[14];
-					snprintf(compName, sizeof(compName), "COMP_%d", i);
+					snprintf(compName, sizeof(compName), "%s_%d", EnumParser<ComponentType>().getString(cType), i);
 					//Each component has editable stuff
 					if (ImGui::TreeNode(compName))
 					{

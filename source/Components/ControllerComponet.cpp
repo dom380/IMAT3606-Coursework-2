@@ -117,6 +117,18 @@ void ControllerComponent::setCameraDistance(glm::vec3 dist)
 	}
 }
 
+void ControllerComponent::setCameraDirection(glm::vec3 direction)
+{
+	if (camera)
+	{
+		auto followCam = dynamic_pointer_cast<FollowCamera>(camera);
+		if (followCam)
+		{
+			followCam->lookAt(direction.x, direction.y, direction.z);
+		}
+	}
+}
+
 void ControllerComponent::dispose()
 {
 	auto ptr = dynamic_pointer_cast<BulletPhysics, Physics>(physics);
@@ -166,6 +178,7 @@ void ControllerComponent::pollInput()
 	if ((space == KeyEventType::KEY_PRESSED || space == KeyEventType::KEY_REPEATED) && controller->canJump())
 	{
 		controller->jump(upDir*jumpForce);
+		SoundComponent::Instance()->play(1);
 	}
 
 }

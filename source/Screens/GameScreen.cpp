@@ -30,11 +30,17 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 	listener = Listener::Instance();
 	sounds = SoundComponent::Instance();
 	sounds->loadSound("resources/audio/Background Music/menu.wav");
+	sounds->loadSound("resources/audio/Sound Effects/Character/jump.wav");
+	sounds->loadSound("resources/audio/Sound Effects/environment/collectable.wav");
+	sounds->loadSound("resources/audio/Sound Effects/Character/hit.ogg");
 
 	listener->setPosition(0, 0.0, 0.0);
 	listener->setDirection(1, 0.0, 0.0);
 	sounds->GetSound(0)->play();
 	sounds->setLooping(true, 0);
+	sounds->setLooping(false, 1);
+	sounds->setLooping(false, 2);
+	sounds->setLooping(false, 3);
 
 	skybox = std::make_shared<Skybox>(renderer, std::string("./resources/textures/cubemap/st"));
 }

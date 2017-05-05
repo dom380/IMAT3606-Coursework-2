@@ -246,8 +246,8 @@ void RenderGL::bufferLightingData(vector<Light>& lights, shared_ptr<Shader> &sha
 		}
 		
 	}
-	if (data.size() <= 0)
-		return;
+	//if (data.size() <= 0)
+	//	return;
 
 	shader->setUniform("NUM_LIGHTS", numOfLights);
 	if (bindingPoint >= 0 && bindingPoint <= currBindingPoint) //If buffer has already been created, just update the data

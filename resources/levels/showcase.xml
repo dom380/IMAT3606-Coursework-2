@@ -98,6 +98,9 @@
                             <z>0.5</z>
                         </half_extents>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
             </components>
         </gameObject>
@@ -161,6 +164,9 @@
                     <bounding_shape type="sphere">
                         <radius>1</radius>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
             </components>
         </gameObject>
@@ -228,6 +234,9 @@
                             <z>0.5</z>
                         </half_extents>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
             </components>
         </gameObject>
@@ -591,6 +600,9 @@
                             <z>5</z>
                         </half_extents>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
                 <component type="logic">
                     <script>default.lua</script>
@@ -841,6 +853,7 @@
                             <y>56.0</y>
                             <z>68.0</z>
                         </param>
+						<param type="string" name="collision_filter">player</param>
                     </params>
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
@@ -883,6 +896,7 @@
                     <trigger_once>true</trigger_once>
                     <params>
                         <param type="string" name="string_id">score_string</param>
+						<param type="string" name="collision_filter">player</param>
                     </params>
                 </component>
             </components>
@@ -922,6 +936,7 @@
                     <trigger_once>true</trigger_once>
                     <params>
                         <param type="string" name="string_id">heartcount</param>
+						<param type="string" name="collision_filter">player</param>
                     </params>
                 </component>
             </components>
@@ -3143,6 +3158,9 @@
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
             </components>
         </gameobject>
@@ -3179,6 +3197,9 @@
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
             </components>
         </gameobject>
@@ -3215,6 +3236,9 @@
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
             </components>
         </gameobject>
@@ -3251,6 +3275,9 @@
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
             </components>
         </gameobject>
@@ -3287,6 +3314,9 @@
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
             </components>
         </gameobject>
@@ -3323,6 +3353,9 @@
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
             </components>
         </gameobject>
@@ -3359,6 +3392,9 @@
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
             </components>
         </gameobject>
@@ -3395,6 +3431,9 @@
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
             </components>
         </gameobject>
@@ -3431,6 +3470,9 @@
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
             </components>
         </gameobject>
@@ -3467,6 +3509,9 @@
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
             </components>
         </gameobject>
@@ -4076,6 +4121,9 @@
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
             </components>
         </gameobject>
@@ -4112,6 +4160,9 @@
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
             </components>
         </gameobject>
@@ -4148,6 +4199,9 @@
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
             </components>
         </gameobject>
@@ -4184,6 +4238,9 @@
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
             </components>
         </gameobject>
@@ -4220,6 +4277,9 @@
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
                     </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+					</params> 
                 </component>
             </components>
         </gameobject>
@@ -6181,49 +6241,7 @@
                 </component>
             </components>
         </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="cube.obj">
-                    <file>cube.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>0</x>
-                        <y>6.25</y>
-                        <z>0</z>
-                    </position>
-                    <scale>
-                        <x>10</x>
-                        <y>10</y>
-                        <z>10</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="box">
-                        <half_extents>
-                            <x>1</x>
-                            <y>1</y>
-                            <z>1</z>
-                        </half_extents>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-3.0651855</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
+        
         <gameobject>
             <components>
                 <component type="model" id="sphere.obj">

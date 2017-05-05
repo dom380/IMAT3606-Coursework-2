@@ -485,6 +485,9 @@
 						<radius>0.5</radius>
 					</bounding_shape>
 					<trigger_once>true</trigger_once>
+					<!-- <params>
+						<param type="string" name="collision_filter">UNKNOWN</param>
+					</params> -->
 				</component>
 			</components>
 		</gameObject>

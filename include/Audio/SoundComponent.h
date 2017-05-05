@@ -60,7 +60,9 @@ public:
 	/*
 		If the sound is playing
 	*/
-	sf::SoundSource::Status isPlaying(int index);
+	bool isPlaying(int index);
+
+	sf::SoundSource::Status getStatus(int index);
 
 	/*
 		Sets sound on pause

@@ -176,5 +176,13 @@ ScriptEngine::ScriptEngine()
 				.addData("orientation", &Transform::orientation)
 				.addFunction("getOriginalPos", &Transform::getOriginalPos)
 			.endClass()
+			.beginClass<SoundComponent>("Sound")
+				.addStaticFunction("getInstance", &SoundComponent::Instance)
+				.addFunction("loadSound", &SoundComponent::loadSound)
+				.addFunction("play",&SoundComponent::play)
+				.addFunction("setLooping", &SoundComponent::setLooping)
+				.addFunction("stop", &SoundComponent::stop)
+				.addFunction("isPlaying", &SoundComponent::isPlaying)
+			.endClass()
 		.endNamespace();
 }

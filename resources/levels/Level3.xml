@@ -420,7 +420,15 @@
 					</scale>
 				</component>
 				<component type="TRIGGER">
-					<script>end_screen_trigger.lua</script>
+					<script>move_player_trigger.lua</script>
+					<params>
+						<param name="new_pos" type="vec3">
+							<x>-6.0</x>
+							<y>10.0</y>
+							<z>8.0</z>
+						</param>
+					</params>
+					<!-- <script>end_screen_trigger.lua</script> -->
 					<bounding_shape type="BOX">
 						<half_extents>
 							<x>0.25</x>
@@ -428,7 +436,7 @@
 							<z>0.25</z>
 						</half_extents>
 					</bounding_shape>
-					<trigger_once>true</trigger_once>
+					<trigger_once>false</trigger_once>
 				</component>
 			</components>
 		</gameObject>

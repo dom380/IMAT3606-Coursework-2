@@ -80,7 +80,12 @@ void SoundComponent::setLooping(bool b, int index)
 	m_Sounds.at(index)->setLoop(b);
 }
 
-sf::SoundSource::Status SoundComponent::isPlaying(int index)
+bool SoundComponent::isPlaying(int index)
+{
+	return m_Sounds.at(index)->getStatus() == sf::Sound::Status::Playing;
+}
+
+sf::SoundSource::Status SoundComponent::getStatus(int index)
 {
 	return m_Sounds.at(index)->getStatus();
 }

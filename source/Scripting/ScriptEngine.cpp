@@ -1,5 +1,6 @@
 #include <Scripting\ScriptEngine.h>
 #include <Components\LogicComponent.h>
+#include <Components\ControllerComponent.h>
 #include <Components\CollisionMessage.h>
 #include <Engine.h>
 #include <Graphics\Material.h>
@@ -139,6 +140,11 @@ ScriptEngine::ScriptEngine()
 			.endClass()
 			.deriveClass<PhysicsComponent, Component>("PhysicsComponent")
 			.endClass()
+			.deriveClass<ControllerComponent, Component>("Controller")
+				.addFunction("setCameraDistance", &ControllerComponent::setCameraDistance)
+				.addFunction("setCameraDirection", &ControllerComponent::setCameraDirection)
+				.addFunction("setWorldFront", &ControllerComponent::setWorldFront)
+			.endClass()
 			.beginClass<MsgType>("MsgType")
 			.endClass()
 			.beginClass<Message>("Message")
@@ -167,6 +173,7 @@ ScriptEngine::ScriptEngine()
 				.addFunction("getLogic", &GameObject::getLogic)
 				.addFunction("getPhysics", &GameObject::getPhysics)
 				.addFunction("getTrigger", &GameObject::getTrigger)
+				.addFunction("getController", &GameObject::getController)
 				.addFunction("getId", &GameObject::getId)
 				.addFunction("getTag", &GameObject::getTagString)
 			.endClass()
@@ -175,6 +182,14 @@ ScriptEngine::ScriptEngine()
 				.addData("scale", &Transform::scale)
 				.addData("orientation", &Transform::orientation)
 				.addFunction("getOriginalPos", &Transform::getOriginalPos)
+			.endClass()
+			.beginClass<SoundComponent>("Sound")
+				.addStaticFunction("getInstance", &SoundComponent::Instance)
+				.addFunction("loadSound", &SoundComponent::loadSound)
+				.addFunction("play",&SoundComponent::play)
+				.addFunction("setLooping", &SoundComponent::setLooping)
+				.addFunction("stop", &SoundComponent::stop)
+				.addFunction("isPlaying", &SoundComponent::isPlaying)
 			.endClass()
 		.endNamespace();
 }

@@ -73,19 +73,19 @@ bool EngineCamera::handle(KeyEvent& event)
 		{
 			cameraSpeed = normalCameraSpeed * 2;
 		}
-		if (event.key == KeyCodes::W) //W
+		if (event.key == KeyCodes::UP) 
 		{
 			position -= cameraSpeed * frontDir;
 		}
-		else if (event.key == KeyCodes::S) //S
+		else if (event.key == KeyCodes::DOWN)
 		{
 			position += cameraSpeed * frontDir;
 		}
-		else if (event.key == KeyCodes::A) //A
+		else if (event.key == KeyCodes::LEFT) 
 		{
 			position -= rightDir * cameraSpeed;
 		}
-		else if (event.key == KeyCodes::D) //D
+		else if (event.key == KeyCodes::RIGHT) 
 		{
 			position += rightDir * cameraSpeed;
 		}

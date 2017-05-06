@@ -71,6 +71,12 @@ void CollisionTrigger::trigger(std::shared_ptr<GameObject> collider)
 {
 	try
 	{
+		luabridge::LuaRef filter = params.isNil() ? luabridge::LuaRef(LuaStateHolder::getLuaState()) : params["collision_filter"];
+		if (!filter.isNil() && filter.isString())
+		{
+			if (collider->getTagString() != params["collision_filter"].cast<string>())
+				return;
+		}
 		if (triggerFunc.isFunction()) //If the script contains a valid function
 		{
 			if (triggerOnce && !triggered)
@@ -96,6 +102,13 @@ void CollisionTrigger::trigger(GameObject * collider)
 {
 	try
 	{
+		luabridge::LuaRef filter = params.isNil() ? luabridge::LuaRef(LuaStateHolder::getLuaState()) : params["collision_filter"];
+		if (!filter.isNil() && filter.isString())
+		{
+			if (collider->getTagString() != params["collision_filter"].cast<string>())
+				return;
+		}
+		
 		if (triggerFunc.isFunction()) //If the script contains a valid function
 		{
 			if (triggerOnce && !triggered)

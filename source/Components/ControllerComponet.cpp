@@ -107,6 +107,30 @@ void ControllerComponent::setWorldFront(float x, float y, float z, bool negative
 	if (negative) angleOffset = -angleOffset;
 }
 
+void ControllerComponent::setCameraDistance(glm::vec3 dist)
+{
+	if (camera)
+	{
+		auto followCam = dynamic_pointer_cast<FollowCamera>(camera);
+		if (followCam)
+		{
+			followCam->setFollowDist(dist);
+		}
+	}
+}
+
+void ControllerComponent::setCameraDirection(glm::vec3 direction)
+{
+	if (camera)
+	{
+		auto followCam = dynamic_pointer_cast<FollowCamera>(camera);
+		if (followCam)
+		{
+			followCam->lookAt(direction.x, direction.y, direction.z);
+		}
+	}
+}
+
 void ControllerComponent::dispose()
 {
 	auto ptr = dynamic_pointer_cast<BulletPhysics, Physics>(physics);
@@ -116,17 +140,22 @@ void ControllerComponent::dispose()
 void ControllerComponent::pollInput()
 {
 	KeyEventType left, right, up, down, space;
-	left = input->getKeyState(KeyCodes::LEFT);
-	right = input->getKeyState(KeyCodes::RIGHT);
-	up = input->getKeyState(KeyCodes::UP);
-	down = input->getKeyState(KeyCodes::DOWN);
+	left = input->getKeyState(KeyCodes::A);
+	right = input->getKeyState(KeyCodes::D);
+	up = input->getKeyState(KeyCodes::W);
+	down = input->getKeyState(KeyCodes::S);
 	space = input->getKeyState(KeyCodes::SPACE);
 	btVector3 walkDir(0.0, 0.0, 0.0);
 	btScalar vel = btScalar(movementSpeed);
-	if (left == KeyEventType::KEY_PRESSED) walkDir.setX(-vel);
-	else if (right == KeyEventType::KEY_PRESSED) walkDir.setX(vel);
-	if (up == KeyEventType::KEY_PRESSED) walkDir.setZ(-vel);
-	else if (down == KeyEventType::KEY_PRESSED) walkDir.setZ(vel);
+	if (left == KeyEventType::KEY_PRESSED) 
+		walkDir.setX(-vel);
+	if (right == KeyEventType::KEY_PRESSED) 
+		walkDir.setX(vel);
+
+	if (up == KeyEventType::KEY_PRESSED) 
+		walkDir.setZ(-vel);
+	if (down == KeyEventType::KEY_PRESSED) 
+		walkDir.setZ(vel);
 	
 	walkDir = walkDir.rotate(upDir, -angleOffset);
 	controller->setWalkDirection(walkDir);
@@ -148,9 +177,10 @@ void ControllerComponent::pollInput()
 		delete msg;
 	}
 
-	if (space == KeyEventType::KEY_PRESSED && controller->canJump())
+	if ((space == KeyEventType::KEY_PRESSED || space == KeyEventType::KEY_REPEATED) && controller->canJump())
 	{
 		controller->jump(upDir*jumpForce);
+		SoundComponent::Instance()->play(1);
 	}
 
 }

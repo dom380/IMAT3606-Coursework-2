@@ -1008,7 +1008,7 @@ bool BulletActerController::onGround() const
 			return (cb.m_closestHitFraction < m_jumpRay);
 		}
 	}
-	return (fabs(m_verticalVelocity) < SIMD_EPSILON) && (fabs(m_verticalOffset) < SIMD_EPSILON);
+	return false;
 }
 
 void BulletActerController::setStepHeight(btScalar h)

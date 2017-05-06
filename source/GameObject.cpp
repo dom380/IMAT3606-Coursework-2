@@ -45,6 +45,11 @@ CollisionTrigger* GameObject::getTrigger()
 	return getComponent<CollisionTrigger>(ComponentType::TRIGGER);
 }
 
+ControllerComponent* GameObject::getController()
+{
+	return getComponent<ControllerComponent>(ComponentType::CONTROLLER);
+}
+
 
 
 void GameObject::AddComponent(std::shared_ptr<Component> comp, ComponentType type)

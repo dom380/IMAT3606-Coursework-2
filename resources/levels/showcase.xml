@@ -6634,10 +6634,14 @@
                 </component>
                 <component type="trigger">
                     <script>collectable.lua</script>
-                    <trigger_once>true</trigger_once>
                     <bounding_shape type="sphere">
                         <radius>1.5</radius>
                     </bounding_shape>
+                    <trigger_once>true</trigger_once>
+                    <params>
+                        <param type="string" name="string_id">heartcount</param>
+                        <param type="string" name="collision_filter">player</param>
+                    </params>
                 </component>
             </components>
         </gameobject>
@@ -6670,10 +6674,14 @@
                 </component>
                 <component type="trigger">
                     <script>collectable.lua</script>
-                    <trigger_once>true</trigger_once>
                     <bounding_shape type="sphere">
                         <radius>1.5</radius>
                     </bounding_shape>
+                    <trigger_once>true</trigger_once>
+                    <params>
+                        <param type="string" name="string_id">heartcount</param>
+                        <param type="string" name="collision_filter">player</param>
+                    </params>
                 </component>
             </components>
         </gameobject>
@@ -8633,7 +8641,7 @@
                         <w>304.985</w>
                     </orientation>
                 </component>
-                <component type="logic">
+               <component type="logic">
                     <script>collectable.lua</script>
                 </component>
                 <component type="trigger">
@@ -8644,6 +8652,7 @@
                     <trigger_once>true</trigger_once>
                     <params>
                         <param type="string" name="string_id">heartcount</param>
+                        <param type="string" name="collision_filter">player</param>
                     </params>
                 </component>
             </components>
@@ -8683,6 +8692,7 @@
                     <trigger_once>true</trigger_once>
                     <params>
                         <param type="string" name="string_id">heartcount</param>
+                        <param type="string" name="collision_filter">player</param>
                     </params>
                 </component>
             </components>

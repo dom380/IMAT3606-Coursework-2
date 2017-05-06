@@ -190,7 +190,7 @@ void GameScreen::addGameObject(shared_ptr<GameObject> gameObj)
 
 void GameScreen::updateLighting()
 {
-	std::shared_ptr<Shader>shader = AssetManager::getInstance()->getShader(std::pair<string, string>("phong.vert", "phong.frag"));
+	std::shared_ptr<Shader>shader = AssetManager::getInstance()->getShader(std::pair<string, string>("lighting.vert", "lighting.frag"));
 	renderer->bufferLightingData(lights, shader, lightingBufferId, lightingBlockId);
 }
 

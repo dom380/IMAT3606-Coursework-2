@@ -619,9 +619,17 @@
     <None Include="shaders\colour.vert">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="shaders\lighting.frag" />
-    <None Include="shaders\lighting.vert" />
-    <None Include="shaders\skybox.frag" />
-    <None Include="shaders\skybox.vert" />
+    <None Include="shaders\skybox.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\lighting.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\lighting.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shaders\skybox.frag">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

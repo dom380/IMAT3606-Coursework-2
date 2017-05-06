@@ -14,11 +14,8 @@ FollowCamera::FollowCamera(int width, int height, float aspect, glm::vec3 target
 }
 void FollowCamera::lookAt(float x, float y, float z)
 {
-	glm::vec3 followCamTilt = glm::vec3(0.0f, 0.25f, 0.0f);
-	x -= followCamTilt.x;
-	y -= followCamTilt.y;
-	z -= followCamTilt.z;
-	lookAt(glm::normalize(glm::vec3(x, y, z)));
+	glm::vec3 xyz = glm::vec3(x, y, z);
+	lookAt(xyz);
 }
 
 void FollowCamera::lookAt(glm::vec3 target)

@@ -260,33 +260,48 @@
                 </component>
                 <component type="transform">
                     <position>
-                        <x>-85.75</x>
-                        <y>45</y>
-                        <z>62.75</z>
+                        <x>-92.76</x>
+                        <y>37.495</y>
+                        <z>-9.712</z>
                     </position>
                     <scale>
-                        <x>1</x>
-                        <y>1</y>
-                        <z>1</z>
+                        <x>0.5</x>
+                        <y>0.5</y>
+                        <z>0.5</z>
                     </scale>
+                    <orientation>
+                        <x>-8.74228e-08</x>
+                        <y>1</y>
+                        <z>-3.93602e-13</z>
+                        <w>180</w>
+                    </orientation>
                 </component>
                 <component type="logic">
                     <script>enemy_pathfinding.lua</script>
                     <params>
                         <param name="start_point" type="vec3">
-                            <x>-85.75</x>
-                            <y>45</y>
-                            <z>62.75</z>
+                            <x>-92.76</x>
+                            <y>37.495</y>
+                            <z>-9.712</z>
                         </param>
                         <param name="end_point" type="vec3">
-                            <x>-85.5</x>
-                            <y>30.0</y>
-                            <z>61.75</z>
+                            <x>-80.76</x>
+                            <y>37.495</y>
+                            <z>-9.712</z>
                         </param>
-                        <param name="move_speed" type="float">
-                3.0
-              </param>
+                        <param name="move_speed" type="float">3.0</param>
                     </params>
+                </component>
+                <component type="trigger">
+                    <script>death_trigger.lua</script>
+                    <trigger_once>false</trigger_once>
+                    <bounding_shape type="box">
+                        <half_extents>
+                            <x>0.5</x>
+                            <y>1</y>
+                            <z>0.5</z>
+                        </half_extents>
+                    </bounding_shape>
                 </component>
             </components>
         </gameObject>
@@ -923,7 +938,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>358.14063</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                     <collision_mesh>log.obj</collision_mesh>
@@ -957,10 +972,26 @@
                     <params>
                         <param name="new_pos" type="vec3">
                             <x>-91.0</x>
-                            <y>56.0</y>
+                            <y>60.0</y>
                             <z>68.0</z>
                         </param>
                         <param type="string" name="collision_filter">player</param>
+                        <param type="bool" name="world_front_negative">true</param>
+                        <param name="world_front" type="vec3">
+                            <x>1.0</x>
+                            <y>0.0</y>
+                            <z>0.0</z>
+                        </param>
+                        <param name="camera_distance" type="vec3">
+                            <x>-15.0</x>
+                            <y>-7.0</y>
+                            <z>0.0</z>
+                        </param>
+                        <param name="camera_direction" type="vec3">
+                            <x>-1.0</x>
+                            <y>0.0</y>
+                            <z>0.0</z>
+                        </param>
                     </params>
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
@@ -987,7 +1018,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.983329</y>
+                        <y>0.983324</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -1147,7 +1178,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.989183</y>
+                        <y>0.988839</y>
                         <z>0</z>
                         <w>345.805</w>
                     </orientation>
@@ -1165,7 +1196,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>3.5873241e-43</y>
+                        <y>1</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1190,7 +1221,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>1.00114</y>
+                        <y>1.00119</y>
                         <z>0</z>
                         <w>345.853</w>
                     </orientation>
@@ -1208,7 +1239,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-469.11719</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1233,7 +1264,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.991987</y>
+                        <y>0.991719</y>
                         <z>0</z>
                         <w>345.902</w>
                     </orientation>
@@ -1251,7 +1282,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-64.248047</y>
+                        <y>-1</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1294,7 +1325,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-198.40625</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1319,7 +1350,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999845</y>
+                        <y>0.999877</y>
                         <z>0</z>
                         <w>345.999</w>
                     </orientation>
@@ -1337,7 +1368,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>413.63281</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1354,9 +1385,9 @@
                 </component>
                 <component type="transform">
                     <position>
-                        <x>-103</x>
+                        <x>-85</x>
                         <y>36.25</y>
-                        <z>-1.5</z>
+                        <z>-0.5</z>
                     </position>
                     <scale>
                         <x>0.375</x>
@@ -1380,7 +1411,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-0.43115997</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1397,157 +1428,9 @@
                 </component>
                 <component type="transform">
                     <position>
-                        <x>-103</x>
+                        <x>-85.25</x>
                         <y>36.25</y>
-                        <z>-3.5</z>
-                    </position>
-                    <scale>
-                        <x>0.375</x>
-                        <y>0.3</y>
-                        <z>-0.35</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>0</mass>
-                    <collision_mesh>littlebrick.obj</collision_mesh>
-                    <convex>true</convex>
-                    <restitution>0.40000000596046448</restitution>
-                    <friction>0.5</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-332.92188</y>
-                        <z>-1.0842022e-19</z>
-                    </velocity>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="littlebrick.obj">
-                    <file>littlebrick.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>-103</x>
-                        <y>36.25</y>
-                        <z>-5.5</z>
-                    </position>
-                    <scale>
-                        <x>0.375</x>
-                        <y>0.3</y>
-                        <z>-0.35</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>0</mass>
-                    <collision_mesh>littlebrick.obj</collision_mesh>
-                    <convex>true</convex>
-                    <restitution>0.40000000596046448</restitution>
-                    <friction>0.5</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-60.285156</y>
-                        <z>-1.0842022e-19</z>
-                    </velocity>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="littlebrick.obj">
-                    <file>littlebrick.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>-103</x>
-                        <y>36.25</y>
-                        <z>-9.75</z>
-                    </position>
-                    <scale>
-                        <x>0.375</x>
-                        <y>0.3</y>
-                        <z>-0.35</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>0</mass>
-                    <collision_mesh>littlebrick.obj</collision_mesh>
-                    <convex>true</convex>
-                    <restitution>0.40000000596046448</restitution>
-                    <friction>0.5</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-205.13281</y>
-                        <z>-1.0842022e-19</z>
-                    </velocity>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="littlebrick.obj">
-                    <file>littlebrick.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>-103</x>
-                        <y>36.25</y>
-                        <z>-11.75</z>
-                    </position>
-                    <scale>
-                        <x>0.375</x>
-                        <y>0.3</y>
-                        <z>-0.35</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>0</mass>
-                    <collision_mesh>littlebrick.obj</collision_mesh>
-                    <convex>true</convex>
-                    <restitution>0.40000000596046448</restitution>
-                    <friction>0.5</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>393.45313</y>
-                        <z>-1.0842022e-19</z>
-                    </velocity>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="littlebrick.obj">
-                    <file>littlebrick.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>-103</x>
-                        <y>36.25</y>
-                        <z>-7.75</z>
+                        <z>-2.75</z>
                     </position>
                     <scale>
                         <x>0.375</x>
@@ -1582,9 +1465,157 @@
                 </component>
                 <component type="transform">
                     <position>
-                        <x>-103</x>
+                        <x>-85.25</x>
                         <y>36.25</y>
-                        <z>16</z>
+                        <z>-5.25</z>
+                    </position>
+                    <scale>
+                        <x>0.375</x>
+                        <y>0.3</y>
+                        <z>-0.35</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-0.073871613</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="littlebrick.obj">
+                    <file>littlebrick.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-85.25</x>
+                        <y>36.25</y>
+                        <z>-9</z>
+                    </position>
+                    <scale>
+                        <x>0.375</x>
+                        <y>0.3</y>
+                        <z>-0.35</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0.32544708</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="littlebrick.obj">
+                    <file>littlebrick.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-85.25</x>
+                        <y>35.75</y>
+                        <z>-13.75</z>
+                    </position>
+                    <scale>
+                        <x>0.375</x>
+                        <y>0.3</y>
+                        <z>-0.35</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="littlebrick.obj">
+                    <file>littlebrick.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-85.25</x>
+                        <y>36.25</y>
+                        <z>-7</z>
+                    </position>
+                    <scale>
+                        <x>0.375</x>
+                        <y>0.3</y>
+                        <z>-0.35</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="littlebrick.obj">
+                    <file>littlebrick.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-86</x>
+                        <y>37.5</y>
+                        <z>4.5</z>
                     </position>
                     <scale>
                         <x>1.375</x>
@@ -1602,45 +1633,8 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-359.82031</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
-                    </velocity>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="littlebrick.obj">
-                    <file>littlebrick.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>-104.75</x>
-                        <y>36.25</y>
-                        <z>-14.75</z>
-                    </position>
-                    <scale>
-                        <x>1.375</x>
-                        <y>0.3</y>
-                        <z>1.15</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>0</mass>
-                    <collision_mesh>littlebrick.obj</collision_mesh>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0.5</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-57.15332</y>
-                        <z>0</z>
                     </velocity>
                 </component>
             </components>
@@ -1719,7 +1713,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-191.68359</y>
+                        <y>0.0041049719</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1759,7 +1753,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>395.13281</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1799,7 +1793,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>7.1746481e-43</y>
+                        <y>-1</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1965,7 +1959,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-326.19531</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2005,7 +1999,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-55.03418</y>
+                        <y>-0.89668274</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2030,7 +2024,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.998793</y>
+                        <y>0.998783</y>
                         <z>0</z>
                         <w>346.048</w>
                     </orientation>
@@ -2045,7 +2039,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-216.90234</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2088,7 +2082,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>418.67188</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2131,7 +2125,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>3.5873241e-43</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2206,7 +2200,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-361.50781</y>
+                        <y>-1</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2246,7 +2240,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-52.583008</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2286,7 +2280,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-132.83203</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2326,7 +2320,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>376.64063</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2366,7 +2360,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-0.82983398</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2406,7 +2400,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-331.24219</y>
+                        <y>-0.70709229</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2487,7 +2481,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-49.772461</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2527,7 +2521,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-206.81641</y>
+                        <y>0.92459106</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2567,7 +2561,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>398.5</y>
+                        <y>0.70709229</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2607,7 +2601,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>7.1746481e-43</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2647,7 +2641,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-364.86719</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2690,7 +2684,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-47.072266</y>
+                        <y>-0.26692963</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2782,7 +2776,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-131.14844</y>
+                        <y>1</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2822,7 +2816,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>430.44531</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2862,7 +2856,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>3.5873241e-43</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -3006,7 +3000,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-465.75781</y>
+                        <y>1</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -3083,7 +3077,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.964382</y>
+                        <y>0.964377</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3122,7 +3116,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.972385</y>
+                        <y>0.97238</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3161,7 +3155,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.979065</y>
+                        <y>0.97906</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3200,7 +3194,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.968259</y>
+                        <y>0.968254</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3239,7 +3233,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.969156</y>
+                        <y>0.969151</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3278,7 +3272,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.967836</y>
+                        <y>0.967831</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3317,7 +3311,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.9727</y>
+                        <y>0.972695</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3356,7 +3350,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.963396</y>
+                        <y>0.963391</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3395,7 +3389,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.949117</y>
+                        <y>0.949112</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3434,7 +3428,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.960572</y>
+                        <y>0.960567</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3560,7 +3554,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-44.996094</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -3600,7 +3594,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-137.875</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -3640,7 +3634,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>423.71875</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -3680,7 +3674,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>3.5873241e-43</y>
+                        <y>-1</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -3720,7 +3714,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-403.53906</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -3911,7 +3905,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-41.230469</y>
+                        <y>-0.43115997</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -3951,7 +3945,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-109.29297</y>
+                        <y>0.0050668716</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -3976,7 +3970,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.951949</y>
+                        <y>0.951944</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -4015,7 +4009,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.9577</y>
+                        <y>0.957695</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -4054,7 +4048,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.958043</y>
+                        <y>0.958038</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -4093,7 +4087,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.955304</y>
+                        <y>0.955299</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -4132,7 +4126,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.94081</y>
+                        <y>0.940805</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -4226,7 +4220,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>388.40625</y>
+                        <y>0.42609406</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -4287,7 +4281,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>7.1746481e-43</y>
+                        <y>0.5546875</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -4327,7 +4321,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-358.14063</y>
+                        <y>0.0038093328</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -4367,7 +4361,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-37.578125</y>
+                        <y>-0.75924683</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -4407,7 +4401,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-176.55078</y>
+                        <y>-0.073871613</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -4447,7 +4441,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>433.80469</y>
+                        <y>-0.5627594</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -4487,7 +4481,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>1.793662e-42</y>
+                        <y>-0.99745178</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -4523,46 +4517,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-346.375</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-35.598633</y>
+                        <y>-0.0062447786</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -4601,826 +4556,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-151.32813</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>353.10156</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>1.4349296e-42</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-353.10156</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-31.675781</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-179.91016</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>373.27344</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>1.793662e-42</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-361.50781</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-28.5</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-168.14063</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>418.67188</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>3.5873241e-43</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-346.375</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-25.879395</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-107.61133</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>418.67188</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>7.1746481e-43</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-326.19531</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-22.300781</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-186.63672</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>391.77344</y>
+                        <y>-0.81314087</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5498,7 +4634,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-368.23438</y>
+                        <y>0.037104607</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5537,7 +4673,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-20.634766</y>
+                        <y>-0.58122253</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5576,7 +4712,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-196.72656</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5615,7 +4751,865 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>411.94531</y>
+                        <y>0</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-0.95449829</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>6.8575901e-08</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-302.65625</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>107.61133</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-295.92969</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-383.36719</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>26.902832</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-376.64063</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-302.65625</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>26.902832</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-373.27344</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-275.75</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>107.61133</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-299.28906</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-275.75</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>188.32031</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-390.08594</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-410.26563</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>121.0625</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5654,7 +5648,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>7.1746481e-43</y>
+                        <y>-279.11719</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5733,7 +5727,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-302.65625</y>
+                        <y>-289.20313</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5772,7 +5766,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-18.6875</y>
+                        <y>174.86719</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5811,7 +5805,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-188.32031</y>
+                        <y>-282.47656</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5850,7 +5844,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>408.58594</y>
+                        <y>-359.82031</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5889,7 +5883,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>1.4349296e-42</y>
+                        <y>164.77734</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5928,7 +5922,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-349.73438</y>
+                        <y>-282.47656</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5967,7 +5961,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-15.341553</y>
+                        <y>-289.20313</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6006,7 +6000,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-151.32813</y>
+                        <y>174.86719</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6045,7 +6039,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>447.25781</y>
+                        <y>-282.47656</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6084,7 +6078,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>7.1746481e-43</y>
+                        <y>-327.875</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6123,7 +6117,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-341.32813</y>
+                        <y>201.76953</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6162,7 +6156,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-12.719482</y>
+                        <y>-282.47656</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6201,7 +6195,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-164.77734</y>
+                        <y>-336.28125</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6240,7 +6234,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>373.27344</y>
+                        <y>188.32031</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6279,7 +6273,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-321.14844</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6318,7 +6312,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-369.91406</y>
+                        <y>-351.41406</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6357,7 +6351,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-11.298096</y>
+                        <y>188.32031</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6401,7 +6395,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-158.05469</y>
+                        <y>-321.14844</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6490,7 +6484,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>361.50781</y>
+                        <y>-344.6875</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6531,7 +6525,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>1.4349296e-42</y>
+                        <y>168.14063</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6683,7 +6677,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.931187</y>
+                        <y>0.931182</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -6719,7 +6713,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.930699</y>
+                        <y>0.930694</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -6755,7 +6749,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.929813</y>
+                        <y>0.929808</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -6791,7 +6785,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.929966</y>
+                        <y>0.929961</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -6827,7 +6821,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.929746</y>
+                        <y>0.929741</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -6863,7 +6857,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.929657</y>
+                        <y>0.929652</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -6899,7 +6893,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.928656</y>
+                        <y>0.928651</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -6935,7 +6929,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.928186</y>
+                        <y>0.928181</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -6971,7 +6965,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.927307</y>
+                        <y>0.927302</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -7007,7 +7001,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.928587</y>
+                        <y>0.928582</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -7084,7 +7078,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-469.11719</y>
+                        <y>-321.14844</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7118,7 +7112,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-7.8118896</y>
+                        <y>-373.27344</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7152,7 +7146,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-164.77734</y>
+                        <y>228.67188</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7186,7 +7180,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>428.76563</y>
+                        <y>-321.14844</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7220,7 +7214,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>1.4349296e-42</y>
+                        <y>-302.65625</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7254,7 +7248,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-358.14063</y>
+                        <y>173.1875</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7309,6 +7303,1399 @@
                         <z>8.56414e-08</z>
                         <w>90</w>
                     </orientation>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="littlebrickindividual_start">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-100.5</x>
+                        <y>52</y>
+                        <z>68.5</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-373.27344</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="brickindividual.obj">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-100.5</x>
+                        <y>50</y>
+                        <z>63.75</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>0.999043</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-306.01563</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="brickindividual.obj">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-100.5</x>
+                        <y>48.5</y>
+                        <z>59.25</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>211.85938</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="brickindividual.obj">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-100.5</x>
+                        <y>48.75</y>
+                        <z>52.25</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-299.28906</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="brickindividual.obj">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-100.5</x>
+                        <y>48.75</y>
+                        <z>44.9994</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-306.01563</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>enemy_pathfinding.lua</script>
+                    <params>
+                        <param name="start_point" type="vec3">
+                            <x>-100.5</x>
+                            <y>48.75</y>
+                            <z>47.75</z>
+                        </param>
+                        <param name="end_point" type="vec3">
+                            <x>-100.5</x>
+                            <y>48.75</y>
+                            <z>37.75</z>
+                        </param>
+                        <param name="move_speed" type="float">3.0</param>
+                        <param name="can_rotate" type="bool">false</param>
+                    </params>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="brickindividual.obj">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-100.5</x>
+                        <y>48.75</y>
+                        <z>33.5</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>242.125</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="brickindividual.obj">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-100.5</x>
+                        <y>57.7663</y>
+                        <z>28.5</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-282.47656</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>enemy_pathfinding.lua</script>
+                    <params>
+                        <param name="start_point" type="vec3">
+                            <x>-100.5</x>
+                            <y>60.25</y>
+                            <z>28.5</z>
+                        </param>
+                        <param name="end_point" type="vec3">
+                            <x>-100.5</x>
+                            <y>36.25</y>
+                            <z>28.5</z>
+                        </param>
+                        <param name="move_speed" type="float">3.0</param>
+                        <param name="can_rotate" type="bool">false</param>
+                    </params>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="brickindividual.obj">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-100.5</x>
+                        <y>60.25</y>
+                        <z>24</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-275.75</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="brickindividual.obj">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-100.5</x>
+                        <y>60.25</y>
+                        <z>18.75</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>188.32031</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="brickindividual.obj">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-100.5</x>
+                        <y>60.25</y>
+                        <z>15.75</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-364.86719</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="brickindividual.obj">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-100.5</x>
+                        <y>61.25</y>
+                        <z>9.5</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-275.75</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="brickindividual.obj">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-100.5</x>
+                        <y>59.25</y>
+                        <z>2</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>230.35547</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="brickindividual.obj">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-100.5</x>
+                        <y>59.25</y>
+                        <z>-1</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-295.92969</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="brickindividual.obj">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-97.25</x>
+                        <y>36</y>
+                        <z>24.75</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-275.75</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="brickindividual.obj">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-94.5</x>
+                        <y>37</y>
+                        <z>20.5</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>104.24805</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="brickindividual.obj">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-94.75</x>
+                        <y>35.5</y>
+                        <z>15.75</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-295.92969</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="brickindividual.obj">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-92.5</x>
+                        <y>37.75</y>
+                        <z>10.5</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-275.75</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="littlebrick.obj">
+                    <file>littlebrick.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-85.25</x>
+                        <y>36.25</y>
+                        <z>-11.5</z>
+                    </position>
+                    <scale>
+                        <x>0.375</x>
+                        <y>0.3</y>
+                        <z>-0.35</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>littlebrick.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0.40000000596046448</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>53.805664</y>
+                        <z>-1.0842022e-19</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="brickindividual.obj">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-93.5</x>
+                        <y>33.75</y>
+                        <z>-16.75</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-393.45313</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="brickindividual.obj">
+                    <file>brickindividual.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-93.5</x>
+                        <y>34.25</y>
+                        <z>-21</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>brickindividual.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>1.7628094539645645e-09</restitution>
+                    <friction>6.9275110092803516e-09</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameObject>
+            <components>
+                <component type="animation">
+                    <!-- fbx files  -->
+                    <default>birdfly</default>
+                    <files>
+                        <file>
+                            <id>birdfly</id>
+                            <filePath>resources/models/Animations/bird@flying.fbx</filePath>
+                        </file>
+                    </files>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-99.01</x>
+                        <y>62.995</y>
+                        <z>4.288</z>
+                    </position>
+                    <scale>
+                        <x>0.5</x>
+                        <y>0.5</y>
+                        <z>0.5</z>
+                    </scale>
+                    <orientation>
+                        <x>-8.74228e-08</x>
+                        <y>1</y>
+                        <z>-3.93602e-13</z>
+                        <w>180</w>
+                    </orientation>
+                </component>
+                <component type="logic">
+                    <script>enemy_pathfinding.lua</script>
+                    <params>
+                        <param name="start_point" type="vec3">
+                            <x>-99.01</x>
+                            <y>62.995</y>
+                            <z>4.288</z>
+                        </param>
+                        <param name="end_point" type="vec3">
+                            <x>-87.01</x>
+                            <y>62.995</y>
+                            <z>4.288</z>
+                        </param>
+                        <param name="move_speed" type="float">3.0</param>
+                    </params>
+                </component>
+                <component type="trigger">
+                    <script>death_trigger.lua</script>
+                    <trigger_once>false</trigger_once>
+                    <bounding_shape type="box">
+                        <half_extents>
+                            <x>0.5</x>
+                            <y>1</y>
+                            <z>0.5</z>
+                        </half_extents>
+                    </bounding_shape>
+                </component>
+            </components>
+        </gameObject>
+        <gameobject>
+            <components>
+                <component type="model" id="gem.obj">
+                    <file>gem.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-85</x>
+                        <y>37.75</y>
+                        <z>-9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.5</x>
+                        <y>0.5</y>
+                        <z>0.5</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>304.969</w>
+                    </orientation>
+                </component>
+                <component type="logic">
+                    <script>collectable.lua</script>
+                </component>
+                <component type="trigger">
+                    <script>collectable.lua</script>
+                    <trigger_once>true</trigger_once>
+                    <bounding_shape type="sphere">
+                        <radius>1.5</radius>
+                    </bounding_shape>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="gem.obj">
+                    <file>gem.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-87.25</x>
+                        <y>37.75</y>
+                        <z>15</z>
+                    </position>
+                    <scale>
+                        <x>0.5</x>
+                        <y>0.5</y>
+                        <z>0.5</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>304.969</w>
+                    </orientation>
+                </component>
+                <component type="logic">
+                    <script>collectable.lua</script>
+                </component>
+                <component type="trigger">
+                    <script>collectable.lua</script>
+                    <trigger_once>true</trigger_once>
+                    <bounding_shape type="sphere">
+                        <radius>1.5</radius>
+                    </bounding_shape>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="gem.obj">
+                    <file>gem.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-90.25</x>
+                        <y>40</y>
+                        <z>26.5</z>
+                    </position>
+                    <scale>
+                        <x>0.5</x>
+                        <y>0.5</y>
+                        <z>0.5</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>304.969</w>
+                    </orientation>
+                </component>
+                <component type="logic">
+                    <script>collectable.lua</script>
+                </component>
+                <component type="trigger">
+                    <script>collectable.lua</script>
+                    <trigger_once>true</trigger_once>
+                    <bounding_shape type="sphere">
+                        <radius>1.5</radius>
+                    </bounding_shape>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="gem.obj">
+                    <file>gem.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-92.75</x>
+                        <y>51</y>
+                        <z>43.75</z>
+                    </position>
+                    <scale>
+                        <x>0.5</x>
+                        <y>0.5</y>
+                        <z>0.5</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>304.969</w>
+                    </orientation>
+                </component>
+                <component type="logic">
+                    <script>collectable.lua</script>
+                </component>
+                <component type="trigger">
+                    <script>collectable.lua</script>
+                    <trigger_once>true</trigger_once>
+                    <bounding_shape type="sphere">
+                        <radius>1.5</radius>
+                    </bounding_shape>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="gem.obj">
+                    <file>gem.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-91.75</x>
+                        <y>60.5</y>
+                        <z>-2.25</z>
+                    </position>
+                    <scale>
+                        <x>0.5</x>
+                        <y>0.5</y>
+                        <z>0.5</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>304.969</w>
+                    </orientation>
+                </component>
+                <component type="logic">
+                    <script>collectable.lua</script>
+                </component>
+                <component type="trigger">
+                    <script>collectable.lua</script>
+                    <trigger_once>true</trigger_once>
+                    <bounding_shape type="sphere">
+                        <radius>1.5</radius>
+                    </bounding_shape>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="gem.obj">
+                    <file>gem.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-95</x>
+                        <y>60.5</y>
+                        <z>-2.25</z>
+                    </position>
+                    <scale>
+                        <x>0.5</x>
+                        <y>0.5</y>
+                        <z>0.5</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>304.969</w>
+                    </orientation>
+                </component>
+                <component type="logic">
+                    <script>collectable.lua</script>
+                </component>
+                <component type="trigger">
+                    <script>collectable.lua</script>
+                    <trigger_once>true</trigger_once>
+                    <bounding_shape type="sphere">
+                        <radius>1.5</radius>
+                    </bounding_shape>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="gem.obj">
+                    <file>gem.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-91.75</x>
+                        <y>60.5</y>
+                        <z>0.75</z>
+                    </position>
+                    <scale>
+                        <x>0.5</x>
+                        <y>0.5</y>
+                        <z>0.5</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>304.969</w>
+                    </orientation>
+                </component>
+                <component type="logic">
+                    <script>collectable.lua</script>
+                </component>
+                <component type="trigger">
+                    <script>collectable.lua</script>
+                    <trigger_once>true</trigger_once>
+                    <bounding_shape type="sphere">
+                        <radius>1.5</radius>
+                    </bounding_shape>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="gem.obj">
+                    <file>gem.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-95</x>
+                        <y>60.5</y>
+                        <z>0.75</z>
+                    </position>
+                    <scale>
+                        <x>0.5</x>
+                        <y>0.5</y>
+                        <z>0.5</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>304.969</w>
+                    </orientation>
+                </component>
+                <component type="logic">
+                    <script>collectable.lua</script>
+                </component>
+                <component type="trigger">
+                    <script>collectable.lua</script>
+                    <trigger_once>true</trigger_once>
+                    <bounding_shape type="sphere">
+                        <radius>1.5</radius>
+                    </bounding_shape>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="gem.obj">
+                    <file>gem.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-93.25</x>
+                        <y>62.25</y>
+                        <z>16.25</z>
+                    </position>
+                    <scale>
+                        <x>0.5</x>
+                        <y>0.5</y>
+                        <z>0.5</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>304.969</w>
+                    </orientation>
+                </component>
+                <component type="logic">
+                    <script>collectable.lua</script>
+                </component>
+                <component type="trigger">
+                    <script>collectable.lua</script>
+                    <trigger_once>true</trigger_once>
+                    <bounding_shape type="sphere">
+                        <radius>1.5</radius>
+                    </bounding_shape>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="star.obj">
+                    <file>star.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-86.5</x>
+                        <y>36.25</y>
+                        <z>-22</z>
+                    </position>
+                    <scale>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                </component>
+                <component type="trigger">
+                    <script>move_player_trigger.lua</script>
+                    <trigger_once>true</trigger_once>
+                    <params>
+                        <param name="new_pos" type="vec3">
+                            <x>144.5</x>
+                            <y>3.75</y>
+                            <z>10</z>
+                        </param>
+                        <param type="string" name="collision_filter">player</param>
+                        <param type="bool" name="world_front_negative">false</param>
+                        <param name="world_front" type="vec3">
+                            <x>1.0</x>
+                            <y>0.0</y>
+                            <z>0.0</z>
+                        </param>
+                        <param name="camera_distance" type="vec3">
+                            <x>15.0</x>
+                            <y>-7.0</y>
+                            <z>0.0</z>
+                        </param>
+                        <param name="camera_direction" type="vec3">
+                            <x>1.0</x>
+                            <y>0.0</y>
+                            <z>0.0</z>
+                        </param>
+                    </params>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="heart.obj">
+                    <file>heart.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-85</x>
+                        <y>37.75</y>
+                        <z>-5.25</z>
+                    </position>
+                    <scale>
+                        <x>2</x>
+                        <y>2</y>
+                        <z>2</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>304.985</w>
+                    </orientation>
+                </component>
+                <component type="logic">
+                    <script>collectable.lua</script>
+                </component>
+                <component type="trigger">
+                    <script>collectable.lua</script>
+                    <bounding_shape type="sphere">
+                        <radius>1.5</radius>
+                    </bounding_shape>
+                    <trigger_once>true</trigger_once>
+                    <params>
+                        <param type="string" name="string_id">heartcount</param>
+                    </params>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="heart.obj">
+                    <file>heart.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-93.75</x>
+                        <y>62.5</y>
+                        <z>8.25</z>
+                    </position>
+                    <scale>
+                        <x>2</x>
+                        <y>2</y>
+                        <z>2</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>1</y>
+                        <z>0</z>
+                        <w>304.985</w>
+                    </orientation>
+                </component>
+                <component type="logic">
+                    <script>collectable.lua</script>
+                </component>
+                <component type="trigger">
+                    <script>collectable.lua</script>
+                    <bounding_shape type="sphere">
+                        <radius>1.5</radius>
+                    </bounding_shape>
+                    <trigger_once>true</trigger_once>
+                    <params>
+                        <param type="string" name="string_id">heartcount</param>
+                    </params>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="death_floor_mountain">
+                    <file>cube.obj</file>
+                    <active>false</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>-157.5</x>
+                        <y>30.5</y>
+                        <z>0</z>
+                    </position>
+                    <scale>
+                        <x>100</x>
+                        <y>0.1</y>
+                        <z>100</z>
+                    </scale>
+                </component>
+                <component type="trigger">
+                    <script>death_trigger.lua</script>
+                    <trigger_once>false</trigger_once>
+                    <bounding_shape type="box">
+                        <half_extents>
+                            <x>500</x>
+                            <y>1</y>
+                            <z>500</z>
+                        </half_extents>
+                    </bounding_shape>
+					<params>
+						<param type="string" name="collision_filter">player</param>
+                        <param type="bool" name="world_front_negative">false</param>
+                        <param name="world_front" type="vec3">
+                            <x>1.0</x>
+                            <y>0.0</y>
+                            <z>0.0</z>
+                        </param>
+                        <param name="camera_distance" type="vec3">
+                            <x>15.0</x>
+							<y>-7.0</y>
+							<z>0.0</z>
+                        </param>
+                        <param name="camera_direction" type="vec3">
+                            <x>1.0</x>
+                            <y>0.0</y>
+                            <z>0.0</z>
+                        </param>
+					</params>
                 </component>
             </components>
         </gameobject>

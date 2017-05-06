@@ -1,6 +1,6 @@
 death_trigger = {}
 
-death_trigger.trigger = function(gameObject, engineObject, param)
+death_trigger.trigger = function(gameObject, engineObj, logic, params)
 	local logic = gameObject:getLogic()
 	local tag = gameObject:getTag()
 	if logic then
@@ -18,8 +18,30 @@ death_trigger.trigger = function(gameObject, engineObject, param)
 			if sound ~= nil then
 				sound:play(3)
 			end
+			if params ~= nil then
+				local worldFront = params["world_front"]
+				--Todo - Add when Ben's controller change is checked in.
+				local worldFrontNegative = params["world_front_negative"]
+				if worldFrontNegative == nil then 
+					worldFrontNegative = false
+				end
+				local controller = gameObject:getController()
+				if controller and worldFront ~= nil then
+					controller:setWorldFront(worldFront.x, worldFront.y, worldFront.z, worldFrontNegative)
+				end
+				local camDistance = params["camera_distance"]
+				if controller and camDistance then
+					controller:setCameraDistance(camDistance)
+				end
+				local camDirection = params["camera_direction"]
+				if controller and camDirection then
+					controller:setCameraDirection(camDirection)
+				else
+					print("cam dist missing")
+				end
+			end
 			if hp == 0 then
-				engineObject:replaceScreen("GameOver")
+				engineObj:replaceScreen("GameOver")
 			end
 		end
 	end

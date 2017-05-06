@@ -99,10 +99,12 @@ void ControllerComponent::setJumpForce(float force)
 	jumpForce = force;
 }
 
-void ControllerComponent::setWorldFront(float x, float y, float z)
+void ControllerComponent::setWorldFront(float x, float y, float z, bool negative)
 {
 	worldFront = btVector3(x, y, z);
-	angleOffset = worldFront.angle(interalFront);
+	auto cosTheta = interalFront.dot(worldFront);
+	angleOffset = acos(cosTheta);
+	if (negative) angleOffset = -angleOffset;
 }
 
 void ControllerComponent::dispose()

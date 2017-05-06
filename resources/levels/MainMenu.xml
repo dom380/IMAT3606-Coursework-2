@@ -29,13 +29,6 @@
                 <g>0</g>
                 <b>0</b>
             </colour>
-            <onClick>
-                <script>ui_button_callbacks.lua</script>
-                <function>exit</function>
-                <params>
-                    <param name="screenId">showcase</param>
-                </params>
-            </onClick>
             <position>
                 <x>30</x>
                 <y>650</y>
@@ -89,6 +82,27 @@
             <position>
                 <x>444.25</x>
                 <y>158</y>
+                <z>0</z>
+            </position>
+            <scale>
+                <x>1</x>
+                <y>1</y>
+                <z>1</z>
+            </scale>
+            <font>Cookies.ttf</font>
+        </uiElement>
+        <uiElement>
+            <ID>gamename</ID>
+            <Type>text</Type>
+            <value>Brick by Brick</value>
+            <colour>
+                <r>1</r>
+                <g>1</g>
+                <b>1</b>
+            </colour>
+            <position>
+                <x>374.25</x>
+                <y>533.75</y>
                 <z>0</z>
             </position>
             <scale>

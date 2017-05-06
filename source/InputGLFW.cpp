@@ -30,7 +30,7 @@ void InputGLFW::mouseButtonCallback(GLFWwindow * window, int button, int action,
 
 	WindowGLFW* gw = (WindowGLFW*) Engine::g_pEngine->GetWindow().get();
 	gw->getImGuiHandler()->imGuiMouseButtonCallback(Engine::g_pEngine->GetWindow(), button, action, mods);
-	if (gw->getImGuiHandler()->imGuiHasInputFocus())
+	if (gw->getImGuiHandler()->imGuiHasInputFocus() && Engine::g_pEngine->getDebugMenu()->isRendering())
 		return;
 
 	double cursorPosX, cursorPosY;
@@ -65,7 +65,7 @@ void InputGLFW::keyboardCallback(GLFWwindow * window, int key, int scancode, int
 
 	WindowGLFW* gw = (WindowGLFW*)Engine::g_pEngine->GetWindow().get(); 
 	gw->getImGuiHandler()->imGuiKeyCallback(Engine::g_pEngine->GetWindow(), key, scancode, action, mods);
-	if (gw->getImGuiHandler()->imGuiHasInputFocus())
+	if (gw->getImGuiHandler()->imGuiHasInputFocus() && Engine::g_pEngine->getDebugMenu()->isRendering())
 		return;
 
 	KeyEventType type;
@@ -101,7 +101,7 @@ void InputGLFW::charCallback(GLFWwindow * window, unsigned int c)
 {
 	WindowGLFW* gw = (WindowGLFW*)Engine::g_pEngine->GetWindow().get(); 
 	gw->getImGuiHandler()->imGuiCharCallback(Engine::g_pEngine->GetWindow(), c);
-	if (gw->getImGuiHandler()->imGuiHasInputFocus())
+	if (gw->getImGuiHandler()->imGuiHasInputFocus() && Engine::g_pEngine->getDebugMenu()->isRendering())
 		return;
 }
 

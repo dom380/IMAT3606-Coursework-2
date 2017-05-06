@@ -156,6 +156,11 @@ public:
 	Switches the camera if 'C' pressed.
 	*/
 	bool  handle(KeyEvent& event);
+
+	bool isRendering()
+	{
+		return isActive;
+	}
 };
 
 #endif // !DEBUGMENU_h

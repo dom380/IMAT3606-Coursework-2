@@ -520,8 +520,10 @@ bool FileSaver::AddObjectToFile(tinyxml2::XMLDocument* doc, int iObjectCount, sh
 						Give component transform information adding xyz from transform elements
 						*/
 
-						auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(go->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
-						AddTransformToFile(doc, componentElement, model->getTransform());
+						auto transform = gameScreen->getComponentStore()->getComponent<Transform>(go->GetComponentHandle(ComponentType::TRANSFORM), ComponentType::TRANSFORM);
+						if (!transform)
+							return false;
+						AddTransformToFile(doc, componentElement, transform);
 
 						break;
 					}

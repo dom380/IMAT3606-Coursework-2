@@ -25,7 +25,8 @@ class Transform;
 class LogicComponent;
 class CollisionTrigger;
 class Light;
-class DebugMenu
+
+class DebugMenu : public EventListener
 {
 private:
 	DebugMenu() {};
@@ -34,6 +35,7 @@ private:
 
 	static bool initialised;
 	static shared_ptr<DebugMenu> instance;
+	bool isActive;
 	/*
 		Menu Bools
 	*/
@@ -145,6 +147,15 @@ public:
 		Lights editor, position only.
 	*/
 	void lightsMenu(int i, Light* light);
+
+	/*
+	Empty implementation of Mouse Event handeling
+	*/
+	bool  handle(MouseEvent& event);
+	/*
+	Switches the camera if 'C' pressed.
+	*/
+	bool  handle(KeyEvent& event);
 };
 
 #endif // !DEBUGMENU_h

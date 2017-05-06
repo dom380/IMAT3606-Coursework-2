@@ -202,6 +202,7 @@ bool GameScreen::handle(MouseEvent& event)
 
 bool GameScreen::handle(KeyEvent& event)
 {
+	Engine::g_pEngine->getDebugMenu()->handle(event);
 	if (event.type == KeyEventType::KEY_PRESSED)
 	{
 		if (event.key == KeyCodes::C)//c
@@ -220,6 +221,7 @@ bool GameScreen::handle(KeyEvent& event)
 	{
 		cameras.at(0)->handle(event);
 	}
+	
 	return false;
 }
 

@@ -57,6 +57,7 @@ void Engine::init()
 	loadFirstLevel();
 
 	DebugMenu::getInstance()->init();
+	inputHandler->registerKeyListener(DebugMenu::getInstance());
 	engineState = std::make_shared<EngineState>();
 }
 

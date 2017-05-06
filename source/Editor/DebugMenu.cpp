@@ -21,6 +21,7 @@ shared_ptr<DebugMenu> DebugMenu::getInstance()
 
 void DebugMenu::init()
 {
+	isActive = false;
 	showGameObjects = false;
 	showCube = false;
 	showSaveAsMenu = false;
@@ -29,6 +30,8 @@ void DebugMenu::init()
 
 void DebugMenu::update()
 {
+	if (!isActive)
+		return;
 	updateMainMenu();
 	updateLogic();
 	DebugUtils::getInstance()->update();
@@ -1002,6 +1005,8 @@ string DebugMenu::listBoxItemSelected(UIType type)
 
 void DebugMenu::render()
 {
+	if (!isActive)
+		return;
 	ImGui::Render();
 }
 
@@ -1441,4 +1446,22 @@ void DebugMenu::lightsMenu(int i, Light * light)
 	ImGui::Checkbox("Enabled", &light->enabled);
 	ImGui::Checkbox("Save?", &light->saved);
 	ImGui::PopID();
+}
+
+bool DebugMenu::handle(MouseEvent & event)
+{
+	return false;
+}
+
+bool DebugMenu::handle(KeyEvent & event)
+{
+	if (event.type == KeyEventType::KEY_RELEASED)
+	{
+		if (event.key == KeyCodes::GRAVE_ACCENT)//c
+		{
+			isActive = !isActive;
+		}
+
+	}
+	return false;
 }

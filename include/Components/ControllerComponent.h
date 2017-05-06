@@ -20,7 +20,7 @@ public:
 	void setGravity(float x, float y, float z);
 	void setTransform(Transform* transform);
 	void setJumpForce(float force);
-	void setWorldFront(float x, float y, float z);
+	void setWorldFront(float x, float y, float z, bool negative = false);
 	void setCameraDistance(glm::vec3 dist);
 	void setCameraDirection(glm::vec3 direction);
 	void dispose();

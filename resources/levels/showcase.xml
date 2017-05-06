@@ -302,6 +302,25 @@
                             <z>0.5</z>
                         </half_extents>
                     </bounding_shape>
+                    <params>
+                        <param type="string" name="collision_filter">player</param>
+                        <param type="bool" name="world_front_negative">false</param>
+                        <param name="world_front" type="vec3">
+                            <x>1.0</x>
+                            <y>0.0</y>
+                            <z>0.0</z>
+                        </param>
+                        <param name="camera_distance" type="vec3">
+                            <x>15.0</x>
+                            <y>-7.0</y>
+                            <z>0.0</z>
+                        </param>
+                        <param name="camera_direction" type="vec3">
+                            <x>1.0</x>
+                            <y>0.0</y>
+                            <z>0.0</z>
+                        </param>
+                    </params>
                 </component>
             </components>
         </gameObject>
@@ -325,20 +344,47 @@
                 </component>
                 <component type="transform">
                     <position>
-                        <x>-17.5</x>
-                        <y>12</y>
-                        <z>62</z>
+                        <x>132.5</x>
+                        <y>3.5</y>
+                        <z>-20.25</z>
                     </position>
                     <scale>
-                        <x>2</x>
-                        <y>2</y>
-                        <z>2</z>
+                        <x>1</x>
+                        <y>1</y>
+                        <z>1</z>
                     </scale>
                     <!-- <scale>
 						<x>1.0</x>
 						<y>1.0</y>
 						<z>1.0</z>
 					</scale> -->
+                </component>
+                <component type="logic">
+                    <script>enemy_pathfinding.lua</script>
+                    <params>
+                        <param name="start_point" type="vec3">
+                            <x>132.5</x>
+                            <y>3.5</y>
+                            <z>-20.25</z>
+                        </param>
+                        <param name="end_point" type="vec3">
+                            <x>132.5</x>
+                            <y>6.5</y>
+                            <z>38.25</z>
+                        </param>
+                        <param name="move_speed" type="float">10.0</param>
+                    </params>
+                </component>
+                <component type="trigger">
+                    <script>death_trigger.lua</script>
+                    <trigger_once>false</trigger_once>
+                    <bounding_shape type="box">
+                        <half_extents>
+                            <x>1</x>
+                            <y>1</y>
+                            <z>1</z>
+                        </half_extents>
+                    </bounding_shape>
                 </component>
             </components>
         </gameObject>
@@ -938,7 +984,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-1.9386333e+36</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                     <collision_mesh>log.obj</collision_mesh>
@@ -1018,7 +1064,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.983324</y>
+                        <y>0.983322</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -1178,7 +1224,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.988839</y>
+                        <y>0.988841</y>
                         <z>0</z>
                         <w>345.805</w>
                     </orientation>
@@ -1196,7 +1242,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>1</y>
+                        <y>-1.8779322e-32</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1282,7 +1328,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-1</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1350,7 +1396,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.999877</y>
+                        <y>0.999873</y>
                         <z>0</z>
                         <w>345.999</w>
                     </orientation>
@@ -1411,7 +1457,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-0.43115997</y>
+                        <y>-8.5970203e-32</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1485,7 +1531,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-0.073871613</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1522,7 +1568,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0.32544708</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1559,7 +1605,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>8.7524414</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1596,7 +1642,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>1</y>
+                        <y>5.1427878e-39</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1633,7 +1679,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>6.8435354e+25</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1713,7 +1759,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0.0041049719</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1753,7 +1799,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-3.9936065e+36</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1793,7 +1839,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-1</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -1999,7 +2045,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-0.89668274</y>
+                        <y>-8.0643803e-32</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2024,7 +2070,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.998783</y>
+                        <y>0.998779</y>
                         <z>0</z>
                         <w>346.048</w>
                     </orientation>
@@ -2039,7 +2085,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-8.5997286e-32</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2082,7 +2128,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-1.9386333e+36</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2125,7 +2171,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-1.8790982e-32</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2200,7 +2246,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-1</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2360,7 +2406,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-0.82983398</y>
+                        <y>-8.6007818e-32</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2400,7 +2446,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-0.70709229</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2521,7 +2567,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0.92459106</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2561,7 +2607,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0.70709229</y>
+                        <y>13.850586</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2601,7 +2647,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>8.3570302e-39</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2641,7 +2687,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>5.3520743e-11</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -2684,7 +2730,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-0.26692963</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -2776,7 +2822,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>1</y>
+                        <y>-3.9936065e+36</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -3000,7 +3046,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>1</y>
+                        <y>-6.700882e-32</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -3077,7 +3123,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.964377</y>
+                        <y>0.964375</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3116,7 +3162,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.97238</y>
+                        <y>0.972378</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3155,7 +3201,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.97906</y>
+                        <y>0.979058</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3194,7 +3240,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.968254</y>
+                        <y>0.968252</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3233,7 +3279,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.969151</y>
+                        <y>0.969149</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3272,7 +3318,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.967831</y>
+                        <y>0.967829</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3311,7 +3357,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.972695</y>
+                        <y>0.972693</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3350,7 +3396,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.963391</y>
+                        <y>0.963389</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3389,7 +3435,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.949112</y>
+                        <y>0.94911</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3428,7 +3474,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.960567</y>
+                        <y>0.960565</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -3554,7 +3600,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>5.3520743e-11</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -3594,7 +3640,47 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>-1.9386333e+36</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="legobricksoptimised.obj">
+                    <file>legobricksoptimised.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>133.25</x>
+                        <y>0.25</y>
+                        <z>10</z>
+                    </position>
+                    <scale>
+                        <x>0.82</x>
+                        <y>1</y>
+                        <z>1</z>
+                    </scale>
+                    <orientation>
+                        <x>0</x>
+                        <y>0.993887</y>
+                        <z>0</z>
+                        <w>90</w>
+                    </orientation>
+                </component>
+                <component type="rigid_body">
+                    <mass>0</mass>
+                    <collision_mesh>legobricksoptimised.obj</collision_mesh>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0.5</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-1.8784964e-32</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -3635,46 +3721,6 @@
                     <velocity>
                         <x>0</x>
                         <y>0</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="legobricksoptimised.obj">
-                    <file>legobricksoptimised.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>133.25</x>
-                        <y>0.25</y>
-                        <z>10</z>
-                    </position>
-                    <scale>
-                        <x>0.82</x>
-                        <y>1</y>
-                        <z>1</z>
-                    </scale>
-                    <orientation>
-                        <x>0</x>
-                        <y>0.993887</y>
-                        <z>0</z>
-                        <w>90</w>
-                    </orientation>
-                </component>
-                <component type="rigid_body">
-                    <mass>0</mass>
-                    <collision_mesh>legobricksoptimised.obj</collision_mesh>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0.5</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-1</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -3905,7 +3951,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-0.43115997</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -3945,7 +3991,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0.0050668716</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -3970,7 +4016,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.951944</y>
+                        <y>0.951942</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -4009,7 +4055,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.957695</y>
+                        <y>0.957693</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -4048,7 +4094,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.958038</y>
+                        <y>0.958036</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -4087,7 +4133,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.955299</y>
+                        <y>0.955297</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -4126,7 +4172,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.940805</y>
+                        <y>0.940803</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -4220,7 +4266,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0.42609406</y>
+                        <y>-1.6179653e-19</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -4281,7 +4327,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0.5546875</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -4321,7 +4367,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0.0038093328</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -4361,7 +4407,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-0.75924683</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -4401,7 +4447,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-0.073871613</y>
+                        <y>1.1112095e-38</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -4441,7 +4487,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-0.5627594</y>
+                        <y>1.2765134e-38</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -4481,87 +4527,9 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-0.99745178</y>
+                        <y>-4.0828857</y>
                         <z>0</z>
                     </velocity>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-0.0062447786</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-0.81314087</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
                 </component>
             </components>
         </gameobject>
@@ -4634,46 +4602,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0.037104607</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-0.58122253</y>
+                        <y>-3.9936065e+36</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -4783,6 +4712,45 @@
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
                     </bounding_shape>
+                    <convex>false</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-6.7019353e-32</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
                     <convex>true</convex>
                     <restitution>0</restitution>
                     <friction>0</friction>
@@ -4790,7 +4758,85 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>1</y>
+                        <y>6.8435354e+25</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-1.9386333e+36</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>true</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-1.8786469e-32</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -4907,7 +4953,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-0.95449829</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -4946,7 +4992,46 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>6.8575901e-08</y>
+                        <y>0</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>11.25</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>false</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>-2.302002</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -4985,7 +5070,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-302.65625</y>
+                        <y>0.5</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5024,7 +5109,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>107.61133</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5063,7 +5148,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-295.92969</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5102,7 +5187,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-383.36719</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5141,7 +5226,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>26.902832</y>
+                        <y>1.5979376e-38</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5180,7 +5265,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-376.64063</y>
+                        <y>5.3520743e-11</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5219,7 +5304,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-302.65625</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5258,7 +5343,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>26.902832</y>
+                        <y>-3.9936065e+36</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5297,7 +5382,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-373.27344</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5336,7 +5421,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-275.75</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5375,7 +5460,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>107.61133</y>
+                        <y>-1.808063e-29</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5414,7 +5499,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-299.28906</y>
+                        <y>-3.5041504</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5453,7 +5538,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-275.75</y>
+                        <y>-1.9386333e+36</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5492,7 +5577,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>188.32031</y>
+                        <y>-1.8790606e-32</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5531,7 +5616,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-390.08594</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5570,46 +5655,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-410.26563</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>11.25</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>121.0625</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5648,7 +5694,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-279.11719</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5720,14 +5766,14 @@
                     <bounding_shape type="sphere">
                         <radius>0.5</radius>
                     </bounding_shape>
-                    <convex>true</convex>
+                    <convex>false</convex>
                     <restitution>0</restitution>
                     <friction>0</friction>
                     <rotational_friction>0</rotational_friction>
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-289.20313</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5766,7 +5812,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>174.86719</y>
+                        <y>-3.152832</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5805,7 +5851,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-282.47656</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5844,7 +5890,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-359.82031</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5883,7 +5929,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>164.77734</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5922,7 +5968,46 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-282.47656</y>
+                        <y>0</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>74.75</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>false</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>1.9652796e-38</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -5961,7 +6046,46 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-289.20313</y>
+                        <y>5.3520743e-11</y>
+                        <z>0</z>
+                    </velocity>
+                </component>
+                <component type="logic">
+                    <script>default.lua</script>
+                </component>
+            </components>
+        </gameobject>
+        <gameobject>
+            <components>
+                <component type="model" id="sphere.obj">
+                    <file>sphere.obj</file>
+                    <active>true</active>
+                </component>
+                <component type="transform">
+                    <position>
+                        <x>74.75</x>
+                        <y>17.75</y>
+                        <z>9.25</z>
+                    </position>
+                    <scale>
+                        <x>0.2</x>
+                        <y>0.2</y>
+                        <z>0.2</z>
+                    </scale>
+                </component>
+                <component type="rigid_body">
+                    <mass>1</mass>
+                    <bounding_shape type="sphere">
+                        <radius>0.5</radius>
+                    </bounding_shape>
+                    <convex>false</convex>
+                    <restitution>0</restitution>
+                    <friction>0</friction>
+                    <rotational_friction>0</rotational_friction>
+                    <constant_velocity>false</constant_velocity>
+                    <velocity>
+                        <x>0</x>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6000,7 +6124,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>174.86719</y>
+                        <y>-3.9936065e+36</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6039,7 +6163,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-282.47656</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6078,7 +6202,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-327.875</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6117,7 +6241,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>201.76953</y>
+                        <y>-4.9031131e-21</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6156,7 +6280,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-282.47656</y>
+                        <y>-2.6020508</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6195,7 +6319,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-336.28125</y>
+                        <y>-1.9386333e+36</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6234,7 +6358,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>188.32031</y>
+                        <y>-1.8790606e-32</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6273,85 +6397,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-321.14844</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>74.75</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>-351.41406</y>
-                        <z>0</z>
-                    </velocity>
-                </component>
-                <component type="logic">
-                    <script>default.lua</script>
-                </component>
-            </components>
-        </gameobject>
-        <gameobject>
-            <components>
-                <component type="model" id="sphere.obj">
-                    <file>sphere.obj</file>
-                    <active>true</active>
-                </component>
-                <component type="transform">
-                    <position>
-                        <x>74.75</x>
-                        <y>17.75</y>
-                        <z>9.25</z>
-                    </position>
-                    <scale>
-                        <x>0.2</x>
-                        <y>0.2</y>
-                        <z>0.2</z>
-                    </scale>
-                </component>
-                <component type="rigid_body">
-                    <mass>1</mass>
-                    <bounding_shape type="sphere">
-                        <radius>0.5</radius>
-                    </bounding_shape>
-                    <convex>true</convex>
-                    <restitution>0</restitution>
-                    <friction>0</friction>
-                    <rotational_friction>0</rotational_friction>
-                    <constant_velocity>false</constant_velocity>
-                    <velocity>
-                        <x>0</x>
-                        <y>188.32031</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6395,7 +6441,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-321.14844</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6484,7 +6530,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-344.6875</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6525,7 +6571,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>168.14063</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -6677,7 +6723,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.931182</y>
+                        <y>0.93118</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -6713,7 +6759,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.930694</y>
+                        <y>0.930692</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -6749,7 +6795,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.929808</y>
+                        <y>0.929806</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -6785,7 +6831,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.929961</y>
+                        <y>0.929959</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -6821,7 +6867,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.929741</y>
+                        <y>0.929739</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -6857,7 +6903,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.929652</y>
+                        <y>0.92965</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -6893,7 +6939,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.928651</y>
+                        <y>0.928649</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -6929,7 +6975,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.928181</y>
+                        <y>0.928179</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -6965,7 +7011,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.927302</y>
+                        <y>0.9273</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -7001,7 +7047,7 @@
                     </scale>
                     <orientation>
                         <x>0</x>
-                        <y>0.928582</y>
+                        <y>0.92858</y>
                         <z>0</z>
                         <w>345.708</w>
                     </orientation>
@@ -7078,7 +7124,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-321.14844</y>
+                        <y>-1.9125977</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7112,7 +7158,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-373.27344</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7146,7 +7192,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>228.67188</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7180,7 +7226,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-321.14844</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7214,7 +7260,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-302.65625</y>
+                        <y>839.46875</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7248,7 +7294,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>173.1875</y>
+                        <y>2.2683368e-38</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7340,7 +7386,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-373.27344</y>
+                        <y>-0.84793091</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7380,7 +7426,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-306.01563</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7420,7 +7466,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>211.85938</y>
+                        <y>-3.9936065e+36</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7460,7 +7506,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-299.28906</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7500,7 +7546,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-306.01563</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7557,7 +7603,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>242.125</y>
+                        <y>-4.904664e-21</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7597,7 +7643,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-282.47656</y>
+                        <y>-1.1992188</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7654,7 +7700,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-275.75</y>
+                        <y>-1.9386333e+36</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7694,7 +7740,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>188.32031</y>
+                        <y>-1.8790982e-32</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7734,7 +7780,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-364.86719</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7774,7 +7820,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-275.75</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7814,7 +7860,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>230.35547</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7854,7 +7900,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-295.92969</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7894,7 +7940,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-275.75</y>
+                        <y>-0.71374512</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7934,7 +7980,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>104.24805</y>
+                        <y>0.5</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -7974,7 +8020,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-295.92969</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -8014,7 +8060,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-275.75</y>
+                        <y>0</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -8048,7 +8094,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>53.805664</y>
+                        <y>0</y>
                         <z>-1.0842022e-19</z>
                     </velocity>
                 </component>
@@ -8091,7 +8137,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>-393.45313</y>
+                        <y>3.0305714e-38</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -8131,7 +8177,7 @@
                     <constant_velocity>false</constant_velocity>
                     <velocity>
                         <x>0</x>
-                        <y>0</y>
+                        <y>7.0354729e+22</y>
                         <z>0</z>
                     </velocity>
                 </component>
@@ -8193,6 +8239,25 @@
                             <z>0.5</z>
                         </half_extents>
                     </bounding_shape>
+                    <params>
+                        <param type="string" name="collision_filter">player</param>
+                        <param type="bool" name="world_front_negative">false</param>
+                        <param name="world_front" type="vec3">
+                            <x>1.0</x>
+                            <y>0.0</y>
+                            <z>0.0</z>
+                        </param>
+                        <param name="camera_distance" type="vec3">
+                            <x>15.0</x>
+                            <y>-7.0</y>
+                            <z>0.0</z>
+                        </param>
+                        <param name="camera_direction" type="vec3">
+                            <x>1.0</x>
+                            <y>0.0</y>
+                            <z>0.0</z>
+                        </param>
+                    </params>
                 </component>
             </components>
         </gameObject>
@@ -8677,8 +8742,8 @@
                             <z>500</z>
                         </half_extents>
                     </bounding_shape>
-					<params>
-						<param type="string" name="collision_filter">player</param>
+                    <params>
+                        <param type="string" name="collision_filter">player</param>
                         <param type="bool" name="world_front_negative">false</param>
                         <param name="world_front" type="vec3">
                             <x>1.0</x>
@@ -8687,15 +8752,15 @@
                         </param>
                         <param name="camera_distance" type="vec3">
                             <x>15.0</x>
-							<y>-7.0</y>
-							<z>0.0</z>
+                            <y>-7.0</y>
+                            <z>0.0</z>
                         </param>
                         <param name="camera_direction" type="vec3">
                             <x>1.0</x>
                             <y>0.0</y>
                             <z>0.0</z>
                         </param>
-					</params>
+                    </params>
                 </component>
             </components>
         </gameobject>
@@ -8827,6 +8892,29 @@
                 <r>0.2</r>
                 <g>0.2</g>
                 <b>0.2</b>
+            </diffuse>
+            <ambient>
+                <r>0.1</r>
+                <g>0.1</g>
+                <b>0.1</b>
+            </ambient>
+            <specular>
+                <r>0.5</r>
+                <g>0.5</g>
+                <b>0.5</b>
+            </specular>
+        </light>
+        <light>
+            <enabled>true</enabled>
+            <position>
+                <x>-81</x>
+                <y>81.5</y>
+                <z>112.5</z>
+            </position>
+            <diffuse>
+                <r>0.5</r>
+                <g>0.5</g>
+                <b>0.5</b>
             </diffuse>
             <ambient>
                 <r>0.1</r>

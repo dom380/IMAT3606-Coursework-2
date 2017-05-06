@@ -36,8 +36,6 @@ death_trigger.trigger = function(gameObject, engineObj, logic, params)
 				local camDirection = params["camera_direction"]
 				if controller and camDirection then
 					controller:setCameraDirection(camDirection)
-				else
-					print("cam dist missing")
 				end
 			end
 			if hp == 0 then

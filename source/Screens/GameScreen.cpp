@@ -47,7 +47,7 @@ GameScreen::GameScreen(shared_ptr<Graphics>& renderer, shared_ptr<Input>& input,
 
 void GameScreen::show()
 {
-	Engine::g_pEngine->getEngineState()->setEngineMode(EngineMode::EDITOR);
+	Engine::g_pEngine->getEngineState()->setEngineMode(EngineMode::GAME);
 	physics->setPaused(false);
 	std::shared_ptr<FollowCamera> playerCam;
 	for (auto camera : cameras)

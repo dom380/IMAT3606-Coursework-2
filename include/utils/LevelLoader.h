@@ -115,7 +115,12 @@ public:
 					break;
 				}
 				case ANIMATION:
+				{
+					auto ani = gameScreen->getComponentStore()->getComponent<AnimatedModelComponent>(go->GetComponentHandle(ComponentType::ANIMATION), ComponentType::ANIMATION);
+					shared_ptr<AnimatedModelComponent> ac = std::make_shared<AnimatedModelComponent>(*ani);
+					newGO->AddComponent(ac, ComponentType::ANIMATION);
 					break;
+				}
 				case RIGID_BODY:
 				{
 					auto rigid = gameScreen->getComponentStore()->getComponent<PhysicsComponent>(go->GetComponentHandle(ComponentType::RIGID_BODY), ComponentType::RIGID_BODY);
@@ -131,7 +136,8 @@ public:
 					shared_ptr<Transform> tr = std::make_shared<Transform>(*transform);
 					newGO->AddComponent(tr, ComponentType::TRANSFORM);
 					auto model = gameScreen->getComponentStore()->getComponent<ModelComponent>(newGO->GetComponentHandle(ComponentType::MODEL), ComponentType::MODEL);
-					model->transformHandle = newGO->GetComponentHandle(ComponentType::TRANSFORM);//transform;
+					if (model)
+						model->transformHandle = newGO->GetComponentHandle(ComponentType::TRANSFORM);//transform;
 					break;
 				}
 				case TRIGGER:

@@ -1,4 +1,4 @@
-##Compiling
+## Compiling
 
 Compiled with Visual Studio 2015 on 64-bit platform using:
 
@@ -9,14 +9,14 @@ Note all binaries are 64-bit.
 
 The visual studio solution should compile and run as is on the x64 platform.
 
-##Controls
+## Controls
 *	'WASD' To move the player.
 *	'Space' to jump.
 *	'C' Changes the camera.
 *	'`' (Grave Accent) to toggle debug menu.
 *	Arrow keys to move debug camera.
 
-##Third Party Software
+## Third Party Software
 
 *	STB_Image - https://github.com/nothings/stb (Public Domain)
 *	Bitmap - Tom Dalling http://www.tomdalling.com/ ([Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0))
@@ -32,7 +32,7 @@ The visual studio solution should compile and run as is on the x64 platform.
 *	LuaBridge - https://github.com/vinniefalco/LuaBridge ([MIT license](https://opensource.org/licenses/mit-license.html))
 *	Assimp - http://assimp.sourceforge.net ([BSD license](http://assimp.sourceforge.net/main_license.html))
 *	SFML (Audio) - https://www.sfml-dev.org/ ([ZLib license](https://www.sfml-dev.org/license.php))
-##Model Credits
+## Model Credits
 
 *	Kitchen Asset Pack : cemkalyoncu - [http://opengameart.org/content/kitchen-low-poly](http://opengameart.org/content/kitchen-low-poly) (CC-BY 3.0)  
 *	Gold Bar : yughues - [http://opengameart.org/content/free-lowpoly-golds](http://opengameart.org/content/free-lowpoly-golds) (Public Domain)  
@@ -47,7 +47,8 @@ The visual studio solution should compile and run as is on the x64 platform.
 *	Low Poly Fox : kitzu653 - [https://free3d.com/3d-model/low-poly-fox-72585.html](https://free3d.com/3d-model/low-poly-fox-72585.html)
 *	Lego Man : tzsftw - [https://free3d.com/3d-model/lego-man-35246.html](https://free3d.com/3d-model/lego-man-35246.html)
 *	Lego Bricks : floriuszzz - [https://free3d.com/3d-model/lego-all-sizes-colors-94903.html](https://free3d.com/3d-model/lego-all-sizes-colors-94903.html)
-##Sounds
+## Sounds
 *	Collectable Sound : Luke.RUSTLTD - [https://opengameart.org/content/10-8bit-coin-sounds](https://opengameart.org/content/10-8bit-coin-sounds) (Public Domain)
 *	Hit Sound : CGEffex - [http://freesound.org/people/CGEffex/sounds/98341/](http://freesound.org/people/CGEffex/sounds/98341/) (CC-BY 3.0)
 *	Jump Sound : Damaged Panda - [https://opengameart.org/content/100-plus-game-sound-effects-wavoggm4a](https://opengameart.org/content/100-plus-game-sound-effects-wavoggm4a)  (CC-BY 3.0)
+*	Background Music: "Wonderful Life!" by HeatleyBros [https://www.youtube.com/user/HeatleyBros/about](https://www.youtube.com/user/HeatleyBros/about)
